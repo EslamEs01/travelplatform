@@ -1,0 +1,62 @@
+<!-- partials/head.html — <head> meta contract (future: {% include "partials/head.html" %})
+     Adjust {PAGE_TITLE}, {PAGE_DESCRIPTION}, {PAGE_URL} per page.                          -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>رحلاتي – أفضل عروض السفر مقارنة في مكان واحد</title>
+<meta name="description" content="اكتشف وقارن أفضل عروض السفر من أكثر من 50 مصدراً موثوقاً. عطل وجولات وفنادق بأسعار مضمونة وخدمة دعم على مدار الساعة.">
+<meta name="theme-color" content="#0E8186">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:title" content="رحلاتي – أفضل عروض السفر">
+<meta property="og:description" content="اكتشف وقارن أفضل عروض السفر من أكثر من 50 مصدراً موثوقاً.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:site_name" content="رحلاتي">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="رحلاتي – أفضل عروض السفر">
+<meta name="twitter:description" content="مقارنة العروض من أكثر من 50 مصدر موثوق في مكان واحد">
+
+<!-- Icons -->
+<link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+
+<!-- Font preload (critical weight — Arabic subset) -->
+<link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
+
+<!-- Stylesheet — compiled local build; NO CDN -->
+<link rel="stylesheet" href="../assets/css/tailwind.css">
+
+<!-- Structured data: Organization -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "رحلاتي",
+  "description": "منصة مقارنة عروض السفر",
+  "url": "https://rihlaty.example.com",
+  "logo": "https://rihlaty.example.com/assets/icons/favicon.svg",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "availableLanguage": ["Arabic", "English"]
+  }
+}
+</script>
+
+<!-- Structured data: WebSite with SearchAction -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "رحلاتي",
+  "url": "https://rihlaty.example.com",
+  "inLanguage": "ar",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://rihlaty.example.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>

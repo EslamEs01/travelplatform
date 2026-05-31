@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="nsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6FD7D9"/><stop offset="65%" stop-color="#16A0A5"/><stop offset="100%" stop-color="#0E8186"/></linearGradient>
+    <linearGradient id="nmtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#115457"/><stop offset="100%" stop-color="#11464A"/></linearGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#nsky)"/>
+  <!-- Sun rays -->
+  <circle cx="60" cy="55" r="28" fill="#F4BE52" opacity="0.85"/>
+  <circle cx="60" cy="55" r="40" fill="#F4BE52" opacity="0.12"/>
+  <!-- Snow caps -->
+  <polygon points="200,30 230,110 170,110" fill="white" opacity="0.75"/>
+  <polygon points="280,50 315,130 245,130" fill="white" opacity="0.6"/>
+  <polygon points="120,65 148,130 92,130" fill="white" opacity="0.5"/>
+  <!-- Mountains -->
+  <polygon points="0,225 120,90 240,225" fill="url(#nmtn)"/>
+  <polygon points="80,225 200,70 320,225" fill="#0E686C"/>
+  <polygon points="160,225 280,55 400,225" fill="#115457" opacity="0.9"/>
+  <polygon points="300,225 400,100 400,225" fill="#0E8186" opacity="0.6"/>
+  <!-- Foreground hills -->
+  <ellipse cx="100" cy="225" rx="160" ry="40" fill="#11464A"/>
+  <ellipse cx="320" cy="225" rx="130" ry="35" fill="#0E686C" opacity="0.8"/>
+  <!-- Clouds -->
+  <ellipse cx="330" cy="38" rx="35" ry="14" fill="white" opacity="0.35"/>
+  <ellipse cx="305" cy="40" rx="20" ry="11" fill="white" opacity="0.3"/>
+  <ellipse cx="355" cy="40" rx="18" ry="10" fill="white" opacity="0.3"/>
+</svg>

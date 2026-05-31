@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <!-- ── partials/head.html (inlined) ──────────────────────────────────────── -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>رحلاتي – أفضل عروض السفر مقارنة في مكان واحد</title>
+  <meta name="description" content="اكتشف وقارن أفضل عروض السفر من أكثر من 50 مصدراً موثوقاً. عطل وجولات وفنادق بأسعار مضمونة وخدمة دعم على مدار الساعة.">
+  <meta name="theme-color" content="#0E8186">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="رحلاتي – أفضل عروض السفر">
+  <meta property="og:description" content="اكتشف وقارن أفضل عروض السفر من أكثر من 50 مصدراً موثوقاً.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ar_AR">
+  <meta property="og:site_name" content="رحلاتي">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="رحلاتي – أفضل عروض السفر">
+  <meta name="twitter:description" content="مقارنة العروض من أكثر من 50 مصدر موثوق في مكان واحد">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/tailwind.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"رحلاتي","description":"منصة مقارنة عروض السفر","url":"https://rihlaty.example.com","logo":"https://rihlaty.example.com/assets/icons/favicon.svg","contactPoint":{"@type":"ContactPoint","contactType":"customer service","availableLanguage":["Arabic","English"]}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"رحلاتي","url":"https://rihlaty.example.com","inLanguage":"ar","potentialAction":{"@type":"SearchAction","target":"https://rihlaty.example.com/search?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+</head>
+<body class="bg-ink-50 text-ink-700 antialiased">
+
+  <!-- SVG sprite (inlined for file:// compatibility) -->
+  <div aria-hidden="true" style="display:none">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <symbol id="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
+      <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+      <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+      <symbol id="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></symbol>
+      <symbol id="icon-star" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></symbol>
+      <symbol id="icon-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></symbol>
+      <symbol id="icon-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></symbol>
+      <symbol id="icon-location" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+      <symbol id="icon-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
+      <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+      <symbol id="icon-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></symbol>
+      <symbol id="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></symbol>
+      <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+      <symbol id="icon-alert-triangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+      <symbol id="icon-facebook" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></symbol>
+      <symbol id="icon-twitter" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></symbol>
+      <symbol id="icon-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></symbol>
+      <symbol id="icon-youtube" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon fill="white" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></symbol>
+      <symbol id="icon-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></symbol>
+    </svg>
+  </div>
+
+  <!-- Skip link -->
+  <a href="#main" class="skip-link">تخطَّ إلى المحتوى</a>
+
+  <!-- ═══ HEADER (inlined from partials/header.html) ═══════════════════════ -->
+
+  <header class="site-header">
+    <div class="header-inner max-w-7xl mx-auto px-4 md:px-6 flex items-center h-16 gap-4">
+
+      <a href="index.html" class="brand flex items-center gap-2 me-auto no-underline" aria-label="رحلاتي – الصفحة الرئيسية">
+        <span aria-hidden="true">
+          <svg width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="9" fill="#0E8186"/>
+            <path d="M16 7C11.029 7 7 11.029 7 16s4.029 9 9 9 9-4.029 9-9-4.029-9-9-9z" fill="#38BCC0" opacity="0.35"/>
+            <path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/>
+            <circle cx="16" cy="14" r="3" fill="#0E8186"/>
+          </svg>
+        </span>
+        <span class="brand-name text-xl font-bold text-lagoon-700 tracking-tight">رحلاتي</span>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-1" aria-label="التنقل الرئيسي">
+        <a href="index.html" class="nav-link nav-link-active" aria-current="page">الرئيسية</a>
+        <a href="#" class="nav-link" data-coming-soon>عروض السفر</a>
+        <a href="#" class="nav-link" data-coming-soon>مقارنة الأسعار</a>
+        <a href="#" class="nav-link" data-coming-soon>كوبونات</a>
+        <a href="#" class="nav-link" data-coming-soon>وجهات</a>
+        <a href="#" class="nav-link" data-coming-soon>الدليل</a>
+      </nav>
+
+      <button
+        type="button"
+        class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-ink-500 hover:text-ink-700 rounded-lg hover:bg-ink-100 transition-colors"
+        aria-label="تغيير اللغة (غير متاح حالياً)"
+        aria-disabled="true"
+        tabindex="-1"
+      >
+        <svg class="w-4 h-4" aria-hidden="true"><use href="#icon-globe"/></svg>
+        <span>EN</span>
+      </button>
+
+      <a href="#" class="hidden md:flex btn btn-primary btn-sm" data-coming-soon>تسجيل الدخول</a>
+
+      <button
+        type="button"
+        class="btn btn-ghost btn-icon lg:hidden"
+        aria-label="فتح قائمة التنقل"
+        aria-expanded="false"
+        aria-controls="main-nav"
+        data-drawer-open="main-nav"
+      >
+        <svg aria-hidden="true"><use href="#icon-menu"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="drawer drawer-start" id="main-nav" data-drawer="main-nav" role="dialog" aria-modal="true" aria-label="قائمة التنقل" hidden>
+    <div class="drawer-overlay" data-drawer-close aria-hidden="true"></div>
+    <nav class="drawer-panel" aria-label="قائمة التنقل للجوال">
+      <div class="flex items-center justify-between p-4 border-b border-ink-100">
+        <span class="text-lg font-bold text-lagoon-700">القائمة الرئيسية</span>
+        <button type="button" class="btn btn-ghost btn-icon" aria-label="إغلاق القائمة" data-drawer-close>
+          <svg aria-hidden="true"><use href="#icon-close"/></svg>
+        </button>
+      </div>
+      <ul class="flex-1 p-4 space-y-1">
+        <li><a href="index.html" class="drawer-nav-link drawer-nav-link-active" aria-current="page"><svg aria-hidden="true"><use href="#icon-plane"/></svg>الرئيسية</a></li>
+        <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-star"/></svg>عروض السفر</a></li>
+        <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-search"/></svg>مقارنة الأسعار</a></li>
+        <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-shield-check"/></svg>كوبونات الخصم</a></li>
+        <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-location"/></svg>الوجهات</a></li>
+        <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-info"/></svg>دليل السفر</a></li>
+      </ul>
+      <div class="p-4 border-t border-ink-100 space-y-3">
+        <a href="#" class="btn btn-primary w-full justify-center" data-coming-soon>تسجيل الدخول</a>
+        <a href="#" class="btn btn-outline w-full justify-center" data-coming-soon>إنشاء حساب جديد</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ═══ MAIN CONTENT ══════════════════════════════════════════════════════ -->
+  <main id="main" tabindex="-1">
+
+    <!-- ── § 1 HERO ─────────────────────────────────────────────────────── -->
+    <section class="hero-section" aria-labelledby="hero-heading">
+
+      <!-- Decorative background shapes -->
+      <div class="hero-blob-1" aria-hidden="true"></div>
+      <div class="hero-blob-2" aria-hidden="true"></div>
+
+      <div class="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-28 text-center relative z-10">
+
+        <!-- Social proof pill -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full text-sm font-semibold" style="background:rgba(255,255,255,0.12);color:#A4E9EA;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18)">
+          <svg class="w-4 h-4" aria-hidden="true" style="color:#F4BE52"><use href="#icon-star"/></svg>
+          مقارنة عروض من أكثر من 50 مصدراً موثوقاً
+        </div>
+
+        <!-- H1 — single per-page -->
+        <h1 id="hero-heading" class="hero-title">
+          ابحث عن
+          <span class="hero-title-gradient">أفضل عروض</span>
+          <br>السفر في مكان واحد
+        </h1>
+
+        <p class="hero-sub max-w-2xl mx-auto">
+          وفّر وقتك وأموالك — نجمع العروض من شركاء موثوقين ونعرضها لك بشفافية تامة.
+          لا مفاجآت، لا أسعار مخفية.
+        </p>
+
+        <!-- Stats -->
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-num">+50K</span>
+            <span class="hero-stat-label">عرض سفر</span>
+          </div>
+          <div class="hero-stat-divider" aria-hidden="true"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">50+</span>
+            <span class="hero-stat-label">شريك موثوق</span>
+          </div>
+          <div class="hero-stat-divider" aria-hidden="true"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">4.9 ⭐</span>
+            <span class="hero-stat-label">تقييم المستخدمين</span>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="hero-actions">
+          <a href="#featured" class="btn btn-primary btn-lg">
+            <svg aria-hidden="true"><use href="#icon-search"/></svg>
+            اكتشف العروض
+          </a>
+          <a href="#how-it-works" class="btn btn-outline-white btn-lg">
+            كيف تعمل رحلاتي؟
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Wave separator -->
+      <div class="hero-wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#F7F8FA"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ── § 2 FEATURED DEALS ────────────────────────────────────────────── -->
+    <section id="featured" class="py-16 md:py-20" aria-labelledby="featured-heading">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+
+        <div class="section-header">
+          <div>
+            <span class="section-eyebrow">مختارة بعناية</span>
+            <h2 id="featured-heading" class="section-title">العروض المميزة</h2>
+          </div>
+          <a href="#" class="btn btn-outline btn-sm hidden md:flex" data-coming-soon>
+            عرض جميع الوجهات
+            <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+
+          <!-- Card 1: شرم الشيخ -->
+          <article class="card" aria-label="عرض: عطلة في شرم الشيخ">
+            <div class="card-badge-wrap">
+              <span class="badge badge-source-partner">
+                <svg aria-hidden="true"><use href="#icon-shield-check"/></svg>
+                Partner
+              </span>
+              <span class="badge badge-featured">مميّز</span>
+            </div>
+            <img class="card-media" src="../assets/images/beach.svg" alt="شاطئ رملي في شرم الشيخ" loading="lazy" width="400" height="225">
+            <div class="card-body">
+              <h3 class="card-title">
+                <a href="#" data-coming-soon>عطلة في شرم الشيخ – 4 ليالٍ</a>
+              </h3>
+              <p class="card-meta">
+                <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
+                شرم الشيخ، مصر
+                <span class="text-ink-300" aria-hidden="true">·</span>
+                <svg class="w-3.5 h-3.5" aria-hidden="true" style="color:#F4BE52"><use href="#icon-star"/></svg>
+                <span>4.7 <span class="text-ink-400">(248)</span></span>
+              </p>
+              <p class="price">ابتداءً من <strong>1,950</strong> <span>ر.س</span></p>
+              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>عرض التفاصيل</button>
+            </div>
+          </article>
+
+          <!-- Card 2: إسطنبول -->
+          <article class="card" aria-label="عرض: رحلة إلى إسطنبول">
+            <div class="card-badge-wrap">
+              <span class="badge badge-source-affiliate">Affiliate</span>
+              <span class="badge badge-verified">موثّق</span>
+            </div>
+            <img class="card-media" src="../assets/images/city.svg" alt="أفق مدينة إسطنبول بمآذنها الشهيرة" loading="lazy" width="400" height="225">
+            <div class="card-body">
+              <h3 class="card-title">
+                <a href="#" data-coming-soon>رحلة إلى إسطنبول – 5 ليالٍ</a>
+              </h3>
+              <p class="card-meta">
+                <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
+                إسطنبول، تركيا
+                <span class="text-ink-300" aria-hidden="true">·</span>
+                <svg class="w-3.5 h-3.5" aria-hidden="true" style="color:#F4BE52"><use href="#icon-star"/></svg>
+                <span>4.8 <span class="text-ink-400">(391)</span></span>
+              </p>
+              <p class="price">ابتداءً من <strong>2,450</strong> <span>ر.س</span></p>
+              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>اطلب الحجز</button>
+            </div>
+          </article>
+
+          <!-- Card 3: دبي -->
+          <article class="card" aria-label="عرض: دبي الفاخرة">
+            <div class="card-badge-wrap">
+              <span class="badge badge-source-partner">
+                <svg aria-hidden="true"><use href="#icon-shield-check"/></svg>
+                Partner
+              </span>
+              <span class="badge badge-featured">مميّز</span>
+            </div>
+            <img class="card-media" src="../assets/images/luxury.svg" alt="أفق دبي الرائع مع ناطحات السحاب" loading="lazy" width="400" height="225">
+            <div class="card-body">
+              <h3 class="card-title">
+                <a href="#" data-coming-soon>دبي الفاخرة – 4 ليالٍ</a>
+              </h3>
+              <p class="card-meta">
+                <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
+                دبي، الإمارات
+                <span class="text-ink-300" aria-hidden="true">·</span>
+                <svg class="w-3.5 h-3.5" aria-hidden="true" style="color:#F4BE52"><use href="#icon-star"/></svg>
+                <span>4.9 <span class="text-ink-400">(512)</span></span>
+              </p>
+              <p class="price">ابتداءً من <strong>3,200</strong> <span>ر.س</span></p>
+              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>عرض التفاصيل</button>
+            </div>
+          </article>
+
+          <!-- Card 4: المالديف -->
+          <article class="card" aria-label="عرض: وجهة المالديف الحلم">
+            <div class="card-badge-wrap">
+              <span class="badge badge-source-affiliate">Affiliate</span>
+              <span class="badge badge-featured">مميّز</span>
+            </div>
+            <img class="card-media" src="../assets/images/beach.svg" alt="شعب مرجانية وشواطئ بيضاء في المالديف" loading="lazy" width="400" height="225">
+            <div class="card-body">
+              <h3 class="card-title">
+                <a href="#" data-coming-soon>وجهة المالديف الحلم – 6 ليالٍ</a>
+              </h3>
+              <p class="card-meta">
+                <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
+                المالديف
+                <span class="text-ink-300" aria-hidden="true">·</span>
+                <svg class="w-3.5 h-3.5" aria-hidden="true" style="color:#F4BE52"><use href="#icon-star"/></svg>
+                <span>5.0 <span class="text-ink-400">(134)</span></span>
+              </p>
+              <p class="price">ابتداءً من <strong>8,500</strong> <span>ر.س</span></p>
+              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>اطلب الحجز</button>
+            </div>
+          </article>
+
+          <!-- Card 5: باريس -->
+          <article class="card" aria-label="عرض: باريس الرومانسية">
+            <div class="card-badge-wrap">
+              <span class="badge badge-source-api-ready">API Ready</span>
+              <span class="badge badge-verified">موثّق</span>
+            </div>
+            <img class="card-media" src="../assets/images/city.svg" alt="برج إيفل وأفق باريس" loading="lazy" width="400" height="225">
+            <div class="card-body">
+              <h3 class="card-title">
+                <a href="#" data-coming-soon>باريس الرومانسية – 7 ليالٍ</a>
+              </h3>
+              <p class="card-meta">
+                <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
+                باريس، فرنسا
+                <span class="text-ink-300" aria-hidden="true">·</span>
+                <svg class="w-3.5 h-3.5" aria-hidden="true" style="color:#F4BE52"><use href="#icon-star"/></svg>
+                <span>4.6 <span class="text-ink-400">(289)</span></span>
+              </p>
+              <p class="price">ابتداءً من <strong>5,800</strong> <span>ر.س</span></p>
+              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>عرض التفاصيل</button>
+            </div>
+          </article>
+
+          <!-- Card 6: سويسرا -->
+          <article class="card" aria-label="عرض: جبال الألب السويسرية">
+            <div class="card-badge-wrap">
+              <span class="badge badge-source-manual">Manual Deal</span>
+              <span class="badge badge-verified">موثّق</span>
+            </div>
+            <img class="card-media" src="../assets/images/nature.svg" alt="جبال الألب المغطاة بالثلج في سويسرا" loading="lazy" width="400" height="225">
+            <div class="card-body">
+              <h3 class="card-title">
+                <a href="#" data-coming-soon>جبال الألب السويسرية – 5 ليالٍ</a>
+              </h3>
+              <p class="card-meta">
+                <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
+                سويسرا
+                <span class="text-ink-300" aria-hidden="true">·</span>
+                <svg class="w-3.5 h-3.5" aria-hidden="true" style="color:#F4BE52"><use href="#icon-star"/></svg>
+                <span>4.8 <span class="text-ink-400">(176)</span></span>
+              </p>
+              <p class="price">ابتداءً من <strong>6,950</strong> <span>ر.س</span></p>
+              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>عرض التفاصيل</button>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Mobile "show all" -->
+        <div class="text-center mt-8 md:hidden">
+          <a href="#" class="btn btn-outline" data-coming-soon>عرض جميع الوجهات</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── § 3 TRUST BAND ─────────────────────────────────────────────── -->
+    <section class="trust-band" aria-label="لماذا تثق بنا">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 py-14">
+        <h2 class="text-center text-2xl md:text-3xl font-bold text-white mb-10">لماذا يثق بنا المسافرون؟</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+
+          <div class="trust-feature">
+            <div class="trust-feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            </div>
+            <h3 class="trust-feature-title">عروض موثقة</h3>
+            <p class="trust-feature-desc">كل عرض يمر بمراجعة يدوية قبل النشر</p>
+          </div>
+
+          <div class="trust-feature">
+            <div class="trust-feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </div>
+            <h3 class="trust-feature-title">حجز آمن</h3>
+            <p class="trust-feature-desc">بياناتك محمية وخصوصيتك مكفولة دائماً</p>
+          </div>
+
+          <div class="trust-feature">
+            <div class="trust-feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <h3 class="trust-feature-title">شركاء معتمدون</h3>
+            <p class="trust-feature-desc">أكثر من 50 وكالة وشركة سياحة معتمدة</p>
+          </div>
+
+          <div class="trust-feature">
+            <div class="trust-feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <h3 class="trust-feature-title">دعم 24/7</h3>
+            <p class="trust-feature-desc">فريق الدعم متاح على مدار الساعة</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── § 4 HOW IT WORKS ───────────────────────────────────────────── -->
+    <section id="how-it-works" class="py-16 md:py-24 bg-white" aria-labelledby="how-heading">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+
+        <div class="text-center mb-12">
+          <span class="section-eyebrow">بسيط وسريع</span>
+          <h2 id="how-heading" class="section-title">كيف تعمل المنصة؟</h2>
+          <p class="text-ink-500 mt-3 max-w-xl mx-auto">ثلاث خطوات بسيطة تفصلك عن رحلة أحلامك</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+
+          <div class="how-step">
+            <div class="how-step-num" aria-hidden="true">١</div>
+            <div class="how-step-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <h3 class="how-step-title">ابحث عن وجهتك</h3>
+            <p class="how-step-desc">اكتب اسم الوجهة التي تحلم بها أو تصفّح العروض المميزة المتاحة من شركائنا.</p>
+          </div>
+
+          <div class="how-step how-step-featured">
+            <div class="how-step-num" aria-hidden="true">٢</div>
+            <div class="how-step-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <h3 class="how-step-title">قارن العروض</h3>
+            <p class="how-step-desc">نعرض لك أفضل الأسعار من مصادر متعددة جنباً إلى جنب لتختار ما يناسبك.</p>
+          </div>
+
+          <div class="how-step">
+            <div class="how-step-num" aria-hidden="true">٣</div>
+            <div class="how-step-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3 class="how-step-title">احجز بأمان</h3>
+            <p class="how-step-desc">اختر العرض المناسب واحجز مباشرة مع الشريك الموثوق بضمان الشفافية الكاملة.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── § 5 FAQ ────────────────────────────────────────────────────── -->
+    <section id="faq" class="py-16 md:py-24" aria-labelledby="faq-heading">
+      <div class="max-w-3xl mx-auto px-4 md:px-6">
+
+        <div class="text-center mb-12">
+          <span class="section-eyebrow">أجوبة واضحة</span>
+          <h2 id="faq-heading" class="section-title">الأسئلة الشائعة</h2>
+        </div>
+
+        <div class="faq-list">
+
+          <div class="faq-item" role="listitem">
+            <details class="faq-details">
+              <summary class="faq-question">
+                <span>ما هي منصة رحلاتي وكيف تختلف عن غيرها؟</span>
+                <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                <p>رحلاتي منصة متخصصة في تجميع ومقارنة عروض السفر من أكثر من 50 مصدراً موثوقاً في مكان واحد. بدلاً من البحث في مواقع متعددة، نوفر لك رؤية شاملة للأسعار المتاحة مع ضمان التحقق من كل عرض قبل نشره.</p>
+              </div>
+            </details>
+          </div>
+
+          <div class="faq-item" role="listitem">
+            <details class="faq-details">
+              <summary class="faq-question">
+                <span>كيف تتحقق المنصة من صحة العروض المعروضة؟</span>
+                <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                <p>يمر كل عرض بعملية مراجعة يدوية من فريقنا قبل نشره. نتحقق من صحة الأسعار وتوافر المقاعد وسمعة الشريك المزود. العروض المميزة بعلامة "موثّق" تعني أننا تأكدنا منها شخصياً.</p>
+              </div>
+            </details>
+          </div>
+
+          <div class="faq-item" role="listitem">
+            <details class="faq-details">
+              <summary class="faq-question">
+                <span>هل الأسعار المعروضة نهائية أم قابلة للتغيير؟</span>
+                <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                <p>الأسعار المعروضة هي أسعار تقديرية "ابتداءً من" وقابلة للتغيير حسب التوافر والموسم. نوضح دائماً أن هذه أسعار بداية وليست ضماناً، وننصح بالتأكد من السعر النهائي مع الشريك المزود مباشرة قبل إتمام الحجز.</p>
+              </div>
+            </details>
+          </div>
+
+          <div class="faq-item" role="listitem">
+            <details class="faq-details">
+              <summary class="faq-question">
+                <span>كيف يمكنني التواصل مع فريق الدعم؟</span>
+                <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                <p>فريق الدعم متاح على مدار الساعة 24/7 عبر البريد الإلكتروني ووسائل التواصل الاجتماعي. يمكنك أيضاً استخدام نموذج التواصل في صفحة "اتصل بنا". نلتزم بالرد خلال ساعة واحدة في أوقات الدوام.</p>
+              </div>
+            </details>
+          </div>
+
+          <div class="faq-item" role="listitem">
+            <details class="faq-details">
+              <summary class="faq-question">
+                <span>هل يمكنني مقارنة أسعار من مصادر مختلفة للوجهة ذاتها؟</span>
+                <svg class="faq-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">
+                <p>نعم، هذه هي الميزة الأساسية للمنصة. لكل وجهة، نعرض جميع العروض المتاحة من المصادر المختلفة جنباً إلى جنب مع تفاصيل واضحة عن مصدر كل عرض (شريك، أفلييت، صفقة يدوية، أو API).</p>
+              </div>
+            </details>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── § 6 CTA BAND ──────────────────────────────────────────────── -->
+    <section class="cta-band" aria-labelledby="cta-heading">
+      <div class="max-w-3xl mx-auto px-4 md:px-6 py-16 md:py-20 text-center relative z-10">
+
+        <div class="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full text-sm font-semibold" style="background:rgba(255,255,255,0.15);color:white">
+          <svg class="w-4 h-4" aria-hidden="true"><use href="#icon-plane"/></svg>
+          ابدأ رحلتك اليوم
+        </div>
+
+        <h2 id="cta-heading" class="text-3xl md:text-4xl font-bold text-white mb-4">
+          رحلتك المثالية تنتظرك
+        </h2>
+        <p class="text-lagoon-200 text-lg mb-8 max-w-lg mx-auto">
+          انضم إلى آلاف المسافرين الذين وفّروا وقتهم وأموالهم بمقارنة العروض عبر رحلاتي.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="#featured" class="btn btn-primary btn-lg" style="background:white;color:#0E8186;border-color:white;box-shadow:0 4px 20px rgba(0,0,0,0.2)">
+            <svg aria-hidden="true"><use href="#icon-search"/></svg>
+            ابحث الآن
+          </a>
+          <a href="#" class="btn btn-outline-white btn-lg" data-coming-soon>إنشاء حساب مجاني</a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ FOOTER (inlined from partials/footer.html) ════════════════════════ -->
+  <footer class="site-footer">
+
+    <div class="trust-row">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 py-10">
+        <div class="trust-item">
+          <div class="trust-icon" aria-hidden="true"><svg><use href="#icon-shield-check"/></svg></div>
+          <div><p class="trust-title">عروض موثقة</p><p class="trust-sub">كل عرض تم التحقق منه</p></div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon" aria-hidden="true"><svg><use href="#icon-shield-check"/></svg></div>
+          <div><p class="trust-title">حجز آمن</p><p class="trust-sub">بياناتك محمية بالكامل</p></div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon" aria-hidden="true"><svg><use href="#icon-star"/></svg></div>
+          <div><p class="trust-title">شركاء معتمدون</p><p class="trust-sub">أكثر من 50 مصدراً</p></div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon" aria-hidden="true"><svg><use href="#icon-phone"/></svg></div>
+          <div><p class="trust-title">دعم 24/7</p><p class="trust-sub">فريقنا دائماً في خدمتك</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-body">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 py-12">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+          <div class="col-span-2 md:col-span-2">
+            <a href="index.html" class="inline-flex items-center gap-2 mb-4 no-underline">
+              <svg width="36" height="36" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#38BCC0"/><path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/><circle cx="16" cy="14" r="3" fill="#0E8186"/></svg>
+              <span class="text-xl font-bold text-white">رحلاتي</span>
+            </a>
+            <p class="text-sm text-lagoon-300 leading-relaxed mb-5">منصة متخصصة في مقارنة وعرض أفضل عروض السفر من مصادر موثوقة ومعتمدة.</p>
+            <ul class="flex gap-3" aria-label="وسائل التواصل الاجتماعي">
+              <li><a href="#" class="social-btn" aria-label="فيسبوك" data-coming-soon><svg aria-hidden="true"><use href="#icon-facebook"/></svg></a></li>
+              <li><a href="#" class="social-btn" aria-label="تويتر" data-coming-soon><svg aria-hidden="true"><use href="#icon-twitter"/></svg></a></li>
+              <li><a href="#" class="social-btn" aria-label="انستجرام" data-coming-soon><svg aria-hidden="true"><use href="#icon-instagram"/></svg></a></li>
+              <li><a href="#" class="social-btn" aria-label="يوتيوب" data-coming-soon><svg aria-hidden="true"><use href="#icon-youtube"/></svg></a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="footer-heading">المنصة</h3>
+            <ul class="footer-nav">
+              <li><a href="#" class="footer-link" data-coming-soon>عن رحلاتي</a></li>
+              <li><a href="#how-it-works" class="footer-link">كيف تعمل</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>شركاؤنا</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="footer-heading">استكشف</h3>
+            <ul class="footer-nav">
+              <li><a href="#featured" class="footer-link">العروض المميزة</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>الوجهات</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>كوبونات</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="footer-heading">الدعم</h3>
+            <ul class="footer-nav">
+              <li><a href="#faq" class="footer-link">الأسئلة الشائعة</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>تواصل معنا</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>الشروط والأحكام</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>الخصوصية</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 flex flex-wrap items-center justify-between gap-4 py-5">
+        <p class="text-sm text-lagoon-400">© <span data-year></span> رحلاتي. جميع الحقوق محفوظة.</p>
+        <p class="text-xs text-lagoon-500">الأسعار المعروضة تقديرية وقابلة للتغيير · هذا الموقع للأغراض التجريبية فقط</p>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Toast mount -->
+  <div id="toast-root" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- Scripts -->
+  <script src="../src/js/ui.js" defer></script>
+  <script src="../src/js/main.js" defer></script>
+
+  <!-- ═══ Page-scoped styles ════════════════════════════════════════════════ -->
+  <style>
+    /* ── Header ────────────────────────────────────────────────────────── */
+    .site-header {
+      position: sticky; top: 0; z-index: 1020;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(222,227,234,0.6);
+      box-shadow: 0 1px 3px rgb(38 46 58 / 0.06);
+    }
+    .nav-link { display:inline-flex; align-items:center; padding:.5rem .75rem; font-size:.9rem; font-weight:500; color:#4D5969; border-radius:.5rem; text-decoration:none; transition:color 150ms,background 150ms; }
+    .nav-link:hover { color:#0E8186; background:#ECFBFB; }
+    .nav-link-active { color:#0E8186; font-weight:600; }
+    .drawer-nav-link { display:flex; align-items:center; gap:.75rem; padding:.75rem 1rem; font-size:1rem; font-weight:500; color:#3A4453; border-radius:.75rem; text-decoration:none; transition:color 150ms,background 150ms; }
+    .drawer-nav-link svg { width:1.25rem; height:1.25rem; flex:none; color:#9AA6B4; }
+    .drawer-nav-link:hover { color:#0E8186; background:#ECFBFB; }
+    .drawer-nav-link:hover svg { color:#0E8186; }
+    .drawer-nav-link-active { color:#0E8186; background:#ECFBFB; font-weight:600; }
+    .drawer-nav-link-active svg { color:#0E8186; }
+
+    /* ── Hero ───────────────────────────────────────────────────────────── */
+    .hero-section {
+      position: relative; overflow: hidden;
+      background: linear-gradient(150deg, #042B2E 0%, #0E686C 50%, #115457 100%);
+      min-height: 600px;
+    }
+    .hero-blob-1 {
+      position:absolute; top:-80px; inset-inline-end:-80px;
+      width:360px; height:360px; border-radius:50%;
+      background: radial-gradient(circle, rgba(56,188,192,0.25) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .hero-blob-2 {
+      position:absolute; bottom:-60px; inset-inline-start:-60px;
+      width:300px; height:300px; border-radius:50%;
+      background: radial-gradient(circle, rgba(14,129,134,0.3) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .hero-title {
+      font-size: clamp(2.2rem, 5vw, 3.75rem);
+      font-weight: 800;
+      color: white;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+    }
+    .hero-title-gradient {
+      background: linear-gradient(135deg, #38BCC0 0%, #F4BE52 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub { color: #A4E9EA; font-size: 1.125rem; line-height: 1.8; margin-bottom: 2.5rem; }
+    .hero-stats {
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+      gap: 1.5rem; margin-bottom: 2.5rem;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-num { display:block; font-size:1.75rem; font-weight:800; color:white; line-height:1; }
+    .hero-stat-label { display:block; font-size:0.8125rem; color:#6FD7D9; margin-top:.25rem; }
+    .hero-stat-divider { width:1px; height:40px; background:rgba(255,255,255,0.2); }
+    .hero-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
+    .hero-wave { position:absolute; bottom:0; left:0; right:0; line-height:0; }
+    .hero-wave svg { width:100%; height:60px; display:block; }
+
+    /* ── Sections ───────────────────────────────────────────────────────── */
+    .section-eyebrow {
+      display: inline-block; font-size: 0.8125rem; font-weight: 700;
+      color: #0E8186; text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+    .section-title { font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 800; color: #262E3A; }
+    .section-header { display:flex; align-items:flex-end; justify-content:space-between; }
+
+    /* ── Trust Band ─────────────────────────────────────────────────────── */
+    .trust-band { background: linear-gradient(135deg, #0E686C 0%, #115457 100%); }
+    .trust-feature { text-align:center; }
+    .trust-feature-icon {
+      width:3.5rem; height:3.5rem; margin:0 auto 1rem;
+      background: rgba(255,255,255,0.15); border-radius:1rem;
+      display:flex; align-items:center; justify-content:center; color:white;
+    }
+    .trust-feature-icon svg { width:1.625rem; height:1.625rem; }
+    .trust-feature-title { font-size:1rem; font-weight:700; color:white; margin-bottom:.35rem; }
+    .trust-feature-desc { font-size:.875rem; color:#A4E9EA; line-height:1.6; }
+
+    /* ── How It Works ───────────────────────────────────────────────────── */
+    .how-step {
+      text-align:center; padding:2rem 1.5rem;
+      background: #F7F8FA; border-radius:1.5rem;
+      transition: transform 200ms, box-shadow 200ms;
+      position: relative;
+    }
+    .how-step:hover { transform:translateY(-4px); box-shadow:0 20px 30px -8px rgb(38 46 58 / 0.1); }
+    .how-step-featured {
+      background: linear-gradient(135deg, #ECFBFB 0%, #D0F4F4 100%);
+      border: 2px solid #A4E9EA;
+    }
+    .how-step-num {
+      position:absolute; top:-1rem; inset-inline-start:50%; transform:translateX(50%);
+      width:2.25rem; height:2.25rem; background:#0E8186; color:white;
+      border-radius:50%; display:flex; align-items:center; justify-content:center;
+      font-size:.875rem; font-weight:800;
+    }
+    /* LTR flip for step number */
+    html[dir="ltr"] .how-step-num { transform: translateX(-50%); }
+    .how-step-icon {
+      width:3.5rem; height:3.5rem; margin:0.5rem auto 1.25rem;
+      background: rgba(14,129,134,0.1); border-radius:1rem;
+      display:flex; align-items:center; justify-content:center; color:#0E8186;
+    }
+    .how-step-icon svg { width:1.625rem; height:1.625rem; }
+    .how-step-title { font-size:1.1875rem; font-weight:700; color:#262E3A; margin-bottom:.75rem; }
+    .how-step-desc { font-size:.9375rem; color:#6B7889; line-height:1.75; }
+
+    /* ── FAQ ────────────────────────────────────────────────────────────── */
+    .faq-list { display:flex; flex-direction:column; gap:0.75rem; }
+    .faq-item { background:white; border-radius:1rem; overflow:hidden; box-shadow:0 1px 3px rgb(38 46 58 / 0.06); }
+    .faq-details { }
+    .faq-question {
+      display:flex; align-items:center; justify-content:space-between; gap:1rem;
+      padding:1.25rem 1.5rem; cursor:pointer;
+      font-size:1rem; font-weight:600; color:#262E3A;
+      list-style:none; user-select:none;
+      transition: color 150ms;
+    }
+    .faq-question::-webkit-details-marker { display:none; }
+    .faq-question:hover { color:#0E8186; }
+    .faq-details[open] .faq-question { color:#0E8186; }
+    .faq-chevron { width:1.125rem; height:1.125rem; flex:none; color:currentColor; transition:transform 200ms; }
+    .faq-details[open] .faq-chevron { transform:rotate(180deg); }
+    .faq-answer { padding:0 1.5rem 1.25rem; }
+    .faq-answer p { font-size:.9375rem; color:#6B7889; line-height:1.8; }
+    .faq-details[open] .faq-question { border-bottom:1px solid #EEF1F5; }
+
+    /* ── CTA Band ───────────────────────────────────────────────────────── */
+    .cta-band {
+      position:relative; overflow:hidden;
+      background: linear-gradient(135deg, #0E8186 0%, #E08D12 100%);
+    }
+    .cta-band::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 70%);
+    }
+
+    /* ── Footer ────────────────────────────────────────────────────────── */
+    .site-footer { background:#042B2E; color:#D0F4F4; }
+    .trust-row { background:#0E686C; }
+    .trust-item { display:flex; align-items:flex-start; gap:1rem; }
+    .trust-icon { flex:none; width:2.75rem; height:2.75rem; background:rgba(255,255,255,0.12); border-radius:.75rem; display:flex; align-items:center; justify-content:center; color:white; }
+    .trust-icon svg { width:1.375rem; height:1.375rem; }
+    .trust-title { font-size:.9375rem; font-weight:700; color:white; margin-bottom:.15rem; }
+    .trust-sub { font-size:.8125rem; color:#A4E9EA; }
+    .footer-body { border-bottom:1px solid rgba(255,255,255,0.08); }
+    .footer-heading { font-size:.875rem; font-weight:700; color:#6FD7D9; text-transform:uppercase; letter-spacing:.06em; margin-bottom:1rem; }
+    .footer-nav { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.5rem; }
+    .footer-link { font-size:.9rem; color:#9AA6B4; text-decoration:none; transition:color 150ms; }
+    .footer-link:hover { color:#38BCC0; }
+    .social-btn { display:flex; align-items:center; justify-content:center; width:2.25rem; height:2.25rem; background:rgba(255,255,255,0.08); border-radius:.5rem; color:#9AA6B4; transition:background 150ms,color 150ms; text-decoration:none; }
+    .social-btn svg { width:1.125rem; height:1.125rem; }
+    .social-btn:hover { background:#0E8186; color:white; }
+    .footer-bottom { border-top:1px solid rgba(255,255,255,0.06); }
+
+    /* ── Utility ────────────────────────────────────────────────────────── */
+    .no-underline { text-decoration: none !important; }
+    .w-full { width: 100%; }
+  </style>
+
+</body>
+</html>

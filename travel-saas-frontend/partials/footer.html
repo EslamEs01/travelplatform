@@ -1,0 +1,184 @@
+<!-- partials/footer.html — trust row + nav groups + support/social (future: {% include "partials/footer.html" %}) -->
+<footer class="site-footer" role="contentinfo">
+
+  <!-- ── Trust Row ─────────────────────────────────────────────────────────── -->
+  <div class="trust-row">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 py-10">
+
+      <div class="trust-item">
+        <div class="trust-icon" aria-hidden="true">
+          <svg><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
+        </div>
+        <div>
+          <p class="trust-title">عروض موثقة</p>
+          <p class="trust-sub">كل عرض تم التحقق منه يدوياً</p>
+        </div>
+      </div>
+
+      <div class="trust-item">
+        <div class="trust-icon" aria-hidden="true">
+          <svg><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
+        </div>
+        <div>
+          <p class="trust-title">حجز آمن</p>
+          <p class="trust-sub">بياناتك محمية بالكامل</p>
+        </div>
+      </div>
+
+      <div class="trust-item">
+        <div class="trust-icon" aria-hidden="true">
+          <svg><use href="../assets/icons/sprite.svg#icon-star"/></svg>
+        </div>
+        <div>
+          <p class="trust-title">شركاء معتمدون</p>
+          <p class="trust-sub">أكثر من 50 مصدراً موثوقاً</p>
+        </div>
+      </div>
+
+      <div class="trust-item">
+        <div class="trust-icon" aria-hidden="true">
+          <svg><use href="../assets/icons/sprite.svg#icon-phone"/></svg>
+        </div>
+        <div>
+          <p class="trust-title">دعم 24/7</p>
+          <p class="trust-sub">فريقنا دائماً في خدمتك</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Footer Body ────────────────────────────────────────────────────────── -->
+  <div class="footer-body">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 py-12">
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+
+        <!-- Brand column -->
+        <div class="col-span-2 md:col-span-2">
+          <a href="index.html" class="inline-flex items-center gap-2 mb-4 no-underline">
+            <svg width="36" height="36" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <rect width="32" height="32" rx="9" fill="#38BCC0"/>
+              <path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/>
+              <circle cx="16" cy="14" r="3" fill="#0E8186"/>
+            </svg>
+            <span class="text-xl font-bold text-white">رحلاتي</span>
+          </a>
+          <p class="text-sm text-lagoon-300 leading-relaxed mb-5">
+            منصة متخصصة في مقارنة وعرض أفضل عروض السفر من مصادر موثوقة ومعتمدة.
+            ابحث، قارن، واحجز بثقة.
+          </p>
+          <!-- Social links -->
+          <div class="flex gap-3" role="list" aria-label="وسائل التواصل الاجتماعي">
+            <a href="#" class="social-btn" aria-label="صفحة فيسبوك" data-coming-soon role="listitem">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-facebook"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="حساب تويتر" data-coming-soon role="listitem">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-twitter"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="حساب انستجرام" data-coming-soon role="listitem">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-instagram"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="قناة يوتيوب" data-coming-soon role="listitem">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-youtube"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- المنصة -->
+        <div>
+          <h3 class="footer-heading">المنصة</h3>
+          <ul class="footer-nav" role="list">
+            <li><a href="#" class="footer-link" data-coming-soon>عن رحلاتي</a></li>
+            <li><a href="#how-it-works" class="footer-link">كيف تعمل</a></li>
+            <li><a href="#" class="footer-link" data-coming-soon>شركاؤنا</a></li>
+            <li><a href="#" class="footer-link" data-coming-soon>المدونة</a></li>
+          </ul>
+        </div>
+
+        <!-- استكشف -->
+        <div>
+          <h3 class="footer-heading">استكشف</h3>
+          <ul class="footer-nav" role="list">
+            <li><a href="#" class="footer-link" data-coming-soon>العروض المميزة</a></li>
+            <li><a href="#" class="footer-link" data-coming-soon>الوجهات</a></li>
+            <li><a href="#" class="footer-link" data-coming-soon>كوبونات الخصم</a></li>
+            <li><a href="#" class="footer-link" data-coming-soon>مقارنة الأسعار</a></li>
+          </ul>
+        </div>
+
+        <!-- الدعم والقانوني -->
+        <div>
+          <h3 class="footer-heading">الدعم</h3>
+          <ul class="footer-nav" role="list">
+            <li><a href="#faq" class="footer-link">الأسئلة الشائعة</a></li>
+            <li><a href="#" class="footer-link" data-coming-soon>تواصل معنا</a></li>
+            <li><a href="#" class="footer-link" data-coming-soon>الشروط والأحكام</a></li>
+            <li><a href="#" class="footer-link" data-coming-soon>سياسة الخصوصية</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer Bottom Bar ──────────────────────────────────────────────────── -->
+  <div class="footer-bottom">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 flex flex-wrap items-center justify-between gap-4 py-5">
+      <p class="text-sm text-lagoon-400">
+        © <span data-year></span> رحلاتي. جميع الحقوق محفوظة.
+      </p>
+      <p class="text-xs text-lagoon-500">
+        الأسعار المعروضة تقديرية وقابلة للتغيير · هذا الموقع للأغراض التجريبية فقط
+      </p>
+    </div>
+  </div>
+
+</footer>
+
+<!-- ═══ Footer styles ═══════════════════════════════════════════════════════ -->
+<style>
+  .site-footer {
+    background: #042B2E;
+    color: #D0F4F4;
+  }
+
+  .trust-row { background: #0E686C; }
+  .trust-item { display: flex; align-items: flex-start; gap: 1rem; }
+  .trust-icon {
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    background: rgba(255,255,255,0.12);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+  .trust-icon svg { width: 1.375rem; height: 1.375rem; }
+  .trust-title { font-size: 0.9375rem; font-weight: 700; color: white; margin-bottom: 0.15rem; }
+  .trust-sub { font-size: 0.8125rem; color: #A4E9EA; }
+
+  .footer-body { border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .footer-heading { font-size: 0.875rem; font-weight: 700; color: #6FD7D9; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
+  .footer-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-link { font-size: 0.9rem; color: #9AA6B4; text-decoration: none; transition: color 150ms; }
+  .footer-link:hover { color: #38BCC0; }
+
+  .social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    background: rgba(255,255,255,0.08);
+    border-radius: 0.5rem;
+    color: #9AA6B4;
+    transition: background 150ms, color 150ms;
+    text-decoration: none;
+  }
+  .social-btn svg { width: 1.125rem; height: 1.125rem; }
+  .social-btn:hover { background: #0E8186; color: white; }
+
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.06); background: #042B2E; }
+</style>

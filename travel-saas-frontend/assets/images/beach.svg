@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="bsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#A4E9EA"/><stop offset="100%" stop-color="#16A0A5"/></linearGradient>
+    <linearGradient id="bsea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0E8186"/><stop offset="100%" stop-color="#042B2E"/></linearGradient>
+  </defs>
+  <rect width="400" height="145" fill="url(#bsky)"/>
+  <rect y="145" width="400" height="80" fill="url(#bsea)"/>
+  <circle cx="310" cy="52" r="38" fill="#F4BE52" opacity="0.92"/>
+  <ellipse cx="200" cy="170" rx="220" ry="30" fill="#FCEBC8" opacity="0.7"/>
+  <path d="M0,145 Q80,135 160,142 Q240,149 320,138 Q360,133 400,140 L400,155 Q360,148 320,153 Q240,164 160,157 Q80,150 0,160Z" fill="rgba(255,255,255,0.18)"/>
+  <path d="M30,105 Q45,98 60,105" stroke="white" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M80,90 Q100,82 120,90" stroke="white" stroke-width="2.5" fill="none" opacity="0.5"/>
+  <path d="M330,78 Q345,72 360,78" stroke="white" stroke-width="2" fill="none" opacity="0.5"/>
+</svg>

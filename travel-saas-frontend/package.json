@@ -1,0 +1,26 @@
+{
+  "name": "travel-saas-frontend",
+  "version": "1.0.0",
+  "description": "Travel SaaS Platform — Frontend Foundation",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./assets/css/tailwind.css --minify",
+    "watch": "tailwindcss -i ./src/input.css -o ./assets/css/tailwind.css --watch",
+    "serve": "npx serve .",
+    "format": "prettier --write .",
+    "lint:css": "stylelint \"src/**/*.css\"",
+    "audit:a11y": "axe http://localhost:3000/pages/index.html"
+  },
+  "devDependencies": {
+    "@axe-core/cli": "^4.9.1",
+    "@tailwindcss/forms": "^0.5.9",
+    "autoprefixer": "^10.4.20",
+    "html-validate": "^9.7.1",
+    "postcss": "^8.4.49",
+    "prettier": "^3.4.2",
+    "serve": "^14.2.4",
+    "stylelint": "^16.12.0",
+    "stylelint-config-standard": "^36.0.1",
+    "tailwindcss": "^3.4.17"
+  }
+}

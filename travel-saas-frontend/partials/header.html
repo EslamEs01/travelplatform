@@ -1,0 +1,195 @@
+<!-- partials/header.html — branded top bar + mobile drawer (future: {% include "partials/header.html" %}) -->
+
+<!-- ═══ Top Bar ═══════════════════════════════════════════════════════════════ -->
+<header class="site-header" role="banner">
+  <div class="header-inner max-w-7xl mx-auto px-4 md:px-6 flex items-center h-16 gap-4">
+
+    <!-- Brand -->
+    <a href="index.html" class="brand flex items-center gap-2 me-auto no-underline" aria-label="رحلاتي – الصفحة الرئيسية">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="9" fill="#0E8186"/>
+          <path d="M16 7C11.029 7 7 11.029 7 16s4.029 9 9 9 9-4.029 9-9-4.029-9-9-9z" fill="#38BCC0" opacity="0.35"/>
+          <path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/>
+          <circle cx="16" cy="14" r="3" fill="#0E8186"/>
+        </svg>
+      </span>
+      <span class="brand-name text-xl font-bold text-lagoon-700 tracking-tight">رحلاتي</span>
+    </a>
+
+    <!-- Desktop navigation -->
+    <nav class="hidden lg:flex items-center gap-1" aria-label="التنقل الرئيسي">
+      <a href="index.html" class="nav-link nav-link-active" aria-current="page">الرئيسية</a>
+      <a href="#" class="nav-link" data-coming-soon>عروض السفر</a>
+      <a href="#" class="nav-link" data-coming-soon>مقارنة الأسعار</a>
+      <a href="#" class="nav-link" data-coming-soon>كوبونات</a>
+      <a href="#" class="nav-link" data-coming-soon>وجهات</a>
+      <a href="#" class="nav-link" data-coming-soon>الدليل</a>
+    </nav>
+
+    <!-- Language toggle (inert this phase per spec Clarifications) -->
+    <button
+      type="button"
+      class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-ink-500 hover:text-ink-700 rounded-lg hover:bg-ink-100 transition-colors"
+      aria-label="تغيير اللغة إلى الإنجليزية (غير متاح حالياً)"
+      aria-disabled="true"
+      tabindex="-1"
+    >
+      <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-globe"/></svg>
+      <span>EN</span>
+    </button>
+
+    <!-- Desktop CTA -->
+    <a href="#" class="hidden md:flex btn btn-primary btn-sm" data-coming-soon>
+      تسجيل الدخول
+    </a>
+
+    <!-- Mobile hamburger -->
+    <button
+      type="button"
+      class="btn btn-ghost btn-icon lg:hidden"
+      aria-label="فتح القائمة"
+      aria-expanded="false"
+      aria-controls="main-nav"
+      data-drawer-open="main-nav"
+    >
+      <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-menu"/></svg>
+    </button>
+
+  </div>
+</header>
+
+<!-- ═══ Mobile Drawer ══════════════════════════════════════════════════════════ -->
+<div
+  class="drawer drawer-start"
+  id="main-nav-drawer"
+  data-drawer="main-nav"
+  role="dialog"
+  aria-modal="true"
+  aria-label="قائمة التنقل"
+  hidden
+>
+  <div class="drawer-overlay" data-drawer-close aria-hidden="true"></div>
+
+  <nav class="drawer-panel" aria-label="التنقل الرئيسي">
+
+    <!-- Drawer header -->
+    <div class="flex items-center justify-between p-4 border-b border-ink-100">
+      <a href="index.html" class="brand flex items-center gap-2 no-underline">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="9" fill="#0E8186"/>
+            <path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/>
+            <circle cx="16" cy="14" r="3" fill="#0E8186"/>
+          </svg>
+        </span>
+        <span class="text-lg font-bold text-lagoon-700">رحلاتي</span>
+      </a>
+      <button
+        type="button"
+        class="btn btn-ghost btn-icon"
+        aria-label="إغلاق القائمة"
+        data-drawer-close
+      >
+        <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-close"/></svg>
+      </button>
+    </div>
+
+    <!-- Drawer nav links -->
+    <ul class="drawer-nav flex-1 p-4 space-y-1" role="list">
+      <li>
+        <a href="index.html" class="drawer-nav-link drawer-nav-link-active" aria-current="page">
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plane"/></svg>
+          الرئيسية
+        </a>
+      </li>
+      <li>
+        <a href="#" class="drawer-nav-link" data-coming-soon>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>
+          عروض السفر
+        </a>
+      </li>
+      <li>
+        <a href="#" class="drawer-nav-link" data-coming-soon>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search"/></svg>
+          مقارنة الأسعار
+        </a>
+      </li>
+      <li>
+        <a href="#" class="drawer-nav-link" data-coming-soon>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
+          كوبونات الخصم
+        </a>
+      </li>
+      <li>
+        <a href="#" class="drawer-nav-link" data-coming-soon>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg>
+          الوجهات
+        </a>
+      </li>
+      <li>
+        <a href="#" class="drawer-nav-link" data-coming-soon>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>
+          دليل السفر
+        </a>
+      </li>
+    </ul>
+
+    <!-- Drawer footer CTA -->
+    <div class="p-4 border-t border-ink-100 space-y-3">
+      <a href="#" class="btn btn-primary w-full justify-center" data-coming-soon>
+        تسجيل الدخول
+      </a>
+      <a href="#" class="btn btn-outline w-full justify-center" data-coming-soon>
+        إنشاء حساب جديد
+      </a>
+    </div>
+
+  </nav>
+</div>
+
+<!-- ═══ Inline styles for header + drawer nav (not utility-only, kept here) ══ -->
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(222,227,234,0.6);
+    box-shadow: 0 1px 3px rgb(38 46 58 / 0.06);
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #4D5969;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: color 150ms, background 150ms;
+  }
+  .nav-link:hover { color: #0E8186; background: #ECFBFB; }
+  .nav-link-active { color: #0E8186; font-weight: 600; }
+
+  .drawer-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #3A4453;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    transition: color 150ms, background 150ms;
+  }
+  .drawer-nav-link svg { width: 1.25rem; height: 1.25rem; flex: none; color: #9AA6B4; }
+  .drawer-nav-link:hover { color: #0E8186; background: #ECFBFB; }
+  .drawer-nav-link:hover svg { color: #0E8186; }
+  .drawer-nav-link-active { color: #0E8186; background: #ECFBFB; font-weight: 600; }
+  .drawer-nav-link-active svg { color: #0E8186; }
+</style>
