@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="hsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCEBC8"/><stop offset="60%" stop-color="#F4A552"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
+    <linearGradient id="hsand" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#D4A96A"/><stop offset="100%" stop-color="#92600A"/></linearGradient>
+  </defs>
+  <!-- Sky at dusk -->
+  <rect width="400" height="225" fill="url(#hsky)"/>
+  <!-- Sun low on horizon -->
+  <circle cx="200" cy="160" r="55" fill="#F4BE52" opacity="0.35"/>
+  <circle cx="200" cy="162" r="36" fill="#F4BE52" opacity="0.7"/>
+  <!-- Horizon dust haze -->
+  <ellipse cx="200" cy="165" rx="220" ry="18" fill="#D97706" opacity="0.25"/>
+  <!-- Desert ground -->
+  <path d="M0,165 Q100,158 200,163 Q300,168 400,160 L400,225 L0,225Z" fill="url(#hsand)"/>
+  <!-- Great Pyramid left -->
+  <polygon points="30,165 90,100 150,165" fill="#C8974A" opacity="0.92"/>
+  <polygon points="30,165 90,100 90,165" fill="#A0732A" opacity="0.6"/>
+  <!-- Great Pyramid center (largest) -->
+  <polygon points="110,165 200,72 290,165" fill="#D4A056" opacity="0.95"/>
+  <polygon points="110,165 200,72 200,165" fill="#B07D38" opacity="0.55"/>
+  <!-- Smaller pyramid right -->
+  <polygon points="270,165 320,115 370,165" fill="#C8974A" opacity="0.88"/>
+  <polygon points="270,165 320,115 320,165" fill="#9E722A" opacity="0.5"/>
+  <!-- Sphinx silhouette rough -->
+  <rect x="155" y="152" width="50" height="14" rx="4" fill="#8B5E20" opacity="0.7"/>
+  <circle cx="200" cy="148" r="9" fill="#A07232" opacity="0.8"/>
+  <!-- Capstone glow -->
+  <circle cx="200" cy="74" r="4" fill="#F4BE52" opacity="0.9"/>
+  <!-- Stars beginning to appear -->
+  <circle cx="40" cy="25" r="1" fill="white" opacity="0.7"/>
+  <circle cx="340" cy="18" r="1.2" fill="white" opacity="0.6"/>
+  <circle cx="380" cy="40" r="0.8" fill="white" opacity="0.5"/>
+  <circle cx="15" cy="60" r="0.8" fill="white" opacity="0.4"/>
+  <circle cx="360" cy="60" r="1" fill="white" opacity="0.5"/>
+</svg>

@@ -1,0 +1,232 @@
+{
+  "default": {
+    "tripLabel": "إسطنبول – 5 ليالٍ لشخصين",
+    "destination": "إسطنبول",
+    "offers": [
+      {
+        "id": "deal-002",
+        "provider": "سكاي ترافيل – شريك معتمد",
+        "source": "Partner",
+        "priceFrom": 2450,
+        "currency": "ر.س",
+        "rating": 4.8,
+        "inclusions": ["فطور", "نقل", "مرشد"],
+        "cta": { "label": "عرض التفاصيل", "kind": "details" }
+      },
+      {
+        "id": "deal-002",
+        "provider": "بوكينج كو – أفلييت",
+        "source": "Affiliate",
+        "priceFrom": 2680,
+        "currency": "ر.س",
+        "rating": 4.6,
+        "inclusions": ["فطور", "نقل"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      },
+      {
+        "id": "deal-002",
+        "provider": "رحلاتي ديلز – إدخال يدوي",
+        "source": "Manual Deal",
+        "priceFrom": 2320,
+        "currency": "ر.س",
+        "rating": 4.5,
+        "inclusions": ["فطور"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      },
+      {
+        "id": "deal-002",
+        "provider": "ترافيل API – جاهز للدمج",
+        "source": "API Ready",
+        "priceFrom": 2550,
+        "currency": "ر.س",
+        "rating": 4.7,
+        "inclusions": ["فطور", "نقل", "تأمين"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      }
+    ]
+  },
+  "إسطنبول": {
+    "tripLabel": "إسطنبول – 5 ليالٍ لشخصين",
+    "destination": "إسطنبول",
+    "offers": [
+      {
+        "id": "deal-002",
+        "provider": "سكاي ترافيل – شريك معتمد",
+        "source": "Partner",
+        "priceFrom": 2450,
+        "currency": "ر.س",
+        "rating": 4.8,
+        "inclusions": ["فطور", "نقل", "مرشد"],
+        "cta": { "label": "عرض التفاصيل", "kind": "details" }
+      },
+      {
+        "id": "deal-002",
+        "provider": "بوكينج كو – أفلييت",
+        "source": "Affiliate",
+        "priceFrom": 2680,
+        "currency": "ر.س",
+        "rating": 4.6,
+        "inclusions": ["فطور", "نقل"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      },
+      {
+        "id": "deal-002",
+        "provider": "رحلاتي ديلز – إدخال يدوي",
+        "source": "Manual Deal",
+        "priceFrom": 2320,
+        "currency": "ر.س",
+        "rating": 4.5,
+        "inclusions": ["فطور"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      },
+      {
+        "id": "deal-002",
+        "provider": "ترافيل API – جاهز للدمج",
+        "source": "API Ready",
+        "priceFrom": 2550,
+        "currency": "ر.س",
+        "rating": 4.7,
+        "inclusions": ["فطور", "نقل", "تأمين"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      }
+    ]
+  },
+  "دبي": {
+    "tripLabel": "دبي الفاخرة – 4 ليالٍ لشخصين",
+    "destination": "دبي",
+    "offers": [
+      {
+        "id": "deal-003",
+        "provider": "سكاي ترافيل – شريك معتمد",
+        "source": "Partner",
+        "priceFrom": 3200,
+        "currency": "ر.س",
+        "rating": 4.9,
+        "inclusions": ["فطور", "نقل", "سفاري"],
+        "cta": { "label": "عرض التفاصيل", "kind": "details" }
+      },
+      {
+        "id": "deal-003",
+        "provider": "إكسبيديا أفلييت",
+        "source": "Affiliate",
+        "priceFrom": 3450,
+        "currency": "ر.س",
+        "rating": 4.7,
+        "inclusions": ["فطور", "نقل"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      },
+      {
+        "id": "deal-003",
+        "provider": "رحلاتي ديلز – إدخال يدوي",
+        "source": "Manual Deal",
+        "priceFrom": 3050,
+        "currency": "ر.س",
+        "rating": 4.5,
+        "inclusions": ["فطور"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      },
+      {
+        "id": "deal-003",
+        "provider": "آمادئوس API – جاهز",
+        "source": "API Ready",
+        "priceFrom": 3300,
+        "currency": "ر.س",
+        "rating": 4.8,
+        "inclusions": ["فطور", "نقل", "تأمين", "سفاري"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      }
+    ]
+  },
+  "الرياض": {
+    "tripLabel": "الرياض الحديثة – 3 ليالٍ لشخصين",
+    "destination": "الرياض",
+    "offers": [
+      {
+        "id": "deal-009",
+        "provider": "سكاي ترافيل – شريك معتمد",
+        "source": "Partner",
+        "priceFrom": 1400,
+        "currency": "ر.س",
+        "rating": 4.7,
+        "inclusions": ["فطور", "نقل"],
+        "cta": { "label": "عرض التفاصيل", "kind": "details" }
+      },
+      {
+        "id": "deal-009",
+        "provider": "نون ترافيل – أفلييت",
+        "source": "Affiliate",
+        "priceFrom": 1550,
+        "currency": "ر.س",
+        "rating": 4.5,
+        "inclusions": ["فطور"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      },
+      {
+        "id": "deal-009",
+        "provider": "رحلاتي ديلز – إدخال يدوي",
+        "source": "Manual Deal",
+        "priceFrom": 1350,
+        "currency": "ر.س",
+        "rating": 4.4,
+        "inclusions": [],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      },
+      {
+        "id": "deal-009",
+        "provider": "سفريات API – جاهز",
+        "source": "API Ready",
+        "priceFrom": 1480,
+        "currency": "ر.س",
+        "rating": 4.6,
+        "inclusions": ["فطور", "نقل"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      }
+    ]
+  },
+  "شرم الشيخ": {
+    "tripLabel": "شرم الشيخ – 4 ليالٍ لشخصين",
+    "destination": "شرم الشيخ",
+    "offers": [
+      {
+        "id": "deal-001",
+        "provider": "سكاي ترافيل – شريك معتمد",
+        "source": "Partner",
+        "priceFrom": 1950,
+        "currency": "ر.س",
+        "rating": 4.7,
+        "inclusions": ["فطور", "نقل", "غطس"],
+        "cta": { "label": "عرض التفاصيل", "kind": "details" }
+      },
+      {
+        "id": "deal-001",
+        "provider": "بوكينج كو – أفلييت",
+        "source": "Affiliate",
+        "priceFrom": 2100,
+        "currency": "ر.س",
+        "rating": 4.5,
+        "inclusions": ["فطور", "نقل"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      },
+      {
+        "id": "deal-001",
+        "provider": "رحلاتي ديلز – إدخال يدوي",
+        "source": "Manual Deal",
+        "priceFrom": 1850,
+        "currency": "ر.س",
+        "rating": 4.4,
+        "inclusions": ["فطور"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      },
+      {
+        "id": "deal-001",
+        "provider": "تريفلبايوتس – جاهز",
+        "source": "API Ready",
+        "priceFrom": 2000,
+        "currency": "ر.س",
+        "rating": 4.6,
+        "inclusions": ["فطور", "نقل", "غطس"],
+        "cta": { "label": "قارن العرض", "kind": "details" }
+      }
+    ]
+  }
+}

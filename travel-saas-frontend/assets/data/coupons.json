@@ -1,0 +1,86 @@
+[
+  {
+    "id": "coupon-flights-15",
+    "title": "خصم على رحلات الطيران",
+    "merchant": "شريك الطيران الموثوق",
+    "category": "طيران",
+    "source": "Affiliate",
+    "badgeClass": "badge-source-affiliate",
+    "discountLabel": "خصم 15%",
+    "code": "FLY15",
+    "expiry": "حتى 31 ديسمبر 2026",
+    "terms": "يُطبَّق على رحلات مختارة. مثال توضيحي فقط — غير مضمون."
+  },
+  {
+    "id": "coupon-hotel-20",
+    "title": "خصم على إقامة الفنادق",
+    "merchant": "شبكة الفنادق المتميزة",
+    "category": "فنادق",
+    "source": "Partner",
+    "badgeClass": "badge-source-partner",
+    "discountLabel": "خصم 20%",
+    "code": "HOTEL20",
+    "expiry": "حتى 30 سبتمبر 2026",
+    "terms": "يُطبَّق على الفنادق 4 و5 نجوم. مثال توضيحي فقط."
+  },
+  {
+    "id": "coupon-bundle-10",
+    "title": "خصم على الباقات السياحية",
+    "merchant": "وكالات السفر المعتمدة",
+    "category": "باقات",
+    "source": "Manual Deal",
+    "badgeClass": "badge-source-manual",
+    "discountLabel": "خصم 10%",
+    "code": "BUNDLE10",
+    "expiry": "حتى 28 فبراير 2027",
+    "terms": "يُطبَّق على الباقات المتكاملة (طيران + فندق). مثال توضيحي فقط."
+  },
+  {
+    "id": "coupon-activity-25",
+    "title": "خصم على الأنشطة السياحية",
+    "merchant": "منصة الأنشطة الترفيهية",
+    "category": "أنشطة",
+    "source": "API Ready",
+    "badgeClass": "badge-source-api-ready",
+    "discountLabel": "خصم 25%",
+    "code": "ACT25",
+    "expiry": "حتى 31 مارس 2027",
+    "terms": "يُطبَّق على رحلات الغطس والصحراء والمغامرات. مثال توضيحي فقط."
+  },
+  {
+    "id": "coupon-winter-12",
+    "title": "عرض الشتاء للرحلات الأوروبية",
+    "merchant": "شريك السفر الأوروبي",
+    "category": "طيران",
+    "source": "Partner",
+    "badgeClass": "badge-source-partner",
+    "discountLabel": "خصم 12%",
+    "code": "WINTER12",
+    "expiry": "حتى 28 فبراير 2027",
+    "terms": "يُطبَّق على الرحلات لأوروبا فقط. الحجز مسبقاً شرط. مثال توضيحي فقط."
+  },
+  {
+    "id": "coupon-luxury-30",
+    "title": "خصم على الفنادق الفاخرة",
+    "merchant": "مجموعة المنتجعات الراقية",
+    "category": "فنادق",
+    "source": "Affiliate",
+    "badgeClass": "badge-source-affiliate",
+    "discountLabel": "خصم 30%",
+    "code": "LUXURY30",
+    "expiry": "حتى 30 يونيو 2026",
+    "terms": "يُطبَّق على الفنادق 5 نجوم المشاركة. مثال توضيحي فقط."
+  },
+  {
+    "id": "coupon-family-15",
+    "title": "عرض العائلة والمجموعات",
+    "merchant": "وكالة رحلات العائلة",
+    "category": "باقات",
+    "source": "Manual Deal",
+    "badgeClass": "badge-source-manual",
+    "discountLabel": "خصم 15%",
+    "code": "FAMILY15",
+    "expiry": "حتى 31 أغسطس 2026",
+    "terms": "يُطبَّق على مجموعات 4 أشخاص فأكثر. مثال توضيحي فقط."
+  }
+]

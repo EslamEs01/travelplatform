@@ -19,6 +19,7 @@
   <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
   <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
   <link rel="stylesheet" href="../assets/css/tailwind.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"ما هي منصة رحلاتي وكيف تختلف عن غيرها؟","acceptedAnswer":{"@type":"Answer","text":"رحلاتي منصة متخصصة في تجميع ومقارنة عروض السفر من أكثر من 50 مصدراً موثوقاً في مكان واحد. بدلاً من البحث في مواقع متعددة، نوفر لك رؤية شاملة للأسعار المتاحة مع ضمان التحقق من كل عرض قبل نشره."}},{"@type":"Question","name":"كيف تتحقق المنصة من صحة العروض المعروضة؟","acceptedAnswer":{"@type":"Answer","text":"يمر كل عرض بعملية مراجعة يدوية من فريقنا قبل نشره. نتحقق من صحة الأسعار وتوافر المقاعد وسمعة الشريك المزود. العروض المميزة بعلامة \"موثّق\" تعني أننا تأكدنا منها شخصياً."}},{"@type":"Question","name":"هل الأسعار المعروضة نهائية أم قابلة للتغيير؟","acceptedAnswer":{"@type":"Answer","text":"الأسعار المعروضة هي أسعار تقديرية \"ابتداءً من\" وقابلة للتغيير حسب التوافر والموسم. نوضح دائماً أن هذه أسعار بداية وليست ضماناً، وننصح بالتأكد من السعر النهائي مع الشريك المزود مباشرة قبل إتمام الحجز."}},{"@type":"Question","name":"كيف يمكنني التواصل مع فريق الدعم؟","acceptedAnswer":{"@type":"Answer","text":"فريق الدعم متاح على مدار الساعة 24/7 عبر البريد الإلكتروني ووسائل التواصل الاجتماعي. يمكنك أيضاً استخدام نموذج التواصل في صفحة اتصل بنا. نلتزم بالرد خلال ساعة واحدة في أوقات الدوام."}},{"@type":"Question","name":"هل يمكنني مقارنة أسعار من مصادر مختلفة للوجهة ذاتها؟","acceptedAnswer":{"@type":"Answer","text":"نعم، هذه هي الميزة الأساسية للمنصة. لكل وجهة، نعرض جميع العروض المتاحة من المصادر المختلفة جنباً إلى جنب مع تفاصيل واضحة عن مصدر كل عرض (شريك، أفلييت، صفقة يدوية، أو API)."}}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"رحلاتي","description":"منصة مقارنة عروض السفر","url":"https://rihlaty.example.com","logo":"https://rihlaty.example.com/assets/icons/favicon.svg","contactPoint":{"@type":"ContactPoint","contactType":"customer service","availableLanguage":["Arabic","English"]}}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"رحلاتي","url":"https://rihlaty.example.com","inLanguage":"ar","potentialAction":{"@type":"SearchAction","target":"https://rihlaty.example.com/search?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
 </head>
@@ -71,9 +72,9 @@
 
       <nav class="hidden lg:flex items-center gap-1" aria-label="التنقل الرئيسي">
         <a href="index.html" class="nav-link nav-link-active" aria-current="page">الرئيسية</a>
-        <a href="#" class="nav-link" data-coming-soon>عروض السفر</a>
-        <a href="#" class="nav-link" data-coming-soon>مقارنة الأسعار</a>
-        <a href="#" class="nav-link" data-coming-soon>كوبونات</a>
+        <a href="deals.html" class="nav-link">عروض السفر</a>
+        <a href="compare.html" class="nav-link">مقارنة الأسعار</a>
+        <a href="coupons.html" class="nav-link">كوبونات</a>
         <a href="#" class="nav-link" data-coming-soon>وجهات</a>
         <a href="#" class="nav-link" data-coming-soon>الدليل</a>
       </nav>
@@ -116,9 +117,9 @@
       </div>
       <ul class="flex-1 p-4 space-y-1">
         <li><a href="index.html" class="drawer-nav-link drawer-nav-link-active" aria-current="page"><svg aria-hidden="true"><use href="#icon-plane"/></svg>الرئيسية</a></li>
-        <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-star"/></svg>عروض السفر</a></li>
-        <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-search"/></svg>مقارنة الأسعار</a></li>
-        <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-shield-check"/></svg>كوبونات الخصم</a></li>
+        <li><a href="deals.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="#icon-star"/></svg>عروض السفر</a></li>
+        <li><a href="compare.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="#icon-search"/></svg>مقارنة الأسعار</a></li>
+        <li><a href="coupons.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="#icon-shield-check"/></svg>كوبونات الخصم</a></li>
         <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-location"/></svg>الوجهات</a></li>
         <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-info"/></svg>دليل السفر</a></li>
       </ul>
@@ -177,15 +178,53 @@
           </div>
         </div>
 
-        <!-- CTAs -->
-        <div class="hero-actions">
-          <a href="#featured" class="btn btn-primary btn-lg">
-            <svg aria-hidden="true"><use href="#icon-search"/></svg>
-            اكتشف العروض
-          </a>
-          <a href="#how-it-works" class="btn btn-outline-white btn-lg">
-            كيف تعمل رحلاتي؟
-          </a>
+        <!-- Search/Comparison Entry (US1 / T004–T005) -->
+        <div class="search-card">
+          <form data-validate method="get" action="compare.html"
+                aria-label="بحث ومقارنة عروض السفر" novalidate>
+            <div class="search-fields-grid">
+
+              <div class="field">
+                <label class="field-label" for="search-destination">الوجهة</label>
+                <input class="field-input" id="search-destination" name="destination"
+                       type="text" required minlength="2"
+                       aria-describedby="search-destination-err"
+                       placeholder="إلى أين تسافر؟">
+                <p class="field-error" id="search-destination-err" role="alert" hidden>الرجاء إدخال وجهة (حرفان على الأقل).</p>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="search-dates">تاريخ الرحلة</label>
+                <input class="field-input" id="search-dates" name="dates" type="month">
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="search-travelers">المسافرون</label>
+                <select class="field-select" id="search-travelers" name="travelers">
+                  <option value="1">مسافر واحد</option>
+                  <option value="2">مسافران</option>
+                  <option value="3">٣ مسافرين</option>
+                  <option value="4">٤ مسافرين</option>
+                  <option value="5">٥ أو أكثر</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg search-submit-btn">
+                <svg aria-hidden="true"><use href="#icon-search"/></svg>
+                ابحث وقارن
+              </button>
+            </div>
+
+          </form>
+
+          <div class="search-quick">
+            <span class="search-quick-label">وجهات شهيرة:</span>
+            <button type="button" class="search-quick-chip" data-coming-soon>دبي</button>
+            <button type="button" class="search-quick-chip" data-coming-soon>إسطنبول</button>
+            <button type="button" class="search-quick-chip" data-coming-soon>المالديف</button>
+            <button type="button" class="search-quick-chip" data-coming-soon>باريس</button>
+            <button type="button" class="search-quick-chip" data-coming-soon>شرم الشيخ</button>
+          </div>
         </div>
 
       </div>
@@ -207,8 +246,8 @@
             <span class="section-eyebrow">مختارة بعناية</span>
             <h2 id="featured-heading" class="section-title">العروض المميزة</h2>
           </div>
-          <a href="#" class="btn btn-outline btn-sm hidden md:flex" data-coming-soon>
-            عرض جميع الوجهات
+          <a href="deals.html" class="btn btn-outline btn-sm hidden md:flex">
+            عرض جميع العروض
             <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
           </a>
         </div>
@@ -227,7 +266,7 @@
             <img class="card-media" src="../assets/images/beach.svg" alt="شاطئ رملي في شرم الشيخ" loading="lazy" width="400" height="225">
             <div class="card-body">
               <h3 class="card-title">
-                <a href="#" data-coming-soon>عطلة في شرم الشيخ – 4 ليالٍ</a>
+                <a href="deal-details.html?id=deal-001">عطلة في شرم الشيخ – 4 ليالٍ</a>
               </h3>
               <p class="card-meta">
                 <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
@@ -237,7 +276,7 @@
                 <span>4.7 <span class="text-ink-400">(248)</span></span>
               </p>
               <p class="price">ابتداءً من <strong>1,950</strong> <span>ر.س</span></p>
-              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>عرض التفاصيل</button>
+              <a href="deal-details.html?id=deal-001" class="btn btn-primary btn-sm w-full justify-center">عرض التفاصيل</a>
             </div>
           </article>
 
@@ -250,7 +289,7 @@
             <img class="card-media" src="../assets/images/city.svg" alt="أفق مدينة إسطنبول بمآذنها الشهيرة" loading="lazy" width="400" height="225">
             <div class="card-body">
               <h3 class="card-title">
-                <a href="#" data-coming-soon>رحلة إلى إسطنبول – 5 ليالٍ</a>
+                <a href="deal-details.html?id=deal-002">رحلة إلى إسطنبول – 5 ليالٍ</a>
               </h3>
               <p class="card-meta">
                 <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
@@ -260,7 +299,7 @@
                 <span>4.8 <span class="text-ink-400">(391)</span></span>
               </p>
               <p class="price">ابتداءً من <strong>2,450</strong> <span>ر.س</span></p>
-              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>اطلب الحجز</button>
+              <a href="deal-details.html?id=deal-002" class="btn btn-primary btn-sm w-full justify-center">اطلب الحجز</a>
             </div>
           </article>
 
@@ -276,7 +315,7 @@
             <img class="card-media" src="../assets/images/luxury.svg" alt="أفق دبي الرائع مع ناطحات السحاب" loading="lazy" width="400" height="225">
             <div class="card-body">
               <h3 class="card-title">
-                <a href="#" data-coming-soon>دبي الفاخرة – 4 ليالٍ</a>
+                <a href="deal-details.html?id=deal-003">دبي الفاخرة – 4 ليالٍ</a>
               </h3>
               <p class="card-meta">
                 <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
@@ -286,7 +325,7 @@
                 <span>4.9 <span class="text-ink-400">(512)</span></span>
               </p>
               <p class="price">ابتداءً من <strong>3,200</strong> <span>ر.س</span></p>
-              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>عرض التفاصيل</button>
+              <a href="deal-details.html?id=deal-003" class="btn btn-primary btn-sm w-full justify-center">عرض التفاصيل</a>
             </div>
           </article>
 
@@ -299,7 +338,7 @@
             <img class="card-media" src="../assets/images/beach.svg" alt="شعب مرجانية وشواطئ بيضاء في المالديف" loading="lazy" width="400" height="225">
             <div class="card-body">
               <h3 class="card-title">
-                <a href="#" data-coming-soon>وجهة المالديف الحلم – 6 ليالٍ</a>
+                <a href="deal-details.html?id=deal-004">وجهة المالديف الحلم – 6 ليالٍ</a>
               </h3>
               <p class="card-meta">
                 <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
@@ -309,7 +348,7 @@
                 <span>5.0 <span class="text-ink-400">(134)</span></span>
               </p>
               <p class="price">ابتداءً من <strong>8,500</strong> <span>ر.س</span></p>
-              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>اطلب الحجز</button>
+              <a href="deal-details.html?id=deal-004" class="btn btn-primary btn-sm w-full justify-center">اطلب الحجز</a>
             </div>
           </article>
 
@@ -322,7 +361,7 @@
             <img class="card-media" src="../assets/images/city.svg" alt="برج إيفل وأفق باريس" loading="lazy" width="400" height="225">
             <div class="card-body">
               <h3 class="card-title">
-                <a href="#" data-coming-soon>باريس الرومانسية – 7 ليالٍ</a>
+                <a href="deal-details.html?id=deal-005">باريس الرومانسية – 7 ليالٍ</a>
               </h3>
               <p class="card-meta">
                 <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
@@ -332,7 +371,7 @@
                 <span>4.6 <span class="text-ink-400">(289)</span></span>
               </p>
               <p class="price">ابتداءً من <strong>5,800</strong> <span>ر.س</span></p>
-              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>عرض التفاصيل</button>
+              <a href="deal-details.html?id=deal-005" class="btn btn-primary btn-sm w-full justify-center">عرض التفاصيل</a>
             </div>
           </article>
 
@@ -345,7 +384,7 @@
             <img class="card-media" src="../assets/images/nature.svg" alt="جبال الألب المغطاة بالثلج في سويسرا" loading="lazy" width="400" height="225">
             <div class="card-body">
               <h3 class="card-title">
-                <a href="#" data-coming-soon>جبال الألب السويسرية – 5 ليالٍ</a>
+                <a href="deal-details.html?id=deal-006">جبال الألب السويسرية – 5 ليالٍ</a>
               </h3>
               <p class="card-meta">
                 <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
@@ -355,7 +394,7 @@
                 <span>4.8 <span class="text-ink-400">(176)</span></span>
               </p>
               <p class="price">ابتداءً من <strong>6,950</strong> <span>ر.س</span></p>
-              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>عرض التفاصيل</button>
+              <a href="deal-details.html?id=deal-006" class="btn btn-primary btn-sm w-full justify-center">عرض التفاصيل</a>
             </div>
           </article>
 
@@ -363,16 +402,210 @@
 
         <!-- Mobile "show all" -->
         <div class="text-center mt-8 md:hidden">
-          <a href="#" class="btn btn-outline" data-coming-soon>عرض جميع الوجهات</a>
+          <a href="deals.html" class="btn btn-outline">عرض جميع العروض</a>
         </div>
 
       </div>
     </section>
 
-    <!-- ── § 3 TRUST BAND ─────────────────────────────────────────────── -->
-    <section class="trust-band" aria-label="لماذا تثق بنا">
+    <!-- ── § 3 POPULAR DESTINATIONS ───────────────────────────────────────── -->
+    <section id="destinations" class="py-16 md:py-24 bg-white" aria-labelledby="destinations-heading">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+
+        <div class="section-header mb-10">
+          <div>
+            <span class="section-eyebrow">اكتشف العالم</span>
+            <h2 id="destinations-heading" class="section-title">وجهات شهيرة</h2>
+          </div>
+          <a href="#" class="btn btn-outline btn-sm hidden md:flex" data-coming-soon>
+            كل الوجهات
+            <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
+          </a>
+        </div>
+
+        <div class="dest-grid">
+
+          <!-- إسطنبول -->
+          <article class="dest-card" aria-label="وجهة: إسطنبول، تركيا">
+            <div class="dest-card-inner">
+              <img class="dest-card-img" src="../assets/images/city.svg" alt="أفق مدينة إسطنبول بمآذنها الشهيرة" loading="lazy" width="320" height="200">
+              <div class="dest-card-overlay" aria-hidden="true"></div>
+              <span class="dest-deals-pill" aria-label="38 عرضاً متاحاً">38 عرضاً</span>
+            </div>
+            <div class="dest-card-body">
+              <h3 class="dest-name">إسطنبول</h3>
+              <p class="dest-country">
+                <svg class="w-3.5 h-3.5" aria-hidden="true"><use href="#icon-location"/></svg>
+                تركيا
+              </p>
+              <p class="dest-price">ابتداءً من <strong>2,450</strong> ر.س</p>
+              <button type="button" class="btn btn-outline btn-sm w-full justify-center mt-3" data-coming-soon>استكشف</button>
+            </div>
+          </article>
+
+          <!-- دبي -->
+          <article class="dest-card" aria-label="وجهة: دبي، الإمارات">
+            <div class="dest-card-inner">
+              <img class="dest-card-img" src="../assets/images/luxury.svg" alt="ناطحات السحاب الشاهقة في دبي" loading="lazy" width="320" height="200">
+              <div class="dest-card-overlay" aria-hidden="true"></div>
+              <span class="dest-deals-pill" aria-label="54 عرضاً متاحاً">54 عرضاً</span>
+            </div>
+            <div class="dest-card-body">
+              <h3 class="dest-name">دبي</h3>
+              <p class="dest-country">
+                <svg class="w-3.5 h-3.5" aria-hidden="true"><use href="#icon-location"/></svg>
+                الإمارات
+              </p>
+              <p class="dest-price">ابتداءً من <strong>3,200</strong> ر.س</p>
+              <button type="button" class="btn btn-outline btn-sm w-full justify-center mt-3" data-coming-soon>استكشف</button>
+            </div>
+          </article>
+
+          <!-- المالديف -->
+          <article class="dest-card" aria-label="وجهة: المالديف">
+            <div class="dest-card-inner">
+              <img class="dest-card-img" src="../assets/images/beach.svg" alt="شواطئ رملية بيضاء ومياه فيروزية في المالديف" loading="lazy" width="320" height="200">
+              <div class="dest-card-overlay" aria-hidden="true"></div>
+              <span class="dest-deals-pill" aria-label="12 عرضاً متاحاً">12 عرضاً</span>
+            </div>
+            <div class="dest-card-body">
+              <h3 class="dest-name">المالديف</h3>
+              <p class="dest-country">
+                <svg class="w-3.5 h-3.5" aria-hidden="true"><use href="#icon-location"/></svg>
+                المالديف
+              </p>
+              <p class="dest-price">ابتداءً من <strong>8,500</strong> ر.س</p>
+              <button type="button" class="btn btn-outline btn-sm w-full justify-center mt-3" data-coming-soon>استكشف</button>
+            </div>
+          </article>
+
+          <!-- باريس -->
+          <article class="dest-card" aria-label="وجهة: باريس، فرنسا">
+            <div class="dest-card-inner">
+              <img class="dest-card-img" src="../assets/images/nature.svg" alt="مناظر طبيعية خلابة قرب باريس" loading="lazy" width="320" height="200">
+              <div class="dest-card-overlay" aria-hidden="true"></div>
+              <span class="dest-deals-pill" aria-label="29 عرضاً متاحاً">29 عرضاً</span>
+            </div>
+            <div class="dest-card-body">
+              <h3 class="dest-name">باريس</h3>
+              <p class="dest-country">
+                <svg class="w-3.5 h-3.5" aria-hidden="true"><use href="#icon-location"/></svg>
+                فرنسا
+              </p>
+              <p class="dest-price">ابتداءً من <strong>5,800</strong> ر.س</p>
+              <button type="button" class="btn btn-outline btn-sm w-full justify-center mt-3" data-coming-soon>استكشف</button>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="text-center mt-8 md:hidden">
+          <a href="#" class="btn btn-outline" data-coming-soon>كل الوجهات</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── § 4 COUPONS & OFFERS ────────────────────────────────────────────── -->
+    <section id="coupons" class="coupons-section py-16 md:py-24" aria-labelledby="coupons-heading">
+      <!-- decorative radial glow -->
+      <div class="coupons-glow" aria-hidden="true"></div>
+
+      <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+
+        <div class="section-header mb-10">
+          <div>
+            <span class="section-eyebrow coupons-eyebrow">كوبونات حصرية</span>
+            <h2 id="coupons-heading" class="section-title coupons-title">كوبونات وعروض</h2>
+          </div>
+        </div>
+
+        <div class="coupons-grid">
+
+          <!-- كوبون 1: رحلات الطيران 15% -->
+          <article class="coupon-card" aria-label="كوبون: خصم 15% على رحلات الطيران">
+            <div class="coupon-discount-col" aria-hidden="true">
+              <span class="coupon-discount-num">15%</span>
+              <span class="coupon-discount-word">خصم</span>
+            </div>
+            <div class="coupon-body">
+              <div class="coupon-top-row">
+                <h3 class="coupon-title">خصم على رحلات الطيران</h3>
+                <span class="badge badge-source-affiliate">Affiliate</span>
+              </div>
+              <p class="coupon-merchant">شريك الطيران الموثوق</p>
+              <div class="coupon-code-row">
+                <span class="coupon-code" dir="ltr" aria-label="الكود: FLY15">FLY15</span>
+                <button type="button" class="coupon-copy-btn" data-copy="FLY15" aria-label="نسخ الكود FLY15">
+                  <svg aria-hidden="true"><use href="#icon-copy"/></svg>
+                  نسخ
+                </button>
+              </div>
+              <p class="coupon-terms">حتى 31 ديسمبر 2026 · يُطبَّق على رحلات مختارة. <strong>مثال توضيحي فقط.</strong></p>
+              <a href="coupons.html" class="btn btn-primary btn-sm coupon-cta">احصل على الكوبون</a>
+            </div>
+          </article>
+
+          <!-- كوبون 2: فنادق 20% -->
+          <article class="coupon-card" aria-label="كوبون: خصم 20% على الفنادق">
+            <div class="coupon-discount-col coupon-discount-col--gold" aria-hidden="true">
+              <span class="coupon-discount-num">20%</span>
+              <span class="coupon-discount-word">خصم</span>
+            </div>
+            <div class="coupon-body">
+              <div class="coupon-top-row">
+                <h3 class="coupon-title">خصم على إقامة الفنادق</h3>
+                <span class="badge badge-source-partner">
+                  <svg aria-hidden="true"><use href="#icon-shield-check"/></svg>
+                  Partner
+                </span>
+              </div>
+              <p class="coupon-merchant">شبكة الفنادق المتميزة</p>
+              <div class="coupon-code-row">
+                <span class="coupon-code" dir="ltr" aria-label="الكود: HOTEL20">HOTEL20</span>
+                <button type="button" class="coupon-copy-btn" data-copy="HOTEL20" aria-label="نسخ الكود HOTEL20">
+                  <svg aria-hidden="true"><use href="#icon-copy"/></svg>
+                  نسخ
+                </button>
+              </div>
+              <p class="coupon-terms">حتى 30 سبتمبر 2026 · يُطبَّق على الفنادق 4 و5 نجوم. <strong>مثال توضيحي فقط.</strong></p>
+              <a href="coupons.html" class="btn btn-primary btn-sm coupon-cta">احصل على الكوبون</a>
+            </div>
+          </article>
+
+          <!-- كوبون 3: باقات 10% -->
+          <article class="coupon-card" aria-label="كوبون: خصم 10% على الباقات السياحية">
+            <div class="coupon-discount-col" aria-hidden="true">
+              <span class="coupon-discount-num">10%</span>
+              <span class="coupon-discount-word">خصم</span>
+            </div>
+            <div class="coupon-body">
+              <div class="coupon-top-row">
+                <h3 class="coupon-title">خصم على الباقات السياحية</h3>
+                <span class="badge badge-source-manual">Manual Deal</span>
+              </div>
+              <p class="coupon-merchant">وكالات السفر المعتمدة</p>
+              <div class="coupon-code-row">
+                <span class="coupon-code" dir="ltr" aria-label="الكود: BUNDLE10">BUNDLE10</span>
+                <button type="button" class="coupon-copy-btn" data-copy="BUNDLE10" aria-label="نسخ الكود BUNDLE10">
+                  <svg aria-hidden="true"><use href="#icon-copy"/></svg>
+                  نسخ
+                </button>
+              </div>
+              <p class="coupon-terms">حتى 28 فبراير 2027 · يُطبَّق على الباقات المتكاملة (طيران + فندق). <strong>مثال توضيحي فقط.</strong></p>
+              <a href="coupons.html" class="btn btn-primary btn-sm coupon-cta">احصل على الكوبون</a>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── § 5 TRUST BAND ─────────────────────────────────────────────── -->
+    <section class="trust-band" aria-labelledby="trust-heading">
       <div class="max-w-7xl mx-auto px-4 md:px-6 py-14">
-        <h2 class="text-center text-2xl md:text-3xl font-bold text-white mb-10">لماذا يثق بنا المسافرون؟</h2>
+        <h2 id="trust-heading" class="text-center text-2xl md:text-3xl font-bold text-white mb-10">لماذا يثق بنا المسافرون؟</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
 
           <div class="trust-feature">
@@ -455,7 +688,234 @@
       </div>
     </section>
 
-    <!-- ── § 5 FAQ ────────────────────────────────────────────────────── -->
+    <!-- ── § 6 SOCIAL PROOF ──────────────────────────────────────────────── -->
+    <section id="testimonials" class="py-16 md:py-24 bg-ink-50" aria-labelledby="testimonials-heading">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+
+        <div class="text-center mb-12">
+          <span class="section-eyebrow">آراء المسافرين</span>
+          <h2 id="testimonials-heading" class="section-title">ماذا يقول مسافرونا؟</h2>
+          <p class="text-ink-500 mt-3 max-w-xl mx-auto">تجارب من مسافرين استخدموا المنصة — <strong>بيانات توضيحية فقط</strong></p>
+        </div>
+
+        <!-- Testimonial cards -->
+        <div class="testimonials-grid mb-14">
+
+          <!-- شهادة 1 -->
+          <article class="testimonial-card">
+            <div class="testimonial-quote-mark" aria-hidden="true">&ldquo;</div>
+            <p class="testimonial-text">وفّرت ساعات من البحث المرهق — وجدت عرض إسطنبول المثالي في دقائق بمقارنة ثلاثة مصادر مختلفة. المنصة شفافة ومريحة جداً.</p>
+            <footer class="testimonial-footer">
+              <div class="testimonial-avatar" aria-hidden="true">أ</div>
+              <div class="testimonial-author">
+                <p class="testimonial-name">أحمد خالد</p>
+                <p class="testimonial-city">الرياض، السعودية</p>
+              </div>
+              <div class="testimonial-stars" aria-label="تقييم 5 من 5 نجوم">
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+              </div>
+            </footer>
+          </article>
+
+          <!-- شهادة 2 -->
+          <article class="testimonial-card testimonial-card--accent">
+            <div class="testimonial-quote-mark" aria-hidden="true">&ldquo;</div>
+            <p class="testimonial-text">أخيراً منصة عربية تجمع العروض من أماكن متعددة! رحلة المالديف كانت أحسن تجربة سفر في حياتي ومن خلال رحلاتي قارنت ووفّرت الكثير.</p>
+            <footer class="testimonial-footer">
+              <div class="testimonial-avatar testimonial-avatar--gold" aria-hidden="true">س</div>
+              <div class="testimonial-author">
+                <p class="testimonial-name">سارة المنصور</p>
+                <p class="testimonial-city">دبي، الإمارات</p>
+              </div>
+              <div class="testimonial-stars" aria-label="تقييم 5 من 5 نجوم">
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+              </div>
+            </footer>
+          </article>
+
+          <!-- شهادة 3 -->
+          <article class="testimonial-card">
+            <div class="testimonial-quote-mark" aria-hidden="true">&ldquo;</div>
+            <p class="testimonial-text">شفافية الأسعار ووضوح مصدر كل عرض ميّزا رحلاتي عن غيرها. أعرف بالضبط هل العرض من شريك موثق أم أفلييت، وهذا يبني الثقة الحقيقية.</p>
+            <footer class="testimonial-footer">
+              <div class="testimonial-avatar testimonial-avatar--teal" aria-hidden="true">م</div>
+              <div class="testimonial-author">
+                <p class="testimonial-name">محمد العمري</p>
+                <p class="testimonial-city">القاهرة، مصر</p>
+              </div>
+              <div class="testimonial-stars" aria-label="تقييم 4 من 5 نجوم">
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg aria-hidden="true"><use href="#icon-star"/></svg>
+                <svg class="star-dim" aria-hidden="true"><use href="#icon-star"/></svg>
+              </div>
+            </footer>
+          </article>
+
+        </div>
+
+        <!-- Trusted Partners strip -->
+        <div class="partners-wrap">
+          <p class="partners-label">شركاؤنا الموثوقون <span class="text-ink-300">(أمثلة توضيحية — ليست علاقات تجارية حقيقية)</span></p>
+          <div class="partners-row" role="list">
+
+            <div class="partner-item" role="listitem">
+              <svg class="partner-mark" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+              <span class="partner-name">طيران الشرق</span>
+              <span class="partner-kind">شريك معتمد</span>
+            </div>
+
+            <div class="partner-item" role="listitem">
+              <svg class="partner-mark" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span class="partner-name">فنادق الخليج</span>
+              <span class="partner-kind">شريك معتمد</span>
+            </div>
+
+            <div class="partner-item" role="listitem">
+              <svg class="partner-mark" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              <span class="partner-name">وكالة السياحة العالمية</span>
+              <span class="partner-kind">شريك معتمد</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── § 7 TRAVEL GUIDES TEASER ───────────────────────────────────────── -->
+    <section id="guides" class="py-16 md:py-24 bg-white" aria-labelledby="guides-heading">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+
+        <div class="section-header mb-10">
+          <div>
+            <span class="section-eyebrow">نصائح السفر</span>
+            <h2 id="guides-heading" class="section-title">دليل السفر والنصائح</h2>
+          </div>
+          <a href="#" class="btn btn-outline btn-sm hidden md:flex" data-coming-soon>
+            كل المقالات
+            <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
+          </a>
+        </div>
+
+        <div class="guides-grid">
+
+          <!-- دليل 1 -->
+          <article class="guide-card">
+            <div class="guide-card-media">
+              <img src="../assets/images/city.svg" alt="مدن سياحية عالمية ومعالم أثرية" loading="lazy" width="400" height="200">
+              <span class="guide-category-pill">نصائح السفر</span>
+            </div>
+            <div class="guide-card-body">
+              <h3 class="guide-title">10 نصائح ذهبية قبل السفر لأول مرة</h3>
+              <p class="guide-excerpt">سواء كانت رحلتك الأولى أو العاشرة، هذه النصائح ستجعل تجربتك أكثر سلاسة وأقل إجهاداً: تحقق من التأشيرة مبكراً، احجز الفندق قبل الطيران، واستعد لمفاجآت العملة والمناخ.</p>
+              <button type="button" class="guide-read-btn" data-coming-soon>
+                اقرأ المزيد
+                <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- دليل 2 -->
+          <article class="guide-card">
+            <div class="guide-card-media">
+              <img src="../assets/images/beach.svg" alt="وجهات شاطئية استوائية مع مياه صافية" loading="lazy" width="400" height="200">
+              <span class="guide-category-pill">وجهات موصى بها</span>
+            </div>
+            <div class="guide-card-body">
+              <h3 class="guide-title">أفضل 5 وجهات صيفية للعائلات العربية</h3>
+              <p class="guide-excerpt">اخترنا لك أجمل الوجهات التي توازن بين الترفيه والراحة والملاءمة للأسرة بميزانيات متنوعة. من شرم الشيخ إلى ماليزيا، كل وجهة بتفاصيل العروض والتوقيت الأمثل للسفر.</p>
+              <button type="button" class="guide-read-btn" data-coming-soon>
+                اقرأ المزيد
+                <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- دليل 3 -->
+          <article class="guide-card">
+            <div class="guide-card-media">
+              <img src="../assets/images/nature.svg" alt="مناظر طبيعية خلابة وتجارب سفر مغامرة" loading="lazy" width="400" height="200">
+              <span class="guide-category-pill">توفير المال</span>
+            </div>
+            <div class="guide-card-body">
+              <h3 class="guide-title">كيف توفر 30% على رحلتك القادمة؟</h3>
+              <p class="guide-excerpt">استراتيجيات مجربة لتوفير المال عند الحجز: المرونة في تواريخ السفر، مقارنة الأسعار من مصادر متعددة في وقت واحد، واستغلال كوبونات الخصم المتاحة بطريقة ذكية وآمنة.</p>
+              <button type="button" class="guide-read-btn" data-coming-soon>
+                اقرأ المزيد
+                <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
+              </button>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── § 8 NEWSLETTER / PRICE ALERT ───────────────────────────────────── -->
+    <section id="newsletter" class="newsletter-section py-16 md:py-24" aria-labelledby="newsletter-heading">
+      <div class="newsletter-bg-glow" aria-hidden="true"></div>
+      <div class="max-w-2xl mx-auto px-4 md:px-6 relative z-10 text-center">
+
+        <div class="newsletter-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+
+        <span class="section-eyebrow newsletter-eyebrow">تنبيهات الأسعار</span>
+        <h2 id="newsletter-heading" class="newsletter-title">لا تفوّت أي عرض</h2>
+        <p class="newsletter-sub">اشترك لتصلك أفضل العروض أولاً بأول — مجاناً وبدون إزعاج. <strong>لا نشارك بريدك مع أي جهة خارجية.</strong></p>
+
+        <form class="newsletter-form" data-validate data-frontend-form
+              data-success-toast="شكراً لاشتراكك — سنرسل لك أفضل العروض قريباً"
+              aria-label="اشترك في تنبيهات الأسعار" novalidate>
+          <div class="newsletter-input-row">
+            <div class="field newsletter-field">
+              <label class="field-label newsletter-field-label" for="news-email">البريد الإلكتروني</label>
+              <input class="field-input newsletter-input" id="news-email" name="email"
+                     type="email" required dir="ltr"
+                     aria-describedby="news-email-err"
+                     placeholder="example@email.com">
+              <p class="field-error" id="news-email-err" role="alert" hidden>الرجاء إدخال بريد إلكتروني صحيح.</p>
+            </div>
+            <button type="submit" class="btn btn-primary newsletter-btn">
+              <svg aria-hidden="true"><use href="#icon-check-circle"/></svg>
+              اشترك الآن
+            </button>
+          </div>
+          <p class="inline-msg inline-msg-success mt-4" data-frontend-success hidden role="status">
+            تم التسجيل! — تأكيد توضيحي فقط، لا يُحفظ أي بريد فعلياً على خوادمنا.
+          </p>
+        </form>
+
+        <div class="newsletter-perks">
+          <div class="newsletter-perk">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            <span>خصوصية تامة</span>
+          </div>
+          <div class="newsletter-perk">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>عروض حصرية أولاً</span>
+          </div>
+          <div class="newsletter-perk">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            <span>إلغاء الاشتراك في أي وقت</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── § 9 FAQ ────────────────────────────────────────────────────── -->
     <section id="faq" class="py-16 md:py-24" aria-labelledby="faq-heading">
       <div class="max-w-3xl mx-auto px-4 md:px-6">
 
@@ -606,14 +1066,16 @@
               <li><a href="#" class="footer-link" data-coming-soon>عن رحلاتي</a></li>
               <li><a href="#how-it-works" class="footer-link">كيف تعمل</a></li>
               <li><a href="#" class="footer-link" data-coming-soon>شركاؤنا</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>المدونة</a></li>
             </ul>
           </div>
           <div>
             <h3 class="footer-heading">استكشف</h3>
             <ul class="footer-nav">
-              <li><a href="#featured" class="footer-link">العروض المميزة</a></li>
+              <li><a href="deals.html" class="footer-link">العروض المميزة</a></li>
               <li><a href="#" class="footer-link" data-coming-soon>الوجهات</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>كوبونات</a></li>
+              <li><a href="coupons.html" class="footer-link">كوبونات الخصم</a></li>
+              <li><a href="compare.html" class="footer-link">مقارنة الأسعار</a></li>
             </ul>
           </div>
           <div>
@@ -622,7 +1084,7 @@
               <li><a href="#faq" class="footer-link">الأسئلة الشائعة</a></li>
               <li><a href="#" class="footer-link" data-coming-soon>تواصل معنا</a></li>
               <li><a href="#" class="footer-link" data-coming-soon>الشروط والأحكام</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>الخصوصية</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>سياسة الخصوصية</a></li>
             </ul>
           </div>
         </div>
@@ -709,6 +1171,53 @@
     .hero-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
     .hero-wave { position:absolute; bottom:0; left:0; right:0; line-height:0; }
     .hero-wave svg { width:100%; height:60px; display:block; }
+
+    /* ── Search Card ───────────────────────────────────────────────────── */
+    .search-card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.75rem 2rem;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35), 0 8px 20px rgba(0,0,0,0.15);
+      margin-top: 2.5rem;
+      margin-inline: auto;
+      max-width: 860px;
+      text-align: start;
+    }
+    .search-fields-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      align-items: end;
+    }
+    @media (min-width: 768px) {
+      .search-fields-grid {
+        grid-template-columns: 1.8fr 1fr 1fr auto;
+        gap: 0.875rem;
+      }
+    }
+    .search-submit-btn { width: 100%; justify-content: center; }
+    @media (min-width: 768px) {
+      .search-submit-btn { width: auto; justify-content: initial; }
+    }
+    .search-quick {
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: 0.5rem; margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #EEF1F5;
+    }
+    .search-quick-label { font-size: 0.8125rem; color: #9AA6B4; font-weight: 500; white-space: nowrap; }
+    .search-quick-chip {
+      display: inline-flex; align-items: center;
+      padding: 0.3125rem 0.875rem;
+      font-size: 0.8125rem; font-weight: 500;
+      background: rgba(14,129,134,0.07);
+      color: #0e8186;
+      border: 1.5px solid rgba(14,129,134,0.18);
+      border-radius: 2rem; cursor: pointer;
+      transition: background 150ms, border-color 150ms;
+      font-family: inherit; line-height: 1.4; min-height: 32px;
+    }
+    .search-quick-chip:hover { background: rgba(14,129,134,0.14); border-color: rgba(14,129,134,0.35); }
 
     /* ── Sections ───────────────────────────────────────────────────────── */
     .section-eyebrow {
@@ -807,6 +1316,274 @@
     .social-btn svg { width:1.125rem; height:1.125rem; }
     .social-btn:hover { background:#0E8186; color:white; }
     .footer-bottom { border-top:1px solid rgba(255,255,255,0.06); }
+
+    /* ── Destinations ─────────────────────────────────────────────────── */
+    .dest-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    @media (min-width: 768px) {
+      .dest-grid { grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+    }
+    .dest-card {
+      background: white;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgb(38 46 58 / 0.08);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+    .dest-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgb(38 46 58 / 0.15);
+    }
+    .dest-card-inner { position: relative; overflow: hidden; }
+    .dest-card-img {
+      width: 100%; height: 160px; object-fit: cover; display: block;
+      transition: transform 320ms ease;
+    }
+    @media (min-width: 768px) { .dest-card-img { height: 180px; } }
+    .dest-card:hover .dest-card-img { transform: scale(1.07); }
+    .dest-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(4,43,46,0.55) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .dest-deals-pill {
+      position: absolute; top: .625rem; inset-inline-end: .625rem;
+      background: rgba(14,129,134,0.92);
+      color: white; font-size: .6875rem; font-weight: 700;
+      padding: .2rem .625rem; border-radius: 2rem;
+      backdrop-filter: blur(4px);
+    }
+    .dest-card-body { padding: .875rem 1rem 1rem; }
+    .dest-name { font-size: 1.0625rem; font-weight: 700; color: #262E3A; margin-bottom: .15rem; }
+    .dest-country {
+      display: flex; align-items: center; gap: .3rem;
+      font-size: .8125rem; color: #9AA6B4; margin-bottom: .5rem;
+    }
+    .dest-country svg { flex: none; color: #0E8186; }
+    .dest-price { font-size: .875rem; color: #6B7889; }
+    .dest-price strong { color: #0E8186; font-size: 1rem; font-weight: 700; }
+
+    /* ── Coupons ───────────────────────────────────────────────────────── */
+    .coupons-section {
+      position: relative; overflow: hidden;
+      background: linear-gradient(140deg, #042B2E 0%, #0A4548 55%, #073033 100%);
+    }
+    .coupons-glow {
+      position: absolute; top: -100px; inset-inline-end: -100px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(56,188,192,0.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .coupons-eyebrow { color: #F4BE52 !important; }
+    .coupons-title { color: white !important; }
+    .coupons-grid {
+      display: grid; grid-template-columns: 1fr; gap: 1.25rem;
+    }
+    @media (min-width: 768px) { .coupons-grid { grid-template-columns: repeat(3, 1fr); } }
+    .coupon-card {
+      background: white; border-radius: 1.25rem; overflow: hidden;
+      display: flex; flex-direction: row;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+    .coupon-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.35);
+    }
+    .coupon-discount-col {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: linear-gradient(180deg, #0E8186 0%, #0A6468 100%);
+      color: white; padding: 1.25rem .875rem;
+      min-width: 5rem; flex-shrink: 0;
+      border-inline-end: 2px dashed rgba(255,255,255,0.3);
+      text-align: center; position: relative;
+    }
+    .coupon-discount-col--gold {
+      background: linear-gradient(180deg, #D97706 0%, #B45309 100%);
+    }
+    .coupon-discount-col::after {
+      content: '';
+      position: absolute;
+      inset-block: -1px;
+      inset-inline-end: -8px;
+      width: 16px; height: 16px;
+      background: white; border-radius: 50%;
+      top: 50%; transform: translateY(-50%);
+      box-shadow: inset 0 0 0 2px #EEF1F5;
+    }
+    .coupon-discount-num { font-size: 1.75rem; font-weight: 800; line-height: 1; display: block; }
+    .coupon-discount-word { font-size: .75rem; font-weight: 600; opacity: .85; display: block; margin-top: .25rem; }
+    .coupon-body { padding: .875rem 1.125rem; flex: 1; min-width: 0; }
+    .coupon-top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; margin-bottom: .25rem; }
+    .coupon-title { font-size: .9375rem; font-weight: 700; color: #262E3A; line-height: 1.35; flex: 1; }
+    .coupon-merchant { font-size: .8125rem; color: #9AA6B4; margin-bottom: .625rem; }
+    .coupon-code-row {
+      display: flex; align-items: center; gap: .5rem;
+      background: #F7F8FA; border: 1.5px dashed #A4E9EA; border-radius: .625rem;
+      padding: .4rem .75rem; margin-bottom: .5rem;
+    }
+    .coupon-code {
+      flex: 1; font-family: monospace; font-size: 1rem; font-weight: 700;
+      color: #0E8186; letter-spacing: .08em; white-space: nowrap;
+    }
+    .coupon-copy-btn {
+      display: inline-flex; align-items: center; gap: .3rem;
+      background: #0E8186; color: white; border: none; border-radius: .5rem;
+      font-size: .75rem; font-weight: 600; padding: .35rem .7rem;
+      cursor: pointer; transition: background 150ms; white-space: nowrap;
+      font-family: inherit; line-height: 1.4; min-height: 32px;
+    }
+    .coupon-copy-btn svg { width: .875rem; height: .875rem; }
+    .coupon-copy-btn:hover { background: #0A6468; }
+    .coupon-copy-btn:focus-visible { outline: 2px solid #0E8186; outline-offset: 2px; }
+    .coupon-terms { font-size: .75rem; color: #9AA6B4; line-height: 1.55; margin-bottom: .75rem; }
+    .coupon-cta { display: flex; width: 100%; justify-content: center; }
+
+    /* ── Testimonials ─────────────────────────────────────────────────── */
+    .testimonials-grid {
+      display: grid; grid-template-columns: 1fr; gap: 1.25rem;
+    }
+    @media (min-width: 768px) { .testimonials-grid { grid-template-columns: repeat(3, 1fr); } }
+    .testimonial-card {
+      background: white; border-radius: 1.5rem; padding: 1.75rem;
+      box-shadow: 0 2px 12px rgb(38 46 58 / 0.07);
+      position: relative; overflow: hidden;
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+    .testimonial-card:hover { transform: translateY(-5px); box-shadow: 0 18px 36px rgb(38 46 58 / 0.13); }
+    .testimonial-card--accent {
+      background: linear-gradient(135deg, #ECFBFB 0%, #D0F4F4 100%);
+      border: 1.5px solid #A4E9EA;
+    }
+    .testimonial-quote-mark {
+      font-size: 6rem; line-height: .9;
+      color: rgba(14,129,134,0.1); font-family: inherit;
+      position: absolute; top: .25rem; inset-inline-start: 1.125rem;
+      pointer-events: none; user-select: none;
+    }
+    .testimonial-text {
+      font-size: .9375rem; color: #3A4453; line-height: 1.85;
+      position: relative; z-index: 1; margin-bottom: 1.5rem;
+    }
+    .testimonial-footer { display: flex; align-items: center; gap: .875rem; }
+    .testimonial-avatar {
+      width: 2.75rem; height: 2.75rem; border-radius: 50%;
+      background: linear-gradient(135deg, #0E8186 0%, #38BCC0 100%);
+      color: white; font-size: 1.125rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .testimonial-avatar--gold { background: linear-gradient(135deg, #D97706 0%, #F4BE52 100%); }
+    .testimonial-avatar--teal { background: linear-gradient(135deg, #115457 0%, #0E8186 100%); }
+    .testimonial-author { flex: 1; min-width: 0; }
+    .testimonial-name { font-size: .9375rem; font-weight: 700; color: #262E3A; }
+    .testimonial-city { font-size: .8125rem; color: #9AA6B4; }
+    .testimonial-stars { display: flex; gap: .15rem; margin-inline-start: auto; flex-shrink: 0; }
+    .testimonial-stars svg { width: .875rem; height: .875rem; color: #F4BE52; }
+    .testimonial-stars .star-dim { color: #DEE3EA; }
+
+    /* ── Trusted Partners ──────────────────────────────────────────────── */
+    .partners-wrap { border-top: 1px solid #EEF1F5; padding-top: 2rem; }
+    .partners-label {
+      text-align: center; font-size: .8125rem; font-weight: 600;
+      color: #9AA6B4; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 1.5rem;
+    }
+    .partners-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+    .partner-item {
+      display: flex; flex-direction: column; align-items: center; gap: .3rem;
+      background: white; border: 1.5px solid #EEF1F5; border-radius: 1rem;
+      padding: 1rem 1.5rem; min-width: 130px;
+      transition: border-color 200ms, box-shadow 200ms, transform 200ms;
+    }
+    .partner-item:hover {
+      border-color: #A4E9EA;
+      box-shadow: 0 4px 16px rgb(14 129 134 / 0.1);
+      transform: translateY(-3px);
+    }
+    .partner-mark { width: 2rem; height: 2rem; color: #0E8186; }
+    .partner-name { font-size: .9375rem; font-weight: 700; color: #262E3A; text-align: center; }
+    .partner-kind { font-size: .75rem; color: #0E8186; font-weight: 600; }
+
+    /* ── Travel Guides ─────────────────────────────────────────────────── */
+    .guides-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    @media (min-width: 768px) { .guides-grid { grid-template-columns: repeat(3, 1fr); } }
+    .guide-card {
+      background: white; border-radius: 1.25rem; overflow: hidden;
+      box-shadow: 0 2px 12px rgb(38 46 58 / 0.08);
+      display: flex; flex-direction: column;
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+    .guide-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgb(38 46 58 / 0.14); }
+    .guide-card-media { position: relative; overflow: hidden; }
+    .guide-card-media img {
+      width: 100%; height: 180px; object-fit: cover; display: block;
+      transition: transform 300ms;
+    }
+    .guide-card:hover .guide-card-media img { transform: scale(1.06); }
+    .guide-category-pill {
+      position: absolute; bottom: .75rem; inset-inline-start: .75rem;
+      background: rgba(14,129,134,0.9); color: white;
+      font-size: .6875rem; font-weight: 700; padding: .25rem .75rem; border-radius: 2rem;
+      backdrop-filter: blur(4px);
+    }
+    .guide-card-body { padding: 1.25rem 1.25rem 1.5rem; display: flex; flex-direction: column; flex: 1; }
+    .guide-title { font-size: 1.0625rem; font-weight: 700; color: #262E3A; line-height: 1.4; margin-bottom: .625rem; }
+    .guide-excerpt { font-size: .9rem; color: #6B7889; line-height: 1.75; margin-bottom: 1.25rem; flex: 1; }
+    .guide-read-btn {
+      display: inline-flex; align-items: center; gap: .375rem;
+      background: none; border: none; padding: 0; cursor: pointer;
+      font-size: .9375rem; font-weight: 600; color: #0E8186;
+      font-family: inherit; transition: gap 220ms, color 220ms; align-self: flex-start;
+    }
+    .guide-read-btn:hover { color: #0A6468; gap: .625rem; }
+    .guide-read-btn svg { width: 1rem; height: 1rem; }
+    .guide-read-btn:focus-visible { outline: 2px solid #0E8186; outline-offset: 3px; border-radius: .25rem; }
+
+    /* ── Newsletter ────────────────────────────────────────────────────── */
+    .newsletter-section {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #ECFBFB 0%, #C8F2F3 50%, #A4E9EA 100%);
+    }
+    .newsletter-bg-glow {
+      position: absolute; bottom: -100px; inset-inline-start: -100px;
+      width: 480px; height: 480px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(14,129,134,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .newsletter-icon-wrap {
+      width: 4rem; height: 4rem; margin: 0 auto .875rem;
+      background: #0E8186; border-radius: 1.125rem;
+      display: flex; align-items: center; justify-content: center; color: white;
+      box-shadow: 0 8px 24px rgba(14,129,134,0.38);
+    }
+    .newsletter-icon-wrap svg { width: 1.75rem; height: 1.75rem; }
+    .newsletter-eyebrow { color: #0E8186 !important; }
+    .newsletter-title {
+      font-size: clamp(1.875rem, 3.5vw, 2.5rem); font-weight: 800;
+      color: #042B2E; line-height: 1.2; margin-bottom: .75rem;
+    }
+    .newsletter-sub {
+      font-size: 1rem; color: #115457; line-height: 1.75;
+      max-width: 30rem; margin: 0 auto 2rem;
+    }
+    .newsletter-form { max-width: 520px; margin: 0 auto; text-align: start; }
+    .newsletter-input-row { display: flex; flex-direction: column; gap: .75rem; }
+    @media (min-width: 560px) { .newsletter-input-row { flex-direction: row; align-items: flex-end; } }
+    .newsletter-field { flex: 1; }
+    .newsletter-field-label { color: #115457 !important; font-weight: 600 !important; }
+    .newsletter-input { background: white !important; border-color: rgba(14,129,134,0.35) !important; }
+    .newsletter-btn { white-space: nowrap; display: inline-flex; align-items: center; gap: .5rem; justify-content: center; }
+    .newsletter-perks {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .newsletter-perk {
+      display: flex; align-items: center; gap: .4rem;
+      font-size: .8125rem; font-weight: 600; color: #0A6468;
+    }
+    .newsletter-perk svg { width: 1rem; height: 1rem; flex: none; }
 
     /* ── Utility ────────────────────────────────────────────────────────── */
     .no-underline { text-decoration: none !important; }

@@ -27,7 +27,9 @@
     "svg-focusable": "off",
     "heading-level": "warn",
     "no-unknown-elements": "warn",
-    "attribute-allowed-values": "off"
+    "attribute-allowed-values": "off",
+    "no-redundant-role": "off",
+    "unique-landmark": "off"
   },
   "elements": ["html5"]
 }

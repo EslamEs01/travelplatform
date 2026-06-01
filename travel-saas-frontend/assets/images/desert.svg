@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="dsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0D1B2A"/><stop offset="55%" stop-color="#1A3A5C"/><stop offset="100%" stop-color="#16A0A5" stop-opacity="0.4"/></linearGradient>
+    <linearGradient id="dsand" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C4924A"/><stop offset="100%" stop-color="#7A4A10"/></linearGradient>
+  </defs>
+  <!-- Night sky -->
+  <rect width="400" height="225" fill="url(#dsky)"/>
+  <!-- Stars -->
+  <circle cx="20" cy="15" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="55" cy="8" r="1" fill="white" opacity="0.8"/>
+  <circle cx="95" cy="22" r="1.2" fill="white" opacity="0.7"/>
+  <circle cx="140" cy="10" r="0.8" fill="white" opacity="0.6"/>
+  <circle cx="175" cy="28" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="210" cy="5" r="1" fill="white" opacity="0.8"/>
+  <circle cx="250" cy="18" r="1.2" fill="white" opacity="0.7"/>
+  <circle cx="300" cy="12" r="0.8" fill="white" opacity="0.6"/>
+  <circle cx="340" cy="25" r="1.5" fill="white" opacity="0.9"/>
+  <circle cx="380" cy="8" r="1" fill="white" opacity="0.7"/>
+  <circle cx="70" cy="40" r="0.8" fill="white" opacity="0.5"/>
+  <circle cx="160" cy="45" r="0.8" fill="white" opacity="0.5"/>
+  <circle cx="280" cy="38" r="0.8" fill="white" opacity="0.6"/>
+  <circle cx="360" cy="48" r="0.8" fill="white" opacity="0.4"/>
+  <!-- Crescent moon -->
+  <circle cx="340" cy="50" r="22" fill="#FCEBC8" opacity="0.95"/>
+  <circle cx="350" cy="44" r="17" fill="#1A3A5C" opacity="0.95"/>
+  <!-- Milky way band -->
+  <ellipse cx="140" cy="60" rx="180" ry="15" fill="white" opacity="0.04" transform="rotate(-20 140 60)"/>
+  <!-- Desert dunes -->
+  <path d="M0,155 Q60,130 130,148 Q190,162 260,138 Q320,120 400,145 L400,225 L0,225Z" fill="url(#dsand)"/>
+  <path d="M0,175 Q80,160 160,170 Q240,180 320,162 Q360,155 400,165 L400,225 L0,225Z" fill="#A0702A" opacity="0.7"/>
+  <!-- Oasis palm silhouettes -->
+  <line x1="80" y1="148" x2="80" y2="110" stroke="#3D2007" stroke-width="4"/>
+  <path d="M80,110 Q60,95 45,88" stroke="#2D4A1A" stroke-width="3" fill="none"/>
+  <path d="M80,112 Q100,96 115,90" stroke="#2D4A1A" stroke-width="3" fill="none"/>
+  <path d="M80,115 Q68,100 60,98" stroke="#2D4A1A" stroke-width="2.5" fill="none"/>
+  <path d="M80,115 Q92,100 100,98" stroke="#2D4A1A" stroke-width="2.5" fill="none"/>
+  <!-- Camel silhouette far -->
+  <ellipse cx="310" cy="143" rx="20" ry="8" fill="#5C3A10" opacity="0.6"/>
+  <rect x="322" y="133" width="4" height="14" fill="#5C3A10" opacity="0.6"/>
+  <rect x="298" y="136" width="4" height="14" fill="#5C3A10" opacity="0.6"/>
+  <ellipse cx="330" cy="132" rx="8" ry="6" fill="#5C3A10" opacity="0.6"/>
+  <circle cx="336" cy="128" r="4" fill="#5C3A10" opacity="0.6"/>
+  <!-- Glowing horizon -->
+  <rect x="0" y="148" width="400" height="8" fill="#F4BE52" opacity="0.08"/>
+</svg>

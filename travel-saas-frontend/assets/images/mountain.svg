@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="msky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B3A6B"/><stop offset="60%" stop-color="#2563A8"/><stop offset="100%" stop-color="#7BB8D4"/></linearGradient>
+    <linearGradient id="mground" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4A7A3A"/><stop offset="100%" stop-color="#2D4D20"/></linearGradient>
+  </defs>
+  <!-- Sky -->
+  <rect width="400" height="225" fill="url(#msky)"/>
+  <!-- Stars (high altitude) -->
+  <circle cx="30" cy="15" r="1.2" fill="white" opacity="0.8"/>
+  <circle cx="75" cy="8" r="0.8" fill="white" opacity="0.6"/>
+  <circle cx="320" cy="12" r="1" fill="white" opacity="0.7"/>
+  <circle cx="370" cy="22" r="0.8" fill="white" opacity="0.6"/>
+  <circle cx="10" cy="35" r="0.8" fill="white" opacity="0.4"/>
+  <!-- Sun / moon in corner -->
+  <circle cx="60" cy="45" r="20" fill="#FCEBC8" opacity="0.85"/>
+  <!-- Clouds -->
+  <ellipse cx="280" cy="55" rx="55" ry="18" fill="white" opacity="0.22"/>
+  <ellipse cx="310" cy="50" rx="35" ry="14" fill="white" opacity="0.18"/>
+  <ellipse cx="130" cy="70" rx="45" ry="14" fill="white" opacity="0.15"/>
+  <!-- Background mountains (muted) -->
+  <polygon points="0,150 70,70 140,150" fill="#1A3D6E" opacity="0.5"/>
+  <polygon points="80,150 160,65 240,150" fill="#1E4575" opacity="0.6"/>
+  <polygon points="200,150 290,50 380,150" fill="#234D82" opacity="0.55"/>
+  <polygon points="300,150 400,75 400,150" fill="#1A3D6E" opacity="0.5"/>
+  <!-- Snow on background peaks -->
+  <polygon points="155,68 160,65 165,68 162,72 158,72" fill="white" opacity="0.7"/>
+  <polygon points="284,53 290,50 296,53 293,58 287,58" fill="white" opacity="0.7"/>
+  <!-- Foreground mountain left -->
+  <polygon points="-10,185 100,95 210,185" fill="#2E5E28" opacity="0.85"/>
+  <!-- Foreground mountain right -->
+  <polygon points="180,185 300,85 420,185" fill="#336625" opacity="0.9"/>
+  <!-- Snow caps foreground -->
+  <polygon points="96,98 100,95 104,98 102,106 98,106" fill="white" opacity="0.9"/>
+  <polygon points="296,88 300,85 304,88 302,97 298,97" fill="white" opacity="0.9"/>
+  <path d="M88,108 Q100,100 112,108" stroke="white" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M290,100 Q300,92 310,100" stroke="white" stroke-width="2" fill="none" opacity="0.6"/>
+  <!-- Valley/meadow foreground -->
+  <path d="M0,185 Q100,175 200,180 Q300,185 400,178 L400,225 L0,225Z" fill="url(#mground)"/>
+  <!-- Pine tree silhouettes -->
+  <polygon points="30,185 38,162 46,185" fill="#1A3A14" opacity="0.8"/>
+  <polygon points="42,185 48,168 54,185" fill="#1A3A14" opacity="0.7"/>
+  <polygon points="340,185 348,160 356,185" fill="#1A3A14" opacity="0.8"/>
+  <polygon points="354,185 360,170 366,185" fill="#1A3A14" opacity="0.7"/>
+  <!-- Stream/river reflection -->
+  <path d="M160,225 Q180,205 200,215 Q220,225 240,210 Q250,203 260,225" fill="none" stroke="#7BB8D4" stroke-width="3" opacity="0.4"/>
+</svg>

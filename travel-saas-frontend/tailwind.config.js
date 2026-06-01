@@ -46,7 +46,8 @@ module.exports = {
         info:    '#2D74C4',
       },
       fontFamily: {
-        sans: ['Cairo', 'system-ui', '"Segoe UI"', 'Tahoma', 'Arial', 'sans-serif'],
+        sans:  ['Cairo', 'system-ui', '"Segoe UI"', 'Tahoma', 'Arial', 'sans-serif'],
+        cairo: ['Cairo', 'system-ui', '"Segoe UI"', 'Tahoma', 'Arial', 'sans-serif'],
       },
       fontSize: {
         xs:   ['0.75rem',   { lineHeight: '1rem' }],

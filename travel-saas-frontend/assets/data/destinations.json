@@ -1,0 +1,42 @@
+[
+  {
+    "id": "dest-istanbul",
+    "name": "إسطنبول",
+    "country": "تركيا",
+    "image": "../assets/images/city.svg",
+    "imageAlt": "أفق مدينة إسطنبول بمآذنها الشهيرة",
+    "priceFrom": 2450,
+    "currency": "ر.س",
+    "dealsCount": 38
+  },
+  {
+    "id": "dest-dubai",
+    "name": "دبي",
+    "country": "الإمارات",
+    "image": "../assets/images/luxury.svg",
+    "imageAlt": "ناطحات السحاب الشاهقة في دبي",
+    "priceFrom": 3200,
+    "currency": "ر.س",
+    "dealsCount": 54
+  },
+  {
+    "id": "dest-maldives",
+    "name": "المالديف",
+    "country": "المالديف",
+    "image": "../assets/images/beach.svg",
+    "imageAlt": "شواطئ رملية بيضاء ومياه فيروزية في المالديف",
+    "priceFrom": 8500,
+    "currency": "ر.س",
+    "dealsCount": 12
+  },
+  {
+    "id": "dest-paris",
+    "name": "باريس",
+    "country": "فرنسا",
+    "image": "../assets/images/city.svg",
+    "imageAlt": "برج إيفل الشهير في باريس",
+    "priceFrom": 5800,
+    "currency": "ر.س",
+    "dealsCount": 29
+  }
+]

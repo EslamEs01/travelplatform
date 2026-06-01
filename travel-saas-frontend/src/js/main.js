@@ -113,9 +113,25 @@
       var result = TUI.validateForm(form);
       if (!result.valid) {
         e.preventDefault();
-        // focus first invalid field
         var firstInvalid = form.querySelector('[aria-invalid="true"]');
         if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+      // opt-in: data-frontend-form → prevent navigation, show toast + echo, reset
+      if (form.hasAttribute('data-frontend-form')) {
+        e.preventDefault();
+        var toastMsg = form.getAttribute('data-success-toast') || 'تم بنجاح';
+        var destInput = form.querySelector('[name="destination"]');
+        var destValue = destInput ? destInput.value.trim() : '';
+        TUI.toast(toastMsg, { type: 'success', duration: 5000 });
+        var successEl = form.querySelector('[data-frontend-success]');
+        if (successEl) {
+          if (destValue) {
+            successEl.textContent = 'يجري البحث عن أفضل العروض إلى ' + destValue + ' …';
+          }
+          successEl.removeAttribute('hidden');
+        }
+        form.reset();
       }
     });
 

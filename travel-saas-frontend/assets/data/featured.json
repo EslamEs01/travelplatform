@@ -14,7 +14,7 @@
     "badgeClass": "badge-source-partner",
     "sourceLabel": "Partner",
     "badges": ["موثّق", "مميّز"],
-    "cta": { "label": "عرض التفاصيل", "kind": "coming-soon" }
+    "cta": { "label": "عرض التفاصيل", "kind": "details" }
   },
   {
     "id": "deal-002",
@@ -31,11 +31,11 @@
     "badgeClass": "badge-source-affiliate",
     "sourceLabel": "Affiliate",
     "badges": ["موثّق"],
-    "cta": { "label": "اطلب الحجز", "kind": "coming-soon" }
+    "cta": { "label": "اطلب الحجز", "kind": "details" }
   },
   {
     "id": "deal-003",
-    "type": "destination",
+    "type": "deal",
     "title": "دبي الفاخرة – 4 ليالٍ",
     "location": "دبي، الإمارات",
     "image": "../assets/images/luxury.svg",
@@ -48,7 +48,7 @@
     "badgeClass": "badge-source-partner",
     "sourceLabel": "Partner",
     "badges": ["مميّز", "موثّق"],
-    "cta": { "label": "عرض التفاصيل", "kind": "coming-soon" }
+    "cta": { "label": "عرض التفاصيل", "kind": "details" }
   },
   {
     "id": "deal-004",
@@ -65,7 +65,7 @@
     "badgeClass": "badge-source-affiliate",
     "sourceLabel": "Affiliate",
     "badges": ["مميّز"],
-    "cta": { "label": "اطلب الحجز", "kind": "coming-soon" }
+    "cta": { "label": "اطلب الحجز", "kind": "details" }
   },
   {
     "id": "deal-005",
@@ -82,14 +82,14 @@
     "badgeClass": "badge-source-api-ready",
     "sourceLabel": "API Ready",
     "badges": ["موثّق"],
-    "cta": { "label": "عرض التفاصيل", "kind": "coming-soon" }
+    "cta": { "label": "عرض التفاصيل", "kind": "details" }
   },
   {
     "id": "deal-006",
-    "type": "destination",
+    "type": "deal",
     "title": "جبال الألب السويسرية – 5 ليالٍ",
-    "location": "سويسرا",
-    "image": "../assets/images/nature.svg",
+    "location": "جنيف، سويسرا",
+    "image": "../assets/images/mountain.svg",
     "imageAlt": "جبال الألب المغطاة بالثلج في سويسرا",
     "priceFrom": 6950,
     "currency": "ر.س",
@@ -99,6 +99,6 @@
     "badgeClass": "badge-source-manual",
     "sourceLabel": "Manual Deal",
     "badges": ["موثّق"],
-    "cta": { "label": "عرض التفاصيل", "kind": "coming-soon" }
+    "cta": { "label": "عرض التفاصيل", "kind": "details" }
   }
 ]
