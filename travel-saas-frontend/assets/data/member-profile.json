@@ -1,0 +1,45 @@
+{
+  "name": "زائر تجريبي",
+  "email": "visitor@example.com",
+  "phone": "+966 50 000 0000",
+  "country": "السعودية",
+  "city": "الرياض",
+  "memberSince": "2025-01-15",
+  "preferredLanguage": "العربية",
+  "preferredCurrency": "ر.س",
+  "preferredDestinations": [
+    { "id": "dest-dubai", "name": "دبي" },
+    { "id": "dest-istanbul", "name": "إسطنبول" },
+    { "id": "dest-paris", "name": "باريس" }
+  ],
+  "travelInterests": ["عائلات", "شواطئ", "فاخر"],
+  "budgetRange": "3000 – 8000 ر.س",
+  "hotelStars": 4,
+  "travelSeason": "خريف / شتاء",
+  "defaultTravelers": 2,
+  "airportPref": "الرياض (RUH)",
+  "notificationPreferences": {
+    "emailAlerts": true,
+    "couponReminders": true,
+    "priceDrop": true,
+    "savedDealsExpiry": false,
+    "whatsappPlaceholder": false,
+    "newsletter": true,
+    "weeklyDigest": false
+  },
+  "security": {
+    "twoFactorEnabled": false,
+    "activeSessions": [
+      {
+        "device": "Chrome – ويندوز 11",
+        "location": "الرياض، السعودية",
+        "lastActive": "2026-06-02"
+      },
+      {
+        "device": "Safari – iPhone 15",
+        "location": "الرياض، السعودية",
+        "lastActive": "2026-05-30"
+      }
+    ]
+  }
+}

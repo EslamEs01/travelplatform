@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <circle cx="60" cy="60" r="60" fill="#0E8186"/>
+  <circle cx="60" cy="46" r="22" fill="rgba(255,255,255,0.25)"/>
+  <ellipse cx="60" cy="108" rx="36" ry="28" fill="rgba(255,255,255,0.2)"/>
+  <text x="60" y="68" text-anchor="middle" font-family="system-ui,sans-serif" font-size="36" font-weight="700" fill="white">ز</text>
+</svg>

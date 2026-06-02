@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="advsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1E3A1E"/><stop offset="100%" stop-color="#0E5C4A"/></linearGradient>
+    <linearGradient id="advmt" x1="0" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#FCEBC8"/><stop offset="100%" stop-color="#A0D0C8"/></linearGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#advsky)"/>
+  <!-- Sky stars -->
+  <circle cx="25" cy="22" r="1.2" fill="white" opacity="0.7"/>
+  <circle cx="90" cy="14" r="1" fill="white" opacity="0.6"/>
+  <circle cx="160" cy="28" r="1.5" fill="white" opacity="0.8"/>
+  <circle cx="250" cy="10" r="1" fill="white" opacity="0.6"/>
+  <circle cx="375" cy="20" r="1.2" fill="white" opacity="0.7"/>
+  <circle cx="310" cy="35" r="0.8" fill="white" opacity="0.5"/>
+  <!-- Moon -->
+  <circle cx="340" cy="48" r="22" fill="#FCEBC8" opacity="0.85"/>
+  <circle cx="349" cy="42" r="16" fill="#0E5C4A" opacity="0.55"/>
+  <!-- Back mountain -->
+  <polygon points="0,180 130,60 260,180" fill="#115457" opacity="0.7"/>
+  <!-- Mid mountain (snow cap) -->
+  <polygon points="140,180 280,50 400,180" fill="#0E686C" opacity="0.8"/>
+  <polygon points="280,50 263,80 297,80" fill="url(#advmt)" opacity="0.85"/>
+  <!-- Front ridge -->
+  <polygon points="0,225 0,190 80,155 160,175 230,145 310,168 400,152 400,225" fill="#0A2F2F" opacity="0.9"/>
+  <!-- Trees silhouette -->
+  <polygon points="30,190 38,165 46,190" fill="#042B2E" opacity="0.8"/>
+  <polygon points="55,193 64,168 73,193" fill="#042B2E" opacity="0.75"/>
+  <polygon points="340,188 348,162 356,188" fill="#042B2E" opacity="0.8"/>
+  <polygon points="365,192 374,166 383,192" fill="#042B2E" opacity="0.75"/>
+  <!-- Hiking path -->
+  <path d="M0,222 Q60,210 120,215 Q180,220 240,208 Q300,196 400,205" stroke="#F4BE52" stroke-width="2" fill="none" opacity="0.6" stroke-dasharray="8,5"/>
+  <!-- Hiker silhouette -->
+  <circle cx="195" cy="192" r="5" fill="#FCEBC8" opacity="0.9"/>
+  <line x1="195" y1="197" x2="195" y2="213" stroke="#FCEBC8" stroke-width="2" opacity="0.85"/>
+  <line x1="195" y1="202" x2="188" y2="208" stroke="#FCEBC8" stroke-width="1.5" opacity="0.8"/>
+  <line x1="195" y1="202" x2="202" y2="207" stroke="#FCEBC8" stroke-width="1.5" opacity="0.8"/>
+  <line x1="195" y1="213" x2="190" y2="222" stroke="#FCEBC8" stroke-width="1.5" opacity="0.8"/>
+  <line x1="195" y1="213" x2="200" y2="222" stroke="#FCEBC8" stroke-width="1.5" opacity="0.8"/>
+  <!-- Walking stick -->
+  <line x1="190" y1="200" x2="184" y2="222" stroke="#F4BE52" stroke-width="1.5" opacity="0.75"/>
+</svg>

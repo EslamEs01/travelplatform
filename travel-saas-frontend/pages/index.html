@@ -75,8 +75,8 @@
         <a href="deals.html" class="nav-link">عروض السفر</a>
         <a href="compare.html" class="nav-link">مقارنة الأسعار</a>
         <a href="coupons.html" class="nav-link">كوبونات</a>
-        <a href="#" class="nav-link" data-coming-soon>وجهات</a>
-        <a href="#" class="nav-link" data-coming-soon>الدليل</a>
+        <a href="destinations.html" class="nav-link">الوجهات</a>
+        <a href="blog.html" class="nav-link">المدونة</a>
       </nav>
 
       <button
@@ -90,7 +90,11 @@
         <span>EN</span>
       </button>
 
-      <a href="#" class="hidden md:flex btn btn-primary btn-sm" data-coming-soon>تسجيل الدخول</a>
+      <a href="saved-deals.html" class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-ink-600 hover:text-lagoon-700 rounded-lg hover:bg-ink-100 transition-colors" aria-label="المحفوظات وحسابي">
+        <svg class="w-4 h-4" aria-hidden="true"><use href="#icon-star"/></svg>
+        <span>حسابي</span>
+      </a>
+      <a href="login.html" class="hidden md:flex btn btn-primary btn-sm">تسجيل الدخول</a>
 
       <button
         type="button"
@@ -120,12 +124,20 @@
         <li><a href="deals.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="#icon-star"/></svg>عروض السفر</a></li>
         <li><a href="compare.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="#icon-search"/></svg>مقارنة الأسعار</a></li>
         <li><a href="coupons.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="#icon-shield-check"/></svg>كوبونات الخصم</a></li>
-        <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-location"/></svg>الوجهات</a></li>
-        <li><a href="#" class="drawer-nav-link" data-coming-soon><svg aria-hidden="true"><use href="#icon-info"/></svg>دليل السفر</a></li>
+        <li><a href="destinations.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="#icon-location"/></svg>الوجهات</a></li>
+        <li><a href="blog.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="#icon-info"/></svg>المدونة</a></li>
       </ul>
       <div class="p-4 border-t border-ink-100 space-y-3">
-        <a href="#" class="btn btn-primary w-full justify-center" data-coming-soon>تسجيل الدخول</a>
-        <a href="#" class="btn btn-outline w-full justify-center" data-coming-soon>إنشاء حساب جديد</a>
+        <a href="login.html" class="btn btn-primary w-full justify-center">تسجيل الدخول</a>
+        <a href="register.html" class="btn btn-outline w-full justify-center">إنشاء حساب جديد</a>
+        <div class="flex gap-2">
+          <a href="saved-deals.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs">
+            <svg class="w-3.5 h-3.5 me-1" aria-hidden="true"><use href="#icon-star"/></svg>المحفوظات
+          </a>
+          <a href="price-alerts.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs">
+            <svg class="w-3.5 h-3.5 me-1" aria-hidden="true"><use href="#icon-info"/></svg>التنبيهات
+          </a>
+        </div>
       </div>
     </nav>
   </div>
@@ -417,7 +429,7 @@
             <span class="section-eyebrow">اكتشف العالم</span>
             <h2 id="destinations-heading" class="section-title">وجهات شهيرة</h2>
           </div>
-          <a href="#" class="btn btn-outline btn-sm hidden md:flex" data-coming-soon>
+          <a href="destinations.html" class="btn btn-outline btn-sm hidden md:flex">
             كل الوجهات
             <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
           </a>
@@ -439,7 +451,7 @@
                 تركيا
               </p>
               <p class="dest-price">ابتداءً من <strong>2,450</strong> ر.س</p>
-              <button type="button" class="btn btn-outline btn-sm w-full justify-center mt-3" data-coming-soon>استكشف</button>
+              <a href="destination-details.html?id=dest-istanbul" class="btn btn-outline btn-sm w-full justify-center mt-3">استكشف</a>
             </div>
           </article>
 
@@ -457,7 +469,7 @@
                 الإمارات
               </p>
               <p class="dest-price">ابتداءً من <strong>3,200</strong> ر.س</p>
-              <button type="button" class="btn btn-outline btn-sm w-full justify-center mt-3" data-coming-soon>استكشف</button>
+              <a href="destination-details.html?id=dest-dubai" class="btn btn-outline btn-sm w-full justify-center mt-3">استكشف</a>
             </div>
           </article>
 
@@ -475,7 +487,7 @@
                 المالديف
               </p>
               <p class="dest-price">ابتداءً من <strong>8,500</strong> ر.س</p>
-              <button type="button" class="btn btn-outline btn-sm w-full justify-center mt-3" data-coming-soon>استكشف</button>
+              <a href="destination-details.html?id=dest-maldives" class="btn btn-outline btn-sm w-full justify-center mt-3">استكشف</a>
             </div>
           </article>
 
@@ -493,14 +505,14 @@
                 فرنسا
               </p>
               <p class="dest-price">ابتداءً من <strong>5,800</strong> ر.س</p>
-              <button type="button" class="btn btn-outline btn-sm w-full justify-center mt-3" data-coming-soon>استكشف</button>
+              <a href="destination-details.html?id=dest-paris" class="btn btn-outline btn-sm w-full justify-center mt-3">استكشف</a>
             </div>
           </article>
 
         </div>
 
         <div class="text-center mt-8 md:hidden">
-          <a href="#" class="btn btn-outline" data-coming-soon>كل الوجهات</a>
+          <a href="destinations.html" class="btn btn-outline">كل الوجهات</a>
         </div>
 
       </div>
@@ -801,7 +813,7 @@
             <span class="section-eyebrow">نصائح السفر</span>
             <h2 id="guides-heading" class="section-title">دليل السفر والنصائح</h2>
           </div>
-          <a href="#" class="btn btn-outline btn-sm hidden md:flex" data-coming-soon>
+          <a href="blog.html" class="btn btn-outline btn-sm hidden md:flex">
             كل المقالات
             <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
           </a>
@@ -809,7 +821,7 @@
 
         <div class="guides-grid">
 
-          <!-- دليل 1 -->
+          <!-- دليل 1 — art-travel-tips -->
           <article class="guide-card">
             <div class="guide-card-media">
               <img src="../assets/images/city.svg" alt="مدن سياحية عالمية ومعالم أثرية" loading="lazy" width="400" height="200">
@@ -818,14 +830,14 @@
             <div class="guide-card-body">
               <h3 class="guide-title">10 نصائح ذهبية قبل السفر لأول مرة</h3>
               <p class="guide-excerpt">سواء كانت رحلتك الأولى أو العاشرة، هذه النصائح ستجعل تجربتك أكثر سلاسة وأقل إجهاداً: تحقق من التأشيرة مبكراً، احجز الفندق قبل الطيران، واستعد لمفاجآت العملة والمناخ.</p>
-              <button type="button" class="guide-read-btn" data-coming-soon>
+              <a href="article.html?id=art-travel-tips" class="guide-read-btn">
                 اقرأ المزيد
                 <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
-              </button>
+              </a>
             </div>
           </article>
 
-          <!-- دليل 2 -->
+          <!-- دليل 2 — art-summer-family -->
           <article class="guide-card">
             <div class="guide-card-media">
               <img src="../assets/images/beach.svg" alt="وجهات شاطئية استوائية مع مياه صافية" loading="lazy" width="400" height="200">
@@ -834,14 +846,14 @@
             <div class="guide-card-body">
               <h3 class="guide-title">أفضل 5 وجهات صيفية للعائلات العربية</h3>
               <p class="guide-excerpt">اخترنا لك أجمل الوجهات التي توازن بين الترفيه والراحة والملاءمة للأسرة بميزانيات متنوعة. من شرم الشيخ إلى ماليزيا، كل وجهة بتفاصيل العروض والتوقيت الأمثل للسفر.</p>
-              <button type="button" class="guide-read-btn" data-coming-soon>
+              <a href="article.html?id=art-summer-family" class="guide-read-btn">
                 اقرأ المزيد
                 <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
-              </button>
+              </a>
             </div>
           </article>
 
-          <!-- دليل 3 -->
+          <!-- دليل 3 — art-save-30-percent -->
           <article class="guide-card">
             <div class="guide-card-media">
               <img src="../assets/images/nature.svg" alt="مناظر طبيعية خلابة وتجارب سفر مغامرة" loading="lazy" width="400" height="200">
@@ -850,10 +862,10 @@
             <div class="guide-card-body">
               <h3 class="guide-title">كيف توفر 30% على رحلتك القادمة؟</h3>
               <p class="guide-excerpt">استراتيجيات مجربة لتوفير المال عند الحجز: المرونة في تواريخ السفر، مقارنة الأسعار من مصادر متعددة في وقت واحد، واستغلال كوبونات الخصم المتاحة بطريقة ذكية وآمنة.</p>
-              <button type="button" class="guide-read-btn" data-coming-soon>
+              <a href="article.html?id=art-save-30-percent" class="guide-read-btn">
                 اقرأ المزيد
                 <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
-              </button>
+              </a>
             </div>
           </article>
 
@@ -1012,7 +1024,7 @@
             <svg aria-hidden="true"><use href="#icon-search"/></svg>
             ابحث الآن
           </a>
-          <a href="#" class="btn btn-outline-white btn-lg" data-coming-soon>إنشاء حساب مجاني</a>
+          <a href="register.html" class="btn btn-outline-white btn-lg">إنشاء حساب مجاني</a>
         </div>
 
       </div>
@@ -1066,14 +1078,18 @@
               <li><a href="#" class="footer-link" data-coming-soon>عن رحلاتي</a></li>
               <li><a href="#how-it-works" class="footer-link">كيف تعمل</a></li>
               <li><a href="#" class="footer-link" data-coming-soon>شركاؤنا</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>المدونة</a></li>
+              <li><a href="blog.html" class="footer-link">المدونة</a></li>
+              <li><a href="login.html" class="footer-link">تسجيل الدخول</a></li>
+              <li><a href="register.html" class="footer-link">إنشاء حساب</a></li>
+              <li><a href="saved-deals.html" class="footer-link">المحفوظات</a></li>
+              <li><a href="price-alerts.html" class="footer-link">تنبيهات الأسعار</a></li>
             </ul>
           </div>
           <div>
             <h3 class="footer-heading">استكشف</h3>
             <ul class="footer-nav">
               <li><a href="deals.html" class="footer-link">العروض المميزة</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>الوجهات</a></li>
+              <li><a href="destinations.html" class="footer-link">الوجهات</a></li>
               <li><a href="coupons.html" class="footer-link">كوبونات الخصم</a></li>
               <li><a href="compare.html" class="footer-link">مقارنة الأسعار</a></li>
             </ul>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="asky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1A2E3B"/><stop offset="100%" stop-color="#0E4B5A"/></linearGradient>
+    <linearGradient id="adesk" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#115457"/><stop offset="100%" stop-color="#0E3A3D"/></linearGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#asky)"/>
+  <!-- Stars -->
+  <circle cx="40" cy="18" r="1.2" fill="white" opacity="0.7"/>
+  <circle cx="100" cy="10" r="1" fill="white" opacity="0.6"/>
+  <circle cx="200" cy="22" r="1.5" fill="white" opacity="0.8"/>
+  <circle cx="320" cy="14" r="1" fill="white" opacity="0.6"/>
+  <circle cx="370" cy="28" r="1.2" fill="white" opacity="0.7"/>
+  <circle cx="70" cy="38" r="0.8" fill="white" opacity="0.5"/>
+  <!-- Compass rose -->
+  <circle cx="320" cy="70" r="32" fill="none" stroke="#16A0A5" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="320" cy="70" r="24" fill="none" stroke="#16A0A5" stroke-width="1" opacity="0.35"/>
+  <polygon points="320,42 325,70 320,98 315,70" fill="#F4BE52" opacity="0.85"/>
+  <polygon points="292,70 320,65 348,70 320,75" fill="#FCEBC8" opacity="0.7"/>
+  <circle cx="320" cy="70" r="4" fill="#F4BE52" opacity="0.9"/>
+  <!-- Decorative map path lines -->
+  <path d="M20,160 Q80,145 140,155 Q200,165 260,150 Q300,140 360,148" stroke="#16A0A5" stroke-width="1.5" fill="none" opacity="0.4" stroke-dasharray="6,4"/>
+  <!-- Open book / article document -->
+  <rect x="60" y="115" width="200" height="90" rx="4" fill="url(#adesk)" opacity="0.9"/>
+  <line x1="160" y1="118" x2="160" y2="202" stroke="#16A0A5" stroke-width="1.5" opacity="0.4"/>
+  <!-- Text lines left page -->
+  <rect x="70" y="128" width="80" height="5" rx="2" fill="#16A0A5" opacity="0.5"/>
+  <rect x="70" y="139" width="70" height="4" rx="2" fill="#16A0A5" opacity="0.35"/>
+  <rect x="70" y="149" width="75" height="4" rx="2" fill="#16A0A5" opacity="0.35"/>
+  <rect x="70" y="159" width="65" height="4" rx="2" fill="#16A0A5" opacity="0.3"/>
+  <rect x="70" y="169" width="72" height="4" rx="2" fill="#16A0A5" opacity="0.3"/>
+  <rect x="70" y="179" width="60" height="4" rx="2" fill="#16A0A5" opacity="0.25"/>
+  <!-- Text lines right page -->
+  <rect x="170" y="128" width="80" height="5" rx="2" fill="#16A0A5" opacity="0.5"/>
+  <rect x="170" y="139" width="72" height="4" rx="2" fill="#16A0A5" opacity="0.35"/>
+  <rect x="170" y="149" width="78" height="4" rx="2" fill="#16A0A5" opacity="0.35"/>
+  <rect x="170" y="159" width="68" height="4" rx="2" fill="#16A0A5" opacity="0.3"/>
+  <rect x="170" y="169" width="74" height="4" rx="2" fill="#16A0A5" opacity="0.3"/>
+  <!-- Pen/quill icon -->
+  <line x1="280" y1="135" x2="256" y2="195" stroke="#F4BE52" stroke-width="2.5" opacity="0.85" stroke-linecap="round"/>
+  <polygon points="280,135 286,128 291,138" fill="#FCEBC8" opacity="0.8"/>
+  <line x1="256" y1="195" x2="253" y2="202" stroke="#F4BE52" stroke-width="1.5" opacity="0.7"/>
+  <!-- Glow -->
+  <rect x="0" y="210" width="400" height="15" fill="#0E8186" opacity="0.2"/>
+</svg>

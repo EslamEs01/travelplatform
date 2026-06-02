@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth" data-page="login">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تسجيل الدخول – رحلاتي</title>
+  <meta name="description" content="سجّل دخولك إلى رحلاتي لإدارة محفوظاتك وتنبيهات أسعار السفر وتفضيلاتك.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0E8186">
+  <meta property="og:title" content="تسجيل الدخول – رحلاتي">
+  <meta property="og:description" content="سجّل دخولك لإدارة العروض المحفوظة وتنبيهات الأسعار وتفضيلات السفر.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ar_AR">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/tailwind.css">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"الرئيسية","item":"https://rihlaty.example.com"},{"@type":"ListItem","position":2,"name":"تسجيل الدخول","item":"https://rihlaty.example.com/login"}]}
+  </script>
+
+  <style>
+    /* ── login.html page-scoped styles ─────────────────────────────────── */
+
+    /* Auth page layout */
+    .auth-page {
+      min-height: calc(100dvh - 64px);
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 1024px) {
+      .auth-page {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Hero/benefits panel */
+    .auth-hero-panel {
+      display: none;
+      background: linear-gradient(145deg, #042B2E 0%, #0E686C 50%, #0D9EA4 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    @media (min-width: 1024px) {
+      .auth-hero-panel { display: flex; flex-direction: column; justify-content: center; padding: 3rem; }
+    }
+    .auth-hero-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(56,188,192,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .auth-hero-panel::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: rgba(14,129,134,0.15);
+      pointer-events: none;
+    }
+
+    /* Form panel */
+    .auth-form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      background: #F4F6F9;
+    }
+    @media (min-width: 640px) {
+      .auth-form-panel { padding: 3rem 2.5rem; }
+    }
+    @media (min-width: 1024px) {
+      .auth-form-panel { padding: 3rem; max-width: 480px; margin: 0 auto; width: 100%; }
+    }
+
+    /* Form card */
+    .auth-card {
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 24px rgba(14,129,134,0.10), 0 1px 6px rgba(38,46,58,0.06);
+      padding: 2rem;
+      width: 100%;
+    }
+    @media (min-width: 480px) {
+      .auth-card { padding: 2.5rem; }
+    }
+
+    /* Breadcrumb on dark bg */
+    .breadcrumb-light { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .breadcrumb-light a { font-size: 0.8125rem; color: rgba(255,255,255,0.55); text-decoration: none; transition: color 150ms; }
+    .breadcrumb-light a:hover { color: white; }
+    .breadcrumb-light-sep { color: rgba(255,255,255,0.25); font-size: 0.75rem; }
+    .breadcrumb-light-current { font-size: 0.8125rem; color: rgba(255,255,255,0.8); font-weight: 500; }
+
+    /* Breadcrumb on light bg (mobile) */
+    .breadcrumb-mobile { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    @media (min-width: 1024px) { .breadcrumb-mobile { display: none; } }
+    .breadcrumb-mobile a { font-size: 0.8125rem; color: #9AA6B4; text-decoration: none; }
+    .breadcrumb-mobile a:hover { color: #0E8186; }
+    .breadcrumb-mobile-sep { color: #DEE3EA; font-size: 0.75rem; }
+    .breadcrumb-mobile-current { font-size: 0.8125rem; color: #0E8186; font-weight: 500; }
+
+    /* Password field wrapper */
+    .field-pw-wrap { position: relative; }
+    .field-pw-wrap .field-input { padding-inline-end: 3rem; }
+    .pw-toggle {
+      position: absolute;
+      top: 50%; right: 0.625rem;
+      transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: #9AA6B4; padding: 0.375rem; border-radius: 0.375rem;
+      transition: color 150ms;
+      display: flex; align-items: center;
+    }
+    html[dir="rtl"] .pw-toggle { right: auto; left: 0.625rem; }
+    .pw-toggle:hover { color: #0E8186; }
+    .pw-toggle svg { width: 1.125rem; height: 1.125rem; }
+
+    /* Benefits list */
+    .benefit-item {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .benefit-item:last-child { border-bottom: none; }
+    .benefit-icon {
+      flex: none; width: 2.25rem; height: 2.25rem;
+      background: rgba(255,255,255,0.12); border-radius: 0.625rem;
+      display: flex; align-items: center; justify-content: center;
+      color: #56D9DC;
+    }
+    .benefit-icon svg { width: 1rem; height: 1rem; }
+    .benefit-text { font-size: 0.9rem; color: rgba(255,255,255,0.85); line-height: 1.5; }
+    .benefit-text strong { color: white; font-weight: 600; }
+
+    /* Social buttons */
+    .social-auth-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.625rem;
+      width: 100%; padding: 0.6875rem 1rem;
+      background: white; border: 1.5px solid #DEE3EA;
+      border-radius: 0.75rem; font-size: 0.875rem; font-weight: 600;
+      color: #3A4453; text-decoration: none; cursor: pointer;
+      transition: border-color 150ms, background 150ms, box-shadow 150ms;
+      min-height: 44px;
+    }
+    .social-auth-btn:hover:not([disabled]):not([aria-disabled="true"]) {
+      border-color: #0E8186; background: #ECFBFB;
+      box-shadow: 0 2px 8px rgba(14,129,134,0.12);
+    }
+    .social-auth-btn[disabled], .social-auth-btn[aria-disabled="true"] {
+      opacity: 0.5; cursor: not-allowed;
+    }
+
+    /* Divider */
+    .or-divider {
+      display: flex; align-items: center; gap: 0.75rem;
+      color: #9AA6B4; font-size: 0.8125rem;
+    }
+    .or-divider::before, .or-divider::after {
+      content: ''; flex: 1; height: 1px; background: #DEE3EA;
+    }
+
+    /* Inline info */
+    .inline-msg-info {
+      background: #EBF9FA; border: 1.5px solid #B2E8EA;
+      border-radius: 0.875rem; padding: 0.875rem 1rem;
+      font-size: 0.8125rem; color: #0A5A5D; line-height: 1.6;
+    }
+    .inline-msg-info strong { color: #0E686C; }
+
+    /* Success block */
+    .success-block {
+      background: linear-gradient(135deg, #EBF9FA 0%, #E4F7F0 100%);
+      border: 1.5px solid #6DD8DB; border-radius: 1rem;
+      padding: 1.5rem; text-align: center;
+    }
+    .success-icon {
+      width: 3.5rem; height: 3.5rem; margin: 0 auto 1rem;
+      background: #0E8186; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+    }
+    .success-icon svg { width: 1.75rem; height: 1.75rem; }
+
+    /* Hero illustration */
+    .hero-illustration {
+      width: 100%; max-width: 380px;
+      margin: 1.5rem auto 2rem;
+      border-radius: 1rem; overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      position: relative; z-index: 1;
+    }
+    .hero-illustration img { width: 100%; height: auto; display: block; }
+
+    /* Stats strip on hero */
+    .hero-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;
+      position: relative; z-index: 1;
+    }
+    .hero-stat {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 0.875rem; padding: 0.875rem; text-align: center;
+      backdrop-filter: blur(8px);
+    }
+    .hero-stat-num { font-size: 1.25rem; font-weight: 800; color: #56D9DC; display: block; }
+    .hero-stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- Skip link -->
+  <a href="#main" class="skip-link">انتقل إلى المحتوى الرئيسي</a>
+
+  <!-- Toast root -->
+  <div id="toast-root" aria-live="assertive" aria-atomic="true" role="status"></div>
+
+  <!-- ═══ HEADER (inlined from partials/header.html) ════════════════════ -->
+  <header class="site-header" role="banner">
+    <div class="header-inner max-w-7xl mx-auto px-4 md:px-6 flex items-center h-16 gap-4">
+      <a href="index.html" class="brand flex items-center gap-2 me-auto no-underline" aria-label="رحلاتي – الصفحة الرئيسية">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="9" fill="#0E8186"/>
+            <path d="M16 7C11.029 7 7 11.029 7 16s4.029 9 9 9 9-4.029 9-9-4.029-9-9-9z" fill="#38BCC0" opacity="0.35"/>
+            <path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/>
+            <circle cx="16" cy="14" r="3" fill="#0E8186"/>
+          </svg>
+        </span>
+        <span class="brand-name text-xl font-bold text-lagoon-700 tracking-tight">رحلاتي</span>
+      </a>
+      <nav class="hidden lg:flex items-center gap-1" aria-label="التنقل الرئيسي">
+        <a href="index.html" class="nav-link">الرئيسية</a>
+        <a href="deals.html" class="nav-link">عروض السفر</a>
+        <a href="compare.html" class="nav-link">مقارنة الأسعار</a>
+        <a href="coupons.html" class="nav-link">كوبونات</a>
+        <a href="destinations.html" class="nav-link">الوجهات</a>
+        <a href="blog.html" class="nav-link">المدونة</a>
+      </nav>
+      <button type="button" class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-ink-500 hover:text-ink-700 rounded-lg hover:bg-ink-100 transition-colors" aria-label="تغيير اللغة إلى الإنجليزية (غير متاح حالياً)" aria-disabled="true" tabindex="-1">
+        <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-globe"/></svg>
+        <span>EN</span>
+      </button>
+      <a href="saved-deals.html" class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-ink-600 hover:text-lagoon-700 rounded-lg hover:bg-ink-100 transition-colors" aria-label="المحفوظات وحسابي">
+        <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>
+        <span>حسابي</span>
+      </a>
+      <a href="login.html" class="hidden md:flex btn btn-primary btn-sm" aria-current="page">تسجيل الدخول</a>
+      <button type="button" class="btn btn-ghost btn-icon lg:hidden" aria-label="فتح القائمة" aria-expanded="false" aria-controls="main-nav" data-drawer-open="main-nav">
+        <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-menu"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="drawer drawer-start" id="main-nav-drawer" data-drawer="main-nav" role="dialog" aria-modal="true" aria-label="قائمة التنقل" hidden>
+    <div class="drawer-overlay" data-drawer-close aria-hidden="true"></div>
+    <nav class="drawer-panel" aria-label="التنقل الرئيسي">
+      <div class="flex items-center justify-between p-4 border-b border-ink-100">
+        <a href="index.html" class="brand flex items-center gap-2 no-underline">
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="30" height="30" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="9" fill="#0E8186"/><path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/><circle cx="16" cy="14" r="3" fill="#0E8186"/></svg>
+          </span>
+          <span class="text-lg font-bold text-lagoon-700">رحلاتي</span>
+        </a>
+        <button type="button" class="btn btn-ghost btn-icon" aria-label="إغلاق القائمة" data-drawer-close>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-close"/></svg>
+        </button>
+      </div>
+      <ul class="drawer-nav flex-1 p-4 space-y-1" role="list">
+        <li><a href="index.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plane"/></svg>الرئيسية</a></li>
+        <li><a href="deals.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>عروض السفر</a></li>
+        <li><a href="compare.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search"/></svg>مقارنة الأسعار</a></li>
+        <li><a href="coupons.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>كوبونات الخصم</a></li>
+        <li><a href="destinations.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg>الوجهات</a></li>
+        <li><a href="blog.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>المدونة</a></li>
+      </ul>
+      <div class="p-4 border-t border-ink-100 space-y-3">
+        <a href="login.html" class="btn btn-primary w-full justify-center" aria-current="page">تسجيل الدخول</a>
+        <a href="register.html" class="btn btn-outline w-full justify-center">إنشاء حساب جديد</a>
+        <div class="flex gap-2">
+          <a href="saved-deals.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs">
+            <svg class="w-3.5 h-3.5 me-1" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>المحفوظات
+          </a>
+          <a href="price-alerts.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs">
+            <svg class="w-3.5 h-3.5 me-1" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>التنبيهات
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ═══ MAIN ════════════════════════════════════════════════════════════ -->
+  <main id="main">
+
+    <div class="auth-page">
+
+      <!-- ── Hero / Benefits Panel (desktop) ─────────────────────────── -->
+      <div class="auth-hero-panel" aria-hidden="true">
+        <div style="position:relative;z-index:1;">
+
+          <!-- Breadcrumb on dark -->
+          <nav class="breadcrumb-light mb-6" aria-label="مسار التنقل">
+            <a href="index.html">الرئيسية</a>
+            <span class="breadcrumb-light-sep" aria-hidden="true">›</span>
+            <span class="breadcrumb-light-current">تسجيل الدخول</span>
+          </nav>
+
+          <!-- Hero headline -->
+          <p class="text-sm font-semibold text-lagoon-300 uppercase tracking-widest mb-2">مرحباً بك</p>
+          <h2 class="text-3xl font-extrabold text-white leading-snug mb-2">سفرة أحلامك<br>تبدأ من هنا</h2>
+          <p class="text-lagoon-300 text-sm leading-relaxed mb-6">أدر محفوظاتك، تنبيهات الأسعار، وتفضيلات سفرك<br>من مكان واحد.</p>
+
+          <!-- Illustration -->
+          <div class="hero-illustration">
+            <img src="../assets/images/auth-hero.svg" alt="خريطة عالمية مع رموز وجهات سياحية" width="480" height="360" loading="eager">
+          </div>
+
+          <!-- Benefits -->
+          <ul class="space-y-0" role="list">
+            <li class="benefit-item">
+              <span class="benefit-icon"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg></span>
+              <span class="benefit-text"><strong>حفظ العروض المفضلة</strong><br>احتفظ بأفضل العروض في متناول يدك</span>
+            </li>
+            <li class="benefit-item">
+              <span class="benefit-icon"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg></span>
+              <span class="benefit-text"><strong>تنبيهات الأسعار</strong><br>نبّهك حين تنخفض الأسعار لوجهتك</span>
+            </li>
+            <li class="benefit-item">
+              <span class="benefit-icon"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg></span>
+              <span class="benefit-text"><strong>تذكير بالكوبونات</strong><br>لا تفوّت كوبوناً قبل انتهاء صلاحيته</span>
+            </li>
+            <li class="benefit-item">
+              <span class="benefit-icon"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg></span>
+              <span class="benefit-text"><strong>قابل للربط لاحقاً</strong><br>بنظام حسابات وبيانات حقيقي</span>
+            </li>
+          </ul>
+
+          <!-- Stats -->
+          <div class="hero-stats mt-6">
+            <div class="hero-stat">
+              <span class="hero-stat-num">+50</span>
+              <span class="hero-stat-label">مصدراً موثوقاً</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-num">+200</span>
+              <span class="hero-stat-label">وجهة سياحية</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-num">24/7</span>
+              <span class="hero-stat-label">تنبيهات أسعار</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── Form Panel ────────────────────────────────────────────────── -->
+      <div class="auth-form-panel">
+
+        <!-- Breadcrumb on light (mobile) -->
+        <nav class="breadcrumb-mobile" aria-label="مسار التنقل">
+          <a href="index.html">الرئيسية</a>
+          <span class="breadcrumb-mobile-sep" aria-hidden="true">›</span>
+          <span class="breadcrumb-mobile-current">تسجيل الدخول</span>
+        </nav>
+
+        <div class="auth-card">
+
+          <!-- Header -->
+          <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-lagoon-50 mb-4">
+              <svg class="w-7 h-7 text-lagoon-600" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
+            </div>
+            <h1 class="text-2xl font-extrabold text-ink-800">تسجيل الدخول</h1>
+            <p class="text-sm text-ink-400 mt-1">أدخل بيانات حسابك للمتابعة</p>
+          </div>
+
+          <!-- Frontend-only honesty note -->
+          <div class="inline-msg-info mb-5" role="note">
+            <strong>نسخة واجهة أمامية تجريبية</strong> — لا يتم إنشاء جلسة حقيقية. الصفحة قابلة للربط لاحقاً بنظام حسابات حقيقي.
+          </div>
+
+          <!-- Social login placeholders -->
+          <div class="space-y-2 mb-5">
+            <button type="button" class="social-auth-btn" disabled aria-disabled="true" aria-label="تسجيل الدخول بواسطة جوجل (غير متاح حالياً)">
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              متابعة بواسطة جوجل (قريباً)
+            </button>
+            <button type="button" class="social-auth-btn" disabled aria-disabled="true" aria-label="تسجيل الدخول بواسطة آبل (غير متاح حالياً)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+              متابعة بواسطة آبل (قريباً)
+            </button>
+          </div>
+
+          <!-- Divider -->
+          <div class="or-divider mb-5" aria-hidden="true">أو بالبريد الإلكتروني</div>
+
+          <!-- Login form -->
+          <form id="login-form" data-validate novalidate aria-label="نموذج تسجيل الدخول">
+
+            <!-- Email -->
+            <div class="field mb-4">
+              <label for="login-email" class="field-label">البريد الإلكتروني</label>
+              <input
+                type="email"
+                id="login-email"
+                name="login-email"
+                class="field-input"
+                dir="ltr"
+                placeholder="name@example.com"
+                required
+                autocomplete="email"
+                aria-required="true"
+              >
+              <span class="field-error" role="alert" id="login-email-err">
+                <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-alert-triangle"/></svg>
+                يرجى إدخال بريد إلكتروني صحيح
+              </span>
+            </div>
+
+            <!-- Password -->
+            <div class="field mb-3">
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="login-password" class="field-label mb-0">كلمة المرور</label>
+                <button
+                  type="button"
+                  class="text-xs text-lagoon-600 hover:text-lagoon-700 font-medium bg-none border-none cursor-pointer"
+                  data-modal-open="forgot-password"
+                  aria-haspopup="dialog"
+                >
+                  نسيت كلمة المرور؟
+                </button>
+              </div>
+              <div class="field-pw-wrap">
+                <input
+                  type="password"
+                  id="login-password"
+                  name="login-password"
+                  class="field-input"
+                  dir="ltr"
+                  placeholder="••••••••"
+                  required
+                  autocomplete="current-password"
+                  aria-required="true"
+                >
+                <button
+                  type="button"
+                  class="pw-toggle"
+                  data-toggle-pw="#login-password"
+                  aria-label="إظهار كلمة المرور"
+                  aria-pressed="false"
+                >
+                  <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>
+                </button>
+              </div>
+              <span class="field-error" role="alert" id="login-password-err">
+                <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-alert-triangle"/></svg>
+                يرجى إدخال كلمة المرور
+              </span>
+            </div>
+
+            <!-- Remember me -->
+            <div class="field field-check mb-5">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="login-remember" name="login-remember" class="w-4 h-4 rounded accent-lagoon-600">
+                <span class="text-sm text-ink-600">تذكّرني لاحقاً (واجهة فقط)</span>
+              </label>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn btn-primary w-full justify-center text-base gap-2" id="login-submit">
+              <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
+              تسجيل الدخول
+            </button>
+
+          </form>
+
+          <!-- Inline success -->
+          <div id="login-success" data-frontend-success class="success-block mt-4" hidden aria-live="polite">
+            <div class="success-icon">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check-circle"/></svg>
+            </div>
+            <h2 class="text-lg font-bold text-ink-800 mb-1">تم الدخول بنجاح!</h2>
+            <p class="text-sm text-ink-500 mb-4">هذه نسخة تجريبية — لا جلسة حقيقية. سيتم توجيهك إلى محفوظاتك.</p>
+            <a href="saved-deals.html" class="btn btn-primary w-full justify-center">
+              <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>
+              انتقل إلى محفوظاتي
+            </a>
+          </div>
+
+          <!-- Register link -->
+          <p class="text-center text-sm text-ink-400 mt-5">
+            ليس لديك حساب؟
+            <a href="register.html" class="font-semibold text-lagoon-600 hover:text-lagoon-700">إنشاء حساب جديد</a>
+          </p>
+
+        </div>
+        <!-- / auth-card -->
+
+      </div>
+      <!-- / form panel -->
+
+    </div>
+    <!-- / auth-page -->
+
+  </main>
+
+  <!-- ═══ FORGOT PASSWORD MODAL ══════════════════════════════════════════ -->
+  <div class="modal modal-sm" id="forgot-password-modal" data-modal="forgot-password" role="dialog" aria-modal="true" aria-labelledby="fp-title" hidden>
+    <div class="modal-overlay" data-modal-close="forgot-password" aria-hidden="true"></div>
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h2 class="modal-title" id="fp-title">استعادة كلمة المرور</h2>
+        <button type="button" class="modal-close" aria-label="إغلاق" data-modal-close="forgot-password">
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-close"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Honesty note -->
+        <div class="inline-msg-info mb-4" role="note">
+          <strong>ملاحظة:</strong> لا يتم إرسال بريد إلكتروني حقيقي في هذه النسخة التجريبية.
+        </div>
+
+        <form id="forgot-form" data-validate data-frontend-form
+          data-success-toast="تم الطلب — لا بريد حقيقي في هذه النسخة"
+          novalidate aria-label="نموذج استعادة كلمة المرور">
+          <div class="field mb-4">
+            <label for="fp-email" class="field-label">البريد الإلكتروني</label>
+            <input type="email" id="fp-email" name="fp-email" class="field-input" dir="ltr" placeholder="name@example.com" required autocomplete="email">
+            <span class="field-error" role="alert">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-alert-triangle"/></svg>
+              يرجى إدخال بريد إلكتروني صحيح
+            </span>
+          </div>
+
+          <div data-frontend-success hidden class="inline-msg-info" aria-live="polite">
+            <strong>تم الطلب (تجريبي).</strong> في النسخة الحقيقية، ستصلك رسالة على بريدك الإلكتروني.
+          </div>
+
+          <div class="modal-footer mt-4 -mx-6 -mb-6 px-6 pb-5 pt-4 rounded-b-2xl">
+            <button type="button" class="btn btn-ghost" data-modal-close="forgot-password">إلغاء</button>
+            <button type="submit" class="btn btn-primary">
+              <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
+              إرسال رابط الاستعادة
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FOOTER (inlined from partials/footer.html) ════════════════════ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="trust-row">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 py-10">
+        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg></div><div><p class="trust-title">عروض موثقة</p><p class="trust-sub">كل عرض تم التحقق منه يدوياً</p></div></div>
+        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg></div><div><p class="trust-title">حجز آمن</p><p class="trust-sub">بياناتك محمية بالكامل</p></div></div>
+        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-star"/></svg></div><div><p class="trust-title">شركاء معتمدون</p><p class="trust-sub">أكثر من 50 مصدراً موثوقاً</p></div></div>
+        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-phone"/></svg></div><div><p class="trust-title">دعم 24/7</p><p class="trust-sub">فريقنا دائماً في خدمتك</p></div></div>
+      </div>
+    </div>
+    <div class="footer-body">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 py-12">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+          <div class="col-span-2 md:col-span-2">
+            <a href="index.html" class="inline-flex items-center gap-2 mb-4 no-underline">
+              <svg width="36" height="36" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#38BCC0"/><path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/><circle cx="16" cy="14" r="3" fill="#0E8186"/></svg>
+              <span class="text-xl font-bold text-white">رحلاتي</span>
+            </a>
+            <p class="text-sm text-lagoon-300 leading-relaxed mb-5">منصة متخصصة في مقارنة وعرض أفضل عروض السفر من مصادر موثوقة ومعتمدة.</p>
+            <div class="flex gap-3" role="list" aria-label="وسائل التواصل الاجتماعي">
+              <a href="#" class="social-btn" aria-label="صفحة فيسبوك" data-coming-soon role="listitem"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-facebook"/></svg></a>
+              <a href="#" class="social-btn" aria-label="حساب تويتر" data-coming-soon role="listitem"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-twitter"/></svg></a>
+              <a href="#" class="social-btn" aria-label="حساب انستجرام" data-coming-soon role="listitem"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-instagram"/></svg></a>
+              <a href="#" class="social-btn" aria-label="قناة يوتيوب" data-coming-soon role="listitem"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-youtube"/></svg></a>
+            </div>
+          </div>
+          <div>
+            <h3 class="footer-heading">المنصة</h3>
+            <ul class="footer-nav" role="list">
+              <li><a href="#" class="footer-link" data-coming-soon>عن رحلاتي</a></li>
+              <li><a href="index.html#how-it-works" class="footer-link">كيف تعمل</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>شركاؤنا</a></li>
+              <li><a href="blog.html" class="footer-link">المدونة</a></li>
+              <li><a href="login.html" class="footer-link">تسجيل الدخول</a></li>
+              <li><a href="register.html" class="footer-link">إنشاء حساب</a></li>
+              <li><a href="saved-deals.html" class="footer-link">المحفوظات</a></li>
+              <li><a href="price-alerts.html" class="footer-link">تنبيهات الأسعار</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="footer-heading">استكشف</h3>
+            <ul class="footer-nav" role="list">
+              <li><a href="deals.html" class="footer-link">العروض المميزة</a></li>
+              <li><a href="destinations.html" class="footer-link">الوجهات</a></li>
+              <li><a href="coupons.html" class="footer-link">كوبونات الخصم</a></li>
+              <li><a href="compare.html" class="footer-link">مقارنة الأسعار</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="footer-heading">الدعم</h3>
+            <ul class="footer-nav" role="list">
+              <li><a href="index.html#faq" class="footer-link">الأسئلة الشائعة</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>تواصل معنا</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>الشروط والأحكام</a></li>
+              <li><a href="#" class="footer-link" data-coming-soon>سياسة الخصوصية</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 flex flex-wrap items-center justify-between gap-4 py-5">
+        <p class="text-sm text-lagoon-400">© <span data-year></span> رحلاتي. جميع الحقوق محفوظة.</p>
+        <p class="text-xs text-lagoon-500">واجهة أمامية تجريبية — لا حسابات أو مدفوعات حقيقية</p>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    .site-footer { background: #042B2E; color: #D0F4F4; }
+    .trust-row { background: #0E686C; }
+    .trust-item { display: flex; align-items: flex-start; gap: 1rem; }
+    .trust-icon { flex: none; width: 2.75rem; height: 2.75rem; background: rgba(255,255,255,0.12); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: white; }
+    .trust-icon svg { width: 1.375rem; height: 1.375rem; }
+    .trust-title { font-size: 0.9375rem; font-weight: 700; color: white; margin-bottom: 0.15rem; }
+    .trust-sub { font-size: 0.8125rem; color: #A4E9EA; }
+    .footer-body { border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .footer-heading { font-size: 0.875rem; font-weight: 700; color: #6FD7D9; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
+    .footer-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-link { font-size: 0.9rem; color: #9AA6B4; text-decoration: none; transition: color 150ms; }
+    .footer-link:hover { color: #38BCC0; }
+    .social-btn { display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; background: rgba(255,255,255,0.08); border-radius: 0.5rem; color: #9AA6B4; transition: background 150ms, color 150ms; text-decoration: none; }
+    .social-btn svg { width: 1.125rem; height: 1.125rem; }
+    .social-btn:hover { background: #0E8186; color: white; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.06); background: #042B2E; }
+    .nav-link { display:inline-flex;align-items:center;padding:0.5rem 0.75rem;font-size:0.9rem;font-weight:500;color:#4D5969;border-radius:0.5rem;text-decoration:none;transition:color 150ms,background 150ms; }
+    .nav-link:hover { color:#0E8186;background:#ECFBFB; }
+    .drawer-nav-link { display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;font-size:1rem;font-weight:500;color:#3A4453;border-radius:0.75rem;text-decoration:none;transition:color 150ms,background 150ms; }
+    .drawer-nav-link svg { width:1.25rem;height:1.25rem;flex:none;color:#9AA6B4; }
+    .drawer-nav-link:hover { color:#0E8186;background:#ECFBFB; }
+    .site-header { position:sticky;top:0;z-index:1020;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(222,227,234,0.6);box-shadow:0 1px 3px rgb(38 46 58 / 0.06); }
+  </style>
+
+  <!-- Scripts -->
+  <script src="../src/js/ui.js" defer></script>
+  <script src="../src/js/main.js" defer></script>
+  <script src="../src/js/member.js" defer></script>
+
+</body>
+</html>

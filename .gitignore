@@ -1,0 +1,12 @@
+node_modules/
+travel-saas-frontend/node_modules/
+travel-saas-frontend/assets/css/tailwind.css
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+*.log
+.env
+.env.*

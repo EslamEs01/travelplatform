@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <linearGradient id="fdbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2A1A0A"/><stop offset="100%" stop-color="#3D200E"/></linearGradient>
+    <linearGradient id="fdtable" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1A0A04"/><stop offset="100%" stop-color="#2E1208"/></linearGradient>
+    <radialGradient id="fdglow" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#F4BE52" stop-opacity="0.25"/><stop offset="100%" stop-color="#F4BE52" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="400" height="225" fill="url(#fdbg)"/>
+  <rect width="400" height="225" fill="url(#fdglow)"/>
+  <!-- Decorative arch / restaurant window -->
+  <path d="M140,10 Q200,0 260,10 L265,100 Q200,90 135,100 Z" fill="#1E0E04" opacity="0.6"/>
+  <path d="M148,14 Q200,6 252,14 L256,95 Q200,86 144,95 Z" fill="none" stroke="#F4BE52" stroke-width="1" opacity="0.35"/>
+  <!-- Lanterns -->
+  <rect x="85" y="30" width="14" height="20" rx="4" fill="#E08D12" opacity="0.8"/>
+  <line x1="92" y1="28" x2="92" y2="22" stroke="#F4BE52" stroke-width="1.5" opacity="0.7"/>
+  <rect x="87" y="50" width="10" height="6" rx="2" fill="#F4BE52" opacity="0.6"/>
+  <rect x="300" y="30" width="14" height="20" rx="4" fill="#E08D12" opacity="0.8"/>
+  <line x1="307" y1="28" x2="307" y2="22" stroke="#F4BE52" stroke-width="1.5" opacity="0.7"/>
+  <rect x="302" y="50" width="10" height="6" rx="2" fill="#F4BE52" opacity="0.6"/>
+  <!-- Table surface -->
+  <ellipse cx="200" cy="185" rx="160" ry="22" fill="url(#fdtable)" opacity="0.95"/>
+  <ellipse cx="200" cy="183" rx="158" ry="20" fill="none" stroke="#E08D12" stroke-width="1" opacity="0.3"/>
+  <!-- Main plate -->
+  <ellipse cx="200" cy="162" rx="60" ry="12" fill="#1A0A04" opacity="0.9"/>
+  <ellipse cx="200" cy="160" rx="55" ry="10" fill="#0E686C" opacity="0.6"/>
+  <ellipse cx="200" cy="158" rx="38" ry="7" fill="#16A0A5" opacity="0.5"/>
+  <!-- Food on plate -->
+  <ellipse cx="200" cy="157" rx="28" ry="5.5" fill="#F4BE52" opacity="0.85"/>
+  <circle cx="192" cy="156" r="5" fill="#E08D12" opacity="0.9"/>
+  <circle cx="205" cy="155" r="4" fill="#FCEBC8" opacity="0.8"/>
+  <circle cx="214" cy="157" r="3.5" fill="#E08D12" opacity="0.85"/>
+  <!-- Steam -->
+  <path d="M185,148 Q188,138 185,128" stroke="#FCEBC8" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>
+  <path d="M200,145 Q203,133 200,122" stroke="#FCEBC8" stroke-width="1.5" fill="none" opacity="0.45" stroke-linecap="round"/>
+  <path d="M215,148 Q212,138 215,128" stroke="#FCEBC8" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>
+  <!-- Side glass / drink -->
+  <rect x="275" y="150" width="18" height="28" rx="2" fill="#0E8186" opacity="0.7"/>
+  <rect x="277" y="152" width="14" height="8" rx="1" fill="#A4E9EA" opacity="0.5"/>
+  <line x1="284" y1="148" x2="284" y2="142" stroke="#F4BE52" stroke-width="1.5" opacity="0.7"/>
+  <!-- Side bread/roll -->
+  <ellipse cx="120" cy="165" rx="22" ry="12" fill="#E08D12" opacity="0.8"/>
+  <ellipse cx="120" cy="163" rx="18" ry="9" fill="#F4BE52" opacity="0.7"/>
+  <!-- Fork and knife -->
+  <line x1="148" y1="148" x2="148" y2="178" stroke="#FCEBC8" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+  <path d="M145,148 L145,158 Q148,161 151,158 L151,148" fill="#FCEBC8" opacity="0.5"/>
+  <line x1="253" y1="148" x2="253" y2="178" stroke="#FCEBC8" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+  <rect x="251" y="148" width="4" height="14" rx="1" fill="#FCEBC8" opacity="0.4"/>
+  <!-- Floor glow -->
+  <ellipse cx="200" cy="220" rx="180" ry="10" fill="#E08D12" opacity="0.15"/>
+</svg>
