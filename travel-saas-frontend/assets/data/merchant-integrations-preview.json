@@ -1,0 +1,112 @@
+[
+  {
+    "id": "int-001",
+    "name": "Travelpayouts",
+    "status": "Needs configuration",
+    "statusAr": "يحتاج ضبطاً",
+    "statusType": "warning",
+    "description": "شبكة شراكة للسفر — استيراد العروض تلقائياً — قابل للربط لاحقاً",
+    "action": "ضبط",
+    "actionType": "coming-soon"
+  },
+  {
+    "id": "int-002",
+    "name": "Booking.com Affiliate",
+    "status": "Not connected",
+    "statusAr": "غير مربوط",
+    "statusType": "neutral",
+    "description": "برنامج التابعين لـ Booking.com — لا يوجد تكامل مفعّل فعلياً",
+    "action": "ربط",
+    "actionType": "coming-soon"
+  },
+  {
+    "id": "int-003",
+    "name": "Expedia Partner Solutions",
+    "status": "Coming soon",
+    "statusAr": "قريباً",
+    "statusType": "info",
+    "description": "استيراد عروض Expedia عبر API — قيد التطوير",
+    "action": "قريباً",
+    "actionType": "coming-soon"
+  },
+  {
+    "id": "int-004",
+    "name": "Skyscanner Partner API",
+    "status": "Coming soon",
+    "statusAr": "قريباً",
+    "statusType": "info",
+    "description": "بحث الرحلات وبيانات الأسعار — قيد التطوير",
+    "action": "قريباً",
+    "actionType": "coming-soon"
+  },
+  {
+    "id": "int-005",
+    "name": "Amadeus API",
+    "status": "API Ready",
+    "statusAr": "API جاهز",
+    "statusType": "api-ready",
+    "description": "GDS عالمي للحجوزات — جاهز للإعداد لاحقاً — لا يوجد اتصال حقيقي",
+    "action": "إعداد",
+    "actionType": "coming-soon"
+  },
+  {
+    "id": "int-006",
+    "name": "Duffel API",
+    "status": "API Ready",
+    "statusAr": "API جاهز",
+    "statusType": "api-ready",
+    "description": "حجز رحلات الطيران مباشرة — جاهز للربط لاحقاً",
+    "action": "إعداد",
+    "actionType": "coming-soon"
+  },
+  {
+    "id": "int-007",
+    "name": "Coupon API",
+    "status": "Connected mock",
+    "statusAr": "مربوط (تجريبي)",
+    "statusType": "success",
+    "description": "واجهة الكوبونات — مفعّلة محلياً — بيانات تجريبية فقط",
+    "action": "اختبار",
+    "actionType": "coming-soon"
+  },
+  {
+    "id": "int-008",
+    "name": "Manual Deals",
+    "status": "Connected mock",
+    "statusAr": "مربوط (تجريبي)",
+    "statusType": "success",
+    "description": "إدارة العروض اليدوية — مفعّلة محلياً — واجهة أمامية فقط",
+    "action": "إدارة",
+    "actionType": "coming-soon"
+  },
+  {
+    "id": "int-009",
+    "name": "Scraping Review Queue",
+    "status": "Needs review",
+    "statusAr": "يحتاج مراجعة",
+    "statusType": "warning",
+    "description": "مراجعة بيانات مستخرجة — في قائمة الانتظار — لا بيانات حقيقية",
+    "action": "مراجعة",
+    "actionType": "coming-soon"
+  },
+  {
+    "id": "int-010",
+    "name": "WhatsApp Notifications",
+    "status": "Not connected",
+    "statusAr": "غير مربوط",
+    "statusType": "neutral",
+    "description": "إشعارات WhatsApp للعملاء — قابل للربط لاحقاً — لا إشعارات حقيقية",
+    "action": "ربط",
+    "actionType": "coming-soon"
+  },
+  {
+    "id": "int-011",
+    "name": "Email Notifications",
+    "status": "Needs configuration",
+    "statusAr": "يحتاج ضبطاً",
+    "statusType": "warning",
+    "description": "إشعارات البريد الإلكتروني — ضبط SMTP مطلوب — لا إرسال حقيقي",
+    "action": "ضبط",
+    "actionType": "coming-soon"
+  }
+]

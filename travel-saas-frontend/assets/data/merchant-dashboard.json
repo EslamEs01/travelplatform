@@ -1,0 +1,322 @@
+{
+  "company": {
+    "name": "شركة رحلات الشرق",
+    "nameEn": "Al-Sharq Travel Agency",
+    "plan": "Growth Plan",
+    "planAr": "باقة النمو",
+    "subscriptionStatus": "تجريبية — 12 يوماً متبقية",
+    "subscriptionStatusType": "trial",
+    "user": {
+      "name": "أحمد العمري",
+      "role": "مدير الوكالة",
+      "avatar": null
+    },
+    "pendingTasksNote": "لديك 3 طلبات حجز جديدة و2 عروض تنتهي قريباً تحتاج إلى مراجعة — بيانات تجريبية"
+  },
+  "kpis": [
+    {
+      "key": "new_booking_requests",
+      "label": "طلبات الحجز الجديدة",
+      "value": "8",
+      "trendDirection": "up",
+      "trendValue": "+3 هذا الأسبوع",
+      "helperText": "طلبات لم يتم الرد عليها — بيانات تجريبية",
+      "link": "#booking-requests",
+      "icon": "icon-calendar"
+    },
+    {
+      "key": "active_deals",
+      "label": "العروض النشطة",
+      "value": "14",
+      "trendDirection": "up",
+      "trendValue": "+2 هذا الشهر",
+      "helperText": "عروض منشورة ومفعّلة حالياً — مثال توضيحي",
+      "link": "#top-deals",
+      "icon": "icon-tag"
+    },
+    {
+      "key": "active_coupons",
+      "label": "الكوبونات المفعّلة",
+      "value": "6",
+      "trendDirection": "neutral",
+      "trendValue": "بدون تغيير",
+      "helperText": "كوبونات خصم نشطة — تقديري",
+      "link": "#",
+      "icon": "icon-ticket"
+    },
+    {
+      "key": "customers",
+      "label": "العملاء المسجّلون",
+      "value": "127",
+      "trendDirection": "up",
+      "trendValue": "+11 هذا الشهر",
+      "helperText": "عملاء في قاعدة البيانات — بيانات تجريبية",
+      "link": "#",
+      "icon": "icon-users"
+    },
+    {
+      "key": "deal_clicks",
+      "label": "الضغطات على العروض",
+      "value": "2,340",
+      "trendDirection": "up",
+      "trendValue": "+18% هذا الأسبوع",
+      "helperText": "إجمالي مشاهدات العروض — تقديري",
+      "link": "#analytics-preview",
+      "icon": "icon-bar-chart"
+    },
+    {
+      "key": "coupon_copies",
+      "label": "نسخ الكوبونات",
+      "value": "394",
+      "trendDirection": "up",
+      "trendValue": "+7% هذا الشهر",
+      "helperText": "عدد مرات نسخ الكوبونات — تقديري",
+      "link": "#analytics-preview",
+      "icon": "icon-copy"
+    },
+    {
+      "key": "estimated_conversions",
+      "label": "التحويلات التقديرية",
+      "value": "23",
+      "trendDirection": "down",
+      "trendValue": "-2 هذا الأسبوع",
+      "helperText": "تحويلات متوقعة على أساس النقرات — مثال توضيحي",
+      "link": "#analytics-preview",
+      "icon": "icon-trend-up"
+    },
+    {
+      "key": "expiring_deals",
+      "label": "عروض تنتهي قريباً",
+      "value": "3",
+      "trendDirection": "warning",
+      "trendValue": "خلال 7 أيام",
+      "helperText": "عروض تحتاج تجديد أو إيقاف — تنبيه تجريبي",
+      "link": "#alerts",
+      "icon": "icon-alert-triangle"
+    }
+  ],
+  "analytics": {
+    "bookingInquiriesOverTime": [
+      { "label": "السبت",  "value": 3 },
+      { "label": "الأحد",  "value": 5 },
+      { "label": "الإثنين", "value": 4 },
+      { "label": "الثلاثاء", "value": 8 },
+      { "label": "الأربعاء", "value": 6 },
+      { "label": "الخميس", "value": 10 },
+      { "label": "الجمعة", "value": 7 }
+    ],
+    "dealClicks": [
+      { "label": "الأسبوع 1", "value": 480 },
+      { "label": "الأسبوع 2", "value": 620 },
+      { "label": "الأسبوع 3", "value": 540 },
+      { "label": "الأسبوع 4", "value": 700 }
+    ],
+    "couponCopies": [
+      { "label": "يناير", "value": 60 },
+      { "label": "فبراير", "value": 75 },
+      { "label": "مارس",  "value": 92 },
+      { "label": "أبريل", "value": 85 },
+      { "label": "مايو",  "value": 110 },
+      { "label": "يونيو", "value": 130 }
+    ],
+    "topDestinations": [
+      { "label": "إسطنبول، تركيا",  "value": 28 },
+      { "label": "دبي، الإمارات",    "value": 22 },
+      { "label": "شرم الشيخ، مصر", "value": 18 },
+      { "label": "باريس، فرنسا",    "value": 14 },
+      { "label": "بانكوك، تايلاند", "value": 10 }
+    ],
+    "trafficSources": [
+      { "label": "البحث المجاني",  "value": 42 },
+      { "label": "وسائل التواصل", "value": 31 },
+      { "label": "الإحالات",       "value": 17 },
+      { "label": "مباشر",          "value": 10 }
+    ],
+    "deviceBreakdown": [
+      { "label": "جوال",   "value": 58 },
+      { "label": "سطح مكتب", "value": 34 },
+      { "label": "تابلت",  "value": 8 }
+    ]
+  },
+  "alerts": [
+    {
+      "id": "alert-001",
+      "severity": "danger",
+      "message": "3 عروض تنتهي خلال 7 أيام — يرجى التجديد أو الإيقاف",
+      "due": "2026-06-09",
+      "action": "مراجعة العروض",
+      "actionTarget": "coming-soon"
+    },
+    {
+      "id": "alert-002",
+      "severity": "warning",
+      "message": "2 كوبونات تحتاج مراجعة وتحديث",
+      "due": "2026-06-05",
+      "action": "فتح الكوبونات",
+      "actionTarget": "coming-soon"
+    },
+    {
+      "id": "alert-003",
+      "severity": "warning",
+      "message": "4 طلبات حجز لم يُرد عليها منذ أكثر من 48 ساعة",
+      "due": "عاجل",
+      "action": "مراجعة الطلبات",
+      "actionTarget": "#booking-requests"
+    },
+    {
+      "id": "alert-004",
+      "severity": "info",
+      "message": "تكامل Travelpayouts يحتاج ضبط — لا يوجد تكامل مفعّل فعلياً",
+      "due": null,
+      "action": "ضبط التكامل",
+      "actionTarget": "coming-soon"
+    },
+    {
+      "id": "alert-005",
+      "severity": "info",
+      "message": "بيانات الشركة غير مكتملة — أضف وصف الوكالة والشعار",
+      "due": null,
+      "action": "تحديث الملف",
+      "actionTarget": "coming-soon"
+    },
+    {
+      "id": "alert-006",
+      "severity": "warning",
+      "message": "باقتك التجريبية تنتهي خلال 12 يوماً — هذه نسخة تجريبية فقط",
+      "due": "2026-06-14",
+      "action": "عرض الباقات",
+      "actionTarget": "coming-soon"
+    }
+  ],
+  "onboarding": [
+    {
+      "id": "ob-001",
+      "label": "أضف أول عرض سياحي",
+      "description": "أنشئ عرضك الأول وابدأ في استقطاب العملاء",
+      "done": false,
+      "cta": "إضافة عرض",
+      "ctaTarget": "coming-soon"
+    },
+    {
+      "id": "ob-002",
+      "label": "أنشئ أول كوبون خصم",
+      "description": "كوبونات الخصم تزيد التفاعل وتُحفّز على الحجز",
+      "done": false,
+      "cta": "إنشاء كوبون",
+      "ctaTarget": "coming-soon"
+    },
+    {
+      "id": "ob-003",
+      "label": "فعّل مصدر العروض (Travelpayouts)",
+      "description": "اربط مصدر عروض خارجي لاستيراد الصفقات تلقائياً — قابل للربط لاحقاً",
+      "done": false,
+      "cta": "ضبط المصدر",
+      "ctaTarget": "coming-soon"
+    },
+    {
+      "id": "ob-004",
+      "label": "اضبط بيانات الشركة",
+      "description": "أكمل ملف وكالتك — الاسم، الوصف، طرق التواصل",
+      "done": false,
+      "cta": "تعديل الملف",
+      "ctaTarget": "coming-soon"
+    },
+    {
+      "id": "ob-005",
+      "label": "راجع أول طلب حجز",
+      "description": "رُد على طلبات العملاء لبناء علاقة ثقة — بيانات تجريبية",
+      "done": false,
+      "cta": "عرض الطلبات",
+      "ctaTarget": "#booking-requests"
+    },
+    {
+      "id": "ob-006",
+      "label": "فعّل تنبيهات البريد الإلكتروني",
+      "description": "تلقَّ إشعارات فورية بالطلبات الجديدة — قابل للربط لاحقاً",
+      "done": false,
+      "cta": "ضبط التنبيهات",
+      "ctaTarget": "coming-soon"
+    }
+  ],
+  "activity": [
+    {
+      "id": "act-001",
+      "icon": "icon-calendar",
+      "text": "طلب حجز جديد من ليلى حسن — إسطنبول 5 ليالٍ",
+      "time": "منذ 14 دقيقة",
+      "type": "booking"
+    },
+    {
+      "id": "act-002",
+      "icon": "icon-tag",
+      "text": "تم تحديث عرض «رحلة إلى إسطنبول» — حالة: نشط",
+      "time": "منذ ساعة",
+      "type": "deal"
+    },
+    {
+      "id": "act-003",
+      "icon": "icon-copy",
+      "text": "تم نسخ كوبون SUMMER25 بواسطة عميل جديد",
+      "time": "منذ 3 ساعات",
+      "type": "coupon"
+    },
+    {
+      "id": "act-004",
+      "icon": "icon-users",
+      "text": "عميل جديد مسجّل — محمد الزهراني",
+      "time": "منذ 5 ساعات",
+      "type": "customer"
+    },
+    {
+      "id": "act-005",
+      "icon": "icon-alert-triangle",
+      "text": "عرض «دبي الفاخرة» ينتهي خلال 7 أيام — بيانات تجريبية",
+      "time": "منذ يوم",
+      "type": "alert"
+    },
+    {
+      "id": "act-006",
+      "icon": "icon-check-circle",
+      "text": "تأكيد حجز رقم BK-2024-003 — مبادر الدفع: Deposit",
+      "time": "منذ يومين",
+      "type": "booking"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif-001",
+      "text": "طلب حجز جديد — ليلى حسن (إسطنبول)",
+      "time": "منذ 14 دقيقة",
+      "type": "booking",
+      "read": false
+    },
+    {
+      "id": "notif-002",
+      "text": "كوبون SUMMER25 نُسخ 5 مرات اليوم",
+      "time": "منذ ساعة",
+      "type": "coupon",
+      "read": false
+    },
+    {
+      "id": "notif-003",
+      "text": "عرض «دبي الفاخرة» ينتهي قريباً",
+      "time": "منذ 3 ساعات",
+      "type": "alert",
+      "read": true
+    },
+    {
+      "id": "notif-004",
+      "text": "عميل جديد مسجّل — محمد الزهراني",
+      "time": "منذ 5 ساعات",
+      "type": "customer",
+      "read": true
+    },
+    {
+      "id": "notif-005",
+      "text": "باقتك التجريبية تنتهي خلال 12 يوماً — واجهة أمامية فقط",
+      "time": "منذ يوم",
+      "type": "system",
+      "read": true
+    }
+  ]
+}

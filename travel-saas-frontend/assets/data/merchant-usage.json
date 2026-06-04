@@ -1,0 +1,53 @@
+{
+  "plan": {
+    "name": "Growth",
+    "renewalMock": "2026-07-01 (تجريبي)",
+    "billingNoteAr": "الفوترة غير مفعّلة في هذه النسخة التجريبية — قابل للربط لاحقاً"
+  },
+  "usage": [
+    {
+      "key": "deals",
+      "labelAr": "العروض النشطة",
+      "used": 12,
+      "limit": 50
+    },
+    {
+      "key": "coupons",
+      "labelAr": "الكوبونات",
+      "used": 12,
+      "limit": 50
+    },
+    {
+      "key": "teamUsers",
+      "labelAr": "أعضاء الفريق",
+      "used": 6,
+      "limit": 10
+    },
+    {
+      "key": "integrations",
+      "labelAr": "التكاملات المفعّلة",
+      "used": 2,
+      "limit": 8
+    },
+    {
+      "key": "bookingInquiries",
+      "labelAr": "طلبات الحجز الشهرية",
+      "used": 320,
+      "limit": 1000
+    },
+    {
+      "key": "customers",
+      "labelAr": "قاعدة العملاء",
+      "used": 210,
+      "limit": 1000
+    },
+    {
+      "key": "storage",
+      "labelAr": "التخزين",
+      "used": 0,
+      "limit": 0,
+      "unit": "placeholder",
+      "noteAr": "قياس التخزين قابل للربط لاحقاً"
+    }
+  ]
+}

@@ -1,0 +1,2741 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth" data-page="merchant-analytics">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>التحليلات – رحلاتي (تجريبي)</title>
+  <meta name="description" content="لوحة تحليلات الوكالة — KPIs ومصادر الزيارات وأداء العروض والكوبونات. بيانات تجريبية وواجهة أمامية فقط.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0E8186">
+  <meta property="og:title" content="التحليلات – رحلاتي">
+  <meta property="og:locale" content="ar_AR">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/tailwind.css">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"الرئيسية","item":"https://rihlaty.example.com"},{"@type":"ListItem","position":2,"name":"لوحة التحكم","item":"https://rihlaty.example.com/dashboard"},{"@type":"ListItem","position":3,"name":"التحليلات","item":"https://rihlaty.example.com/dashboard/analytics"}]}
+  </script>
+
+  <style>
+    /* ── dashboard/analytics.html page-scoped styles ─────────────────────────── */
+
+    :root {
+      --sidebar-w:          260px;
+      --topbar-h:            64px;
+      --sidebar-bg:         #042B2E;
+      --sidebar-active:     #0E8186;
+      --sidebar-hover:      rgba(14,129,134,.18);
+      --sidebar-text:       #A4E9EA;
+      --body-bg:            #F4F6F9;
+      --card-bg:            #ffffff;
+      --border-color:       #E2E8F0;
+      --shadow-card:        0 1px 3px rgba(38,46,58,.07),0 1px 2px rgba(38,46,58,.04);
+      --shadow-pop:         0 10px 25px -5px rgba(38,46,58,.12),0 4px 10px -6px rgba(38,46,58,.08);
+      --shadow-elevated:    0 20px 40px -8px rgba(38,46,58,.15),0 8px 16px -4px rgba(38,46,58,.08);
+      --z-dd:               1000;
+      --z-drawer-overlay:   1030;
+      --z-drawer:           1040;
+      --z-modal-overlay:    1050;
+      --z-modal:            1060;
+      --z-toast:            1080;
+    }
+
+    /* ── Skip link ── */
+    .skip-link {
+      position: absolute; inset-inline-start: -999px; top: .5rem;
+      background: #0E8186; color: #fff;
+      padding: .5rem 1.25rem; border-radius: 0 .5rem .5rem 0;
+      font-weight: 700; font-size: .875rem; z-index: 9999;
+      text-decoration: none; transition: inset-inline-start .15s;
+    }
+    .skip-link:focus { inset-inline-start: 0; }
+
+    /* ── Shell ── */
+    body { background: var(--body-bg); }
+
+    .dash-sidebar {
+      position: fixed; top: 0; bottom: 0; inset-inline-start: 0;
+      width: var(--sidebar-w); background: var(--sidebar-bg);
+      display: flex; flex-direction: column;
+      overflow-y: auto; overflow-x: hidden;
+      z-index: var(--z-drawer);
+      transition: transform .25s cubic-bezier(.4,0,.2,1);
+      scrollbar-width: thin; scrollbar-color: rgba(14,129,134,.4) transparent;
+    }
+    .dash-sidebar:not(.is-open) { transform: translateX(100%); }
+    html[dir="ltr"] .dash-sidebar:not(.is-open) { transform: translateX(-100%); }
+    @media (min-width: 1024px) {
+      .dash-sidebar,
+      html[dir="ltr"] .dash-sidebar { transform: translateX(0) !important; transition: none !important; z-index: 10; }
+    }
+
+    .dash-scrim {
+      position: fixed; inset: 0; background: rgba(22,28,38,.6);
+      z-index: var(--z-drawer-overlay); opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .dash-scrim.is-visible { opacity: 1; pointer-events: auto; }
+
+    .dash-main { display: flex; flex-direction: column; min-height: 100dvh; }
+    @media (min-width: 1024px) { .dash-main { margin-inline-start: var(--sidebar-w); } }
+
+    body.sidebar-open { overflow: hidden; }
+
+    /* ── Topbar ── */
+    .dash-topbar {
+      position: sticky; top: 0; height: var(--topbar-h);
+      background: var(--card-bg); border-bottom: 1px solid var(--border-color);
+      display: flex; align-items: center;
+      gap: .5rem; padding: 0 1.25rem;
+      z-index: var(--z-dd); box-shadow: 0 1px 3px rgba(38,46,58,.05);
+    }
+
+    .dash-dropdown {
+      position: absolute; top: calc(var(--topbar-h) - 4px); inset-inline-end: 0;
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: .875rem; box-shadow: var(--shadow-pop);
+      min-width: 280px; z-index: var(--z-dd); overflow: hidden;
+    }
+    .dash-dropdown[hidden] { display: none; }
+    .dash-dropdown.is-open { display: block; }
+    .dash-dropdown.dd-animate { animation: dd-pop .15s cubic-bezier(.4,0,.2,1); }
+    @keyframes dd-pop {
+      from { opacity:0; transform: translateY(-8px) scale(.97); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) { .dash-dropdown.dd-animate { animation: none; } }
+
+    .topbar-search {
+      display: flex; align-items: center; background: #F7F8FA;
+      border: 1px solid var(--border-color); border-radius: .625rem;
+      padding: 0 .75rem; height: 2.25rem; gap: .375rem;
+      flex: 1; max-width: 280px; transition: border-color .15s, box-shadow .15s;
+    }
+    .topbar-search:focus-within {
+      border-color: #16A0A5; box-shadow: 0 0 0 3px rgba(22,160,165,.12); background: #fff;
+    }
+    .topbar-search input {
+      border: none; background: transparent; font-family: inherit;
+      font-size: .875rem; color: #262E3A; width: 100%; outline: none;
+    }
+    .topbar-search input::placeholder { color: #9AA6B4; }
+
+    /* ── Sidebar nav ── */
+    .sidebar-brand {
+      display: flex; align-items: center; gap: .75rem;
+      padding: 1.375rem 1.25rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.08); flex-shrink: 0;
+    }
+    .sidebar-brand-name { font-size: 1.125rem; font-weight: 800; color: #fff; letter-spacing: -.01em; }
+    .sidebar-brand-sub  { font-size: .6875rem; color: #6FD7D9; font-weight: 500; }
+    .sidebar-nav { flex: 1; padding: .75rem 0; }
+    .sidebar-nav-item { list-style: none; }
+    .sidebar-nav-link {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .6875rem 1.25rem; color: var(--sidebar-text);
+      text-decoration: none; border-radius: .625rem;
+      margin: .125rem .75rem; font-size: .9375rem; font-weight: 500;
+      transition: background .15s, color .15s; white-space: nowrap;
+    }
+    .sidebar-nav-link:hover { background: var(--sidebar-hover); color: #fff; }
+    .sidebar-nav-link[aria-current="page"] {
+      background: var(--sidebar-active); color: #fff; font-weight: 700;
+    }
+    .sidebar-nav-link svg { width: 1.125rem; height: 1.125rem; flex-shrink: 0; }
+    .sidebar-section-label {
+      font-size: .6875rem; font-weight: 700; letter-spacing: .07em;
+      color: rgba(164,233,234,.5); text-transform: uppercase;
+      padding: .75rem 1.25rem .25rem; margin: 0;
+    }
+    .sidebar-bottom { border-top: 1px solid rgba(255,255,255,.08); padding: .75rem 0; flex-shrink: 0; }
+
+    /* ── Content ── */
+    .dash-content {
+      flex: 1; padding: 1.25rem 1rem 2.5rem;
+      max-width: 1400px; width: 100%; margin-inline: auto;
+    }
+    @media (min-width: 768px)  { .dash-content { padding: 1.75rem 1.75rem 3rem; } }
+    @media (min-width: 1280px) { .dash-content { padding: 2rem 2.5rem 3rem; } }
+
+    /* ── Breadcrumb ── */
+    .dash-breadcrumb {
+      display: flex; align-items: center; gap: .375rem; font-size: .8125rem;
+      color: #9AA6B4; padding-bottom: 1.125rem;
+    }
+    .dash-breadcrumb a { color: #6B7889; text-decoration: none; }
+    .dash-breadcrumb a:hover { color: #0E8186; text-decoration: underline; }
+    .dash-breadcrumb-sep { color: #C5CDD7; user-select: none; }
+
+    /* ── Page header band ── */
+    .dash-page-header { padding: .25rem 0 1.75rem; }
+    .page-header-band {
+      background: linear-gradient(135deg, #042B2E 0%, #0B545A 50%, #16A0A5 100%);
+      border-radius: 1.5rem; padding: 2rem 2.25rem;
+      position: relative; overflow: hidden;
+      box-shadow: 0 12px 32px -6px rgba(4,43,46,.4);
+    }
+    .page-header-band::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 85% 40%, rgba(56,188,192,.2) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .page-header-band::after {
+      content: ''; position: absolute;
+      inset-block-start: -30px; inset-inline-end: 1.5rem;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-header-inner { position: relative; z-index: 1; }
+
+    /* ── Safe note ── */
+    .safe-note {
+      display: inline-flex; align-items: flex-start; gap: .5rem;
+      padding: .5rem .875rem;
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+      border-radius: .75rem; font-size: .75rem; color: rgba(255,255,255,.8);
+      margin-top: .875rem;
+    }
+
+    /* ── Date-range toolbar ── */
+    .analytics-toolbar {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .75rem;
+      padding: 1.125rem 1.5rem;
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; box-shadow: var(--shadow-card);
+      margin-bottom: 1.5rem;
+    }
+    .toolbar-label {
+      font-size: .8125rem; font-weight: 700; color: #4D5969; flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .date-range-chips {
+      display: flex; flex-wrap: wrap; gap: .375rem; flex: 1;
+    }
+    .date-chip {
+      padding: .375rem .875rem; border-radius: 9999px;
+      border: 1.5px solid var(--border-color);
+      background: transparent; color: #6B7889;
+      font-size: .8125rem; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: all .15s; white-space: nowrap;
+    }
+    .date-chip:hover { border-color: #0E8186; color: #0E8186; background: #F0FAFA; }
+    .date-chip[aria-pressed="true"],
+    .date-chip.is-active {
+      border-color: #0E8186; background: #0E8186; color: #fff;
+    }
+    .date-chip:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+
+    /* Custom range inputs */
+    .custom-range-wrap {
+      display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+    }
+    .custom-range-wrap[hidden] { display: none; }
+    .custom-date-input {
+      padding: .375rem .625rem; border: 1.5px solid var(--border-color);
+      border-radius: .625rem; font-size: .8125rem; color: #262E3A;
+      font-family: inherit; background: #F8FAFC; outline: none;
+      transition: border-color .15s;
+    }
+    .custom-date-input:focus { border-color: #0E8186; background: #fff; }
+    .btn-apply {
+      padding: .375rem .875rem; border-radius: .625rem;
+      background: #0E8186; color: #fff; border: none;
+      font-size: .8125rem; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: background .15s;
+    }
+    .btn-apply:hover { background: #0A6B6F; }
+    .btn-apply:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+
+    /* Compare + export */
+    .toolbar-divider { width: 1px; height: 1.5rem; background: var(--border-color); flex-shrink: 0; }
+    .compare-toggle-wrap { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
+    .compare-label { font-size: .8125rem; font-weight: 600; color: #4D5969; white-space: nowrap; }
+    .toggle-switch {
+      position: relative; display: inline-block; width: 2.75rem; height: 1.5rem; flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-track {
+      position: absolute; inset: 0; cursor: pointer;
+      background: #CBD5E1; border-radius: 9999px; transition: background .2s;
+    }
+    .toggle-track::after {
+      content: ''; position: absolute;
+      left: 3px; top: 3px; width: 1.125rem; height: 1.125rem;
+      background: #fff; border-radius: 50%;
+      transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+    html[dir="rtl"] .toggle-track::after { left: auto; right: 3px; }
+    .toggle-switch input:checked + .toggle-track { background: #0E8186; }
+    .toggle-switch input:checked + .toggle-track::after { transform: translateX(1.25rem); }
+    html[dir="rtl"] .toggle-switch input:checked + .toggle-track::after { transform: translateX(-1.25rem); }
+    .toggle-switch input:focus-visible + .toggle-track {
+      outline: 2px solid #16A0A5; outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .toggle-track, .toggle-track::after { transition: none; }
+    }
+
+    .btn-export {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .4375rem 1rem; border-radius: .75rem;
+      background: transparent; border: 1.5px solid var(--border-color);
+      color: #4D5969; font-size: .8125rem; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: all .15s; white-space: nowrap;
+    }
+    .btn-export:hover { border-color: #0E8186; color: #0E8186; background: #F0FAFA; }
+    .btn-export:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+
+    /* ── KPI grid ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 540px)  { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 720px)  { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1024px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 1280px) { .kpi-grid { grid-template-columns: repeat(5, 1fr); } }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 1.125rem;
+      padding: 1.25rem 1.375rem 1.125rem;
+      display: flex; flex-direction: column; gap: .5rem;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow .2s, transform .2s;
+      position: relative; overflow: hidden;
+    }
+    .kpi-card:hover { box-shadow: var(--shadow-pop); transform: translateY(-2px); }
+    .kpi-card-accent {
+      position: absolute; top: 0; inset-inline-start: 0; inset-inline-end: 0;
+      height: 3px; border-radius: 1.125rem 1.125rem 0 0;
+    }
+    .kpi-card-header {
+      display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+    }
+    .kpi-icon-wrap {
+      width: 2.5rem; height: 2.5rem; border-radius: .75rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .kpi-label {
+      font-size: .8125rem; color: #6B7889; font-weight: 600; line-height: 1.3;
+      flex: 1; min-width: 0;
+    }
+    .kpi-value {
+      font-size: 1.625rem; font-weight: 800; color: #161C26; line-height: 1.1;
+      letter-spacing: -.01em;
+    }
+    .kpi-value-unit {
+      font-size: .875rem; font-weight: 700; color: #4D5969; margin-inline-start: .25rem;
+    }
+    .kpi-trend {
+      display: inline-flex; align-items: center; gap: .25rem;
+      font-size: .75rem; font-weight: 700; padding: .25rem .5rem;
+      border-radius: 9999px; align-self: flex-start;
+    }
+    .kpi-trend-up   { background: #DCFCE7; color: #16A34A; }
+    .kpi-trend-down { background: #FEE2E2; color: #DC2626; }
+    .kpi-trend-neutral { background: #EEF1F5; color: #4D5969; }
+    .kpi-helper { font-size: .6875rem; color: #9AA6B4; line-height: 1.4; }
+    .kpi-demo-label {
+      display: inline-block; font-size: .625rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      padding: .175rem .4rem; border-radius: .375rem;
+      background: #FEF9C3; color: #A16207;
+      align-self: flex-start;
+    }
+
+    /* KPI accent colors */
+    .kpi-accent-teal   { background: linear-gradient(90deg,#0E8186,#38BCC0); }
+    .kpi-accent-blue   { background: linear-gradient(90deg,#2563EB,#60A5FA); }
+    .kpi-accent-purple { background: linear-gradient(90deg,#7C3AED,#A78BFA); }
+    .kpi-accent-amber  { background: linear-gradient(90deg,#D97706,#FCD34D); }
+    .kpi-accent-green  { background: linear-gradient(90deg,#16A34A,#4ADE80); }
+    .kpi-accent-rose   { background: linear-gradient(90deg,#E11D48,#FB7185); }
+    .kpi-accent-sky    { background: linear-gradient(90deg,#0284C7,#38BEF8); }
+    .kpi-icon-teal   { background: #ECFBFB; color: #0E8186; }
+    .kpi-icon-blue   { background: #EFF6FF; color: #2563EB; }
+    .kpi-icon-purple { background: #EDE9FE; color: #7C3AED; }
+    .kpi-icon-amber  { background: #FFFBEB; color: #D97706; }
+    .kpi-icon-green  { background: #F0FDF4; color: #16A34A; }
+    .kpi-icon-rose   { background: #FFF1F2; color: #E11D48; }
+    .kpi-icon-sky    { background: #F0F9FF; color: #0284C7; }
+
+    /* ── Section wrapper ── */
+    .dash-section { margin-bottom: 2rem; }
+    .dash-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem; gap: .75rem; flex-wrap: wrap;
+    }
+    .dash-section-title {
+      font-size: 1.0625rem; font-weight: 800; color: #161C26; margin: 0; line-height: 1.4;
+    }
+    .dash-section-sub { font-size: .8125rem; color: #9AA6B4; margin-top: .125rem; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; box-shadow: var(--shadow-card);
+    }
+
+    /* ── sr-only ── */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ── Skeleton / loading ── */
+    @keyframes shimmer {
+      from { background-position: -600px 0; }
+      to   { background-position:  600px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg,#EEF1F5 25%,#F7F8FA 50%,#EEF1F5 75%);
+      background-size: 600px 100%; animation: shimmer 1.5s infinite linear; border-radius: .5rem;
+    }
+    @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; background: #EEF1F5; } }
+
+    /* ── Empty state ── */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 3rem 1.5rem; text-align: center; color: #9AA6B4;
+    }
+    .empty-state svg { opacity: .3; margin-bottom: .875rem; }
+    .empty-state-title { font-size: 1rem; font-weight: 700; color: #6B7889; }
+    .empty-state-body  { font-size: .875rem; margin-top: .375rem; }
+
+    /* ── Section placeholders for T011–T013 ── */
+    .section-coming { padding: 2rem 1.5rem; text-align: center; color: #9AA6B4; font-size: .875rem; }
+
+    /* ── Footer ── */
+    .dash-footer {
+      border-top: 1px solid var(--border-color); background: var(--card-bg);
+      padding: 1rem 1.75rem;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: .5rem; font-size: .8125rem; color: #9AA6B4;
+    }
+    .dash-footer a { color: #6B7889; text-decoration: none; }
+    .dash-footer a:hover { color: #0E8186; text-decoration: underline; }
+
+    /* ── Chart bars (T011 prep) ── */
+    .chart-bars-container {
+      display: flex; align-items: flex-end; gap: 4px; height: 88px;
+    }
+    .chart-bar-col {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 3px; height: 100%; justify-content: flex-end;
+    }
+    .chart-bar {
+      width: 100%; background: linear-gradient(180deg,#38BCC0,#0E8186);
+      border-radius: 3px 3px 0 0; min-height: 4px; transition: opacity .15s;
+    }
+    .chart-bar:hover { opacity: .8; }
+    .chart-bar-val {
+      font-size: .5625rem; font-weight: 700; color: #4D5969;
+      text-align: center; line-height: 1; margin-bottom: 2px;
+    }
+    .chart-bar-lbl { font-size: .5625rem; color: #9AA6B4; text-align: center; white-space: nowrap; }
+
+    /* Progress bars */
+    .chart-prop-row { display: flex; align-items: center; gap: .625rem; margin-bottom: .625rem; }
+    .chart-prop-label { font-size: .8125rem; color: #4D5969; min-width: 8.5rem; font-weight: 500; }
+    .chart-prop-track { flex: 1; height: 8px; background: #EEF1F5; border-radius: 9999px; overflow: hidden; }
+    .chart-prop-fill { height: 100%; background: linear-gradient(90deg,#16A0A5,#38BCC0); border-radius: 9999px; }
+    .chart-prop-fill-amber  { background: linear-gradient(90deg,#D97706,#FCD34D); }
+    .chart-prop-fill-purple { background: linear-gradient(90deg,#7C3AED,#A78BFA); }
+    .chart-prop-fill-blue   { background: linear-gradient(90deg,#2563EB,#60A5FA); }
+    .chart-prop-fill-green  { background: linear-gradient(90deg,#16A34A,#4ADE80); }
+    .chart-prop-val { font-size: .8125rem; font-weight: 700; color: #161C26; min-width: 2.75rem; text-align: end; }
+
+    /* ── Responsive table → stacked cards ── */
+    .dash-table-wrap {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; box-shadow: var(--shadow-card); overflow: hidden;
+    }
+    .dash-table-scroll { overflow-x: auto; }
+    .dash-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    .dash-table th {
+      background: #F7F8FA; padding: .75rem 1rem; text-align: start;
+      font-weight: 700; font-size: .8125rem; color: #4D5969; white-space: nowrap;
+      border-bottom: 2px solid var(--border-color);
+    }
+    .dash-table td {
+      padding: .875rem 1rem; border-bottom: 1px solid #EEF1F5;
+      vertical-align: middle; color: #262E3A;
+    }
+    .dash-table tbody tr:last-child td { border-bottom: none; }
+    .dash-table tbody tr:hover { background: #FAFBFC; }
+
+    @media (max-width: 767px) {
+      .dash-table thead { display: none; }
+      .dash-table, .dash-table tbody, .dash-table tr, .dash-table td { display: block; }
+      .dash-table tbody tr {
+        padding: .875rem; margin: .5rem;
+        border: 1px solid var(--border-color); border-radius: .875rem;
+        background: var(--card-bg); box-shadow: var(--shadow-card);
+      }
+      .dash-table td {
+        display: flex; align-items: flex-start; gap: .5rem;
+        padding: .3125rem 0; border: none; font-size: .875rem; line-height: 1.45;
+      }
+      .dash-table td::before {
+        content: attr(data-label); font-weight: 700; color: #4D5969;
+        flex-shrink: 0; min-width: 7rem; font-size: .8125rem;
+      }
+      .dash-table td.cell-actions::before { display: none; }
+      .dash-table td.cell-actions { justify-content: flex-end; }
+    }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: .2rem .6rem; border-radius: 9999px;
+      font-size: .6875rem; font-weight: 700; white-space: nowrap; line-height: 1.4;
+    }
+    .badge-source-partner   { background: #DCFCE7; color: #15803D; }
+    .badge-source-affiliate { background: #FEF3C7; color: #A16207; }
+    .badge-source-manual    { background: #EEF1F5; color: #4D5969; }
+    .badge-active   { background: #DCFCE7; color: #15803D; }
+    .badge-expiring { background: #FEF3C7; color: #A16207; }
+    .badge-draft    { background: #EEF1F5; color: #4D5969; }
+
+    /* ── Row action button ── */
+    .row-action-wrap { position: relative; }
+    .row-action-menu {
+      position: absolute; inset-inline-end: 0; top: calc(100% + 4px);
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: .75rem; box-shadow: var(--shadow-pop);
+      min-width: 180px; z-index: calc(var(--z-dd) + 5); overflow: hidden;
+    }
+    .row-action-menu[hidden] { display: none; }
+    .row-action-menu button, .row-action-menu a {
+      display: flex; align-items: center; gap: .625rem;
+      width: 100%; padding: .625rem 1rem; font-size: .875rem; color: #262E3A;
+      background: none; border: none; cursor: pointer; text-decoration: none;
+      text-align: start; transition: background .1s;
+    }
+    .row-action-menu button:hover, .row-action-menu a:hover { background: #F7F8FA; }
+    .row-action-trigger {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.875rem; height: 1.875rem; border-radius: .5rem;
+      background: transparent; border: 1px solid transparent;
+      cursor: pointer; color: #6B7889; transition: all .12s;
+    }
+    .row-action-trigger:hover { background: #EEF1F5; border-color: var(--border-color); color: #262E3A; }
+    .row-action-trigger:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+
+    /* ── Insight / recommendation cards ── */
+    .insight-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: .875rem;
+    }
+    @media (min-width: 900px) { .insight-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 479px) { .insight-grid { grid-template-columns: 1fr; } }
+
+    .insight-card {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; padding: 1.25rem; box-shadow: var(--shadow-card);
+      display: flex; flex-direction: column; gap: .5rem;
+      transition: box-shadow .15s, transform .15s;
+    }
+    .insight-card:hover { box-shadow: var(--shadow-pop); transform: translateY(-1px); }
+    .insight-icon {
+      width: 2.25rem; height: 2.25rem; border-radius: .625rem;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .insight-title { font-size: .9375rem; font-weight: 700; color: #161C26; line-height: 1.3; }
+    .insight-value { font-size: 1.25rem; font-weight: 800; color: #0E8186; }
+    .insight-helper { font-size: .75rem; color: #9AA6B4; line-height: 1.5; }
+
+    .rec-card {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; padding: 1.25rem; box-shadow: var(--shadow-card);
+      display: flex; flex-direction: column; gap: .75rem;
+      transition: box-shadow .15s;
+    }
+    .rec-card:hover { box-shadow: var(--shadow-pop); }
+    .rec-priority {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .2rem .6rem; border-radius: 9999px;
+      font-size: .6875rem; font-weight: 700; align-self: flex-start;
+    }
+    .rec-priority-high   { background: #FEE2E2; color: #DC2626; }
+    .rec-priority-medium { background: #FEF3C7; color: #A16207; }
+    .rec-priority-low    { background: #DCFCE7; color: #15803D; }
+    .rec-title { font-size: .9375rem; font-weight: 700; color: #262E3A; line-height: 1.3; }
+    .rec-explanation { font-size: .8125rem; color: #6B7889; line-height: 1.6; }
+    .rec-action {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .4375rem .875rem; border-radius: .75rem;
+      background: #ECFBFB; border: 1.5px solid #A4E9EA;
+      color: #0E8186; font-size: .8125rem; font-weight: 700; font-family: inherit;
+      cursor: pointer; text-decoration: none; align-self: flex-start;
+      transition: all .15s;
+    }
+    .rec-action:hover { background: #0E8186; color: #fff; border-color: #0E8186; }
+    .rec-action:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+
+    /* ── FAQ ── */
+    .faq-wrap {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; box-shadow: var(--shadow-card); overflow: hidden;
+    }
+    .faq-item { border-bottom: 1px solid #F0F4F8; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary {
+      padding: 1rem 1.5rem; font-size: .9375rem; font-weight: 700; color: #262E3A;
+      cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between; align-items: center; gap: .75rem;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-chevron { transition: transform .2s; color: #9AA6B4; flex-shrink: 0; }
+    .faq-item[open] .faq-chevron { transform: rotate(180deg); }
+    @media (prefers-reduced-motion: reduce) { .faq-chevron { transition: none; } }
+    .faq-body { padding: 0 1.5rem 1rem; font-size: .875rem; color: #6B7889; line-height: 1.75; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(22,28,38,.55);
+      z-index: var(--z-modal-overlay); display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay[hidden] { display: none; }
+    .modal-box {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.25rem; box-shadow: var(--shadow-elevated);
+      padding: 1.75rem; max-width: 440px; width: 100%;
+      animation: modal-in .18s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes modal-in {
+      from { opacity:0; transform: scale(.95) translateY(8px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) { .modal-box { animation: none; } }
+    .modal-icon {
+      width: 3rem; height: 3rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem; flex-shrink: 0;
+    }
+    .modal-icon-info { background: #ECFBFB; color: #0E8186; }
+    .modal-title { font-size: 1.125rem; font-weight: 800; color: #161C26; }
+    .modal-body  { font-size: .9rem; color: #4D5969; margin-top: .5rem; line-height: 1.65; }
+    .modal-actions { display: flex; gap: .625rem; margin-top: 1.375rem; justify-content: flex-end; flex-wrap: wrap; }
+    .btn-cancel {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .5625rem 1.25rem; border-radius: .75rem;
+      background: #F1F5F9; color: #475569;
+      font-size: .875rem; font-weight: 600; border: none; cursor: pointer; font-family: inherit;
+      transition: background .12s;
+    }
+    .btn-cancel:hover { background: #E2E8F0; }
+    .btn-primary-modal {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .5625rem 1.25rem; border-radius: .75rem;
+      background: #0E8186; color: #fff;
+      font-size: .875rem; font-weight: 700; border: none; cursor: pointer; font-family: inherit;
+      transition: background .12s;
+    }
+    .btn-primary-modal:hover { background: #0A6B6F; }
+
+    /* ── Destination cards ── */
+    .dest-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: .875rem;
+    }
+    @media (min-width: 600px) { .dest-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 900px) { .dest-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 479px) { .dest-grid { grid-template-columns: 1fr; } }
+
+    .dest-card {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; padding: 1.125rem; box-shadow: var(--shadow-card);
+      transition: box-shadow .15s, transform .15s;
+    }
+    .dest-card:hover { box-shadow: var(--shadow-pop); transform: translateY(-1px); }
+    .dest-name { font-size: 1rem; font-weight: 800; color: #161C26; margin-bottom: .625rem; }
+    .dest-stat-row { display: flex; align-items: center; gap: .375rem; margin-bottom: .375rem; }
+    .dest-stat-label { font-size: .75rem; color: #9AA6B4; flex: 1; }
+    .dest-stat-val { font-size: .875rem; font-weight: 700; color: #262E3A; }
+    .dest-trend-up   { display: inline-flex; align-items: center; gap: .15rem; font-size: .6875rem; font-weight: 700; color: #16A34A; }
+    .dest-trend-down { display: inline-flex; align-items: center; gap: .15rem; font-size: .6875rem; font-weight: 700; color: #DC2626; }
+    .dest-trend-stable { display: inline-flex; align-items: center; gap: .15rem; font-size: .6875rem; font-weight: 700; color: #9AA6B4; }
+    .dest-mini-bar {
+      height: 5px; background: #EEF1F5; border-radius: 9999px; overflow: hidden; margin-top: .625rem;
+    }
+    .dest-mini-fill {
+      height: 100%; background: linear-gradient(90deg,#16A0A5,#38BCC0); border-radius: 9999px;
+    }
+
+    /* ── Traffic source rows ── */
+    .traffic-row {
+      display: flex; align-items: center; gap: .875rem;
+      padding: .75rem 1.25rem; border-bottom: 1px solid #F0F4F8;
+    }
+    .traffic-row:last-child { border-bottom: none; }
+    .traffic-icon-wrap {
+      width: 2rem; height: 2rem; border-radius: .5rem;
+      display: flex; align-items: center; justify-content: center;
+      background: #ECFBFB; color: #0E8186; flex-shrink: 0;
+    }
+    .traffic-name { font-size: .875rem; font-weight: 600; color: #262E3A; flex: 1; }
+    .traffic-visits { font-size: .875rem; font-weight: 700; color: #161C26; min-width: 4rem; text-align: end; }
+    .traffic-pct   { font-size: .8125rem; font-weight: 600; color: #6B7889; min-width: 3rem; text-align: end; }
+    .traffic-bar-wrap { width: 80px; flex-shrink: 0; }
+    .traffic-trend-up   { color: #16A34A; font-size: .75rem; font-weight: 700; }
+    .traffic-trend-down { color: #DC2626; font-size: .75rem; font-weight: 700; }
+    .traffic-trend-stable { color: #9AA6B4; font-size: .75rem; font-weight: 700; }
+
+    /* ── Device bars ── */
+    .device-row { display: flex; align-items: center; gap: .875rem; margin-bottom: .75rem; }
+    .device-name { font-size: .875rem; font-weight: 600; color: #262E3A; min-width: 7rem; }
+    .device-bar-track { flex: 1; height: 12px; background: #EEF1F5; border-radius: 9999px; overflow: hidden; }
+    .device-bar-fill { height: 100%; border-radius: 9999px; }
+    .device-fill-mobile  { background: linear-gradient(90deg,#0E8186,#38BCC0); }
+    .device-fill-desktop { background: linear-gradient(90deg,#2563EB,#60A5FA); }
+    .device-fill-tablet  { background: linear-gradient(90deg,#7C3AED,#A78BFA); }
+    .device-pct { font-size: .875rem; font-weight: 700; color: #161C26; min-width: 2.5rem; text-align: end; }
+
+    /* ── Charts section ── */
+    .charts-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;
+    }
+    @media (max-width: 767px) { .charts-grid { grid-template-columns: 1fr; } }
+
+    .chart-card {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; padding: 1.375rem 1.5rem; box-shadow: var(--shadow-card);
+    }
+    .chart-card-title {
+      font-size: .9375rem; font-weight: 800; color: #161C26; margin-bottom: .25rem;
+    }
+    .chart-card-subtitle { font-size: .75rem; color: #9AA6B4; margin-bottom: 1.125rem; }
+
+    /* Two-column layout (traffic + device) */
+    .traffic-device-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;
+    }
+    @media (max-width: 767px) { .traffic-device-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+
+<body class="antialiased font-sans">
+
+  <!-- Skip navigation -->
+  <a href="#main" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
+
+  <!-- ARIA live announcer -->
+  <div id="dash-announcer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════════════════════════════════════ -->
+  <aside id="sidebar-drawer" class="dash-sidebar" aria-label="قائمة لوحة التحكم" inert>
+
+    <div class="sidebar-brand">
+      <a href="index.html" class="flex items-center gap-2 no-underline focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded-md" aria-label="الصفحة الرئيسية للوحة التحكم">
+        <span class="w-8 h-8 bg-lagoon-500 rounded-lg flex items-center justify-center flex-shrink-0" aria-hidden="true">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2" aria-hidden="true">
+            <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+          </svg>
+        </span>
+        <div>
+          <div class="sidebar-brand-name">رحلاتي</div>
+          <div class="sidebar-brand-sub">لوحة التحكم التجريبية</div>
+        </div>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="روابط لوحة التحكم">
+
+      <p class="sidebar-section-label">الرئيسية</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="index.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>الرئيسية</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="sidebar-section-label">إدارة العروض</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="deals.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            <span>العروض</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="create-deal.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>إضافة عرض</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="coupons.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+            <span>الكوبونات</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="sidebar-section-label">العمليات</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="#" class="sidebar-nav-link" data-coming-soon>
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>طلبات الحجز</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="#" class="sidebar-nav-link" data-coming-soon>
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            <span>العملاء</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="analytics.html" class="sidebar-nav-link" aria-current="page">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+            <span>التحليلات</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="sidebar-section-label">الإعدادات</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="integrations.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M7 17l-5 5"/><path d="M17 7l5-5"/><path d="M11 3l3 3-7 7-3-3z"/><path d="M13 21l-3-3 7-7 3 3z"/></svg>
+            <span>التكاملات</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="settings.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            <span>الإعدادات</span>
+          </a>
+        </li>
+      </ul>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="../pages/index.html" class="sidebar-nav-link text-lagoon-300 hover:text-white">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>العودة للموقع</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <button type="button" class="sidebar-nav-link w-full text-start" data-action="logout">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>تسجيل الخروج</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+  </aside>
+
+  <!-- Scrim -->
+  <div id="sidebar-scrim" class="dash-scrim" hidden aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       MAIN AREA
+  ══════════════════════════════════════════════════════════════════════ -->
+  <div class="dash-main">
+
+    <!-- ── Topbar ───────────────────────────────────────────────────────── -->
+    <header class="dash-topbar" role="banner" aria-label="شريط التحكم العلوي">
+
+      <button
+        id="btn-mobile-menu"
+        type="button"
+        class="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors flex-shrink-0"
+        aria-label="فتح القائمة الجانبية"
+        aria-controls="sidebar-drawer"
+        aria-expanded="false"
+      >
+        <svg width="22" height="22" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="hidden sm:flex items-center gap-1.5 text-sm text-ink-500 flex-shrink-0">
+        <a href="index.html" class="text-ink-700 font-semibold hover:text-lagoon-600">لوحة التحكم</a>
+        <svg width="14" height="14" aria-hidden="true" class="text-ink-300 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <span class="text-ink-400">التحليلات</span>
+      </div>
+
+      <button
+        type="button"
+        class="hidden lg:flex items-center gap-2 px-2.5 py-1.5 rounded-xl border border-ink-200 hover:bg-ink-50 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors text-sm flex-shrink-0"
+        data-coming-soon
+        aria-label="تبديل الشركة — قابل للربط لاحقاً"
+      >
+        <span class="w-5 h-5 bg-lagoon-700 rounded-md text-white font-extrabold text-xs flex items-center justify-center flex-shrink-0 select-none" aria-hidden="true">ش</span>
+        <span class="font-semibold text-ink-800 max-w-[130px] truncate">شركة رحلات الشرق</span>
+        <svg width="12" height="12" aria-hidden="true" class="text-ink-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <div class="flex-1 min-w-2"></div>
+
+      <form id="topbar-search-form" role="search" class="topbar-search hidden md:flex" aria-label="البحث في لوحة التحكم">
+        <svg width="16" height="16" aria-hidden="true" class="text-ink-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="topbar-search-input" type="search" name="q" placeholder="بحث تجريبي…" autocomplete="off" dir="auto" aria-label="حقل البحث">
+      </form>
+
+      <div class="relative flex-shrink-0">
+        <button
+          id="btn-notifications"
+          type="button"
+          class="relative flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors"
+          aria-label="الإشعارات"
+          aria-haspopup="menu"
+          aria-controls="dropdown-notifications"
+          aria-expanded="false"
+        >
+          <svg width="20" height="20" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="absolute top-1.5 end-1.5 w-2.5 h-2.5 bg-danger rounded-full border-2 border-white" aria-hidden="true"></span>
+        </button>
+        <div id="dropdown-notifications" class="dash-dropdown" role="menu" aria-label="الإشعارات" hidden style="min-width:300px">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-ink-100">
+            <span class="font-bold text-sm text-ink-800">الإشعارات</span>
+            <span class="text-xs text-lagoon-600 font-semibold">بيانات تجريبية</span>
+          </div>
+          <div class="p-3 text-center text-sm text-ink-400">لا إشعارات جديدة — واجهة أمامية فقط</div>
+        </div>
+      </div>
+
+      <div class="relative flex-shrink-0">
+        <button
+          id="btn-quick-add"
+          type="button"
+          class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-lagoon-600 hover:bg-lagoon-700 text-white text-sm font-bold focus-visible:ring-2 focus-visible:ring-lagoon-400 transition-colors"
+          aria-label="إضافة سريعة"
+          aria-haspopup="menu"
+          aria-controls="dropdown-quick-add"
+          aria-expanded="false"
+        >
+          <svg width="15" height="15" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span class="hidden sm:inline">إضافة</span>
+        </button>
+        <div id="dropdown-quick-add" class="dash-dropdown" role="menu" aria-label="خيارات الإضافة السريعة" hidden>
+          <div class="p-2">
+            <a href="create-deal.html" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-ink-700 hover:bg-ink-50 transition-colors no-underline">
+              <span class="w-7 h-7 bg-lagoon-100 text-lagoon-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              </span>
+              إضافة عرض جديد
+            </a>
+            <a href="create-coupon.html" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-ink-700 hover:bg-ink-50 transition-colors no-underline">
+              <span class="w-7 h-7 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+              </span>
+              إنشاء كوبون
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative flex-shrink-0">
+        <button
+          id="btn-user-menu"
+          type="button"
+          class="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-ink-50 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors"
+          aria-haspopup="menu"
+          aria-controls="dropdown-user-menu"
+          aria-expanded="false"
+          aria-label="قائمة المستخدم"
+        >
+          <span class="w-8 h-8 bg-gradient-to-br from-lagoon-400 to-lagoon-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">أ</span>
+          <span class="hidden lg:block text-sm font-semibold text-ink-800 max-w-[100px] truncate">أحمد العمري</span>
+          <svg width="12" height="12" aria-hidden="true" class="text-ink-400 hidden lg:block flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div id="dropdown-user-menu" class="dash-dropdown" role="menu" aria-label="قائمة المستخدم" hidden>
+          <div class="px-4 py-3 border-b border-ink-100">
+            <div class="font-bold text-sm text-ink-800">أحمد العمري</div>
+            <div class="text-xs text-ink-500">مدير الوكالة — شركة رحلات الشرق</div>
+            <div class="text-xs text-warning font-semibold mt-1">باقة النمو (تجريبي)</div>
+          </div>
+          <div class="p-2">
+            <button type="button" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-ink-700 hover:bg-ink-50 transition-colors" data-coming-soon>
+              <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>الملف الشخصي
+            </button>
+            <div class="h-px bg-ink-100 my-1"></div>
+            <button type="button" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-danger hover:bg-danger/5 transition-colors" data-action="logout">
+              <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>تسجيل الخروج
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </header>
+
+    <!-- ── Content ──────────────────────────────────────────────────────── -->
+    <main id="main" tabindex="-1">
+      <div class="dash-content">
+
+        <!-- Breadcrumb -->
+        <nav class="dash-breadcrumb" aria-label="مسار التنقل">
+          <a href="../pages/index.html">الموقع الرئيسي</a>
+          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+          <a href="index.html">لوحة التحكم</a>
+          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+          <span aria-current="page">التحليلات</span>
+        </nav>
+
+        <!-- ════════════════════════════════════════════════════════
+             T010 — Page header
+        ═════════════════════════════════════════════════════════ -->
+        <div class="dash-page-header">
+          <div class="page-header-band">
+            <div class="page-header-inner">
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2.5 mb-1.5">
+                    <div class="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+                    </div>
+                    <span class="text-xs font-bold text-lagoon-200 uppercase tracking-widest">تحليل الأداء</span>
+                  </div>
+                  <h1 class="text-2xl sm:text-3xl font-extrabold text-white leading-tight m-0">
+                    التحليلات
+                  </h1>
+                  <p class="text-lagoon-200 text-sm mt-1 m-0 font-medium leading-relaxed">
+                    تتبّع أداء العروض والكوبونات ومصادر الزيارات — <span class="text-white/60 font-normal">آخر 30 يوم</span>
+                  </p>
+                  <div class="safe-note" role="note">
+                    <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <span>البيانات هنا تجريبية ولا تمثل تتبعًا مباشرًا — واجهة أمامية فقط / قابل للربط لاحقاً</span>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2 md:flex-shrink-0 md:mt-1">
+                  <button
+                    type="button"
+                    id="btn-export-report"
+                    data-analytics-export="pdf"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-lagoon-700 text-sm font-bold hover:bg-lagoon-50 focus-visible:ring-2 focus-visible:ring-white transition-all shadow-sm"
+                  >
+                    <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    تصدير تقرير
+                  </button>
+                  <button
+                    type="button"
+                    data-analytics-export="schedule"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-sm font-semibold hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white/50 transition-all"
+                  >
+                    <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    جدولة تقارير
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             T010 — Date-range toolbar + compare + export
+        ═════════════════════════════════════════════════════════ -->
+        <div class="analytics-toolbar" role="region" aria-label="نطاق التاريخ والمقارنة">
+          <span class="toolbar-label" id="date-range-label">الفترة الزمنية:</span>
+          <div class="date-range-chips" role="group" aria-labelledby="date-range-label">
+            <button type="button" class="date-chip" id="chip-today" aria-pressed="false" data-range="today">اليوم</button>
+            <button type="button" class="date-chip" id="chip-7d"    aria-pressed="false" data-range="7d">آخر 7 أيام</button>
+            <button type="button" class="date-chip is-active" id="chip-30d" aria-pressed="true" data-range="30d">آخر 30 يوم</button>
+            <button type="button" class="date-chip" id="chip-month" aria-pressed="false" data-range="month">هذا الشهر</button>
+            <button type="button" class="date-chip" id="chip-90d"   aria-pressed="false" data-range="90d">آخر 90 يوم</button>
+            <button type="button" class="date-chip" id="chip-custom" aria-pressed="false" data-range="custom" aria-controls="custom-range-region">نطاق مخصص</button>
+          </div>
+
+          <div id="custom-range-region" class="custom-range-wrap" hidden aria-label="نطاق التاريخ المخصص">
+            <label for="date-from" class="sr-only">من</label>
+            <input type="date" id="date-from" class="custom-date-input" aria-label="تاريخ البداية">
+            <span aria-hidden="true" class="text-ink-400 text-sm font-semibold">—</span>
+            <label for="date-to" class="sr-only">إلى</label>
+            <input type="date" id="date-to" class="custom-date-input" aria-label="تاريخ النهاية">
+            <button type="button" id="btn-apply-range" class="btn-apply">تطبيق</button>
+            <span id="date-range-error" class="text-xs text-red-600 font-semibold" hidden role="alert">تاريخ البداية يجب أن يكون قبل تاريخ النهاية</span>
+          </div>
+
+          <div class="toolbar-divider" aria-hidden="true"></div>
+
+          <div class="compare-toggle-wrap">
+            <label class="compare-label" for="compare-toggle">مقارنة بالفترة السابقة</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="compare-toggle" role="switch" aria-checked="false">
+              <span class="toggle-track" aria-hidden="true"></span>
+            </label>
+          </div>
+
+          <div class="toolbar-divider hidden md:block" aria-hidden="true"></div>
+
+          <button
+            type="button"
+            data-analytics-export="csv"
+            class="btn-export"
+          >
+            <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            تصدير CSV
+          </button>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             T010 — KPI Cards (≥10)
+        ═════════════════════════════════════════════════════════ -->
+        <section id="kpi-section" aria-label="مؤشرات الأداء الرئيسية">
+          <div class="dash-section-header">
+            <div>
+              <h2 class="dash-section-title">مؤشرات الأداء الرئيسية</h2>
+              <p class="dash-section-sub">آخر 30 يوم — بيانات تجريبية</p>
+            </div>
+          </div>
+
+          <div class="kpi-grid" id="kpi-grid">
+
+            <!-- KPI 1: الزيارات -->
+            <div class="kpi-card">
+              <div class="kpi-card-accent kpi-accent-teal"></div>
+              <div class="kpi-card-header">
+                <div class="kpi-icon-wrap kpi-icon-teal" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+                <span class="kpi-label">الزيارات</span>
+              </div>
+              <div class="kpi-value">18,420</div>
+              <div class="kpi-trend kpi-trend-up" aria-label="ارتفاع 12.4%">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                +12.4%
+              </div>
+              <div class="kpi-helper">إجمالي زيارات الصفحات</div>
+              <span class="kpi-demo-label">تجريبي</span>
+            </div>
+
+            <!-- KPI 2: الضغطات على العروض -->
+            <div class="kpi-card">
+              <div class="kpi-card-accent kpi-accent-blue"></div>
+              <div class="kpi-card-header">
+                <div class="kpi-icon-wrap kpi-icon-blue" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                </div>
+                <span class="kpi-label">الضغطات على العروض</span>
+              </div>
+              <div class="kpi-value">9,240</div>
+              <div class="kpi-trend kpi-trend-up" aria-label="ارتفاع 8.2%">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                +8.2%
+              </div>
+              <div class="kpi-helper">إجمالي الضغطات على روابط العروض</div>
+              <span class="kpi-demo-label">تجريبي</span>
+            </div>
+
+            <!-- KPI 3: طلبات الحجز -->
+            <div class="kpi-card">
+              <div class="kpi-card-accent kpi-accent-purple"></div>
+              <div class="kpi-card-header">
+                <div class="kpi-icon-wrap kpi-icon-purple" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <span class="kpi-label">طلبات الحجز</span>
+              </div>
+              <div class="kpi-value">742</div>
+              <div class="kpi-trend kpi-trend-up" aria-label="ارتفاع 5.1%">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                +5.1%
+              </div>
+              <div class="kpi-helper">طلبات الحجز الواردة</div>
+              <span class="kpi-demo-label">تجريبي</span>
+            </div>
+
+            <!-- KPI 4: نسخ الكوبونات -->
+            <div class="kpi-card">
+              <div class="kpi-card-accent kpi-accent-amber"></div>
+              <div class="kpi-card-header">
+                <div class="kpi-icon-wrap kpi-icon-amber" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                </div>
+                <span class="kpi-label">نسخ الكوبونات</span>
+              </div>
+              <div class="kpi-value">1,830</div>
+              <div class="kpi-trend kpi-trend-up" aria-label="ارتفاع 18.7%">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                +18.7%
+              </div>
+              <div class="kpi-helper">عدد مرات نسخ رموز الكوبونات</div>
+              <span class="kpi-demo-label">تجريبي</span>
+            </div>
+
+            <!-- KPI 5: معدل التحويل التقديري -->
+            <div class="kpi-card">
+              <div class="kpi-card-accent kpi-accent-green"></div>
+              <div class="kpi-card-header">
+                <div class="kpi-icon-wrap kpi-icon-green" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+                </div>
+                <span class="kpi-label">معدل التحويل التقديري</span>
+              </div>
+              <div class="kpi-value">4.03<span class="kpi-value-unit">%</span></div>
+              <div class="kpi-trend kpi-trend-up" aria-label="ارتفاع 0.8%">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                +0.8%
+              </div>
+              <div class="kpi-helper">طلبات الحجز ÷ الضغطات — تقدير تجريبي</div>
+              <span class="kpi-demo-label">تقديري</span>
+            </div>
+
+            <!-- KPI 6: الوجهة الأعلى -->
+            <div class="kpi-card">
+              <div class="kpi-card-accent kpi-accent-sky"></div>
+              <div class="kpi-card-header">
+                <div class="kpi-icon-wrap kpi-icon-sky" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <span class="kpi-label">الوجهة الأعلى</span>
+              </div>
+              <div class="kpi-value" style="font-size:1.25rem">دبي</div>
+              <div class="kpi-trend kpi-trend-up" aria-label="ارتفاع 3.2%">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                +3.2%
+              </div>
+              <div class="kpi-helper">الوجهة الأكثر ظهوراً في الطلبات</div>
+              <span class="kpi-demo-label">تجريبي</span>
+            </div>
+
+            <!-- KPI 7: الإيراد التقديري -->
+            <div class="kpi-card">
+              <div class="kpi-card-accent kpi-accent-teal"></div>
+              <div class="kpi-card-header">
+                <div class="kpi-icon-wrap kpi-icon-teal" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                </div>
+                <span class="kpi-label">الإيراد التقديري</span>
+              </div>
+              <div class="kpi-value">285K<span class="kpi-value-unit">ر.س</span></div>
+              <div class="kpi-trend kpi-trend-up" aria-label="ارتفاع 15.2%">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                +15.2%
+              </div>
+              <div class="kpi-helper">تقدير غير حقيقي — لا يعكس مدفوعات فعلية</div>
+              <span class="kpi-demo-label">تقديري</span>
+            </div>
+
+            <!-- KPI 8: متوسط قيمة الطلب -->
+            <div class="kpi-card">
+              <div class="kpi-card-accent kpi-accent-amber"></div>
+              <div class="kpi-card-header">
+                <div class="kpi-icon-wrap kpi-icon-amber" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                </div>
+                <span class="kpi-label">متوسط قيمة الطلب</span>
+              </div>
+              <div class="kpi-value">3,840<span class="kpi-value-unit">ر.س</span></div>
+              <div class="kpi-trend kpi-trend-up" aria-label="ارتفاع 6.9%">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                +6.9%
+              </div>
+              <div class="kpi-helper">متوسط قيمة الرحلة المطلوبة</div>
+              <span class="kpi-demo-label">تجريبي</span>
+            </div>
+
+            <!-- KPI 9: العملاء الجدد -->
+            <div class="kpi-card">
+              <div class="kpi-card-accent kpi-accent-purple"></div>
+              <div class="kpi-card-header">
+                <div class="kpi-icon-wrap kpi-icon-purple" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/></svg>
+                </div>
+                <span class="kpi-label">العملاء الجدد</span>
+              </div>
+              <div class="kpi-value">124</div>
+              <div class="kpi-trend kpi-trend-up" aria-label="ارتفاع 9.3%">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                +9.3%
+              </div>
+              <div class="kpi-helper">عملاء جدد في الفترة</div>
+              <span class="kpi-demo-label">تجريبي</span>
+            </div>
+
+            <!-- KPI 10: العروض الأكثر مشاهدة -->
+            <div class="kpi-card">
+              <div class="kpi-card-accent kpi-accent-rose"></div>
+              <div class="kpi-card-header">
+                <div class="kpi-icon-wrap kpi-icon-rose" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <span class="kpi-label">العروض الأكثر مشاهدة</span>
+              </div>
+              <div class="kpi-value" style="font-size:1.0625rem;line-height:1.3">دبي الفاخرة</div>
+              <div class="kpi-trend kpi-trend-up" aria-label="ارتفاع 22.1%">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                +22.1%
+              </div>
+              <div class="kpi-helper">العرض صاحب أعلى عدد مشاهدات</div>
+              <span class="kpi-demo-label">تجريبي</span>
+            </div>
+
+          </div>
+          <!-- /kpi-grid -->
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T011 — Over-time charts + Traffic + Device
+             (Filled in next step)
+        ═════════════════════════════════════════════════════════ -->
+        <!-- ════════════════════════════════════════════════════════
+             T011 — Over-time CSS charts
+        ═════════════════════════════════════════════════════════ -->
+        <section id="charts-section" aria-label="المخططات الزمنية" class="dash-section">
+          <div class="dash-section-header">
+            <div>
+              <h2 class="dash-section-title">الأداء عبر الزمن</h2>
+              <p class="dash-section-sub">آخر 6 أسابيع — لا تتبع حقيقي / بيانات تجريبية ثابتة</p>
+            </div>
+          </div>
+
+          <div class="charts-grid">
+
+            <!-- Chart 1: Booking Inquiries -->
+            <div class="chart-card">
+              <div class="flex items-start justify-between gap-2 mb-3">
+                <div>
+                  <span class="chart-card-title">طلبات الحجز</span>
+                  <div class="chart-card-subtitle">إجمالي الطلبات الواردة — آخر 6 أسابيع</div>
+                </div>
+                <span class="kpi-trend kpi-trend-up" style="font-size:.6875rem;padding:.2rem .45rem" aria-label="ارتفاع 5.1%">
+                  <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                  +5.1%
+                </span>
+              </div>
+              <div class="chart-bars-container" role="img" aria-label="مخطط أعمدة: طلبات الحجز عبر 6 أسابيع">
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">102</span>
+                  <div class="chart-bar" style="height:54%" title="أسبوع 1: 102 طلب"></div>
+                  <span class="chart-bar-lbl">أ١</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">118</span>
+                  <div class="chart-bar" style="height:63%" title="أسبوع 2: 118 طلب"></div>
+                  <span class="chart-bar-lbl">أ٢</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">134</span>
+                  <div class="chart-bar" style="height:71%" title="أسبوع 3: 134 طلب"></div>
+                  <span class="chart-bar-lbl">أ٣</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">156</span>
+                  <div class="chart-bar" style="height:83%;background:linear-gradient(180deg,#38BCC0,#0E8186)" title="أسبوع 4: 156 طلب (الأعلى)"></div>
+                  <span class="chart-bar-lbl">أ٤</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">143</span>
+                  <div class="chart-bar" style="height:76%" title="أسبوع 5: 143 طلب"></div>
+                  <span class="chart-bar-lbl">أ٥</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">89</span>
+                  <div class="chart-bar" style="height:47%;opacity:.7" title="أسبوع 6: 89 طلب (جزئي)"></div>
+                  <span class="chart-bar-lbl">أ٦</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-2 pt-2 border-t border-ink-100 text-xs text-ink-400">
+                <span>إجمالي: <strong class="text-ink-700">742</strong> طلب</span>
+                <span>بيانات تجريبية</span>
+              </div>
+            </div>
+
+            <!-- Chart 2: Deal Clicks -->
+            <div class="chart-card">
+              <div class="flex items-start justify-between gap-2 mb-3">
+                <div>
+                  <span class="chart-card-title">الضغطات على العروض</span>
+                  <div class="chart-card-subtitle">إجمالي الضغطات — آخر 6 أسابيع</div>
+                </div>
+                <span class="kpi-trend kpi-trend-up" style="font-size:.6875rem;padding:.2rem .45rem" aria-label="ارتفاع 8.2%">
+                  <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                  +8.2%
+                </span>
+              </div>
+              <div class="chart-bars-container" role="img" aria-label="مخطط أعمدة: الضغطات على العروض عبر 6 أسابيع">
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">1.34K</span>
+                  <div class="chart-bar" style="height:56%;background:linear-gradient(180deg,#60A5FA,#2563EB)" title="أسبوع 1: 1,340 ضغطة"></div>
+                  <span class="chart-bar-lbl">أ١</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">1.58K</span>
+                  <div class="chart-bar" style="height:66%;background:linear-gradient(180deg,#60A5FA,#2563EB)" title="أسبوع 2: 1,580 ضغطة"></div>
+                  <span class="chart-bar-lbl">أ٢</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">1.72K</span>
+                  <div class="chart-bar" style="height:73%;background:linear-gradient(180deg,#60A5FA,#2563EB)" title="أسبوع 3: 1,720 ضغطة"></div>
+                  <span class="chart-bar-lbl">أ٣</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">1.89K</span>
+                  <div class="chart-bar" style="height:85%;background:linear-gradient(180deg,#60A5FA,#2563EB)" title="أسبوع 4: 1,890 ضغطة (الأعلى)"></div>
+                  <span class="chart-bar-lbl">أ٤</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">1.64K</span>
+                  <div class="chart-bar" style="height:70%;background:linear-gradient(180deg,#60A5FA,#2563EB)" title="أسبوع 5: 1,640 ضغطة"></div>
+                  <span class="chart-bar-lbl">أ٥</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">1.07K</span>
+                  <div class="chart-bar" style="height:45%;background:linear-gradient(180deg,#60A5FA,#2563EB);opacity:.7" title="أسبوع 6: 1,070 ضغطة (جزئي)"></div>
+                  <span class="chart-bar-lbl">أ٦</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-2 pt-2 border-t border-ink-100 text-xs text-ink-400">
+                <span>إجمالي: <strong class="text-ink-700">9,240</strong> ضغطة</span>
+                <span>بيانات تجريبية</span>
+              </div>
+            </div>
+
+            <!-- Chart 3: Coupon Copies -->
+            <div class="chart-card">
+              <div class="flex items-start justify-between gap-2 mb-3">
+                <div>
+                  <span class="chart-card-title">نسخ الكوبونات</span>
+                  <div class="chart-card-subtitle">إجمالي مرات نسخ الرموز — آخر 6 أسابيع</div>
+                </div>
+                <span class="kpi-trend kpi-trend-up" style="font-size:.6875rem;padding:.2rem .45rem" aria-label="ارتفاع 18.7%">
+                  <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                  +18.7%
+                </span>
+              </div>
+              <div class="chart-bars-container" role="img" aria-label="مخطط أعمدة: نسخ الكوبونات عبر 6 أسابيع">
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">280</span>
+                  <div class="chart-bar" style="height:52%;background:linear-gradient(180deg,#FCD34D,#D97706)" title="أسبوع 1: 280 نسخة"></div>
+                  <span class="chart-bar-lbl">أ١</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">310</span>
+                  <div class="chart-bar" style="height:59%;background:linear-gradient(180deg,#FCD34D,#D97706)" title="أسبوع 2: 310 نسخة"></div>
+                  <span class="chart-bar-lbl">أ٢</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">360</span>
+                  <div class="chart-bar" style="height:69%;background:linear-gradient(180deg,#FCD34D,#D97706)" title="أسبوع 3: 360 نسخة"></div>
+                  <span class="chart-bar-lbl">أ٣</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">420</span>
+                  <div class="chart-bar" style="height:83%;background:linear-gradient(180deg,#FCD34D,#D97706)" title="أسبوع 4: 420 نسخة (الأعلى)"></div>
+                  <span class="chart-bar-lbl">أ٤</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">290</span>
+                  <div class="chart-bar" style="height:55%;background:linear-gradient(180deg,#FCD34D,#D97706)" title="أسبوع 5: 290 نسخة"></div>
+                  <span class="chart-bar-lbl">أ٥</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">170</span>
+                  <div class="chart-bar" style="height:31%;background:linear-gradient(180deg,#FCD34D,#D97706);opacity:.7" title="أسبوع 6: 170 نسخة (جزئي)"></div>
+                  <span class="chart-bar-lbl">أ٦</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-2 pt-2 border-t border-ink-100 text-xs text-ink-400">
+                <span>إجمالي: <strong class="text-ink-700">1,830</strong> نسخة</span>
+                <span>بيانات تجريبية</span>
+              </div>
+            </div>
+
+            <!-- Chart 4: Conversion Estimate (sparkline-style) -->
+            <div class="chart-card">
+              <div class="flex items-start justify-between gap-2 mb-3">
+                <div>
+                  <span class="chart-card-title">معدل التحويل التقديري</span>
+                  <div class="chart-card-subtitle">نسبة مئوية أسبوعية — آخر 6 أسابيع</div>
+                </div>
+                <span class="kpi-trend kpi-trend-up" style="font-size:.6875rem;padding:.2rem .45rem" aria-label="ارتفاع 0.8%">
+                  <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                  +0.8%
+                </span>
+              </div>
+              <div class="chart-bars-container" role="img" aria-label="مخطط أعمدة: معدل التحويل التقديري عبر 6 أسابيع">
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">3.8%</span>
+                  <div class="chart-bar" style="height:73%;background:linear-gradient(180deg,#A78BFA,#7C3AED)" title="أسبوع 1: 3.8%"></div>
+                  <span class="chart-bar-lbl">أ١</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">4.1%</span>
+                  <div class="chart-bar" style="height:80%;background:linear-gradient(180deg,#A78BFA,#7C3AED)" title="أسبوع 2: 4.1%"></div>
+                  <span class="chart-bar-lbl">أ٢</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">4.4%</span>
+                  <div class="chart-bar" style="height:87%;background:linear-gradient(180deg,#A78BFA,#7C3AED)" title="أسبوع 3: 4.4%"></div>
+                  <span class="chart-bar-lbl">أ٣</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">4.6%</span>
+                  <div class="chart-bar" style="height:92%;background:linear-gradient(180deg,#A78BFA,#7C3AED)" title="أسبوع 4: 4.6% (الأعلى)"></div>
+                  <span class="chart-bar-lbl">أ٤</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">3.9%</span>
+                  <div class="chart-bar" style="height:76%;background:linear-gradient(180deg,#A78BFA,#7C3AED)" title="أسبوع 5: 3.9%"></div>
+                  <span class="chart-bar-lbl">أ٥</span>
+                </div>
+                <div class="chart-bar-col">
+                  <span class="chart-bar-val">3.5%</span>
+                  <div class="chart-bar" style="height:67%;background:linear-gradient(180deg,#A78BFA,#7C3AED);opacity:.7" title="أسبوع 6: 3.5% (جزئي)"></div>
+                  <span class="chart-bar-lbl">أ٦</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-2 pt-2 border-t border-ink-100 text-xs text-ink-400">
+                <span>متوسط: <strong class="text-ink-700">4.03%</strong> — تقدير تجريبي</span>
+                <span>لا تتبع حقيقي</span>
+              </div>
+            </div>
+
+          </div>
+          <!-- /charts-grid -->
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T011 — Traffic sources + Device breakdown
+        ═════════════════════════════════════════════════════════ -->
+        <section id="traffic-device-section" aria-label="مصادر الزيارات والأجهزة" class="dash-section">
+          <div class="traffic-device-grid">
+
+            <!-- Traffic sources -->
+            <div class="card" aria-label="مصادر الزيارات">
+              <div class="flex items-center justify-between px-5 py-4 border-b border-ink-100">
+                <div>
+                  <h2 class="dash-section-title" style="font-size:.9375rem">مصادر الزيارات</h2>
+                  <p class="dash-section-sub" style="font-size:.75rem;margin-top:.125rem">8 مصادر — إجمالي 18,420 زيارة</p>
+                </div>
+                <span class="text-xs text-lagoon-600 font-semibold bg-lagoon-50 px-2 py-1 rounded-lg">تجريبي</span>
+              </div>
+
+              <div role="list" aria-label="قائمة مصادر الزيارات">
+
+                <!-- 1: Organic Search -->
+                <div class="traffic-row" role="listitem">
+                  <div class="traffic-icon-wrap" aria-hidden="true">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  </div>
+                  <span class="traffic-name">البحث الطبيعي</span>
+                  <div class="traffic-bar-wrap" aria-hidden="true">
+                    <div class="chart-prop-track"><div class="chart-prop-fill" style="width:38.5%"></div></div>
+                  </div>
+                  <span class="traffic-pct">38.5%</span>
+                  <span class="traffic-visits">7,090</span>
+                  <span class="traffic-trend-up" aria-label="ارتفاع">↑</span>
+                </div>
+
+                <!-- 2: Direct -->
+                <div class="traffic-row" role="listitem">
+                  <div class="traffic-icon-wrap" style="background:#EFF6FF;color:#2563EB" aria-hidden="true">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                  </div>
+                  <span class="traffic-name">مباشر</span>
+                  <div class="traffic-bar-wrap" aria-hidden="true">
+                    <div class="chart-prop-track"><div class="chart-prop-fill chart-prop-fill-blue" style="width:20%"></div></div>
+                  </div>
+                  <span class="traffic-pct">20.0%</span>
+                  <span class="traffic-visits">3,680</span>
+                  <span class="traffic-trend-stable" aria-label="مستقر">→</span>
+                </div>
+
+                <!-- 3: Social Media -->
+                <div class="traffic-row" role="listitem">
+                  <div class="traffic-icon-wrap" style="background:#EDE9FE;color:#7C3AED" aria-hidden="true">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+                  </div>
+                  <span class="traffic-name">وسائل التواصل</span>
+                  <div class="traffic-bar-wrap" aria-hidden="true">
+                    <div class="chart-prop-track"><div class="chart-prop-fill chart-prop-fill-purple" style="width:15%"></div></div>
+                  </div>
+                  <span class="traffic-pct">15.0%</span>
+                  <span class="traffic-visits">2,760</span>
+                  <span class="traffic-trend-up" aria-label="ارتفاع">↑</span>
+                </div>
+
+                <!-- 4: Referral -->
+                <div class="traffic-row" role="listitem">
+                  <div class="traffic-icon-wrap" style="background:#FFFBEB;color:#D97706" aria-hidden="true">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                  </div>
+                  <span class="traffic-name">إحالة</span>
+                  <div class="traffic-bar-wrap" aria-hidden="true">
+                    <div class="chart-prop-track"><div class="chart-prop-fill chart-prop-fill-amber" style="width:10%"></div></div>
+                  </div>
+                  <span class="traffic-pct">10.0%</span>
+                  <span class="traffic-visits">1,840</span>
+                  <span class="traffic-trend-down" aria-label="انخفاض">↓</span>
+                </div>
+
+                <!-- 5: Coupon Pages -->
+                <div class="traffic-row" role="listitem">
+                  <div class="traffic-icon-wrap" style="background:#F0FDF4;color:#16A34A" aria-hidden="true">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                  </div>
+                  <span class="traffic-name">صفحات الكوبونات</span>
+                  <div class="traffic-bar-wrap" aria-hidden="true">
+                    <div class="chart-prop-track"><div class="chart-prop-fill chart-prop-fill-green" style="width:7%"></div></div>
+                  </div>
+                  <span class="traffic-pct">7.0%</span>
+                  <span class="traffic-visits">1,290</span>
+                  <span class="traffic-trend-up" aria-label="ارتفاع">↑</span>
+                </div>
+
+                <!-- 6: Deal Pages -->
+                <div class="traffic-row" role="listitem">
+                  <div class="traffic-icon-wrap" style="background:#F0F9FF;color:#0284C7" aria-hidden="true">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                  </div>
+                  <span class="traffic-name">صفحات العروض</span>
+                  <div class="traffic-bar-wrap" aria-hidden="true">
+                    <div class="chart-prop-track"><div class="chart-prop-fill chart-prop-fill-blue" style="width:5%"></div></div>
+                  </div>
+                  <span class="traffic-pct">5.0%</span>
+                  <span class="traffic-visits">920</span>
+                  <span class="traffic-trend-up" aria-label="ارتفاع">↑</span>
+                </div>
+
+                <!-- 7: Email Mock -->
+                <div class="traffic-row" role="listitem">
+                  <div class="traffic-icon-wrap" style="background:#EEF1F5;color:#4D5969" aria-hidden="true">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  </div>
+                  <span class="traffic-name">البريد (تجريبي)</span>
+                  <div class="traffic-bar-wrap" aria-hidden="true">
+                    <div class="chart-prop-track"><div class="chart-prop-fill" style="width:2.5%"></div></div>
+                  </div>
+                  <span class="traffic-pct">2.5%</span>
+                  <span class="traffic-visits">460</span>
+                  <span class="traffic-trend-stable" aria-label="مستقر">→</span>
+                </div>
+
+                <!-- 8: WhatsApp Mock -->
+                <div class="traffic-row" role="listitem">
+                  <div class="traffic-icon-wrap" style="background:#F0FDF4;color:#16A34A" aria-hidden="true">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+                  </div>
+                  <span class="traffic-name">واتساب (تجريبي)</span>
+                  <div class="traffic-bar-wrap" aria-hidden="true">
+                    <div class="chart-prop-track"><div class="chart-prop-fill chart-prop-fill-green" style="width:2%"></div></div>
+                  </div>
+                  <span class="traffic-pct">2.0%</span>
+                  <span class="traffic-visits">380</span>
+                  <span class="traffic-trend-up" aria-label="ارتفاع">↑</span>
+                </div>
+
+              </div>
+
+              <div class="px-5 py-3 border-t border-ink-100 bg-ink-50 rounded-b-2xl">
+                <p class="text-xs text-ink-400">لا يتم إرسال إشعارات حقيقية عبر البريد أو واتساب في هذه النسخة</p>
+              </div>
+            </div>
+            <!-- /traffic -->
+
+            <!-- Device breakdown -->
+            <div class="card" aria-label="توزيع الأجهزة">
+              <div class="flex items-center justify-between px-5 py-4 border-b border-ink-100">
+                <div>
+                  <h2 class="dash-section-title" style="font-size:.9375rem">توزيع الأجهزة</h2>
+                  <p class="dash-section-sub" style="font-size:.75rem;margin-top:.125rem">نسبة الزيارات حسب نوع الجهاز</p>
+                </div>
+                <span class="text-xs text-lagoon-600 font-semibold bg-lagoon-50 px-2 py-1 rounded-lg">تجريبي</span>
+              </div>
+
+              <div class="p-5">
+
+                <!-- Donut-like summary pills -->
+                <div class="flex flex-wrap gap-2 mb-5" role="list" aria-label="ملخص الأجهزة">
+                  <div class="flex items-center gap-1.5 bg-lagoon-50 border border-lagoon-200 px-3 py-1.5 rounded-full" role="listitem">
+                    <span class="w-2.5 h-2.5 rounded-full bg-lagoon-500 flex-shrink-0" aria-hidden="true"></span>
+                    <span class="text-xs font-bold text-lagoon-700">الجوال</span>
+                    <span class="text-sm font-extrabold text-lagoon-800">63%</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-full" role="listitem">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 flex-shrink-0" aria-hidden="true"></span>
+                    <span class="text-xs font-bold text-blue-700">الحاسوب</span>
+                    <span class="text-sm font-extrabold text-blue-800">29%</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 bg-purple-50 border border-purple-200 px-3 py-1.5 rounded-full" role="listitem">
+                    <span class="w-2.5 h-2.5 rounded-full bg-purple-500 flex-shrink-0" aria-hidden="true"></span>
+                    <span class="text-xs font-bold text-purple-700">اللوحي</span>
+                    <span class="text-sm font-extrabold text-purple-800">8%</span>
+                  </div>
+                </div>
+
+                <!-- Stacked bar (visual) -->
+                <div class="w-full h-4 rounded-full overflow-hidden flex mb-5" role="img" aria-label="شريط مجمّع: الجوال 63% / الحاسوب 29% / اللوحي 8%">
+                  <div style="width:63%;background:linear-gradient(90deg,#16A0A5,#38BCC0)" title="الجوال: 63%"></div>
+                  <div style="width:29%;background:linear-gradient(90deg,#2563EB,#60A5FA)" title="الحاسوب: 29%"></div>
+                  <div style="width:8%;background:linear-gradient(90deg,#7C3AED,#A78BFA)" title="اللوحي: 8%"></div>
+                </div>
+
+                <!-- Per-device rows -->
+                <div role="list" aria-label="تفاصيل توزيع الأجهزة">
+
+                  <div class="device-row" role="listitem">
+                    <div class="device-name">
+                      <div class="flex items-center gap-2">
+                        <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                        الجوال
+                      </div>
+                    </div>
+                    <div class="device-bar-track" aria-hidden="true">
+                      <div class="device-bar-fill device-fill-mobile" style="width:63%"></div>
+                    </div>
+                    <span class="device-pct" aria-label="63 بالمئة">63%</span>
+                  </div>
+
+                  <div class="device-row" role="listitem">
+                    <div class="device-name">
+                      <div class="flex items-center gap-2">
+                        <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        الحاسوب
+                      </div>
+                    </div>
+                    <div class="device-bar-track" aria-hidden="true">
+                      <div class="device-bar-fill device-fill-desktop" style="width:29%"></div>
+                    </div>
+                    <span class="device-pct" aria-label="29 بالمئة">29%</span>
+                  </div>
+
+                  <div class="device-row" role="listitem">
+                    <div class="device-name">
+                      <div class="flex items-center gap-2">
+                        <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                        الجهاز اللوحي
+                      </div>
+                    </div>
+                    <div class="device-bar-track" aria-hidden="true">
+                      <div class="device-bar-fill device-fill-tablet" style="width:8%"></div>
+                    </div>
+                    <span class="device-pct" aria-label="8 بالمئة">8%</span>
+                  </div>
+
+                </div>
+
+                <!-- Insight note -->
+                <div class="mt-4 p-3 bg-lagoon-50 border border-lagoon-100 rounded-xl">
+                  <p class="text-xs text-lagoon-700 font-semibold leading-relaxed">
+                    <svg width="12" height="12" aria-hidden="true" class="inline me-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    63% من الزيارات من الجوال — تأكد من أن عروضك محسّنة للشاشات الصغيرة.
+                    <span class="text-lagoon-500 font-normal">(بيانات تجريبية)</span>
+                  </p>
+                </div>
+              </div>
+
+            </div>
+            <!-- /device -->
+
+          </div>
+          <!-- /traffic-device-grid -->
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T012 — Top-deals table, top-destinations, coupon table
+             (Filled in next step)
+        ═════════════════════════════════════════════════════════ -->
+        <!-- ════════════════════════════════════════════════════════
+             T012 — Top-deals table (≥8 rows)
+        ═════════════════════════════════════════════════════════ -->
+        <section id="top-deals-section" aria-label="أفضل العروض أداءً" class="dash-section">
+          <div class="dash-section-header">
+            <div>
+              <h2 class="dash-section-title">أفضل العروض أداءً</h2>
+              <p class="dash-section-sub">8 عروض — مرتبة حسب عدد المشاهدات</p>
+            </div>
+            <a href="deals.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-lagoon-600 hover:text-lagoon-700 hover:underline">
+              إدارة كل العروض
+              <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+          </div>
+
+          <div class="dash-table-wrap">
+            <div class="dash-table-scroll">
+              <table class="dash-table" aria-label="جدول أفضل العروض أداءً">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">العرض</th>
+                    <th scope="col">الوجهة</th>
+                    <th scope="col">المصدر</th>
+                    <th scope="col">المشاهدات</th>
+                    <th scope="col">الضغطات</th>
+                    <th scope="col">الطلبات</th>
+                    <th scope="col">نسخ الكوبون</th>
+                    <th scope="col">التحويل (تقديري)</th>
+                    <th scope="col">الحالة</th>
+                    <th scope="col" class="cell-actions">الإجراءات</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <!-- Row 1 -->
+                  <tr>
+                    <td data-label="#">
+                      <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-lagoon-100 text-lagoon-700 font-extrabold text-xs">1</span>
+                    </td>
+                    <td data-label="العرض">
+                      <div class="font-semibold text-ink-800 leading-snug">دبي الفاخرة – 4 ليالٍ</div>
+                    </td>
+                    <td data-label="الوجهة"><span class="text-sm text-ink-600">دبي</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-partner">شريك</span></td>
+                    <td data-label="المشاهدات"><span class="font-bold text-ink-800">4,200</span></td>
+                    <td data-label="الضغطات"><span class="font-bold text-ink-700">2,100</span></td>
+                    <td data-label="الطلبات"><span class="font-bold text-ink-700">185</span></td>
+                    <td data-label="نسخ الكوبون"><span class="font-semibold text-amber-700">320</span></td>
+                    <td data-label="التحويل (تقديري)">
+                      <span class="kpi-trend kpi-trend-up" style="font-size:.6875rem">4.4%</span>
+                    </td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <a href="../pages/deal-details.html?id=deal-003" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" aria-label="عرض تفاصيل دبي الفاخرة">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                          عرض
+                        </a>
+                        <a href="deals.html" class="inline-flex items-center gap-1 text-xs font-semibold text-ink-500 hover:text-ink-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-300 rounded">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 2 -->
+                  <tr>
+                    <td data-label="#">
+                      <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-ink-100 text-ink-600 font-extrabold text-xs">2</span>
+                    </td>
+                    <td data-label="العرض"><div class="font-semibold text-ink-800 leading-snug">رحلة إلى إسطنبول – 5 ليالٍ</div></td>
+                    <td data-label="الوجهة"><span class="text-sm text-ink-600">إسطنبول</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-affiliate">أفيليت</span></td>
+                    <td data-label="المشاهدات"><span class="font-bold text-ink-800">3,850</span></td>
+                    <td data-label="الضغطات"><span class="font-bold text-ink-700">1,920</span></td>
+                    <td data-label="الطلبات"><span class="font-bold text-ink-700">142</span></td>
+                    <td data-label="نسخ الكوبون"><span class="font-semibold text-amber-700">210</span></td>
+                    <td data-label="التحويل (تقديري)">
+                      <span class="kpi-trend kpi-trend-up" style="font-size:.6875rem">3.9%</span>
+                    </td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <a href="../pages/deal-details.html?id=deal-002" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" aria-label="عرض تفاصيل رحلة إسطنبول">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                          عرض
+                        </a>
+                        <a href="deals.html" class="inline-flex items-center gap-1 text-xs font-semibold text-ink-500 hover:text-ink-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-300 rounded">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 3 -->
+                  <tr>
+                    <td data-label="#">
+                      <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-ink-100 text-ink-600 font-extrabold text-xs">3</span>
+                    </td>
+                    <td data-label="العرض"><div class="font-semibold text-ink-800 leading-snug">عطلة في شرم الشيخ – 4 ليالٍ</div></td>
+                    <td data-label="الوجهة"><span class="text-sm text-ink-600">شرم الشيخ</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-manual">يدوي</span></td>
+                    <td data-label="المشاهدات"><span class="font-bold text-ink-800">3,620</span></td>
+                    <td data-label="الضغطات"><span class="font-bold text-ink-700">1,810</span></td>
+                    <td data-label="الطلبات"><span class="font-bold text-ink-700">128</span></td>
+                    <td data-label="نسخ الكوبون"><span class="font-semibold text-amber-700">190</span></td>
+                    <td data-label="التحويل (تقديري)">
+                      <span class="kpi-trend kpi-trend-up" style="font-size:.6875rem">3.5%</span>
+                    </td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <a href="../pages/deal-details.html?id=deal-001" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" aria-label="عرض تفاصيل شرم الشيخ">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                          عرض
+                        </a>
+                        <a href="deals.html" class="inline-flex items-center gap-1 text-xs font-semibold text-ink-500 hover:text-ink-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-300 rounded">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 4 -->
+                  <tr>
+                    <td data-label="#">
+                      <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-ink-100 text-ink-600 font-extrabold text-xs">4</span>
+                    </td>
+                    <td data-label="العرض"><div class="font-semibold text-ink-800 leading-snug">باريس الرومانسية – 7 ليالٍ</div></td>
+                    <td data-label="الوجهة"><span class="text-sm text-ink-600">باريس</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-affiliate">أفيليت</span></td>
+                    <td data-label="المشاهدات"><span class="font-bold text-ink-800">3,100</span></td>
+                    <td data-label="الضغطات"><span class="font-bold text-ink-700">1,550</span></td>
+                    <td data-label="الطلبات"><span class="font-bold text-ink-700">98</span></td>
+                    <td data-label="نسخ الكوبون"><span class="font-semibold text-amber-700">145</span></td>
+                    <td data-label="التحويل (تقديري)">
+                      <span class="kpi-trend kpi-trend-neutral" style="font-size:.6875rem">3.2%</span>
+                    </td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <a href="../pages/deal-details.html?id=deal-005" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" aria-label="عرض تفاصيل باريس">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                          عرض
+                        </a>
+                        <a href="deals.html" class="inline-flex items-center gap-1 text-xs font-semibold text-ink-500 hover:text-ink-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-300 rounded">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 5 -->
+                  <tr>
+                    <td data-label="#">
+                      <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-ink-100 text-ink-600 font-extrabold text-xs">5</span>
+                    </td>
+                    <td data-label="العرض"><div class="font-semibold text-ink-800 leading-snug">بانكوك وفوكيت – 7 ليالٍ</div></td>
+                    <td data-label="الوجهة"><span class="text-sm text-ink-600">بانكوك</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-affiliate">أفيليت</span></td>
+                    <td data-label="المشاهدات"><span class="font-bold text-ink-800">2,800</span></td>
+                    <td data-label="الضغطات"><span class="font-bold text-ink-700">1,400</span></td>
+                    <td data-label="الطلبات"><span class="font-bold text-ink-700">87</span></td>
+                    <td data-label="نسخ الكوبون"><span class="font-semibold text-amber-700">130</span></td>
+                    <td data-label="التحويل (تقديري)">
+                      <span class="kpi-trend kpi-trend-neutral" style="font-size:.6875rem">3.1%</span>
+                    </td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <a href="../pages/deal-details.html?id=deal-010" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" aria-label="عرض تفاصيل بانكوك">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                          عرض
+                        </a>
+                        <a href="deals.html" class="inline-flex items-center gap-1 text-xs font-semibold text-ink-500 hover:text-ink-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-300 rounded">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 6 -->
+                  <tr>
+                    <td data-label="#">
+                      <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-ink-100 text-ink-600 font-extrabold text-xs">6</span>
+                    </td>
+                    <td data-label="العرض"><div class="font-semibold text-ink-800 leading-snug">الرياض الحديثة – 3 ليالٍ</div></td>
+                    <td data-label="الوجهة"><span class="text-sm text-ink-600">الرياض</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-manual">يدوي</span></td>
+                    <td data-label="المشاهدات"><span class="font-bold text-ink-800">2,450</span></td>
+                    <td data-label="الضغطات"><span class="font-bold text-ink-700">1,225</span></td>
+                    <td data-label="الطلبات"><span class="font-bold text-ink-700">74</span></td>
+                    <td data-label="نسخ الكوبون"><span class="font-semibold text-amber-700">95</span></td>
+                    <td data-label="التحويل (تقديري)">
+                      <span class="kpi-trend kpi-trend-neutral" style="font-size:.6875rem">3.0%</span>
+                    </td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <a href="../pages/deal-details.html?id=deal-009" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" aria-label="عرض تفاصيل الرياض">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                          عرض
+                        </a>
+                        <a href="deals.html" class="inline-flex items-center gap-1 text-xs font-semibold text-ink-500 hover:text-ink-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-300 rounded">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 7 -->
+                  <tr>
+                    <td data-label="#">
+                      <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-ink-100 text-ink-600 font-extrabold text-xs">7</span>
+                    </td>
+                    <td data-label="العرض"><div class="font-semibold text-ink-800 leading-snug">وجهة المالديف الحلم – 6 ليالٍ</div></td>
+                    <td data-label="الوجهة"><span class="text-sm text-ink-600">المالديف</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-partner">شريك</span></td>
+                    <td data-label="المشاهدات"><span class="font-bold text-ink-800">2,200</span></td>
+                    <td data-label="الضغطات"><span class="font-bold text-ink-700">1,100</span></td>
+                    <td data-label="الطلبات"><span class="font-bold text-ink-700">63</span></td>
+                    <td data-label="نسخ الكوبون"><span class="font-semibold text-amber-700">80</span></td>
+                    <td data-label="التحويل (تقديري)">
+                      <span class="kpi-trend kpi-trend-neutral" style="font-size:.6875rem">2.9%</span>
+                    </td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <a href="../pages/deal-details.html?id=deal-004" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" aria-label="عرض تفاصيل المالديف">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                          عرض
+                        </a>
+                        <a href="deals.html" class="inline-flex items-center gap-1 text-xs font-semibold text-ink-500 hover:text-ink-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-300 rounded">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 8 -->
+                  <tr>
+                    <td data-label="#">
+                      <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-ink-100 text-ink-600 font-extrabold text-xs">8</span>
+                    </td>
+                    <td data-label="العرض"><div class="font-semibold text-ink-800 leading-snug">كنوز الأردن – 4 ليالٍ</div></td>
+                    <td data-label="الوجهة"><span class="text-sm text-ink-600">الأردن</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-manual">يدوي</span></td>
+                    <td data-label="المشاهدات"><span class="font-bold text-ink-800">1,950</span></td>
+                    <td data-label="الضغطات"><span class="font-bold text-ink-700">975</span></td>
+                    <td data-label="الطلبات"><span class="font-bold text-ink-700">52</span></td>
+                    <td data-label="نسخ الكوبون"><span class="font-semibold text-amber-700">65</span></td>
+                    <td data-label="التحويل (تقديري)">
+                      <span class="kpi-trend kpi-trend-down" style="font-size:.6875rem">2.7%</span>
+                    </td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <a href="../pages/deal-details.html?id=deal-007" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" aria-label="عرض تفاصيل الأردن">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                          عرض
+                        </a>
+                        <a href="deals.html" class="inline-flex items-center gap-1 text-xs font-semibold text-ink-500 hover:text-ink-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-300 rounded">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+            <div class="px-4 py-3 border-t border-ink-100 bg-ink-50 rounded-b-2xl flex items-center justify-between flex-wrap gap-2">
+              <p class="text-xs text-ink-400">بيانات تجريبية — لا تعكس نشاطاً حقيقياً</p>
+              <a href="deals.html" class="text-xs font-semibold text-lagoon-600 hover:underline">عرض كل العروض ←</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T012 — Top destinations (≥7 cards)
+        ═════════════════════════════════════════════════════════ -->
+        <section id="top-destinations-section" aria-label="أفضل الوجهات" class="dash-section">
+          <div class="dash-section-header">
+            <div>
+              <h2 class="dash-section-title">أفضل الوجهات</h2>
+              <p class="dash-section-sub">7 وجهات — مرتبة حسب عدد الزيارات</p>
+            </div>
+          </div>
+
+          <div class="dest-grid">
+
+            <!-- Dubai -->
+            <div class="dest-card">
+              <div class="flex items-center justify-between mb-2">
+                <div class="dest-name">🇦🇪 دبي</div>
+                <span class="dest-trend-up" aria-label="ارتفاع">
+                  <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> ارتفاع
+                </span>
+              </div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الزيارات</span><span class="dest-stat-val">4,200</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الضغطات</span><span class="dest-stat-val">2,100</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الطلبات</span><span class="dest-stat-val">185</span></div>
+              <div class="dest-mini-bar" aria-hidden="true"><div class="dest-mini-fill" style="width:100%"></div></div>
+              <a href="../pages/deal-details.html?id=deal-003" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded">استعراض العروض ←</a>
+            </div>
+
+            <!-- Istanbul -->
+            <div class="dest-card">
+              <div class="flex items-center justify-between mb-2">
+                <div class="dest-name">🇹🇷 إسطنبول</div>
+                <span class="dest-trend-up" aria-label="ارتفاع">
+                  <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> ارتفاع
+                </span>
+              </div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الزيارات</span><span class="dest-stat-val">3,850</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الضغطات</span><span class="dest-stat-val">1,920</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الطلبات</span><span class="dest-stat-val">142</span></div>
+              <div class="dest-mini-bar" aria-hidden="true"><div class="dest-mini-fill" style="width:92%"></div></div>
+              <a href="../pages/deal-details.html?id=deal-002" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded">استعراض العروض ←</a>
+            </div>
+
+            <!-- Sharm -->
+            <div class="dest-card">
+              <div class="flex items-center justify-between mb-2">
+                <div class="dest-name">🇪🇬 شرم الشيخ</div>
+                <span class="dest-trend-stable" aria-label="مستقر">
+                  <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg> مستقر
+                </span>
+              </div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الزيارات</span><span class="dest-stat-val">3,620</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الضغطات</span><span class="dest-stat-val">1,810</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الطلبات</span><span class="dest-stat-val">128</span></div>
+              <div class="dest-mini-bar" aria-hidden="true"><div class="dest-mini-fill" style="width:86%"></div></div>
+              <a href="../pages/deal-details.html?id=deal-001" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded">استعراض العروض ←</a>
+            </div>
+
+            <!-- Paris -->
+            <div class="dest-card">
+              <div class="flex items-center justify-between mb-2">
+                <div class="dest-name">🇫🇷 باريس</div>
+                <span class="dest-trend-stable" aria-label="مستقر">
+                  <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg> مستقر
+                </span>
+              </div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الزيارات</span><span class="dest-stat-val">3,100</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الضغطات</span><span class="dest-stat-val">1,550</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الطلبات</span><span class="dest-stat-val">98</span></div>
+              <div class="dest-mini-bar" aria-hidden="true"><div class="dest-mini-fill" style="width:74%"></div></div>
+              <a href="../pages/deal-details.html?id=deal-005" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded">استعراض العروض ←</a>
+            </div>
+
+            <!-- Bangkok -->
+            <div class="dest-card">
+              <div class="flex items-center justify-between mb-2">
+                <div class="dest-name">🇹🇭 بانكوك</div>
+                <span class="dest-trend-up" aria-label="ارتفاع">
+                  <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> ارتفاع
+                </span>
+              </div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الزيارات</span><span class="dest-stat-val">2,800</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الضغطات</span><span class="dest-stat-val">1,400</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الطلبات</span><span class="dest-stat-val">87</span></div>
+              <div class="dest-mini-bar" aria-hidden="true"><div class="dest-mini-fill" style="width:67%"></div></div>
+              <a href="../pages/deal-details.html?id=deal-010" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded">استعراض العروض ←</a>
+            </div>
+
+            <!-- Riyadh -->
+            <div class="dest-card">
+              <div class="flex items-center justify-between mb-2">
+                <div class="dest-name">🇸🇦 الرياض</div>
+                <span class="dest-trend-up" aria-label="ارتفاع">
+                  <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> ارتفاع
+                </span>
+              </div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الزيارات</span><span class="dest-stat-val">2,450</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الضغطات</span><span class="dest-stat-val">1,225</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الطلبات</span><span class="dest-stat-val">74</span></div>
+              <div class="dest-mini-bar" aria-hidden="true"><div class="dest-mini-fill" style="width:58%"></div></div>
+              <a href="../pages/deal-details.html?id=deal-009" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:underline mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded">استعراض العروض ←</a>
+            </div>
+
+            <!-- Cairo -->
+            <div class="dest-card">
+              <div class="flex items-center justify-between mb-2">
+                <div class="dest-name">🇪🇬 القاهرة</div>
+                <span class="dest-trend-down" aria-label="انخفاض">
+                  <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg> انخفاض
+                </span>
+              </div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الزيارات</span><span class="dest-stat-val">1,680</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الضغطات</span><span class="dest-stat-val">840</span></div>
+              <div class="dest-stat-row"><span class="dest-stat-label">الطلبات</span><span class="dest-stat-val">48</span></div>
+              <div class="dest-mini-bar" aria-hidden="true"><div class="dest-mini-fill" style="width:40%;background:linear-gradient(90deg,#9AA6B4,#C5CDD7)"></div></div>
+              <a href="deals.html" class="inline-flex items-center gap-1 text-xs font-semibold text-ink-500 hover:underline mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-300 rounded">استعراض العروض ←</a>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T012 — Coupon performance table (≥8 rows)
+        ═════════════════════════════════════════════════════════ -->
+        <section id="coupon-performance-section" aria-label="أداء الكوبونات" class="dash-section">
+          <div class="dash-section-header">
+            <div>
+              <h2 class="dash-section-title">أداء الكوبونات</h2>
+              <p class="dash-section-sub">8 كوبونات — بيانات تجريبية</p>
+            </div>
+            <a href="coupons.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-lagoon-600 hover:text-lagoon-700 hover:underline">
+              إدارة الكوبونات
+              <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+          </div>
+
+          <div class="dash-table-wrap">
+            <div class="dash-table-scroll">
+              <table class="dash-table" aria-label="جدول أداء الكوبونات">
+                <thead>
+                  <tr>
+                    <th scope="col">الكود</th>
+                    <th scope="col">المزود</th>
+                    <th scope="col">الفئة</th>
+                    <th scope="col">المصدر</th>
+                    <th scope="col">عدد النسخ</th>
+                    <th scope="col">الاستخدام (تجريبي)</th>
+                    <th scope="col">العرض المرتبط</th>
+                    <th scope="col">انتهاء الصلاحية</th>
+                    <th scope="col">الحالة</th>
+                    <th scope="col" class="cell-actions">الإجراءات</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <!-- Coupon 1 -->
+                  <tr>
+                    <td data-label="الكود">
+                      <code class="font-mono font-bold text-lagoon-700 bg-lagoon-50 px-2 py-0.5 rounded text-sm" dir="ltr">FLY15</code>
+                    </td>
+                    <td data-label="المزود"><span class="text-sm text-ink-700">شركاء السفر</span></td>
+                    <td data-label="الفئة"><span class="text-sm text-ink-600">رحلات جوية</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-affiliate">أفيليت</span></td>
+                    <td data-label="عدد النسخ"><span class="font-bold text-ink-800">420</span></td>
+                    <td data-label="الاستخدام (تجريبي)"><span class="font-semibold text-lagoon-700">38 مرة</span></td>
+                    <td data-label="العرض المرتبط"><a href="../pages/deal-details.html?id=deal-002" class="text-lagoon-600 hover:underline text-xs font-semibold">إسطنبول</a></td>
+                    <td data-label="انتهاء الصلاحية"><span class="text-sm text-ink-600" dir="ltr">2026-09-30</span></td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:text-lagoon-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" data-copy-coupon="FLY15" aria-label="نسخ كود FLY15">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                          نسخ
+                        </button>
+                        <a href="coupons.html" class="text-xs font-semibold text-ink-500 hover:underline">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Coupon 2 -->
+                  <tr>
+                    <td data-label="الكود">
+                      <code class="font-mono font-bold text-lagoon-700 bg-lagoon-50 px-2 py-0.5 rounded text-sm" dir="ltr">HOTEL20</code>
+                    </td>
+                    <td data-label="المزود"><span class="text-sm text-ink-700">شركاء الفنادق</span></td>
+                    <td data-label="الفئة"><span class="text-sm text-ink-600">فنادق</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-affiliate">أفيليت</span></td>
+                    <td data-label="عدد النسخ"><span class="font-bold text-ink-800">380</span></td>
+                    <td data-label="الاستخدام (تجريبي)"><span class="font-semibold text-lagoon-700">31 مرة</span></td>
+                    <td data-label="العرض المرتبط"><a href="../pages/deal-details.html?id=deal-003" class="text-lagoon-600 hover:underline text-xs font-semibold">دبي</a></td>
+                    <td data-label="انتهاء الصلاحية"><span class="text-sm text-ink-600" dir="ltr">2026-08-31</span></td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:text-lagoon-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" data-copy-coupon="HOTEL20" aria-label="نسخ كود HOTEL20">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                          نسخ
+                        </button>
+                        <a href="coupons.html" class="text-xs font-semibold text-ink-500 hover:underline">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Coupon 3 -->
+                  <tr>
+                    <td data-label="الكود">
+                      <code class="font-mono font-bold text-lagoon-700 bg-lagoon-50 px-2 py-0.5 rounded text-sm" dir="ltr">SUMMER25</code>
+                    </td>
+                    <td data-label="المزود"><span class="text-sm text-ink-700">وكالة الأفق</span></td>
+                    <td data-label="الفئة"><span class="text-sm text-ink-600">موسمي</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-manual">يدوي</span></td>
+                    <td data-label="عدد النسخ"><span class="font-bold text-ink-800">310</span></td>
+                    <td data-label="الاستخدام (تجريبي)"><span class="font-semibold text-lagoon-700">27 مرة</span></td>
+                    <td data-label="العرض المرتبط"><a href="../pages/deal-details.html?id=deal-001" class="text-lagoon-600 hover:underline text-xs font-semibold">شرم الشيخ</a></td>
+                    <td data-label="انتهاء الصلاحية"><span class="text-sm text-amber-600 font-semibold" dir="ltr">2026-08-31</span></td>
+                    <td data-label="الحالة"><span class="badge badge-expiring">ينتهي قريباً</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:text-lagoon-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" data-copy-coupon="SUMMER25" aria-label="نسخ كود SUMMER25">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                          نسخ
+                        </button>
+                        <a href="coupons.html" class="text-xs font-semibold text-ink-500 hover:underline">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Coupon 4 -->
+                  <tr>
+                    <td data-label="الكود">
+                      <code class="font-mono font-bold text-lagoon-700 bg-lagoon-50 px-2 py-0.5 rounded text-sm" dir="ltr">FAMILY15</code>
+                    </td>
+                    <td data-label="المزود"><span class="text-sm text-ink-700">وكالة الأفق</span></td>
+                    <td data-label="الفئة"><span class="text-sm text-ink-600">عائلي</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-manual">يدوي</span></td>
+                    <td data-label="عدد النسخ"><span class="font-bold text-ink-800">260</span></td>
+                    <td data-label="الاستخدام (تجريبي)"><span class="font-semibold text-lagoon-700">22 مرة</span></td>
+                    <td data-label="العرض المرتبط"><a href="../pages/deal-details.html?id=deal-010" class="text-lagoon-600 hover:underline text-xs font-semibold">بانكوك</a></td>
+                    <td data-label="انتهاء الصلاحية"><span class="text-sm text-ink-600" dir="ltr">2026-10-31</span></td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:text-lagoon-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" data-copy-coupon="FAMILY15" aria-label="نسخ كود FAMILY15">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                          نسخ
+                        </button>
+                        <a href="coupons.html" class="text-xs font-semibold text-ink-500 hover:underline">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Coupon 5 -->
+                  <tr>
+                    <td data-label="الكود">
+                      <code class="font-mono font-bold text-lagoon-700 bg-lagoon-50 px-2 py-0.5 rounded text-sm" dir="ltr">LUXURY30</code>
+                    </td>
+                    <td data-label="المزود"><span class="text-sm text-ink-700">شركاء المنتجعات</span></td>
+                    <td data-label="الفئة"><span class="text-sm text-ink-600">فنادق فاخرة</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-affiliate">أفيليت</span></td>
+                    <td data-label="عدد النسخ"><span class="font-bold text-ink-800">195</span></td>
+                    <td data-label="الاستخدام (تجريبي)"><span class="font-semibold text-lagoon-700">18 مرة</span></td>
+                    <td data-label="العرض المرتبط"><a href="../pages/deal-details.html?id=deal-004" class="text-lagoon-600 hover:underline text-xs font-semibold">المالديف</a></td>
+                    <td data-label="انتهاء الصلاحية"><span class="text-sm text-amber-600 font-semibold" dir="ltr">2026-07-15</span></td>
+                    <td data-label="الحالة"><span class="badge badge-expiring">ينتهي قريباً</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:text-lagoon-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" data-copy-coupon="LUXURY30" aria-label="نسخ كود LUXURY30">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                          نسخ
+                        </button>
+                        <a href="coupons.html" class="text-xs font-semibold text-ink-500 hover:underline">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Coupon 6 -->
+                  <tr>
+                    <td data-label="الكود">
+                      <code class="font-mono font-bold text-lagoon-700 bg-lagoon-50 px-2 py-0.5 rounded text-sm" dir="ltr">BUNDLE10</code>
+                    </td>
+                    <td data-label="المزود"><span class="text-sm text-ink-700">شركاء الباقات</span></td>
+                    <td data-label="الفئة"><span class="text-sm text-ink-600">باقات</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-affiliate">أفيليت</span></td>
+                    <td data-label="عدد النسخ"><span class="font-bold text-ink-800">175</span></td>
+                    <td data-label="الاستخدام (تجريبي)"><span class="font-semibold text-lagoon-700">14 مرة</span></td>
+                    <td data-label="العرض المرتبط"><a href="../pages/deal-details.html?id=deal-005" class="text-lagoon-600 hover:underline text-xs font-semibold">باريس</a></td>
+                    <td data-label="انتهاء الصلاحية"><span class="text-sm text-amber-600 font-semibold" dir="ltr">2026-07-31</span></td>
+                    <td data-label="الحالة"><span class="badge badge-expiring">ينتهي قريباً</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:text-lagoon-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" data-copy-coupon="BUNDLE10" aria-label="نسخ كود BUNDLE10">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                          نسخ
+                        </button>
+                        <a href="coupons.html" class="text-xs font-semibold text-ink-500 hover:underline">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Coupon 7 -->
+                  <tr>
+                    <td data-label="الكود">
+                      <code class="font-mono font-bold text-lagoon-700 bg-lagoon-50 px-2 py-0.5 rounded text-sm" dir="ltr">ACT25</code>
+                    </td>
+                    <td data-label="المزود"><span class="text-sm text-ink-700">شركاء الأنشطة</span></td>
+                    <td data-label="الفئة"><span class="text-sm text-ink-600">أنشطة</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-affiliate">أفيليت</span></td>
+                    <td data-label="عدد النسخ"><span class="font-bold text-ink-800">140</span></td>
+                    <td data-label="الاستخدام (تجريبي)"><span class="font-semibold text-lagoon-700">11 مرة</span></td>
+                    <td data-label="العرض المرتبط"><a href="../pages/deal-details.html?id=deal-007" class="text-lagoon-600 hover:underline text-xs font-semibold">الأردن</a></td>
+                    <td data-label="انتهاء الصلاحية"><span class="text-sm text-ink-600" dir="ltr">2026-09-30</span></td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:text-lagoon-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" data-copy-coupon="ACT25" aria-label="نسخ كود ACT25">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                          نسخ
+                        </button>
+                        <a href="coupons.html" class="text-xs font-semibold text-ink-500 hover:underline">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Coupon 8 -->
+                  <tr>
+                    <td data-label="الكود">
+                      <code class="font-mono font-bold text-lagoon-700 bg-lagoon-50 px-2 py-0.5 rounded text-sm" dir="ltr">WINTER12</code>
+                    </td>
+                    <td data-label="المزود"><span class="text-sm text-ink-700">وكالة الأفق</span></td>
+                    <td data-label="الفئة"><span class="text-sm text-ink-600">موسمي</span></td>
+                    <td data-label="المصدر"><span class="badge badge-source-manual">يدوي</span></td>
+                    <td data-label="عدد النسخ"><span class="font-bold text-ink-800">95</span></td>
+                    <td data-label="الاستخدام (تجريبي)"><span class="font-semibold text-lagoon-700">8 مرات</span></td>
+                    <td data-label="العرض المرتبط"><a href="deals.html" class="text-lagoon-600 hover:underline text-xs font-semibold">عروض شتوية</a></td>
+                    <td data-label="انتهاء الصلاحية"><span class="text-sm text-ink-600" dir="ltr">2026-12-31</span></td>
+                    <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                    <td class="cell-actions" data-label="الإجراءات">
+                      <div class="flex items-center gap-1.5">
+                        <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-lagoon-600 hover:text-lagoon-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded" data-copy-coupon="WINTER12" aria-label="نسخ كود WINTER12">
+                          <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                          نسخ
+                        </button>
+                        <a href="coupons.html" class="text-xs font-semibold text-ink-500 hover:underline">إدارة</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+            <div class="px-4 py-3 border-t border-ink-100 bg-ink-50 rounded-b-2xl flex items-center justify-between flex-wrap gap-2">
+              <p class="text-xs text-ink-400">الكوبونات بيانات تجريبية — لا يتم استيراد كوبونات حقيقية / كل المصادر تحتاج مراجعة قبل النشر</p>
+              <a href="coupons.html" class="text-xs font-semibold text-lagoon-600 hover:underline">إدارة كل الكوبونات ←</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T013 — Insights, Recommendations, Export, FAQ
+             (Filled in next step)
+        ═════════════════════════════════════════════════════════ -->
+        <!-- ════════════════════════════════════════════════════════
+             T013 — Insights (≥6) + Recommendations (≥6)
+        ═════════════════════════════════════════════════════════ -->
+        <section id="insights-section" aria-label="الرؤى والتوصيات" class="dash-section">
+
+          <!-- Insights -->
+          <div class="dash-section-header" style="margin-bottom:1rem">
+            <div>
+              <h2 class="dash-section-title">الرؤى التحليلية</h2>
+              <p class="dash-section-sub">6 رؤى — بيانات تجريبية ثابتة</p>
+            </div>
+          </div>
+
+          <div class="insight-grid" style="margin-bottom:2rem">
+
+            <div class="insight-card">
+              <div class="flex items-center gap-3">
+                <div class="insight-icon" style="background:#ECFBFB;color:#0E8186" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                </div>
+                <span class="insight-title">أعلى شريحة قيمة</span>
+              </div>
+              <div class="insight-value">عائلات الخليج</div>
+              <p class="insight-helper">تشكّل أعلى نسبة من طلبات الحجز — بيانات تجريبية</p>
+            </div>
+
+            <div class="insight-card">
+              <div class="flex items-center gap-3">
+                <div class="insight-icon" style="background:#EDE9FE;color:#7C3AED" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                </div>
+                <span class="insight-title">النوع الأكثر طلباً</span>
+              </div>
+              <div class="insight-value" style="font-size:1rem">باقات فندق + طيران</div>
+              <p class="insight-helper">72% من الاستفسارات تشمل فندقاً وطيراناً — بيانات تجريبية</p>
+            </div>
+
+            <div class="insight-card">
+              <div class="flex items-center gap-3">
+                <div class="insight-icon" style="background:#FEF3C7;color:#D97706" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <span class="insight-title">متوسط وقت الاستجابة</span>
+              </div>
+              <div class="insight-value">خلال ساعتين</div>
+              <p class="insight-helper">وقت الاستجابة للطلبات — قيمة تجريبية</p>
+            </div>
+
+            <div class="insight-card">
+              <div class="flex items-center gap-3">
+                <div class="insight-icon" style="background:#FEE2E2;color:#DC2626" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <span class="insight-title">طلبات تحتاج متابعة</span>
+              </div>
+              <div class="insight-value" style="color:#DC2626">14 طلب</div>
+              <p class="insight-helper">طلبات لم يُرد عليها خلال 24 ساعة — بيانات تجريبية</p>
+            </div>
+
+            <div class="insight-card">
+              <div class="flex items-center gap-3">
+                <div class="insight-icon" style="background:#FEF3C7;color:#A16207" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                </div>
+                <span class="insight-title">دفعات معلقة</span>
+              </div>
+              <div class="insight-value" style="color:#A16207">8 طلبات</div>
+              <p class="insight-helper">طلبات في مرحلة انتظار الدفع — بيانات تجريبية</p>
+            </div>
+
+            <div class="insight-card">
+              <div class="flex items-center gap-3">
+                <div class="insight-icon" style="background:#DCFCE7;color:#16A34A" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                </div>
+                <span class="insight-title">اتجاه السفر العائلي</span>
+              </div>
+              <div class="insight-value" style="color:#16A34A">ارتفاع 24%</div>
+              <p class="insight-helper">زيادة ملحوظة في طلبات الرحلات العائلية — بيانات تجريبية</p>
+            </div>
+
+          </div>
+
+          <!-- Recommendations -->
+          <div class="dash-section-header" style="margin-bottom:1rem">
+            <div>
+              <h2 class="dash-section-title">التوصيات</h2>
+              <p class="dash-section-sub">6 توصيات — مُولَّدة تجريبياً</p>
+            </div>
+          </div>
+
+          <div class="insight-grid">
+
+            <div class="rec-card">
+              <span class="rec-priority rec-priority-high">
+                <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+                أولوية عالية
+              </span>
+              <div class="rec-title">عرض دبي يحصل على أعلى ضغطات</div>
+              <p class="rec-explanation">يحقق عرض دبي الفاخرة أفضل معدل تحويل — يُنصح بتحديث الصور وإضافة كوبون موسمي</p>
+              <a href="edit-deal.html?id=deal-003" class="rec-action">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                تعديل العرض
+              </a>
+            </div>
+
+            <div class="rec-card">
+              <span class="rec-priority rec-priority-high">
+                <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+                أولوية عالية
+              </span>
+              <div class="rec-title">متابعة 14 طلب حجز معلق</div>
+              <p class="rec-explanation">طلبات لم تتلقَ رداً خلال 24 ساعة — التواصل السريع يرفع معدل التحويل</p>
+              <button type="button" class="rec-action" data-analytics-toast="قابل للربط بصفحة الطلبات لاحقاً">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                متابعة الطلبات
+              </button>
+            </div>
+
+            <div class="rec-card">
+              <span class="rec-priority rec-priority-high">
+                <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+                أولوية عالية
+              </span>
+              <div class="rec-title">إضافة كوبون للموسم الصيفي</div>
+              <p class="rec-explanation">انتهاء كوبون SUMMER25 في أغسطس — يُنصح بتجهيز كوبون جديد مسبقاً</p>
+              <a href="create-coupon.html" class="rec-action">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                إنشاء كوبون
+              </a>
+            </div>
+
+            <div class="rec-card">
+              <span class="rec-priority rec-priority-medium">
+                <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                أولوية متوسطة
+              </span>
+              <div class="rec-title">تحديث تفاصيل رحلة إسطنبول</div>
+              <p class="rec-explanation">عرض إسطنبول يحصل على نقرات عالية لكن معدل التحويل أقل من المتوسط</p>
+              <a href="edit-deal.html?id=deal-002" class="rec-action">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                تعديل العرض
+              </a>
+            </div>
+
+            <div class="rec-card">
+              <span class="rec-priority rec-priority-medium">
+                <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                أولوية متوسطة
+              </span>
+              <div class="rec-title">تفعيل تكامل Travelpayouts</div>
+              <p class="rec-explanation">تفعيل رابط Affiliate يمكن أن يرفع الإيراد التقديري للعروض الجوية</p>
+              <a href="integrations.html" class="rec-action">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M7 17l-5 5"/><path d="M17 7l5-5"/></svg>
+                إعداد التكاملات
+              </a>
+            </div>
+
+            <div class="rec-card">
+              <span class="rec-priority rec-priority-low">
+                <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                أولوية منخفضة
+              </span>
+              <div class="rec-title">إضافة صور لعروض المالديف</div>
+              <p class="rec-explanation">العروض ذات الصور الاحترافية تحقق معدلات ضغط أعلى بـ 3 أضعاف — بيانات تجريبية</p>
+              <a href="edit-deal.html?id=deal-004" class="rec-action">
+                <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                تعديل العرض
+              </a>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T013 — Export mock section
+        ═════════════════════════════════════════════════════════ -->
+        <section class="dash-section" aria-label="تصدير التقارير">
+          <div class="card p-5">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div class="flex items-center gap-3 flex-1">
+                <div class="w-10 h-10 bg-lagoon-100 text-lagoon-600 rounded-xl flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </div>
+                <div>
+                  <h2 class="text-base font-bold text-ink-800 m-0">تصدير تقرير التحليلات</h2>
+                  <p class="text-xs text-ink-400 mt-0.5 m-0">تصدير تجريبي — لا يتم إنشاء ملف فعلي في هذه النسخة</p>
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  data-analytics-export="pdf"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-lagoon-600 text-white text-sm font-bold hover:bg-lagoon-700 focus-visible:ring-2 focus-visible:ring-lagoon-400 transition-colors"
+                >
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  تصدير PDF
+                </button>
+                <button
+                  type="button"
+                  data-analytics-export="csv"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-ink-200 text-ink-700 text-sm font-semibold hover:border-lagoon-400 hover:text-lagoon-700 focus-visible:ring-2 focus-visible:ring-lagoon-400 transition-colors bg-white"
+                >
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  تصدير CSV
+                </button>
+                <button
+                  type="button"
+                  data-analytics-export="schedule"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-ink-200 text-ink-700 text-sm font-semibold hover:border-lagoon-400 hover:text-lagoon-700 focus-visible:ring-2 focus-visible:ring-lagoon-400 transition-colors bg-white"
+                >
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  جدولة تقارير
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T013 — FAQ (≥5)
+        ═════════════════════════════════════════════════════════ -->
+        <section id="faq-section" aria-label="الأسئلة الشائعة" class="dash-section">
+          <div class="dash-section-header">
+            <h2 class="dash-section-title">الأسئلة الشائعة</h2>
+          </div>
+          <div class="faq-wrap">
+
+            <details class="faq-item">
+              <summary>
+                هل التحليلات المعروضة حقيقية؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                لا. جميع الأرقام والمؤشرات الموضحة في هذه الصفحة هي <strong>بيانات تجريبية ثابتة</strong> ولا تعكس نشاطاً حقيقياً أو زيارات فعلية. الصفحة مثال توضيحي لما ستبدو عليه لوحة التحليلات عند الربط بخادم حقيقي.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يتم تتبع الزوار الآن؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                لا يتم أي تتبع أو تحليل حقيقي في هذه النسخة. لا يتصل النظام بأي خدمة تحليل مثل Google Analytics أو أي أداة تتبع خارجية. الصفحة <strong>واجهة أمامية فقط</strong> بدون أي اتصال بخادم.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يمكن ربط Google Analytics أو أداة تحليل أخرى لاحقاً؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                نعم، هذه الصفحة مصممة لتكون <strong>قابلة للربط لاحقاً</strong>. عند تطوير الخادم يمكن استبدال البيانات الثابتة بطلبات API حقيقية، وربط التحليلات بأدوات مثل Google Analytics أو Mixpanel أو لوحة تحليل مخصصة.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                ما معنى "معدل التحويل التقديري"؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                هو نسبة تقديرية مبنية على: <strong>عدد طلبات الحجز ÷ عدد الضغطات على العروض</strong>. هذا الرقم تجريبي ولا يعكس مدفوعات مؤكدة أو تحويلات فعلية. في النظام الحقيقي سيُحسب بدقة أكبر بناءً على بيانات المبيعات المؤكدة.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يمكن تصدير تقارير حقيقية لاحقاً؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                نعم، أزرار التصدير (PDF / CSV / جدولة) موضحة كمثال تصميمي. عند الربط بالخادم ستُنشئ تقارير حقيقية قابلة للتحميل. في النسخة الحالية أي ضغطة على زر التصدير تُظهر رسالة تنبيه بأنه تجريبي فقط.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                ما الفرق بين "الزيارات" و"الضغطات على العروض"؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                <strong>الزيارات</strong>: إجمالي مشاهدات صفحات الموقع عموماً. <strong>الضغطات على العروض</strong>: عدد النقرات على روابط العروض تحديداً. الفرق يعكس نسبة الزوار الذين يتفاعلون مع المحتوى. كلاهما أرقام تجريبية في هذه النسخة.
+              </div>
+            </details>
+
+          </div>
+        </section>
+
+        <!-- Analytics empty state (hidden by default) -->
+        <div id="analytics-empty" class="empty-state card" hidden>
+          <svg width="56" height="56" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+          <p class="empty-state-title">لا توجد بيانات للفترة المحددة</p>
+          <p class="empty-state-body">جرّب تحديد نطاق زمني آخر</p>
+        </div>
+
+        <!-- Analytics skeleton (hidden by default) -->
+        <div id="analytics-skeleton" aria-label="جارٍ التحميل" aria-busy="true" hidden>
+          <div class="kpi-grid">
+            <div class="skeleton" style="height:130px;border-radius:1.125rem"></div>
+            <div class="skeleton" style="height:130px;border-radius:1.125rem"></div>
+            <div class="skeleton" style="height:130px;border-radius:1.125rem"></div>
+            <div class="skeleton" style="height:130px;border-radius:1.125rem"></div>
+          </div>
+          <div class="skeleton" style="height:200px;border-radius:1.125rem;margin-top:1rem"></div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ── Footer ────────────────────────────────────────────────────────── -->
+    <footer class="dash-footer" role="contentinfo">
+      <span>رحلاتي — لوحة التحكم التجريبية · بيانات تجريبية / واجهة أمامية فقط</span>
+      <div class="flex gap-1 flex-wrap">
+        <a href="index.html">الرئيسية</a>
+        <span aria-hidden="true">·</span>
+        <a href="deals.html">العروض</a>
+        <span aria-hidden="true">·</span>
+        <a href="coupons.html">الكوبونات</a>
+        <span aria-hidden="true">·</span>
+        <a href="integrations.html">التكاملات</a>
+        <span aria-hidden="true">·</span>
+        <a href="settings.html">الإعدادات</a>
+      </div>
+    </footer>
+
+  </div>
+  <!-- /dash-main -->
+
+  <!-- Export modal (T013 — accessible, no browser dialog) -->
+  <div
+    id="modal-export"
+    class="modal-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-export-title"
+    aria-describedby="modal-export-body"
+    hidden
+  >
+    <div class="modal-box" role="document">
+      <div class="modal-icon modal-icon-info" aria-hidden="true">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+      <h2 id="modal-export-title" class="modal-title">تصدير تقرير التحليلات</h2>
+      <p class="modal-body" id="modal-export-body">
+        اختر صيغة التصدير — <strong>تصدير تجريبي / لا يتم إنشاء ملف فعلي في هذه النسخة.</strong>
+      </p>
+      <div class="flex flex-col gap-2 mt-4">
+        <button type="button" class="btn-export w-full justify-center" data-analytics-export="pdf" data-modal-close="modal-export">
+          <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          تصدير PDF
+        </button>
+        <button type="button" class="btn-export w-full justify-center" data-analytics-export="csv" data-modal-close="modal-export">
+          <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          تصدير CSV
+        </button>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-export">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../src/js/ui.js" defer></script>
+  <script src="../src/js/main.js" defer></script>
+  <script src="../src/js/dashboard.js" defer></script>
+
+</body>
+</html>

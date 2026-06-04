@@ -1,0 +1,424 @@
+{
+  "stats": {
+    "connected": 2,
+    "notConnected": 5,
+    "apiReady": 4,
+    "needsConfig": 3,
+    "needsReview": 2,
+    "comingSoon": 3
+  },
+  "integrations": [
+    {
+      "key": "travelpayouts",
+      "name": "Travelpayouts",
+      "category": "affiliate",
+      "status": "needs-config",
+      "descriptionAr": "شبكة Affiliate رائدة لعروض الطيران والفنادق والجولات — تحتاج ضبط Marker ID",
+      "credentialsAr": "Marker ID + API Token",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "warn",
+      "configFields": [
+        { "name": "marker", "labelAr": "Marker ID", "type": "text", "required": true },
+        { "name": "token", "labelAr": "API Token", "type": "text", "required": true },
+        { "name": "currency", "labelAr": "العملة الافتراضية", "type": "select", "required": false },
+        { "name": "language", "labelAr": "اللغة الافتراضية", "type": "select", "required": false },
+        { "name": "trackingParam", "labelAr": "معامل التتبع", "type": "text", "required": false }
+      ],
+      "warningsAr": null
+    },
+    {
+      "key": "booking-affiliate",
+      "name": "Booking.com Affiliate",
+      "category": "affiliate",
+      "status": "not-connected",
+      "descriptionAr": "برنامج Affiliate لـ Booking.com لعروض الفنادق والشقق المفروشة",
+      "credentialsAr": "Affiliate ID + رابط القالب",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "off",
+      "configFields": [
+        { "name": "affiliateId", "labelAr": "Affiliate ID", "type": "text", "required": true },
+        { "name": "destination", "labelAr": "الوجهة الافتراضية", "type": "text", "required": false },
+        { "name": "linkTemplate", "labelAr": "قالب الرابط", "type": "text", "required": false },
+        { "name": "trackingParam", "labelAr": "معامل التتبع", "type": "text", "required": false }
+      ],
+      "warningsAr": null
+    },
+    {
+      "key": "expedia-partner",
+      "name": "Expedia Partner",
+      "category": "affiliate",
+      "status": "not-connected",
+      "descriptionAr": "برنامج شراكة Expedia لعروض الفنادق والطيران",
+      "credentialsAr": "Partner ID",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "off",
+      "configFields": [
+        { "name": "partnerId", "labelAr": "Partner ID", "type": "text", "required": true },
+        { "name": "market", "labelAr": "السوق الافتراضي", "type": "select", "required": false },
+        { "name": "currency", "labelAr": "العملة", "type": "select", "required": false }
+      ],
+      "warningsAr": null
+    },
+    {
+      "key": "skyscanner-partner",
+      "name": "Skyscanner Partner",
+      "category": "affiliate",
+      "status": "needs-config",
+      "descriptionAr": "أداة بحث الطيران من Skyscanner — تحتاج ضبط Partner ID",
+      "credentialsAr": "Partner ID",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "warn",
+      "configFields": [
+        { "name": "partnerId", "labelAr": "Partner ID", "type": "text", "required": true },
+        { "name": "market", "labelAr": "السوق الافتراضي", "type": "select", "required": false }
+      ],
+      "warningsAr": null
+    },
+    {
+      "key": "kiwi-tequila",
+      "name": "Kiwi / Tequila",
+      "category": "affiliate",
+      "status": "not-connected",
+      "descriptionAr": "منصة تذاكر الطيران منخفضة التكلفة من Kiwi.com",
+      "credentialsAr": "API Key",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "off",
+      "configFields": [
+        { "name": "apiKey", "labelAr": "API Key", "type": "text", "required": true }
+      ],
+      "warningsAr": null
+    },
+    {
+      "key": "partner-link-template",
+      "name": "قالب رابط شريك مخصص",
+      "category": "affiliate",
+      "status": "coming-soon",
+      "descriptionAr": "إضافة روابط Affiliate لأي شريك مخصص — قيد التطوير",
+      "credentialsAr": "—",
+      "enabled": false,
+      "lastSyncMock": "—",
+      "health": "off",
+      "configFields": [],
+      "warningsAr": null
+    },
+    {
+      "key": "amadeus",
+      "name": "Amadeus API",
+      "category": "travel-apis",
+      "status": "api-ready",
+      "descriptionAr": "واجهة برمجية متكاملة للطيران والفنادق والوجهات — جاهزة للربط",
+      "credentialsAr": "API Key + API Secret",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "ok",
+      "configFields": [
+        { "name": "apiKey", "labelAr": "API Key", "type": "text", "required": true },
+        { "name": "apiSecret", "labelAr": "API Secret (placeholder)", "type": "text", "required": true },
+        { "name": "environment", "labelAr": "البيئة", "type": "select", "required": true }
+      ],
+      "warningsAr": null
+    },
+    {
+      "key": "duffel",
+      "name": "Duffel API",
+      "category": "travel-apis",
+      "status": "api-ready",
+      "descriptionAr": "واجهة برمجية حديثة لحجوزات الطيران — جاهزة للربط",
+      "credentialsAr": "API Token",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "ok",
+      "configFields": [
+        { "name": "apiToken", "labelAr": "API Token (placeholder)", "type": "text", "required": true },
+        { "name": "environment", "labelAr": "البيئة", "type": "select", "required": true }
+      ],
+      "warningsAr": null
+    },
+    {
+      "key": "expedia-rapid",
+      "name": "Expedia Rapid API",
+      "category": "travel-apis",
+      "status": "api-ready",
+      "descriptionAr": "واجهة برمجية للفنادق من Expedia بمعدلات تنافسية — جاهزة للربط",
+      "credentialsAr": "API Key",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "ok",
+      "configFields": [
+        { "name": "apiKey", "labelAr": "API/Rapid Key (placeholder)", "type": "text", "required": true },
+        { "name": "market", "labelAr": "السوق", "type": "select", "required": false }
+      ],
+      "warningsAr": null
+    },
+    {
+      "key": "hotelbeds",
+      "name": "Hotelbeds",
+      "category": "travel-apis",
+      "status": "api-ready",
+      "descriptionAr": "موزّع فنادق عالمي من خلال Hotelbeds — جاهز للربط",
+      "credentialsAr": "API Key + Secret",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "ok",
+      "configFields": [
+        { "name": "apiKey", "labelAr": "API Key (placeholder)", "type": "text", "required": true },
+        { "name": "secret", "labelAr": "API Secret (placeholder)", "type": "text", "required": true }
+      ],
+      "warningsAr": null
+    },
+    {
+      "key": "coupon-api",
+      "name": "Coupon API",
+      "category": "coupons",
+      "status": "needs-config",
+      "descriptionAr": "استيراد كوبونات من مصدر خارجي عبر API — يحتاج مراجعة يدوية قبل النشر",
+      "credentialsAr": "API Key + Region",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "warn",
+      "configFields": [
+        { "name": "apiKey", "labelAr": "API Key", "type": "text", "required": true },
+        { "name": "region", "labelAr": "المنطقة", "type": "select", "required": false }
+      ],
+      "warningsAr": "لا يتم استيراد أي كوبون أو عرض تلقائياً — كل المحتوى يحتاج مراجعة يدوية قبل النشر"
+    },
+    {
+      "key": "affiliate-coupon-feed",
+      "name": "Affiliate Coupon Feed",
+      "category": "coupons",
+      "status": "not-connected",
+      "descriptionAr": "استيراد كوبونات من شبكات Affiliate — يتطلب مراجعة يدوية",
+      "credentialsAr": "Feed URL",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "off",
+      "configFields": [
+        { "name": "feedUrl", "labelAr": "Feed URL", "type": "text", "required": true }
+      ],
+      "warningsAr": "لا يتم نشر أي كوبون تلقائياً — كل المحتوى المستورد يحتاج مراجعة يدوية قبل النشر"
+    },
+    {
+      "key": "manual-coupons",
+      "name": "كوبونات يدوية",
+      "category": "coupons",
+      "status": "connected",
+      "descriptionAr": "إنشاء وإدارة الكوبونات يدوياً من لوحة التحكم — مفعّل حالياً",
+      "credentialsAr": "—",
+      "enabled": true,
+      "lastSyncMock": "اليوم 11:30 (تجريبي)",
+      "health": "ok",
+      "configFields": [],
+      "warningsAr": null
+    },
+    {
+      "key": "coupon-import-review",
+      "name": "مراجعة استيراد الكوبونات",
+      "category": "coupons",
+      "status": "needs-review",
+      "descriptionAr": "قائمة مراجعة يدوية للكوبونات المستوردة — 3 كوبونات بانتظار الموافقة",
+      "credentialsAr": "—",
+      "enabled": false,
+      "lastSyncMock": "اليوم 09:15 (تجريبي)",
+      "health": "review",
+      "configFields": [],
+      "warningsAr": "لا يتم نشر أي كوبون مستورد قبل مراجعته وموافقتك اليدوية"
+    },
+    {
+      "key": "scraping-review-queue",
+      "name": "Scraping Review Queue",
+      "category": "scraping-review",
+      "status": "needs-review",
+      "descriptionAr": "قائمة مراجعة يدوية لمحتوى يتطلب المراجعة — لا يُنشر أي شيء تلقائياً",
+      "credentialsAr": "—",
+      "enabled": false,
+      "lastSyncMock": "اليوم 09:00 (تجريبي)",
+      "health": "review",
+      "configFields": [
+        { "name": "sourceName", "labelAr": "اسم المصدر", "type": "text", "required": true },
+        { "name": "sourceUrl", "labelAr": "رابط المصدر", "type": "text", "required": true },
+        { "name": "crawlFrequency", "labelAr": "تكرار الفحص", "type": "select", "required": false }
+      ],
+      "warningsAr": "⚠️ لا يتم تشغيل أي scraping فعلياً في هذه النسخة. لا يتم نشر أي كوبون أو عرض مجمّع تلقائياً قبل المراجعة اليدوية. كل المصادر تحتاج احترام سياسة الموقع قبل استخدامها."
+    },
+    {
+      "key": "source-url-monitor",
+      "name": "Source URL Monitor",
+      "category": "scraping-review",
+      "status": "disabled",
+      "descriptionAr": "مراقبة روابط المصادر للتحقق من صحتها — معطّل حالياً",
+      "credentialsAr": "—",
+      "enabled": false,
+      "lastSyncMock": "—",
+      "health": "off",
+      "configFields": [],
+      "warningsAr": "لا يتم تشغيل أي أتمتة — لأغراض المراجعة اليدوية فقط"
+    },
+    {
+      "key": "manual-approval-workflow",
+      "name": "Manual Approval Workflow",
+      "category": "scraping-review",
+      "status": "connected",
+      "descriptionAr": "سير عمل الموافقة اليدوية على المحتوى — مفعّل ويضمن عدم النشر التلقائي",
+      "credentialsAr": "—",
+      "enabled": true,
+      "lastSyncMock": "اليوم 10:00 (تجريبي)",
+      "health": "ok",
+      "configFields": [],
+      "warningsAr": "كل المحتوى يمر عبر هذا سير العمل قبل النشر — لا يوجد نشر تلقائي"
+    },
+    {
+      "key": "duplicate-coupon-detector",
+      "name": "Duplicate Coupon Detector",
+      "category": "scraping-review",
+      "status": "coming-soon",
+      "descriptionAr": "كشف الكوبونات المكررة تلقائياً — قيد التطوير",
+      "credentialsAr": "—",
+      "enabled": false,
+      "lastSyncMock": "—",
+      "health": "off",
+      "configFields": [],
+      "warningsAr": null
+    },
+    {
+      "key": "expiry-validator",
+      "name": "Expiry Validator",
+      "category": "scraping-review",
+      "status": "not-connected",
+      "descriptionAr": "التحقق من تواريخ انتهاء الكوبونات قبل عرضها",
+      "credentialsAr": "—",
+      "enabled": false,
+      "lastSyncMock": "—",
+      "health": "off",
+      "configFields": [],
+      "warningsAr": null
+    },
+    {
+      "key": "email-notifications",
+      "name": "إشعارات البريد الإلكتروني",
+      "category": "notifications",
+      "status": "connected",
+      "descriptionAr": "إرسال إشعارات البريد للفريق والعملاء — متصل (تجريبي)",
+      "credentialsAr": "Sender Email + API Key",
+      "enabled": true,
+      "lastSyncMock": "اليوم 11:00 (تجريبي)",
+      "health": "ok",
+      "configFields": [
+        { "name": "senderName", "labelAr": "اسم المرسِل", "type": "text", "required": true },
+        { "name": "senderEmail", "labelAr": "بريد المرسِل", "type": "email", "required": true },
+        { "name": "apiKey", "labelAr": "API Key (placeholder)", "type": "text", "required": false }
+      ],
+      "warningsAr": null
+    },
+    {
+      "key": "whatsapp-notifications",
+      "name": "إشعارات واتساب",
+      "category": "notifications",
+      "status": "not-connected",
+      "descriptionAr": "إرسال إشعارات عبر واتساب للفريق — غير متصل",
+      "credentialsAr": "Provider + API Key + رقم هاتف",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "off",
+      "configFields": [
+        { "name": "provider", "labelAr": "الجهة المزودة (placeholder)", "type": "text", "required": false },
+        { "name": "senderName", "labelAr": "اسم المرسِل", "type": "text", "required": false },
+        { "name": "apiKey", "labelAr": "API Key (placeholder)", "type": "text", "required": false },
+        { "name": "phone", "labelAr": "رقم الهاتف (placeholder)", "type": "text", "required": false }
+      ],
+      "warningsAr": null
+    },
+    {
+      "key": "dashboard-alerts",
+      "name": "تنبيهات لوحة التحكم",
+      "category": "notifications",
+      "status": "connected",
+      "descriptionAr": "إشعارات داخل لوحة التحكم — مفعّل افتراضياً",
+      "credentialsAr": "—",
+      "enabled": true,
+      "lastSyncMock": "اليوم (تجريبي)",
+      "health": "ok",
+      "configFields": [],
+      "warningsAr": null
+    },
+    {
+      "key": "daily-summary",
+      "name": "ملخص يومي",
+      "category": "notifications",
+      "status": "not-connected",
+      "descriptionAr": "إرسال ملخص يومي للأداء عبر البريد — غير مفعّل",
+      "credentialsAr": "—",
+      "enabled": false,
+      "lastSyncMock": "لم تتم المزامنة (تجريبي)",
+      "health": "off",
+      "configFields": [],
+      "warningsAr": null
+    },
+    {
+      "key": "weekly-reports",
+      "name": "تقارير أسبوعية",
+      "category": "notifications",
+      "status": "coming-soon",
+      "descriptionAr": "تقارير أسبوعية مفصّلة — قيد التطوير",
+      "credentialsAr": "—",
+      "enabled": false,
+      "lastSyncMock": "—",
+      "health": "off",
+      "configFields": [],
+      "warningsAr": null
+    }
+  ],
+  "activity": [
+    {
+      "timeMock": "اليوم 10:24",
+      "event": "تم ضبط إعدادات Travelpayouts (تجريبي)",
+      "severity": "info"
+    },
+    {
+      "timeMock": "اليوم 09:40",
+      "event": "اختبار اتصال Coupon API فشل — لا يتم الاتصال بأي مصدر خارجي",
+      "severity": "error"
+    },
+    {
+      "timeMock": "اليوم 09:15",
+      "event": "تمت إضافة مصدر مراجعة جديد (تجريبي)",
+      "severity": "info"
+    },
+    {
+      "timeMock": "أمس 18:30",
+      "event": "محتوى بانتظار المراجعة اليدوية — 3 عناصر جديدة",
+      "severity": "warn"
+    },
+    {
+      "timeMock": "أمس 14:10",
+      "event": "تم إرسال بريد اختباري (تجريبي — لا يتم إرسال رسائل حقيقية)",
+      "severity": "info"
+    },
+    {
+      "timeMock": "أمس 11:05",
+      "event": "تم تعطيل تكامل واتساب مؤقتاً",
+      "severity": "warn"
+    },
+    {
+      "timeMock": "منذ يومين",
+      "event": "تم تحديث معامل API Key (placeholder — لا يتم الحفظ على خادم)",
+      "severity": "info"
+    },
+    {
+      "timeMock": "منذ يومين",
+      "event": "تخطّت المزامنة — لا يوجد مصدر متصل فعلياً",
+      "severity": "warn"
+    }
+  ],
+  "health": {
+    "overall": "warn",
+    "issues": 1,
+    "warnings": 2,
+    "reviewNeeded": 2,
+    "lastCheckMock": "اليوم 11:00 (تجريبي)"
+  }
+}

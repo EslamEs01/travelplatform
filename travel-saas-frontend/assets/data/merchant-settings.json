@@ -1,0 +1,84 @@
+{
+  "company": {
+    "name": "وكالة الأفق للسفر",
+    "businessType": "وكالة سياحة",
+    "phone": "+966500000000",
+    "email": "info@example.com",
+    "website": "https://example.com",
+    "address": "طريق الملك فهد، برج المعرفة، الدور 12",
+    "country": "السعودية",
+    "city": "الرياض",
+    "supportContact": "support@example.com",
+    "workingHours": "الأحد – الخميس، 9ص – 6م",
+    "license": "RX-0000 (مثال توضيحي)"
+  },
+  "branding": {
+    "primary": "#0E7C7B",
+    "secondary": "#F4A300",
+    "slug": "alufuq-travel",
+    "publicUrlBase": "https://travel.example.com/",
+    "socials": {
+      "instagram": "",
+      "x": "",
+      "facebook": ""
+    }
+  },
+  "booking": {
+    "currency": "SAR",
+    "mode": "inquiry",
+    "confirmationMessage": "شكراً لتواصلك مع وكالة الأفق للسفر. سنتواصل معك خلال ساعتين لتأكيد تفاصيل حجزك.",
+    "minDeposit": "",
+    "cancellationNote": "يمكن إلغاء الحجز قبل 48 ساعة من موعد السفر مقابل استرداد كامل — شروط تجريبية",
+    "refundNote": "يُعاد المبلغ خلال 7–14 يوم عمل حسب وسيلة الدفع — شروط تجريبية",
+    "workingHours": "الأحد – الخميس، 9ص – 6م",
+    "responseTime": "خلال ساعتين (تجريبي)",
+    "requiredDocs": ["passport", "id", "receipt", "travelerNames", "visa"]
+  },
+  "notifications": [
+    {
+      "key": "newInquiry",
+      "labelAr": "طلب حجز جديد",
+      "channels": { "dashboard": true, "email": true, "whatsapp": false }
+    },
+    {
+      "key": "bookingStatusChange",
+      "labelAr": "تغيير حالة الحجز",
+      "channels": { "dashboard": true, "email": true, "whatsapp": false }
+    },
+    {
+      "key": "couponCopied",
+      "labelAr": "نسخ كوبون",
+      "channels": { "dashboard": true, "email": false, "whatsapp": false }
+    },
+    {
+      "key": "dealExpiringSoon",
+      "labelAr": "عرض يوشك على الانتهاء",
+      "channels": { "dashboard": true, "email": true, "whatsapp": false }
+    },
+    {
+      "key": "integrationFailed",
+      "labelAr": "فشل تكامل",
+      "channels": { "dashboard": true, "email": true, "whatsapp": false }
+    },
+    {
+      "key": "dailySummary",
+      "labelAr": "ملخص يومي",
+      "channels": { "dashboard": true, "email": true, "whatsapp": false }
+    },
+    {
+      "key": "weeklyAnalytics",
+      "labelAr": "تقرير التحليلات الأسبوعي",
+      "channels": { "dashboard": false, "email": true, "whatsapp": false }
+    },
+    {
+      "key": "paymentPending",
+      "labelAr": "دفعة معلقة (تجريبي)",
+      "channels": { "dashboard": true, "email": false, "whatsapp": false }
+    },
+    {
+      "key": "customerFollowUp",
+      "labelAr": "متابعة عميل",
+      "channels": { "dashboard": true, "email": false, "whatsapp": false }
+    }
+  ]
+}

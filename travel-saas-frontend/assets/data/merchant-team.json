@@ -1,0 +1,58 @@
+{
+  "members": [
+    {
+      "id": "u-001",
+      "name": "سارة العتيبي",
+      "email": "sara@example.com",
+      "role": "Owner",
+      "status": "active",
+      "lastActiveMock": "اليوم",
+      "permissionsAr": "كل الصلاحيات"
+    },
+    {
+      "id": "u-002",
+      "name": "أحمد الزهراني",
+      "email": "ahmad@example.com",
+      "role": "Manager",
+      "status": "active",
+      "lastActiveMock": "اليوم",
+      "permissionsAr": "إدارة العروض والكوبونات والفريق"
+    },
+    {
+      "id": "u-003",
+      "name": "ليلى الشمري",
+      "email": "layla@example.com",
+      "role": "Agent",
+      "status": "active",
+      "lastActiveMock": "أمس",
+      "permissionsAr": "عرض الطلبات والرد عليها"
+    },
+    {
+      "id": "u-004",
+      "name": "محمد القحطاني",
+      "email": "mohammed@example.com",
+      "role": "Marketing",
+      "status": "active",
+      "lastActiveMock": "منذ يومين",
+      "permissionsAr": "إدارة العروض والكوبونات والتحليلات"
+    },
+    {
+      "id": "u-005",
+      "name": "نورة الدوسري",
+      "email": "noura@example.com",
+      "role": "Support",
+      "status": "invited",
+      "lastActiveMock": "دعوة معلقة",
+      "permissionsAr": "عرض الطلبات والتواصل مع العملاء"
+    },
+    {
+      "id": "u-006",
+      "name": "خالد المطيري",
+      "email": "khalid@example.com",
+      "role": "Agent",
+      "status": "disabled",
+      "lastActiveMock": "منذ أسبوع",
+      "permissionsAr": "معطّل"
+    }
+  ]
+}

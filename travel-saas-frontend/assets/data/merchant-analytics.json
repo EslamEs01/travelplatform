@@ -1,0 +1,424 @@
+{
+  "dateRange": {
+    "key": "30d",
+    "labelAr": "آخر 30 يوم",
+    "from": "2026-05-05",
+    "to": "2026-06-04"
+  },
+  "compare": {
+    "enabled": false,
+    "periodAr": "الفترة السابقة"
+  },
+  "kpis": [
+    {
+      "key": "visits",
+      "labelAr": "الزيارات",
+      "value": 18420,
+      "unit": "",
+      "trend": { "dir": "up", "pct": 12.4 },
+      "helperAr": "إجمالي زيارات الصفحات — بيانات تجريبية"
+    },
+    {
+      "key": "dealClicks",
+      "labelAr": "الضغطات على العروض",
+      "value": 9240,
+      "unit": "",
+      "trend": { "dir": "up", "pct": 8.2 },
+      "helperAr": "إجمالي الضغطات على روابط العروض — بيانات تجريبية"
+    },
+    {
+      "key": "bookingInquiries",
+      "labelAr": "طلبات الحجز",
+      "value": 742,
+      "unit": "",
+      "trend": { "dir": "up", "pct": 5.1 },
+      "helperAr": "طلبات الحجز الواردة — بيانات تجريبية"
+    },
+    {
+      "key": "couponCopies",
+      "labelAr": "نسخ الكوبونات",
+      "value": 1830,
+      "unit": "",
+      "trend": { "dir": "up", "pct": 18.7 },
+      "helperAr": "عدد مرات نسخ رموز الكوبونات — بيانات تجريبية"
+    },
+    {
+      "key": "conversionEstimate",
+      "labelAr": "معدل التحويل التقديري",
+      "value": 4.03,
+      "unit": "%",
+      "trend": { "dir": "up", "pct": 0.8 },
+      "helperAr": "طلبات الحجز ÷ الضغطات — تقدير تجريبي غير دقيق"
+    },
+    {
+      "key": "topDestination",
+      "labelAr": "الوجهة الأعلى",
+      "value": "دبي",
+      "unit": "",
+      "trend": { "dir": "up", "pct": 3.2 },
+      "helperAr": "الوجهة الأكثر ظهوراً في العروض المطلوبة — بيانات تجريبية"
+    },
+    {
+      "key": "revenueEstimate",
+      "labelAr": "الإيراد التقديري",
+      "value": 285000,
+      "unit": "ر.س",
+      "trend": { "dir": "up", "pct": 15.2 },
+      "helperAr": "تقدير غير حقيقي — لا يعكس مدفوعات فعلية"
+    },
+    {
+      "key": "averageRequestValue",
+      "labelAr": "متوسط قيمة الطلب",
+      "value": 3840,
+      "unit": "ر.س",
+      "trend": { "dir": "up", "pct": 6.9 },
+      "helperAr": "متوسط قيمة الرحلة المطلوبة — بيانات تجريبية"
+    },
+    {
+      "key": "newCustomers",
+      "labelAr": "العملاء الجدد",
+      "value": 124,
+      "unit": "",
+      "trend": { "dir": "up", "pct": 9.3 },
+      "helperAr": "عملاء جدد في الفترة — بيانات تجريبية"
+    },
+    {
+      "key": "mostViewedDeals",
+      "labelAr": "العروض الأكثر مشاهدة",
+      "value": "دبي الفاخرة",
+      "unit": "",
+      "trend": { "dir": "up", "pct": 22.1 },
+      "helperAr": "العرض صاحب أعلى عدد مشاهدات — بيانات تجريبية"
+    }
+  ],
+  "series": {
+    "inquiries": [
+      { "period": "أسبوع 1", "value": 102 },
+      { "period": "أسبوع 2", "value": 118 },
+      { "period": "أسبوع 3", "value": 134 },
+      { "period": "أسبوع 4", "value": 156 },
+      { "period": "أسبوع 5", "value": 143 },
+      { "period": "أسبوع 6", "value": 89 }
+    ],
+    "dealClicks": [
+      { "period": "أسبوع 1", "value": 1340 },
+      { "period": "أسبوع 2", "value": 1580 },
+      { "period": "أسبوع 3", "value": 1720 },
+      { "period": "أسبوع 4", "value": 1890 },
+      { "period": "أسبوع 5", "value": 1640 },
+      { "period": "أسبوع 6", "value": 1070 }
+    ],
+    "couponCopies": [
+      { "period": "أسبوع 1", "value": 280 },
+      { "period": "أسبوع 2", "value": 310 },
+      { "period": "أسبوع 3", "value": 360 },
+      { "period": "أسبوع 4", "value": 420 },
+      { "period": "أسبوع 5", "value": 290 },
+      { "period": "أسبوع 6", "value": 170 }
+    ],
+    "conversion": [
+      { "period": "أسبوع 1", "value": 3.8 },
+      { "period": "أسبوع 2", "value": 4.1 },
+      { "period": "أسبوع 3", "value": 4.4 },
+      { "period": "أسبوع 4", "value": 4.6 },
+      { "period": "أسبوع 5", "value": 3.9 },
+      { "period": "أسبوع 6", "value": 3.5 }
+    ]
+  },
+  "trafficSources": [
+    { "name": "Organic Search", "nameAr": "البحث الطبيعي", "visits": 7090, "pct": 38.5, "trend": "up" },
+    { "name": "Direct", "nameAr": "مباشر", "visits": 3680, "pct": 20.0, "trend": "stable" },
+    { "name": "Social Media", "nameAr": "وسائل التواصل", "visits": 2760, "pct": 15.0, "trend": "up" },
+    { "name": "Referral", "nameAr": "إحالة", "visits": 1840, "pct": 10.0, "trend": "down" },
+    { "name": "Coupon Pages", "nameAr": "صفحات الكوبونات", "visits": 1290, "pct": 7.0, "trend": "up" },
+    { "name": "Deal Pages", "nameAr": "صفحات العروض", "visits": 920, "pct": 5.0, "trend": "up" },
+    { "name": "Email Mock", "nameAr": "البريد الإلكتروني (تجريبي)", "visits": 460, "pct": 2.5, "trend": "stable" },
+    { "name": "WhatsApp Mock", "nameAr": "واتساب (تجريبي)", "visits": 380, "pct": 2.0, "trend": "up" }
+  ],
+  "devices": [
+    { "name": "mobile", "nameAr": "الجوال", "pct": 63 },
+    { "name": "desktop", "nameAr": "الحاسوب", "pct": 29 },
+    { "name": "tablet", "nameAr": "الجهاز اللوحي", "pct": 8 }
+  ],
+  "topDeals": [
+    {
+      "dealId": "deal-003",
+      "title": "دبي الفاخرة – 4 ليالٍ",
+      "destination": "دبي",
+      "source": "partner",
+      "views": 4200,
+      "clicks": 2100,
+      "inquiries": 185,
+      "couponCopies": 320,
+      "conversionEst": 4.4,
+      "status": "active"
+    },
+    {
+      "dealId": "deal-002",
+      "title": "رحلة إلى إسطنبول – 5 ليالٍ",
+      "destination": "إسطنبول",
+      "source": "affiliate",
+      "views": 3850,
+      "clicks": 1920,
+      "inquiries": 142,
+      "couponCopies": 210,
+      "conversionEst": 3.9,
+      "status": "active"
+    },
+    {
+      "dealId": "deal-001",
+      "title": "عطلة في شرم الشيخ – 4 ليالٍ",
+      "destination": "شرم الشيخ",
+      "source": "manual",
+      "views": 3620,
+      "clicks": 1810,
+      "inquiries": 128,
+      "couponCopies": 190,
+      "conversionEst": 3.5,
+      "status": "active"
+    },
+    {
+      "dealId": "deal-005",
+      "title": "باريس الرومانسية – 7 ليالٍ",
+      "destination": "باريس",
+      "source": "affiliate",
+      "views": 3100,
+      "clicks": 1550,
+      "inquiries": 98,
+      "couponCopies": 145,
+      "conversionEst": 3.2,
+      "status": "active"
+    },
+    {
+      "dealId": "deal-010",
+      "title": "بانكوك وفوكيت – 7 ليالٍ",
+      "destination": "بانكوك",
+      "source": "affiliate",
+      "views": 2800,
+      "clicks": 1400,
+      "inquiries": 87,
+      "couponCopies": 130,
+      "conversionEst": 3.1,
+      "status": "active"
+    },
+    {
+      "dealId": "deal-009",
+      "title": "الرياض الحديثة – 3 ليالٍ",
+      "destination": "الرياض",
+      "source": "manual",
+      "views": 2450,
+      "clicks": 1225,
+      "inquiries": 74,
+      "couponCopies": 95,
+      "conversionEst": 3.0,
+      "status": "active"
+    },
+    {
+      "dealId": "deal-004",
+      "title": "وجهة المالديف الحلم – 6 ليالٍ",
+      "destination": "المالديف",
+      "source": "partner",
+      "views": 2200,
+      "clicks": 1100,
+      "inquiries": 63,
+      "couponCopies": 80,
+      "conversionEst": 2.9,
+      "status": "active"
+    },
+    {
+      "dealId": "deal-007",
+      "title": "كنوز الأردن – 4 ليالٍ",
+      "destination": "الأردن",
+      "source": "manual",
+      "views": 1950,
+      "clicks": 975,
+      "inquiries": 52,
+      "couponCopies": 65,
+      "conversionEst": 2.7,
+      "status": "active"
+    }
+  ],
+  "topDestinations": [
+    { "name": "دبي", "visits": 4200, "dealClicks": 2100, "inquiries": 185, "trend": "up" },
+    { "name": "إسطنبول", "visits": 3850, "dealClicks": 1920, "inquiries": 142, "trend": "up" },
+    { "name": "شرم الشيخ", "visits": 3620, "dealClicks": 1810, "inquiries": 128, "trend": "stable" },
+    { "name": "الرياض", "visits": 2450, "dealClicks": 1225, "inquiries": 74, "trend": "up" },
+    { "name": "باريس", "visits": 3100, "dealClicks": 1550, "inquiries": 98, "trend": "stable" },
+    { "name": "بانكوك", "visits": 2800, "dealClicks": 1400, "inquiries": 87, "trend": "up" },
+    { "name": "القاهرة", "visits": 1680, "dealClicks": 840, "inquiries": 48, "trend": "down" }
+  ],
+  "couponPerformance": [
+    {
+      "couponId": "coupon-flights-15",
+      "code": "FLY15",
+      "provider": "شركاء السفر",
+      "category": "رحلات جوية",
+      "source": "affiliate",
+      "copies": 420,
+      "usageMock": 38,
+      "relatedDealId": "deal-002",
+      "expiry": "2026-09-30",
+      "status": "active"
+    },
+    {
+      "couponId": "coupon-hotel-20",
+      "code": "HOTEL20",
+      "provider": "شركاء الفنادق",
+      "category": "فنادق",
+      "source": "affiliate",
+      "copies": 380,
+      "usageMock": 31,
+      "relatedDealId": "deal-003",
+      "expiry": "2026-08-31",
+      "status": "active"
+    },
+    {
+      "couponId": "coupon-summer-25",
+      "code": "SUMMER25",
+      "provider": "وكالة الأفق",
+      "category": "موسمي",
+      "source": "manual",
+      "copies": 310,
+      "usageMock": 27,
+      "relatedDealId": "deal-001",
+      "expiry": "2026-08-31",
+      "status": "active"
+    },
+    {
+      "couponId": "coupon-luxury-30",
+      "code": "LUXURY30",
+      "provider": "شركاء المنتجعات",
+      "category": "فنادق فاخرة",
+      "source": "affiliate",
+      "copies": 195,
+      "usageMock": 18,
+      "relatedDealId": "deal-004",
+      "expiry": "2026-07-15",
+      "status": "active"
+    },
+    {
+      "couponId": "coupon-family-15",
+      "code": "FAMILY15",
+      "provider": "وكالة الأفق",
+      "category": "عائلي",
+      "source": "manual",
+      "copies": 260,
+      "usageMock": 22,
+      "relatedDealId": "deal-010",
+      "expiry": "2026-10-31",
+      "status": "active"
+    },
+    {
+      "couponId": "coupon-bundle-10",
+      "code": "BUNDLE10",
+      "provider": "شركاء الباقات",
+      "category": "باقات",
+      "source": "affiliate",
+      "copies": 175,
+      "usageMock": 14,
+      "relatedDealId": "deal-005",
+      "expiry": "2026-07-31",
+      "status": "active"
+    },
+    {
+      "couponId": "coupon-activity-25",
+      "code": "ACT25",
+      "provider": "شركاء الأنشطة",
+      "category": "أنشطة",
+      "source": "affiliate",
+      "copies": 140,
+      "usageMock": 11,
+      "relatedDealId": "deal-007",
+      "expiry": "2026-09-30",
+      "status": "active"
+    },
+    {
+      "couponId": "coupon-winter-12",
+      "code": "WINTER12",
+      "provider": "وكالة الأفق",
+      "category": "موسمي",
+      "source": "manual",
+      "copies": 95,
+      "usageMock": 8,
+      "relatedDealId": "deal-006",
+      "expiry": "2026-12-31",
+      "status": "active"
+    }
+  ],
+  "insights": [
+    {
+      "key": "topSegment",
+      "labelAr": "أعلى شريحة قيمة",
+      "valueAr": "عائلات منطقة الخليج",
+      "helperAr": "تشكّل أعلى نسبة من طلبات الحجز — بيانات تجريبية"
+    },
+    {
+      "key": "mostRequestedType",
+      "labelAr": "النوع الأكثر طلباً",
+      "valueAr": "باقات الفنادق والطيران",
+      "helperAr": "72% من الاستفسارات تشمل فندقاً + طيراناً — بيانات تجريبية"
+    },
+    {
+      "key": "avgResponseTime",
+      "labelAr": "متوسط وقت الاستجابة",
+      "valueAr": "خلال ساعتين",
+      "helperAr": "وقت الاستجابة للطلبات — قيمة تجريبية"
+    },
+    {
+      "key": "followUpNeeded",
+      "labelAr": "طلبات تحتاج متابعة",
+      "valueAr": "14 طلب",
+      "helperAr": "طلبات لم يُرد عليها خلال 24 ساعة — بيانات تجريبية"
+    },
+    {
+      "key": "pendingPayments",
+      "labelAr": "دفعات معلقة",
+      "valueAr": "8 طلبات",
+      "helperAr": "طلبات في مرحلة انتظار الدفع — بيانات تجريبية"
+    },
+    {
+      "key": "familyTravelTrend",
+      "labelAr": "اتجاه السفر العائلي",
+      "valueAr": "ارتفاع 24%",
+      "helperAr": "زيادة ملحوظة في طلبات الرحلات العائلية — بيانات تجريبية"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "high",
+      "titleAr": "عرض دبي يحصل على أعلى ضغطات",
+      "explanationAr": "يحقق عرض دبي الفاخرة أفضل معدل تحويل — يُنصح بتحديث الصور وإضافة كوبون موسمي",
+      "action": { "type": "link", "href": "edit-deal.html?id=deal-003" }
+    },
+    {
+      "priority": "high",
+      "titleAr": "متابعة 14 طلب حجز معلق",
+      "explanationAr": "طلبات لم تتلقَ رداً خلال 24 ساعة — التواصل السريع يرفع معدل التحويل",
+      "action": { "type": "toast", "msgAr": "قابل للربط بصفحة الطلبات لاحقاً" }
+    },
+    {
+      "priority": "high",
+      "titleAr": "إضافة كوبون للموسم الصيفي",
+      "explanationAr": "انتهاء كوبون SUMMER25 في أغسطس — يُنصح بتجهيز كوبون جديد مسبقاً",
+      "action": { "type": "link", "href": "create-coupon.html" }
+    },
+    {
+      "priority": "medium",
+      "titleAr": "تحديث تفاصيل رحلة إسطنبول",
+      "explanationAr": "عرض إسطنبول يحصل على نقرات عالية لكن معدل التحويل أقل من المتوسط",
+      "action": { "type": "link", "href": "edit-deal.html?id=deal-002" }
+    },
+    {
+      "priority": "medium",
+      "titleAr": "تفعيل تكامل Travelpayouts",
+      "explanationAr": "تفعيل رابط Affiliate يمكن أن يرفع الإيراد التقديري للعروض الجوية",
+      "action": { "type": "link", "href": "integrations.html" }
+    },
+    {
+      "priority": "low",
+      "titleAr": "إضافة صور لعروض المالديف",
+      "explanationAr": "العروض ذات الصور الاحترافية تحقق معدلات ضغط أعلى بـ 3 أضعاف — بيانات تجريبية",
+      "action": { "type": "link", "href": "edit-deal.html?id=deal-004" }
+    }
+  ]
+}

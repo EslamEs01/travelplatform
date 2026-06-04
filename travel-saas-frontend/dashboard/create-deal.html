@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth" data-page="merchant-create-deal">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إضافة عرض جديد – رحلاتي (تجريبي)</title>
+  <meta name="description" content="إضافة عرض سياحي جديد — بيانات تجريبية وواجهة أمامية فقط.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0E8186">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/tailwind.css">
+  <style>
+    :root {
+      --sidebar-w: 260px; --topbar-h: 64px;
+      --sidebar-bg: #042B2E; --sidebar-active: #0E8186;
+      --sidebar-hover: rgba(14,129,134,.18); --sidebar-text: #A4E9EA;
+      --body-bg: #F4F6F9; --card-bg: #ffffff; --border-color: #E2E8F0;
+      --shadow-card: 0 1px 3px rgba(38,46,58,.07),0 1px 2px rgba(38,46,58,.04);
+      --shadow-pop: 0 10px 25px -5px rgba(38,46,58,.12),0 4px 10px -6px rgba(38,46,58,.08);
+      --z-dd: 1000; --z-drawer: 1040; --z-modal-overlay: 1050; --z-modal: 1060;
+    }
+    .skip-link { position:absolute;inset-inline-start:-999px;top:.5rem;background:#0E8186;color:#fff;padding:.5rem 1.25rem;border-radius:0 .5rem .5rem 0;font-weight:700;font-size:.875rem;z-index:9999;text-decoration:none;transition:inset-inline-start .15s; }
+    .skip-link:focus { inset-inline-start:0; }
+    body { background:var(--body-bg); }
+    .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+
+    /* ── Shell ── */
+    .dash-sidebar { position:fixed;top:0;bottom:0;inset-inline-start:0;width:var(--sidebar-w);background:var(--sidebar-bg);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;z-index:var(--z-drawer);transition:transform .25s cubic-bezier(.4,0,.2,1);scrollbar-width:thin;scrollbar-color:rgba(14,129,134,.4) transparent; }
+    .dash-sidebar:not(.is-open) { transform:translateX(100%); }
+    html[dir="ltr"] .dash-sidebar:not(.is-open) { transform:translateX(-100%); }
+    @media(min-width:1024px) { .dash-sidebar,html[dir="ltr"] .dash-sidebar { transform:translateX(0)!important;transition:none!important;z-index:10; } }
+    .dash-scrim { position:fixed;inset:0;background:rgba(22,28,38,.6);z-index:1030;opacity:0;pointer-events:none;transition:opacity .2s; }
+    .dash-scrim.is-visible { opacity:1;pointer-events:auto; }
+    .dash-main { display:flex;flex-direction:column;min-height:100dvh; }
+    @media(min-width:1024px) { .dash-main { margin-inline-start:var(--sidebar-w); } }
+    body.sidebar-open { overflow:hidden; }
+    .dash-topbar { position:sticky;top:0;height:var(--topbar-h);background:var(--card-bg);border-bottom:1px solid var(--border-color);display:flex;align-items:center;gap:.5rem;padding:0 1.25rem;z-index:var(--z-dd);box-shadow:0 1px 3px rgba(38,46,58,.05); }
+    .dash-dropdown { position:absolute;top:calc(var(--topbar-h) - 4px);inset-inline-end:0;background:var(--card-bg);border:1px solid var(--border-color);border-radius:.875rem;box-shadow:var(--shadow-pop);min-width:280px;z-index:var(--z-dd);overflow:hidden; }
+    .dash-dropdown[hidden] { display:none; }
+    .dash-dropdown.dd-animate { animation:dd-pop .15s cubic-bezier(.4,0,.2,1); }
+    @keyframes dd-pop { from{opacity:0;transform:translateY(-8px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+    .topbar-search { display:flex;align-items:center;background:#F7F8FA;border:1px solid var(--border-color);border-radius:.625rem;padding:0 .75rem;height:2.25rem;gap:.375rem;flex:1;max-width:280px;transition:border-color .15s,box-shadow .15s; }
+    .topbar-search:focus-within { border-color:#16A0A5;box-shadow:0 0 0 3px rgba(22,160,165,.12);background:#fff; }
+    .topbar-search input { border:none;background:transparent;font-family:inherit;font-size:.875rem;color:#262E3A;width:100%;outline:none; }
+    .topbar-search input::placeholder { color:#9AA6B4; }
+    .dash-content { flex:1;padding:1.25rem 1rem 2.5rem;max-width:1400px;width:100%;margin-inline:auto; }
+    @media(min-width:768px) { .dash-content { padding:1.75rem 1.75rem 3rem; } }
+    @media(min-width:1280px) { .dash-content { padding:2rem 2.5rem 3rem; } }
+    .sidebar-brand { display:flex;align-items:center;gap:.75rem;padding:1.375rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0; }
+    .sidebar-brand-name { font-size:1.125rem;font-weight:800;color:#fff;letter-spacing:-.01em; }
+    .sidebar-brand-sub { font-size:.6875rem;color:#6FD7D9;font-weight:500; }
+    .sidebar-nav { flex:1;padding:.75rem 0; }
+    .sidebar-nav-item { list-style:none; }
+    .sidebar-nav-link { display:flex;align-items:center;gap:.75rem;padding:.6875rem 1.25rem;color:var(--sidebar-text);text-decoration:none;border-radius:.625rem;margin:.125rem .75rem;font-size:.9375rem;font-weight:500;transition:background .15s,color .15s;white-space:nowrap; }
+    .sidebar-nav-link:hover { background:var(--sidebar-hover);color:#fff; }
+    .sidebar-nav-link[aria-current="page"] { background:var(--sidebar-active);color:#fff;font-weight:700; }
+    .sidebar-section-label { font-size:.6875rem;font-weight:700;letter-spacing:.07em;color:rgba(164,233,234,.5);text-transform:uppercase;padding:.75rem 1.25rem .25rem;margin:0; }
+    .sidebar-bottom { border-top:1px solid rgba(255,255,255,.08);padding:.75rem 0;flex-shrink:0; }
+    .dash-breadcrumb { display:flex;align-items:center;gap:.375rem;font-size:.8125rem;color:#9AA6B4;padding-bottom:1rem; }
+    .dash-breadcrumb a { color:#6B7889;text-decoration:none; }
+    .dash-breadcrumb a:hover { color:#0E8186;text-decoration:underline; }
+    .dash-breadcrumb-sep { color:#C5CDD7;user-select:none; }
+    .dash-footer { border-top:1px solid var(--border-color);background:var(--card-bg);padding:1rem 1.75rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;font-size:.8125rem;color:#9AA6B4; }
+
+    /* ── Page header ── */
+    .page-header-band { background:linear-gradient(135deg,#042B2E 0%,#0B545A 55%,#16A0A5 100%);border-radius:1.25rem;padding:1.5rem 2rem;position:relative;overflow:hidden;box-shadow:0 8px 24px -4px rgba(4,43,46,.3);margin-bottom:1.75rem; }
+    .page-header-band::before { content:'';position:absolute;inset:0;background:radial-gradient(circle at 85% 40%,rgba(56,188,192,.18) 0%,transparent 55%);pointer-events:none; }
+
+    /* ── Buttons ── */
+    .btn { display:inline-flex;align-items:center;gap:.4rem;padding:.5625rem 1.125rem;border-radius:.75rem;font-family:inherit;font-size:.875rem;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:all .15s; }
+    .btn-primary { background:#0E8186;color:#fff; }
+    .btn-primary:hover { background:#0A6B6F;box-shadow:0 4px 12px rgba(14,129,134,.3); }
+    .btn-outline { background:transparent;border:1.5px solid var(--border-color);color:#4D5969; }
+    .btn-outline:hover { border-color:#0E8186;color:#0E8186;background:#F0FAFA; }
+    .btn-ghost { background:transparent;color:#6B7889;border:1.5px solid transparent; }
+    .btn-ghost:hover { background:#EEF1F5;color:#262E3A; }
+    .btn-sm { padding:.4rem .875rem;font-size:.8125rem; }
+    .btn-danger-outline { background:transparent;border:1.5px solid #FECACA;color:#DC2626; }
+    .btn-danger-outline:hover { background:#FEF2F2; }
+
+    /* ── Safe note ── */
+    .safe-note { display:inline-flex;align-items:flex-start;gap:.5rem;padding:.5rem .875rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:.75rem;font-size:.75rem;color:rgba(255,255,255,.8);margin-top:.875rem; }
+
+    /* ── Two-column layout ── */
+    .create-form-layout { display:grid;grid-template-columns:1fr 288px;gap:1.5rem;align-items:start; }
+    @media(max-width:1024px) { .create-form-layout { grid-template-columns:1fr; } }
+
+    /* ── Form section ── */
+    .form-section { background:var(--card-bg);border:1px solid var(--border-color);border-radius:1rem;box-shadow:var(--shadow-card);margin-bottom:1.125rem;overflow:hidden; }
+    .form-section-header { display:flex;align-items:center;gap:.625rem;padding:.875rem 1.25rem;border-bottom:1px solid var(--border-color);background:#F8FAFC; }
+    .form-section-num { width:1.625rem;height:1.625rem;border-radius:50%;background:#ECFBFB;color:#0E8186;font-size:.8125rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+    .form-section-title { font-size:.9375rem;font-weight:700;color:#262E3A;margin:0; }
+    .form-section-body { padding:1.25rem; }
+
+    /* ── Form grid ── */
+    .form-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.875rem; }
+    .span-full { grid-column:1/-1; }
+
+    /* ── Fields ── */
+    .field-group { display:flex;flex-direction:column; }
+    .field-label { font-size:.6875rem;font-weight:700;color:#6B7889;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.35rem; }
+    .field-input,.field-select,.field-textarea { width:100%;padding:.5625rem .75rem;border:1.5px solid #E2E8F0;border-radius:.625rem;background:#F8FAFC;font-size:.875rem;color:#262E3A;font-family:inherit;outline:none;transition:border-color .15s,box-shadow .15s,background .15s;appearance:none; }
+    .field-input:focus,.field-select:focus,.field-textarea:focus { border-color:#0E8186;box-shadow:0 0 0 3px rgba(14,129,134,.1);background:#fff; }
+    .field-input[aria-invalid="true"],.field-select[aria-invalid="true"],.field-textarea[aria-invalid="true"] { border-color:#DC2626;box-shadow:0 0 0 3px rgba(220,38,38,.1); }
+    .field-textarea { resize:vertical;min-height:90px;line-height:1.6; }
+    .field-helper { font-size:.75rem;color:#9AA6B4;margin-top:.3rem;line-height:1.4; }
+    .field-error { font-size:.75rem;color:#DC2626;margin-top:.3rem;display:flex;align-items:center;gap:.25rem; }
+    .field-error[hidden] { display:none; }
+    .req { color:#DC2626;font-weight:900; }
+
+    /* ── Toggle ── */
+    .toggle-row { display:flex;align-items:center;gap:.625rem;padding:.5625rem .75rem;border:1.5px solid #E2E8F0;border-radius:.625rem;background:#F8FAFC;cursor:pointer;transition:border-color .15s; }
+    .toggle-row:focus-within { border-color:#0E8186; }
+    .toggle-row input[type="checkbox"] { width:1rem;height:1rem;accent-color:#0E8186;cursor:pointer;flex-shrink:0; }
+    .toggle-lbl { font-size:.875rem;color:#4D5969;cursor:pointer; }
+
+    /* ── Inline messages ── */
+    .inline-msg { display:flex;align-items:flex-start;gap:.5rem;padding:.625rem .875rem;border-radius:.75rem;font-size:.8125rem;line-height:1.5;margin-top:.5rem; }
+    .inline-msg[hidden] { display:none; }
+    .inline-msg-info { background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF; }
+    .inline-msg-warning { background:#FFFBEB;border:1px solid #FDE68A;color:#92400E; }
+    .inline-msg-danger { background:#FEF2F2;border:1px solid #FECACA;color:#991B1B; }
+
+    /* ── Slug preview ── */
+    .slug-preview-block { display:flex;align-items:center;gap:.375rem;padding:.5rem .75rem;background:#F1F5F9;border:1px solid #E2E8F0;border-radius:.625rem;margin-top:.375rem;font-size:.8125rem;color:#64748B;overflow:hidden; }
+    .slug-preview-block .slug-val { color:#0E8186;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+
+    /* ── Repeater ── */
+    .repeater-item { display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem; }
+    .repeater-item .field-input { flex:1; }
+    .repeater-remove { width:2rem;height:2rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1.5px solid #E2E8F0;border-radius:.5rem;background:transparent;color:#9AA6B4;cursor:pointer;font-size:1.25rem;line-height:1;transition:all .12s; }
+    .repeater-remove:hover { background:#FEE2E2;border-color:#FECACA;color:#DC2626; }
+
+    /* ── Upload zone ── */
+    .upload-zone { border:2px dashed #E2E8F0;border-radius:.875rem;padding:2rem 1.5rem;text-align:center;color:#9AA6B4;cursor:pointer;transition:border-color .15s,background .15s;position:relative; }
+    .upload-zone:hover { border-color:#0E8186;background:#F0FAFA;color:#0E8186; }
+    .upload-zone input[type="file"] { position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%; }
+    .upload-preview-img { width:100%;border-radius:.75rem;margin-top:.875rem;max-height:180px;object-fit:cover;display:none; }
+
+    /* ── Sticky summary ── */
+    .form-sticky-col { position:sticky;top:calc(var(--topbar-h) + 1rem); }
+    .sticky-card { background:var(--card-bg);border:1px solid var(--border-color);border-radius:1rem;box-shadow:var(--shadow-card);padding:1.25rem; }
+    .summary-completion-bar { height:6px;background:#F1F5F9;border-radius:9999px;overflow:hidden;margin:.5rem 0 .25rem; }
+    .summary-completion-fill { height:100%;background:linear-gradient(90deg,#0E8186,#38BCC0);border-radius:9999px;width:0%;transition:width .3s; }
+
+    /* ── Modal ── */
+    .modal-overlay { position:fixed;inset:0;background:rgba(15,23,30,.55);backdrop-filter:blur(4px);z-index:var(--z-modal-overlay);display:flex;align-items:center;justify-content:center;padding:1rem; }
+    .modal-overlay[hidden] { display:none; }
+    .modal-box { background:var(--card-bg);border:1px solid var(--border-color);border-radius:1.25rem;box-shadow:var(--shadow-pop);padding:1.75rem;max-width:460px;width:100%;animation:modal-in .18s cubic-bezier(.4,0,.2,1); }
+    @keyframes modal-in { from{opacity:0;transform:scale(.95) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    @media(prefers-reduced-motion:reduce) { .modal-box { animation:none; } }
+    .modal-icon { width:3rem;height:3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;flex-shrink:0; }
+    .modal-icon-teal { background:#ECFBFB;color:#0E8186; }
+    .modal-title { font-size:1.125rem;font-weight:800;color:#161C26; }
+    .modal-body { font-size:.9rem;color:#4D5969;margin-top:.5rem;line-height:1.65; }
+    .modal-actions { display:flex;gap:.625rem;margin-top:1.375rem;justify-content:flex-end;flex-wrap:wrap; }
+    .btn-cancel { display:inline-flex;align-items:center;gap:.375rem;padding:.5625rem 1.25rem;border-radius:.75rem;background:#F1F5F9;color:#475569;font-size:.875rem;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .12s; }
+    .btn-cancel:hover { background:#E2E8F0; }
+
+    /* ── Deal preview card (inside modal) ── */
+    .deal-preview-card { background:linear-gradient(135deg,#F0FAFA,#E8F8F8);border:1px solid #A4E9EA;border-radius:1rem;padding:1.25rem;margin-top:1rem; }
+    .preview-price { font-size:1.5rem;font-weight:800;color:#0E8186;direction:ltr;display:inline-block; }
+    .preview-price-old { font-size:.875rem;color:#9AA6B4;text-decoration:line-through;direction:ltr; }
+    .badge { display:inline-flex;align-items:center;gap:.25rem;padding:.2rem .6rem;border-radius:9999px;font-size:.6875rem;font-weight:700;white-space:nowrap; }
+    .badge-source-manual { background:#F1F5F9;color:#475569; }
+    .badge-source-partner { background:#DCFCE7;color:#15803D; }
+    .badge-source-affiliate { background:#FDF4FF;color:#9333EA; }
+    .badge-source-api { background:#DBEAFE;color:#1D4ED8; }
+    .badge-source-scraped { background:#FFF7ED;color:#C2410C; }
+    .card { background:var(--card-bg);border:1px solid var(--border-color);border-radius:1rem;box-shadow:var(--shadow-card); }
+  </style>
+</head>
+
+<body class="antialiased font-sans">
+  <a href="#main" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
+  <div id="dash-announcer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+  <!-- ── Sidebar ── -->
+  <aside id="sidebar-drawer" class="dash-sidebar" aria-label="قائمة لوحة التحكم" inert>
+    <div class="sidebar-brand">
+      <a href="index.html" class="flex items-center gap-2 no-underline focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded-md" aria-label="الصفحة الرئيسية">
+        <span class="w-8 h-8 bg-lagoon-500 rounded-lg flex items-center justify-center flex-shrink-0" aria-hidden="true">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+        </span>
+        <div><div class="sidebar-brand-name">رحلاتي</div><div class="sidebar-brand-sub">لوحة التحكم التجريبية</div></div>
+      </a>
+    </div>
+    <nav class="sidebar-nav" aria-label="روابط لوحة التحكم">
+      <p class="sidebar-section-label">الرئيسية</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>الرئيسية</span></a></li>
+      </ul>
+      <p class="sidebar-section-label">إدارة العروض</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item"><a href="deals.html" class="sidebar-nav-link"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span>العروض</span></a></li>
+        <li class="sidebar-nav-item"><a href="create-deal.html" class="sidebar-nav-link" aria-current="page"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>إضافة عرض</span></a></li>
+        <li class="sidebar-nav-item"><a href="coupons.html" class="sidebar-nav-link"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z"/><line x1="9" y1="3" x2="9" y2="21"/></svg><span>الكوبونات</span></a></li>
+      </ul>
+      <p class="sidebar-section-label">العمليات</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" data-coming-soon><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>طلبات الحجز</span></a></li>
+        <li class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" data-coming-soon><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span>العملاء</span></a></li>
+        <li class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" data-coming-soon><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg><span>التحليلات</span></a></li>
+      </ul>
+      <p class="sidebar-section-label">الإعدادات</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" data-coming-soon><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M7 17l-5 5"/><path d="M17 7l5-5"/><path d="M11 3l3 3-7 7-3-3z"/><path d="M13 21l-3-3 7-7 3 3z"/></svg><span>التكاملات</span></a></li>
+        <li class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" data-coming-soon><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>الإعدادات</span></a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-bottom">
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item"><a href="../pages/index.html" class="sidebar-nav-link text-lagoon-300 hover:text-white"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><span>العودة للموقع</span></a></li>
+        <li class="sidebar-nav-item"><button type="button" class="sidebar-nav-link w-full text-start" data-action="logout"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>تسجيل الخروج</span></button></li>
+      </ul>
+    </div>
+  </aside>
+  <div id="sidebar-scrim" class="dash-scrim" hidden aria-hidden="true"></div>
+
+  <!-- ── Main ── -->
+  <div class="dash-main">
+
+    <!-- Topbar -->
+    <header class="dash-topbar" role="banner" aria-label="شريط التحكم العلوي">
+      <button id="btn-mobile-menu" type="button" class="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors flex-shrink-0" aria-label="فتح القائمة الجانبية" aria-controls="sidebar-drawer" aria-expanded="false">
+        <svg width="22" height="22" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="hidden sm:flex items-center gap-1.5 text-sm text-ink-500 flex-shrink-0">
+        <a href="index.html" class="text-ink-700 font-semibold hover:text-lagoon-600">لوحة التحكم</a>
+        <svg width="14" height="14" aria-hidden="true" class="text-ink-300 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <a href="deals.html" class="text-ink-600 hover:text-lagoon-600">العروض</a>
+        <svg width="14" height="14" aria-hidden="true" class="text-ink-300 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <span class="text-ink-400">إضافة عرض</span>
+      </div>
+      <div class="flex-1 min-w-2"></div>
+      <form id="topbar-search-form" role="search" class="topbar-search hidden md:flex" aria-label="البحث">
+        <svg width="16" height="16" aria-hidden="true" class="text-ink-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="topbar-search-input" type="search" name="q" placeholder="بحث تجريبي…" autocomplete="off" dir="auto" aria-label="حقل البحث">
+      </form>
+      <div class="relative flex-shrink-0">
+        <button id="btn-notifications" type="button" class="relative flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors" aria-label="الإشعارات" aria-haspopup="menu" aria-controls="dropdown-notifications" aria-expanded="false">
+          <svg width="20" height="20" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        </button>
+        <div id="dropdown-notifications" class="dash-dropdown" role="menu" hidden style="min-width:280px"><div class="p-3 text-center text-sm text-ink-400">لا إشعارات — واجهة تجريبية</div></div>
+      </div>
+      <div class="relative flex-shrink-0">
+        <button id="btn-user-menu" type="button" class="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-ink-50 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors" aria-haspopup="menu" aria-controls="dropdown-user-menu" aria-expanded="false" aria-label="قائمة المستخدم">
+          <span class="w-8 h-8 bg-gradient-to-br from-lagoon-400 to-lagoon-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">أ</span>
+          <span class="hidden lg:block text-sm font-semibold text-ink-800">أحمد العمري</span>
+        </button>
+        <div id="dropdown-user-menu" class="dash-dropdown" role="menu" hidden>
+          <div class="px-4 py-3 border-b border-ink-100"><div class="font-bold text-sm text-ink-800">أحمد العمري</div><div class="text-xs text-ink-500">مدير الوكالة — شركة رحلات الشرق</div></div>
+          <div class="p-2"><button type="button" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-danger hover:bg-danger/5 transition-colors" data-action="logout"><svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>تسجيل الخروج</button></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Main content ── -->
+    <main id="main" tabindex="-1">
+      <div class="dash-content">
+
+        <!-- Breadcrumb -->
+        <nav class="dash-breadcrumb" aria-label="مسار التنقل">
+          <a href="../pages/index.html">الموقع الرئيسي</a>
+          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+          <a href="index.html">لوحة التحكم</a>
+          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+          <a href="deals.html">العروض</a>
+          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+          <span aria-current="page">إضافة عرض جديد</span>
+        </nav>
+
+        <!-- Page header -->
+        <div class="page-header-band">
+          <div style="position:relative;z-index:1">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2.5 mb-1">
+                  <div class="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </div>
+                  <span class="text-xs font-semibold text-lagoon-200 uppercase tracking-widest">إضافة محتوى</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-white leading-tight m-0">إضافة عرض جديد</h1>
+                <p class="text-lagoon-200 text-sm mt-1 m-0 font-medium">أضف عرضاً سياحياً جديداً للوكالة — واجهة أمامية تجريبية</p>
+                <div class="safe-note" role="note">
+                  <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  <span>لا يتم حفظ العرض على خادم في هذه النسخة — إجراءات تجريبية / قابل للربط لاحقاً</span>
+                </div>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 mt-1 sm:mt-0 flex-shrink-0">
+                <a href="deals.html" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:white">
+                  <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                  رجوع للعروض
+                </a>
+                <button type="button" id="btn-save-draft-top" class="btn btn-sm" style="background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);color:white">
+                  <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  حفظ كمسودة
+                </button>
+                <button type="button" id="btn-preview-top" class="btn btn-sm" style="background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);color:white">
+                  <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  معاينة
+                </button>
+                <button type="button" id="btn-publish-top" class="btn btn-sm" style="background:#fff;color:#0E8186;font-weight:700">
+                  <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  نشر تجريبي
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two-column layout -->
+        <div class="create-form-layout">
+
+          <!-- ── Main form column ── -->
+          <div>
+            <form id="form-create-deal" novalidate aria-label="نموذج إضافة عرض جديد">
+
+              <!-- § 1 — Basic Information -->
+              <div class="form-section">
+                <div class="form-section-header">
+                  <span class="form-section-num" aria-hidden="true">1</span>
+                  <h2 class="form-section-title">المعلومات الأساسية</h2>
+                </div>
+                <div class="form-section-body">
+                  <div class="form-grid">
+
+                    <div class="field-group span-full">
+                      <label for="deal-title" class="field-label">عنوان العرض <span class="req" aria-label="مطلوب">*</span></label>
+                      <input id="deal-title" name="title" type="text" class="field-input" placeholder="مثال: باقة إسطنبول الشاملة – 5 ليالٍ" required aria-required="true" aria-describedby="err-title" dir="auto">
+                      <span id="err-title" class="field-error" data-error-for="title" hidden role="alert"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-type" class="field-label">نوع العرض <span class="req" aria-label="مطلوب">*</span></label>
+                      <select id="deal-type" name="dealType" class="field-select" required aria-required="true" aria-describedby="err-dealType">
+                        <option value="">اختر النوع…</option>
+                        <option value="Package">باقة سياحية</option>
+                        <option value="Flight">رحلة طيران</option>
+                        <option value="Hotel">إقامة فندقية</option>
+                        <option value="Umrah">عمرة</option>
+                        <option value="Honeymoon">شهر عسل</option>
+                        <option value="Family">عائلي</option>
+                        <option value="Business">أعمال</option>
+                        <option value="Budget">اقتصادي</option>
+                        <option value="Luxury">فاخر</option>
+                      </select>
+                      <span id="err-dealType" class="field-error" data-error-for="dealType" hidden role="alert"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-destination" class="field-label">الوجهة <span class="req" aria-label="مطلوب">*</span></label>
+                      <input id="deal-destination" name="destination" type="text" class="field-input" placeholder="مثال: إسطنبول" required aria-required="true" aria-describedby="err-destination" dir="auto">
+                      <span id="err-destination" class="field-error" data-error-for="destination" hidden role="alert"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-country" class="field-label">الدولة</label>
+                      <input id="deal-country" name="country" type="text" class="field-input" placeholder="مثال: تركيا" dir="auto">
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-city" class="field-label">المدينة</label>
+                      <input id="deal-city" name="city" type="text" class="field-input" placeholder="مثال: إسطنبول" dir="auto">
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-region" class="field-label">المنطقة / الإقليم</label>
+                      <input id="deal-region" name="region" type="text" class="field-input" placeholder="مثال: الأناضول" dir="auto">
+                    </div>
+
+                    <div class="field-group span-full">
+                      <label for="deal-short-desc" class="field-label">الوصف المختصر <span class="req" aria-label="مطلوب">*</span></label>
+                      <textarea id="deal-short-desc" name="shortDescription" class="field-textarea" placeholder="وصف قصير يظهر في بطاقة العرض (≤160 حرف)…" required aria-required="true" aria-describedby="err-shortDescription" rows="3" style="min-height:70px"></textarea>
+                      <span id="err-shortDescription" class="field-error" data-error-for="shortDescription" hidden role="alert"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+                    </div>
+
+                    <div class="field-group span-full">
+                      <label for="deal-full-desc" class="field-label">الوصف الكامل</label>
+                      <textarea id="deal-full-desc" name="fullDescription" class="field-textarea" placeholder="تفاصيل العرض الكاملة…" rows="5"></textarea>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- § 2 — Pricing -->
+              <div class="form-section">
+                <div class="form-section-header">
+                  <span class="form-section-num" aria-hidden="true">2</span>
+                  <h2 class="form-section-title">التسعير</h2>
+                </div>
+                <div class="form-section-body">
+                  <div class="form-grid">
+
+                    <div class="field-group">
+                      <label for="deal-currency" class="field-label">العملة</label>
+                      <select id="deal-currency" name="currency" class="field-select">
+                        <option value="ر.س" selected>ريال سعودي (ر.س)</option>
+                        <option value="USD">دولار أمريكي (USD)</option>
+                        <option value="EUR">يورو (EUR)</option>
+                        <option value="GBP">جنيه إسترليني (GBP)</option>
+                        <option value="AED">درهم إماراتي (AED)</option>
+                      </select>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-price-before" class="field-label">السعر قبل الخصم</label>
+                      <input id="deal-price-before" name="priceBefore" type="number" class="field-input" placeholder="0" min="0" dir="ltr">
+                      <span class="field-helper">اتركه فارغاً إن لم يكن هناك سعر أصلي</span>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-price-from" class="field-label">السعر الأساسي <span class="req" aria-label="مطلوب">*</span></label>
+                      <input id="deal-price-from" name="priceFrom" type="number" class="field-input" placeholder="0" min="0" required aria-required="true" aria-describedby="err-priceFrom" dir="ltr">
+                      <span id="err-priceFrom" class="field-error" data-error-for="priceFrom" hidden role="alert"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-discount-type" class="field-label">نوع الخصم</label>
+                      <select id="deal-discount-type" name="discountType" class="field-select">
+                        <option value="">لا يوجد</option>
+                        <option value="Percentage">نسبة مئوية (%)</option>
+                        <option value="Fixed">مبلغ ثابت</option>
+                        <option value="Free service">خدمة مجانية</option>
+                      </select>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-discount-value" class="field-label">قيمة الخصم</label>
+                      <input id="deal-discount-value" name="discountValue" type="number" class="field-input" placeholder="0" min="0" dir="ltr">
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-payment" class="field-label">خيارات الدفع</label>
+                      <select id="deal-payment" name="payment" class="field-select">
+                        <option value="full">دفع كامل</option>
+                        <option value="deposit">عربون مسبق</option>
+                      </select>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-deposit" class="field-label">قيمة العربون</label>
+                      <input id="deal-deposit" name="deposit" type="number" class="field-input" placeholder="0" min="0" dir="ltr">
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label">شامل الضرائب؟</label>
+                      <label class="toggle-row">
+                        <input type="checkbox" id="deal-taxes" name="taxes">
+                        <span class="toggle-lbl" for="deal-taxes">السعر شامل الضرائب والرسوم</span>
+                      </label>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- § 3 — Travel Dates & Availability -->
+              <div class="form-section">
+                <div class="form-section-header">
+                  <span class="form-section-num" aria-hidden="true">3</span>
+                  <h2 class="form-section-title">التواريخ والتوفر</h2>
+                </div>
+                <div class="form-section-body">
+                  <div class="form-grid">
+
+                    <div class="field-group">
+                      <label for="deal-start-date" class="field-label">تاريخ البداية</label>
+                      <input id="deal-start-date" name="startDate" type="date" class="field-input" dir="ltr">
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-end-date" class="field-label">تاريخ النهاية</label>
+                      <input id="deal-end-date" name="endDate" type="date" class="field-input" dir="ltr">
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-booking-deadline" class="field-label">آخر موعد للحجز</label>
+                      <input id="deal-booking-deadline" name="bookingDeadline" type="date" class="field-input" dir="ltr">
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-expiry" class="field-label">تاريخ انتهاء العرض <span class="req" aria-label="مطلوب">*</span></label>
+                      <input id="deal-expiry" name="expiryDate" type="date" class="field-input" required aria-required="true" aria-describedby="err-expiryDate" dir="ltr">
+                      <span id="err-expiryDate" class="field-error" data-error-for="expiryDate" hidden role="alert"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-availability" class="field-label">عدد الأماكن المتاحة</label>
+                      <input id="deal-availability" name="availability" type="number" class="field-input" placeholder="0" min="0" dir="ltr">
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label">تواريخ مرنة؟</label>
+                      <label class="toggle-row">
+                        <input type="checkbox" id="deal-flexible-dates" name="flexibleDates">
+                        <span class="toggle-lbl">تواريخ مرنة (أكثر من موعد)</span>
+                      </label>
+                    </div>
+
+                    <div class="field-group span-full" id="flexible-note-wrap" hidden>
+                      <label for="deal-travel-note" class="field-label">ملاحظة التواريخ</label>
+                      <input id="deal-travel-note" name="travelNote" type="text" class="field-input" placeholder="مثال: يونيو – سبتمبر 2026، متعدد المواعيد" dir="auto">
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- § 4 — Source & Booking -->
+              <div class="form-section">
+                <div class="form-section-header">
+                  <span class="form-section-num" aria-hidden="true">4</span>
+                  <h2 class="form-section-title">المصدر ورابط الحجز</h2>
+                </div>
+                <div class="form-section-body">
+                  <div class="form-grid">
+
+                    <div class="field-group">
+                      <label for="deal-source-type" class="field-label">مصدر العرض <span class="req" aria-label="مطلوب">*</span></label>
+                      <select id="deal-source-type" name="sourceType" class="field-select" required aria-required="true" aria-describedby="err-sourceType">
+                        <option value="">اختر المصدر…</option>
+                        <option value="Manual Deal">Manual Deal — يدوي</option>
+                        <option value="Partner Link">Partner Link — شريك</option>
+                        <option value="Affiliate">Affiliate — تابع</option>
+                        <option value="API Ready">API Ready — جاهز للربط</option>
+                        <option value="Scraped Pending Review">Scraped — بانتظار مراجعة</option>
+                      </select>
+                      <span id="err-sourceType" class="field-error" data-error-for="sourceType" hidden role="alert"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="deal-provider" class="field-label">اسم المزود / الشريك</label>
+                      <input id="deal-provider" name="providerName" type="text" class="field-input" placeholder="مثال: سان ترافيل تركيا" dir="auto">
+                    </div>
+
+                    <div class="field-group span-full">
+                      <label for="deal-booking-url" class="field-label">رابط الحجز / التابع</label>
+                      <input id="deal-booking-url" name="bookingUrl" type="url" class="field-input" placeholder="https://partner.example.com/deal/..." dir="ltr">
+                      <span class="field-helper">قابل للربط لاحقاً — لا يُفعّل حجزاً حقيقياً الآن</span>
+                    </div>
+
+                    <div class="field-group span-full">
+                      <label for="deal-source-url" class="field-label">رابط المصدر الأصلي</label>
+                      <input id="deal-source-url" name="sourceUrl" type="url" class="field-input" placeholder="https://source.example.com/..." dir="ltr">
+                    </div>
+
+                    <div class="field-group span-full">
+                      <label for="deal-notes" class="field-label">ملاحظات داخلية</label>
+                      <textarea id="deal-notes" name="notes" class="field-textarea" placeholder="ملاحظات خاصة بالفريق — لا تظهر للزوار" rows="3" style="min-height:70px"></textarea>
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label">مراجعة يدوية</label>
+                      <label class="toggle-row">
+                        <input type="checkbox" id="deal-manual-review" name="manualReview">
+                        <span class="toggle-lbl">يحتاج مراجعة يدوية قبل النشر</span>
+                      </label>
+                    </div>
+
+                  </div>
+
+                  <!-- Conditional: API Ready helper -->
+                  <div id="source-api-msg" class="inline-msg inline-msg-info" hidden role="status">
+                    <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <span>العرض بنوع API Ready سيستقبل بياناته تلقائياً عند ربط الواجهة البرمجية — أسعاره تقديرية حتى ذلك الحين.</span>
+                  </div>
+
+                  <!-- Conditional: Scraped warning -->
+                  <div id="source-scraped-msg" class="inline-msg inline-msg-danger" hidden role="alert">
+                    <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    <span><strong>تنبيه:</strong> لا يتم نشر العروض المجمّعة (Scraped) تلقائياً — يجب مراجعة البيانات والصور والأسعار يدوياً قبل أي موافقة على النشر.</span>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- § 5 — Media (mock) -->
+              <div class="form-section">
+                <div class="form-section-header">
+                  <span class="form-section-num" aria-hidden="true">5</span>
+                  <h2 class="form-section-title">الوسائط <span style="font-size:.75rem;font-weight:500;color:#9AA6B4">(تجريبي — لا يُرفع ملف حقيقي)</span></h2>
+                </div>
+                <div class="form-section-body">
+                  <div class="form-grid">
+
+                    <div class="field-group span-full">
+                      <label class="field-label">صورة الغلاف</label>
+                      <label class="upload-zone" id="cover-upload-zone">
+                        <input type="file" id="deal-cover-image" name="coverImage" accept="image/*" aria-label="رفع صورة الغلاف">
+                        <svg width="32" height="32" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="margin:0 auto .5rem;display:block;color:inherit"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        <div class="font-semibold text-sm" style="margin-bottom:.25rem">اسحب صورة هنا أو انقر للاختيار</div>
+                        <div class="text-xs">PNG, JPG, WebP · بحد أقصى 5 ميجابايت — لا يتم رفع ملفات حقيقية الآن</div>
+                      </label>
+                      <img id="cover-preview" class="upload-preview-img" alt="معاينة صورة الغلاف">
+                    </div>
+
+                    <div class="field-group span-full">
+                      <label for="deal-image-alt" class="field-label">نص بديل للصورة (Alt)</label>
+                      <input id="deal-image-alt" name="imageAlt" type="text" class="field-input" placeholder="وصف مختصر للصورة للقارئات الشاشية…" dir="auto">
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- § 6 — Highlights repeater -->
+              <div class="form-section">
+                <div class="form-section-header">
+                  <span class="form-section-num" aria-hidden="true">6</span>
+                  <h2 class="form-section-title">أبرز مزايا العرض</h2>
+                </div>
+                <div class="form-section-body">
+                  <div id="highlights-list">
+                    <div data-repeater-item class="repeater-item"><input type="text" name="highlight" class="field-input" placeholder="مزية أو نقطة بيع رئيسية…" dir="auto"><button type="button" data-repeater-remove class="repeater-remove" aria-label="حذف هذه الميزة">×</button></div>
+                    <div data-repeater-item class="repeater-item"><input type="text" name="highlight" class="field-input" placeholder="مزية أو نقطة بيع رئيسية…" dir="auto"><button type="button" data-repeater-remove class="repeater-remove" aria-label="حذف هذه الميزة">×</button></div>
+                    <div data-repeater-item class="repeater-item"><input type="text" name="highlight" class="field-input" placeholder="مزية أو نقطة بيع رئيسية…" dir="auto"><button type="button" data-repeater-remove class="repeater-remove" aria-label="حذف هذه الميزة">×</button></div>
+                    <button type="button" data-repeater-add class="btn btn-ghost btn-sm" style="margin-top:.25rem">
+                      <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                      إضافة ميزة
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- § 7 — Included items repeater -->
+              <div class="form-section">
+                <div class="form-section-header">
+                  <span class="form-section-num" aria-hidden="true">7</span>
+                  <h2 class="form-section-title">ما يشمله العرض</h2>
+                </div>
+                <div class="form-section-body">
+                  <div id="included-list">
+                    <div data-repeater-item class="repeater-item"><input type="text" name="includedItem" class="field-input" placeholder="مثال: الإفطار اليومي" dir="auto"><button type="button" data-repeater-remove class="repeater-remove" aria-label="حذف">×</button></div>
+                    <div data-repeater-item class="repeater-item"><input type="text" name="includedItem" class="field-input" placeholder="مثال: نقل المطار" dir="auto"><button type="button" data-repeater-remove class="repeater-remove" aria-label="حذف">×</button></div>
+                    <div data-repeater-item class="repeater-item"><input type="text" name="includedItem" class="field-input" placeholder="مثال: الجولات السياحية" dir="auto"><button type="button" data-repeater-remove class="repeater-remove" aria-label="حذف">×</button></div>
+                    <button type="button" data-repeater-add class="btn btn-ghost btn-sm" style="margin-top:.25rem">
+                      <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                      إضافة عنصر
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- § 8 — Not included items repeater -->
+              <div class="form-section">
+                <div class="form-section-header">
+                  <span class="form-section-num" aria-hidden="true">8</span>
+                  <h2 class="form-section-title">ما لا يشمله العرض</h2>
+                </div>
+                <div class="form-section-body">
+                  <div id="not-included-list">
+                    <div data-repeater-item class="repeater-item"><input type="text" name="notIncludedItem" class="field-input" placeholder="مثال: تذكرة الطيران" dir="auto"><button type="button" data-repeater-remove class="repeater-remove" aria-label="حذف">×</button></div>
+                    <div data-repeater-item class="repeater-item"><input type="text" name="notIncludedItem" class="field-input" placeholder="مثال: التأمين الصحي" dir="auto"><button type="button" data-repeater-remove class="repeater-remove" aria-label="حذف">×</button></div>
+                    <button type="button" data-repeater-add class="btn btn-ghost btn-sm" style="margin-top:.25rem">
+                      <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                      إضافة عنصر
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- § 9 — Terms -->
+              <div class="form-section">
+                <div class="form-section-header">
+                  <span class="form-section-num" aria-hidden="true">9</span>
+                  <h2 class="form-section-title">الشروط والأحكام</h2>
+                </div>
+                <div class="form-section-body">
+                  <div class="form-grid">
+                    <div class="field-group span-full"><label for="deal-cancellation" class="field-label">سياسة الإلغاء</label><textarea id="deal-cancellation" name="cancellation" class="field-textarea" placeholder="مثال: الإلغاء مجاني قبل 7 أيام من تاريخ الوصول…" rows="3"></textarea></div>
+                    <div class="field-group span-full"><label for="deal-refund" class="field-label">سياسة الاسترداد</label><textarea id="deal-refund" name="refund" class="field-textarea" placeholder="مثال: لا استرداد بعد تأكيد الحجز…" rows="2"></textarea></div>
+                    <div class="field-group span-full"><label for="deal-important-notes" class="field-label">ملاحظات مهمة</label><textarea id="deal-important-notes" name="importantNotes" class="field-textarea" placeholder="أي ملاحظات خاصة يجب على العميل معرفتها…" rows="2"></textarea></div>
+                    <div class="field-group"><label for="deal-child-policy" class="field-label">سياسة الأطفال</label><input id="deal-child-policy" name="childPolicy" type="text" class="field-input" placeholder="مثال: الأطفال تحت 12 سنة مجاناً" dir="auto"></div>
+                    <div class="field-group"><label for="deal-visa" class="field-label">التأشيرة والتأمين</label><input id="deal-visa" name="visaInsurance" type="text" class="field-input" placeholder="مثال: التأشيرة على حساب العميل" dir="auto"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- § 10 — SEO -->
+              <div class="form-section">
+                <div class="form-section-header">
+                  <span class="form-section-num" aria-hidden="true">10</span>
+                  <h2 class="form-section-title">السيو والرابط العام</h2>
+                </div>
+                <div class="form-section-body">
+                  <div class="form-grid">
+                    <div class="field-group span-full"><label for="deal-seo-title" class="field-label">عنوان السيو</label><input id="deal-seo-title" name="seoTitle" type="text" class="field-input" placeholder="عنوان الصفحة في نتائج البحث (≤60 حرف)" dir="auto"></div>
+                    <div class="field-group span-full"><label for="deal-meta-desc" class="field-label">الوصف التعريفي (Meta Description)</label><textarea id="deal-meta-desc" name="metaDescription" class="field-textarea" placeholder="وصف يظهر في نتائج البحث (≤160 حرف)" rows="2" style="min-height:60px"></textarea></div>
+                    <div class="field-group span-full">
+                      <label for="deal-slug" class="field-label">الرابط المختصر (Slug)</label>
+                      <input id="deal-slug" name="slug" type="text" class="field-input" placeholder="يُولَّد تلقائياً من العنوان" dir="ltr" style="font-family:monospace">
+                      <div class="slug-preview-block" id="slug-preview-block">
+                        <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                        <span id="slug-preview-val" class="slug-val">rihlaty.example.com/deals/...</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- § 11 — Status & Visibility -->
+              <div class="form-section">
+                <div class="form-section-header">
+                  <span class="form-section-num" aria-hidden="true">11</span>
+                  <h2 class="form-section-title">الحالة والظهور</h2>
+                </div>
+                <div class="form-section-body">
+                  <div class="form-grid">
+
+                    <div class="field-group">
+                      <label for="deal-status" class="field-label">حالة العرض</label>
+                      <select id="deal-status" name="status" class="field-select">
+                        <option value="Draft" selected>مسودة (Draft)</option>
+                        <option value="Active">نشط (Active)</option>
+                        <option value="Scheduled">مجدول (Scheduled)</option>
+                      </select>
+                    </div>
+
+                    <div class="field-group" id="schedule-date-wrap" hidden>
+                      <label for="deal-schedule-date" class="field-label">تاريخ النشر المجدول</label>
+                      <input id="deal-schedule-date" name="scheduleDate" type="datetime-local" class="field-input" dir="ltr">
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label">تمييز العرض</label>
+                      <label class="toggle-row">
+                        <input type="checkbox" id="deal-featured" name="featured">
+                        <span class="toggle-lbl">عرض مميز ★ (يظهر في الواجهة)</span>
+                      </label>
+                    </div>
+
+                    <div class="field-group">
+                      <label class="field-label">الظهور</label>
+                      <label class="toggle-row">
+                        <input type="checkbox" id="deal-visible" name="visibleOnHomepage" checked>
+                        <span class="toggle-lbl">مرئي على الصفحة الرئيسية</span>
+                      </label>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form bottom actions -->
+              <div style="display:flex;gap:.625rem;flex-wrap:wrap;padding:.25rem 0 1rem">
+                <button type="submit" id="btn-publish-form" class="btn btn-primary">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  نشر تجريبي
+                </button>
+                <button type="button" id="btn-save-draft-form" class="btn btn-outline">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                  حفظ كمسودة
+                </button>
+                <button type="button" id="btn-preview-form" class="btn btn-ghost">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  معاينة
+                </button>
+                <a href="deals.html" class="btn btn-ghost">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                  رجوع بدون حفظ
+                </a>
+              </div>
+
+            </form>
+          </div><!-- /main form column -->
+
+          <!-- ── Sticky summary sidebar ── -->
+          <aside class="form-sticky-col" aria-label="ملخص النموذج">
+            <div class="sticky-card">
+              <p class="text-sm font-bold text-ink-700 m-0 mb-3">
+                <svg width="14" height="14" aria-hidden="true" style="display:inline;vertical-align:middle;margin-inline-end:.3rem" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                حالة النموذج
+              </p>
+
+              <div class="summary-completion-bar">
+                <div id="summary-fill" class="summary-completion-fill" style="width:0%"></div>
+              </div>
+              <p id="summary-missing" class="text-xs text-ink-400 m-0 mb-4"><span class="text-danger-600">7</span> حقل مطلوب غير مكتمل</p>
+
+              <div style="display:flex;flex-direction:column;gap:.5rem">
+                <button type="button" id="btn-publish-sidebar" class="btn btn-primary" style="justify-content:center">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  نشر تجريبي
+                </button>
+                <button type="button" id="btn-save-draft-sidebar" class="btn btn-outline" style="justify-content:center">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                  حفظ كمسودة
+                </button>
+                <button type="button" id="btn-preview-sidebar" class="btn btn-ghost" style="justify-content:center">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  معاينة
+                </button>
+                <a href="deals.html" class="btn btn-ghost" style="justify-content:center;text-align:center">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                  رجوع للعروض
+                </a>
+              </div>
+
+              <div class="mt-4 p-3 rounded-xl text-xs" style="background:#FFF7ED;border:1px solid #FDE68A;color:#92400E">
+                <svg width="11" height="11" aria-hidden="true" style="display:inline;vertical-align:middle;margin-inline-end:.25rem" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                لا يتم الحفظ على خادم — بيانات تجريبية
+              </div>
+            </div>
+          </aside>
+
+        </div><!-- /create-form-layout -->
+
+      </div><!-- /dash-content -->
+    </main>
+
+    <footer class="dash-footer" role="contentinfo">
+      <span><strong>رحلاتي</strong> — نظام إدارة الوكالات (تجريبي)</span>
+      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold" style="background:#FEF9C3;color:#A16207">بيانات تجريبية — واجهة أمامية فقط</span>
+    </footer>
+
+  </div><!-- /dash-main -->
+
+  <!-- ── Preview modal (T017) ── -->
+  <div id="modal-deal-preview" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="preview-modal-title" hidden>
+    <div class="modal-box" style="max-width:500px">
+      <div class="modal-icon modal-icon-teal" aria-hidden="true">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <h2 id="preview-modal-title" class="modal-title">معاينة العرض</h2>
+      <p class="modal-body" style="margin-bottom:0">هذه معاينة تجريبية بناءً على البيانات المُدخلة — لا تعكس نشراً فعلياً.</p>
+
+      <div class="deal-preview-card">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;flex-wrap:wrap">
+          <div style="flex:1;min-width:0">
+            <p id="preview-title" class="font-bold text-lg text-ink-900 m-0 leading-snug" style="color:#161C26">—</p>
+            <p id="preview-destination" class="text-sm text-ink-500 m-0 mt-0.5" style="color:#6B7889">—</p>
+          </div>
+          <div id="preview-source-badge"></div>
+        </div>
+        <div style="margin-top:.875rem;display:flex;align-items:baseline;gap:.625rem">
+          <span id="preview-price" class="preview-price">—</span>
+          <span id="preview-price-before" class="preview-price-old"></span>
+        </div>
+        <div style="margin-top:.75rem;padding:.5rem .75rem;background:rgba(255,255,255,.6);border-radius:.625rem;font-size:.75rem;color:#6B7889">
+          <svg width="11" height="11" aria-hidden="true" style="display:inline;vertical-align:middle;margin-inline-end:.25rem" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12.01" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
+          معاينة تجريبية — لا يتم نشر العرض فعلياً الآن
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-cancel>إغلاق</button>
+        <a id="preview-public-link" href="../pages/deals.html" class="btn btn-outline btn-sm" target="_blank" rel="noopener">
+          <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          عرض في الموقع العام
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Scripts ── -->
+  <script src="../src/js/ui.js" defer></script>
+  <script src="../src/js/main.js" defer></script>
+  <script src="../src/js/dashboard.js" defer></script>
+
+</body>
+</html>
