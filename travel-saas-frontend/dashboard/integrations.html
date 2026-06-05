@@ -1,0 +1,2916 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth" data-page="merchant-integrations">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>التكاملات – رحلاتي (تجريبي)</title>
+  <meta name="description" content="مركز تكاملات الوكالة — Affiliate وAPIs والكوبونات والإشعارات. بيانات تجريبية وواجهة أمامية فقط.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0E8186">
+  <meta property="og:title" content="التكاملات – رحلاتي">
+  <meta property="og:locale" content="ar_AR">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/tailwind.css">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"الرئيسية","item":"https://rihlaty.example.com"},{"@type":"ListItem","position":2,"name":"لوحة التحكم","item":"https://rihlaty.example.com/dashboard"},{"@type":"ListItem","position":3,"name":"التكاملات","item":"https://rihlaty.example.com/dashboard/integrations"}]}
+  </script>
+
+  <style>
+    /* ── dashboard/integrations.html page-scoped styles ───────────────────── */
+
+    :root {
+      --sidebar-w:          260px;
+      --topbar-h:            64px;
+      --sidebar-bg:         #042B2E;
+      --sidebar-active:     #0E8186;
+      --sidebar-hover:      rgba(14,129,134,.18);
+      --sidebar-text:       #A4E9EA;
+      --body-bg:            #F4F6F9;
+      --card-bg:            #ffffff;
+      --border-color:       #E2E8F0;
+      --shadow-card:        0 1px 3px rgba(38,46,58,.07),0 1px 2px rgba(38,46,58,.04);
+      --shadow-pop:         0 10px 25px -5px rgba(38,46,58,.12),0 4px 10px -6px rgba(38,46,58,.08);
+      --shadow-elevated:    0 20px 40px -8px rgba(38,46,58,.15),0 8px 16px -4px rgba(38,46,58,.08);
+      --z-dd:               1000;
+      --z-drawer-overlay:   1030;
+      --z-drawer:           1040;
+      --z-modal-overlay:    1050;
+      --z-modal:            1060;
+      --z-toast:            1080;
+    }
+
+    /* ── Skip link ── */
+    .skip-link {
+      position: absolute; inset-inline-start: -999px; top: .5rem;
+      background: #0E8186; color: #fff;
+      padding: .5rem 1.25rem; border-radius: 0 .5rem .5rem 0;
+      font-weight: 700; font-size: .875rem; z-index: 9999;
+      text-decoration: none; transition: inset-inline-start .15s;
+    }
+    .skip-link:focus { inset-inline-start: 0; }
+
+    /* ── Shell ── */
+    body { background: var(--body-bg); }
+
+    .dash-sidebar {
+      position: fixed; top: 0; bottom: 0; inset-inline-start: 0;
+      width: var(--sidebar-w); background: var(--sidebar-bg);
+      display: flex; flex-direction: column;
+      overflow-y: auto; overflow-x: hidden;
+      z-index: var(--z-drawer);
+      transition: transform .25s cubic-bezier(.4,0,.2,1);
+      scrollbar-width: thin; scrollbar-color: rgba(14,129,134,.4) transparent;
+    }
+    .dash-sidebar:not(.is-open) { transform: translateX(100%); }
+    html[dir="ltr"] .dash-sidebar:not(.is-open) { transform: translateX(-100%); }
+    @media (min-width: 1024px) {
+      .dash-sidebar,
+      html[dir="ltr"] .dash-sidebar { transform: translateX(0) !important; transition: none !important; z-index: 10; }
+    }
+
+    .dash-scrim {
+      position: fixed; inset: 0; background: rgba(22,28,38,.6);
+      z-index: var(--z-drawer-overlay); opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .dash-scrim.is-visible { opacity: 1; pointer-events: auto; }
+
+    .dash-main { display: flex; flex-direction: column; min-height: 100dvh; }
+    @media (min-width: 1024px) { .dash-main { margin-inline-start: var(--sidebar-w); } }
+
+    body.sidebar-open { overflow: hidden; }
+
+    /* ── Topbar ── */
+    .dash-topbar {
+      position: sticky; top: 0; height: var(--topbar-h);
+      background: var(--card-bg); border-bottom: 1px solid var(--border-color);
+      display: flex; align-items: center;
+      gap: .5rem; padding: 0 1.25rem;
+      z-index: var(--z-dd); box-shadow: 0 1px 3px rgba(38,46,58,.05);
+    }
+
+    .dash-dropdown {
+      position: absolute; top: calc(var(--topbar-h) - 4px); inset-inline-end: 0;
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: .875rem; box-shadow: var(--shadow-pop);
+      min-width: 280px; z-index: var(--z-dd); overflow: hidden;
+    }
+    .dash-dropdown[hidden] { display: none; }
+    .dash-dropdown.is-open { display: block; }
+    .dash-dropdown.dd-animate { animation: dd-pop .15s cubic-bezier(.4,0,.2,1); }
+    @keyframes dd-pop {
+      from { opacity:0; transform: translateY(-8px) scale(.97); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) { .dash-dropdown.dd-animate { animation: none; } }
+
+    .topbar-search {
+      display: flex; align-items: center; background: #F7F8FA;
+      border: 1px solid var(--border-color); border-radius: .625rem;
+      padding: 0 .75rem; height: 2.25rem; gap: .375rem;
+      flex: 1; max-width: 280px; transition: border-color .15s, box-shadow .15s;
+    }
+    .topbar-search:focus-within {
+      border-color: #16A0A5; box-shadow: 0 0 0 3px rgba(22,160,165,.12); background: #fff;
+    }
+    .topbar-search input {
+      border: none; background: transparent; font-family: inherit;
+      font-size: .875rem; color: #262E3A; width: 100%; outline: none;
+    }
+    .topbar-search input::placeholder { color: #9AA6B4; }
+
+    /* ── Sidebar nav ── */
+    .sidebar-brand {
+      display: flex; align-items: center; gap: .75rem;
+      padding: 1.375rem 1.25rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.08); flex-shrink: 0;
+    }
+    .sidebar-brand-name { font-size: 1.125rem; font-weight: 800; color: #fff; letter-spacing: -.01em; }
+    .sidebar-brand-sub  { font-size: .6875rem; color: #6FD7D9; font-weight: 500; }
+    .sidebar-nav { flex: 1; padding: .75rem 0; }
+    .sidebar-nav-item { list-style: none; }
+    .sidebar-nav-link {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .6875rem 1.25rem; color: var(--sidebar-text);
+      text-decoration: none; border-radius: .625rem;
+      margin: .125rem .75rem; font-size: .9375rem; font-weight: 500;
+      transition: background .15s, color .15s; white-space: nowrap;
+    }
+    .sidebar-nav-link:hover { background: var(--sidebar-hover); color: #fff; }
+    .sidebar-nav-link[aria-current="page"] {
+      background: var(--sidebar-active); color: #fff; font-weight: 700;
+    }
+    .sidebar-nav-link svg { width: 1.125rem; height: 1.125rem; flex-shrink: 0; }
+    .sidebar-section-label {
+      font-size: .6875rem; font-weight: 700; letter-spacing: .07em;
+      color: rgba(164,233,234,.5); text-transform: uppercase;
+      padding: .75rem 1.25rem .25rem; margin: 0;
+    }
+    .sidebar-bottom { border-top: 1px solid rgba(255,255,255,.08); padding: .75rem 0; flex-shrink: 0; }
+
+    /* ── Content ── */
+    .dash-content {
+      flex: 1; padding: 1.25rem 1rem 2.5rem;
+      max-width: 1400px; width: 100%; margin-inline: auto;
+    }
+    @media (min-width: 768px)  { .dash-content { padding: 1.75rem 1.75rem 3rem; } }
+    @media (min-width: 1280px) { .dash-content { padding: 2rem 2.5rem 3rem; } }
+
+    /* ── Breadcrumb ── */
+    .dash-breadcrumb {
+      display: flex; align-items: center; gap: .375rem; font-size: .8125rem;
+      color: #9AA6B4; padding-bottom: 1.125rem;
+    }
+    .dash-breadcrumb a { color: #6B7889; text-decoration: none; }
+    .dash-breadcrumb a:hover { color: #0E8186; text-decoration: underline; }
+    .dash-breadcrumb-sep { color: #C5CDD7; user-select: none; }
+
+    /* ── Page header band ── */
+    .dash-page-header { padding: .25rem 0 1.75rem; }
+    .page-header-band {
+      background: linear-gradient(135deg, #042B2E 0%, #0B545A 50%, #16A0A5 100%);
+      border-radius: 1.5rem; padding: 2rem 2.25rem;
+      position: relative; overflow: hidden;
+      box-shadow: 0 12px 32px -6px rgba(4,43,46,.4);
+    }
+    .page-header-band::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 85% 40%, rgba(56,188,192,.2) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .page-header-band::after {
+      content: ''; position: absolute;
+      inset-block-start: -30px; inset-inline-end: 1.5rem;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-header-inner { position: relative; z-index: 1; }
+
+    /* ── Safe note ── */
+    .safe-note {
+      display: inline-flex; align-items: flex-start; gap: .5rem;
+      padding: .5rem .875rem;
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+      border-radius: .75rem; font-size: .75rem; color: rgba(255,255,255,.8);
+      margin-top: .875rem;
+    }
+
+    /* ── Toggle switch ── */
+    .toggle-switch {
+      position: relative; display: inline-block; width: 2.75rem; height: 1.5rem; flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-track {
+      position: absolute; inset: 0; cursor: pointer;
+      background: #CBD5E1; border-radius: 9999px; transition: background .2s;
+    }
+    .toggle-track::after {
+      content: ''; position: absolute;
+      left: 3px; top: 3px; width: 1.125rem; height: 1.125rem;
+      background: #fff; border-radius: 50%;
+      transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+    html[dir="rtl"] .toggle-track::after { left: auto; right: 3px; }
+    .toggle-switch input:checked + .toggle-track { background: #0E8186; }
+    .toggle-switch input:checked + .toggle-track::after { transform: translateX(1.25rem); }
+    html[dir="rtl"] .toggle-switch input:checked + .toggle-track::after { transform: translateX(-1.25rem); }
+    .toggle-switch input:focus-visible + .toggle-track {
+      outline: 2px solid #16A0A5; outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .toggle-track, .toggle-track::after { transition: none; }
+    }
+
+    /* ── sr-only ── */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; box-shadow: var(--shadow-card);
+    }
+
+    /* ── Skeleton ── */
+    @keyframes shimmer {
+      from { background-position: -600px 0; }
+      to   { background-position:  600px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg,#EEF1F5 25%,#F7F8FA 50%,#EEF1F5 75%);
+      background-size: 600px 100%; animation: shimmer 1.5s infinite linear; border-radius: .5rem;
+    }
+    @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; background: #EEF1F5; } }
+
+    /* ── Empty state ── */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 3rem 1.5rem; text-align: center; color: #9AA6B4;
+    }
+    .empty-state svg { opacity: .3; margin-bottom: .875rem; }
+    .empty-state-title { font-size: 1rem; font-weight: 700; color: #6B7889; }
+    .empty-state-body  { font-size: .875rem; margin-top: .375rem; }
+
+    /* ── Section wrapper ── */
+    .dash-section { margin-bottom: 2rem; }
+    .dash-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem; gap: .75rem; flex-wrap: wrap;
+    }
+    .dash-section-title {
+      font-size: 1.0625rem; font-weight: 800; color: #161C26; margin: 0; line-height: 1.4;
+    }
+    .dash-section-sub { font-size: .8125rem; color: #9AA6B4; margin-top: .125rem; }
+
+    /* ── Footer ── */
+    .dash-footer {
+      border-top: 1px solid var(--border-color); background: var(--card-bg);
+      padding: 1rem 1.75rem;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: .5rem; font-size: .8125rem; color: #9AA6B4;
+    }
+    .dash-footer a { color: #6B7889; text-decoration: none; }
+    .dash-footer a:hover { color: #0E8186; text-decoration: underline; }
+
+    /* ── Row action button ── */
+    .row-action-wrap { position: relative; }
+    .row-action-menu {
+      position: absolute; inset-inline-end: 0; top: calc(100% + 4px);
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: .75rem; box-shadow: var(--shadow-pop);
+      min-width: 180px; z-index: calc(var(--z-dd) + 5); overflow: hidden;
+    }
+    .row-action-menu[hidden] { display: none; }
+    .row-action-menu button, .row-action-menu a {
+      display: flex; align-items: center; gap: .625rem;
+      width: 100%; padding: .625rem 1rem; font-size: .875rem; color: #262E3A;
+      background: none; border: none; cursor: pointer; text-decoration: none;
+      text-align: start; transition: background .1s;
+    }
+    .row-action-menu button:hover, .row-action-menu a:hover { background: #F7F8FA; }
+    .row-action-trigger {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.875rem; height: 1.875rem; border-radius: .5rem;
+      background: transparent; border: 1px solid transparent;
+      cursor: pointer; color: #6B7889; transition: all .12s;
+    }
+    .row-action-trigger:hover { background: #EEF1F5; border-color: var(--border-color); color: #262E3A; }
+    .row-action-trigger:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: .25rem;
+      padding: .2rem .6rem; border-radius: 9999px;
+      font-size: .6875rem; font-weight: 700; white-space: nowrap; line-height: 1.4;
+    }
+    .badge-connected     { background: #DCFCE7; color: #15803D; }
+    .badge-not-connected { background: #EEF1F5; color: #6B7889; }
+    .badge-api-ready     { background: #DBEAFE; color: #1D4ED8; }
+    .badge-coming-soon   { background: #EDE9FE; color: #6D28D9; }
+    .badge-needs-config  { background: #FEF3C7; color: #A16207; }
+    .badge-needs-review  { background: #FFEDD5; color: #C2410C; }
+    .badge-disabled      { background: #FEE2E2; color: #B91C1C; }
+    .badge-active        { background: #DCFCE7; color: #15803D; }
+
+    /* ── FAQ ── */
+    .faq-wrap {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; box-shadow: var(--shadow-card); overflow: hidden;
+    }
+    .faq-item { border-bottom: 1px solid #F0F4F8; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary {
+      padding: 1rem 1.5rem; font-size: .9375rem; font-weight: 700; color: #262E3A;
+      cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between; align-items: center; gap: .75rem;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-chevron { transition: transform .2s; color: #9AA6B4; flex-shrink: 0; }
+    .faq-item[open] .faq-chevron { transform: rotate(180deg); }
+    @media (prefers-reduced-motion: reduce) { .faq-chevron { transition: none; } }
+    .faq-body { padding: 0 1.5rem 1rem; font-size: .875rem; color: #6B7889; line-height: 1.75; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(22,28,38,.55); backdrop-filter: blur(4px);
+      z-index: var(--z-modal-overlay); display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay[hidden] { display: none; }
+    .modal-box {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.375rem; box-shadow: var(--shadow-elevated);
+      padding: 1.875rem; max-width: 520px; width: 100%;
+      animation: modal-in .18s cubic-bezier(.4,0,.2,1);
+      max-height: 90dvh; overflow-y: auto;
+    }
+    @keyframes modal-in {
+      from { opacity:0; transform: scale(.95) translateY(8px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) { .modal-box { animation: none; } }
+    .modal-header {
+      display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem;
+    }
+    .modal-icon {
+      width: 2.75rem; height: 2.75rem; border-radius: .875rem;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .modal-icon-teal   { background: #ECFBFB; color: #0E8186; }
+    .modal-icon-orange { background: #FFEDD5; color: #C2410C; }
+    .modal-icon-warning { background: #FEF9C3; color: #A16207; }
+    .modal-icon-info   { background: #ECFBFB; color: #0E8186; }
+    .modal-icon-danger { background: #FEE2E2; color: #B91C1C; }
+    .modal-title { font-size: 1.125rem; font-weight: 800; color: #161C26; line-height: 1.3; }
+    .modal-subtitle { font-size: .8125rem; color: #9AA6B4; margin-top: .25rem; }
+    .modal-body  { font-size: .875rem; color: #4D5969; line-height: 1.65; }
+    .modal-actions {
+      display: flex; gap: .625rem; margin-top: 1.5rem; justify-content: flex-end; flex-wrap: wrap;
+    }
+    .btn-cancel {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .5625rem 1.25rem; border-radius: .75rem;
+      background: #F1F5F9; color: #475569;
+      font-size: .875rem; font-weight: 600; border: none; cursor: pointer; font-family: inherit;
+      transition: background .12s;
+    }
+    .btn-cancel:hover { background: #E2E8F0; }
+    .btn-cancel:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+    .btn-primary-modal {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .5625rem 1.25rem; border-radius: .75rem;
+      background: linear-gradient(135deg,#0E8186,#16A0A5); color: #fff;
+      font-size: .875rem; font-weight: 700; border: none; cursor: pointer; font-family: inherit;
+      transition: opacity .12s, box-shadow .12s; box-shadow: 0 2px 8px rgba(14,129,134,.3);
+    }
+    .btn-primary-modal:hover { opacity: .9; box-shadow: 0 4px 12px rgba(14,129,134,.4); }
+    .btn-primary-modal:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+    .btn-secondary-modal {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .5625rem 1.25rem; border-radius: .75rem;
+      background: transparent; color: #0E8186;
+      border: 1.5px solid #A4E9EA;
+      font-size: .875rem; font-weight: 700; cursor: pointer; font-family: inherit;
+      transition: all .12s;
+    }
+    .btn-secondary-modal:hover { background: #ECFBFB; border-color: #0E8186; }
+    .btn-secondary-modal:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+
+    /* ── Form fields ── */
+    .form-group { margin-bottom: 1rem; }
+    .form-label {
+      display: block; font-size: .8125rem; font-weight: 700; color: #374151;
+      margin-bottom: .375rem;
+    }
+    .form-label .req { color: #E11D48; margin-inline-start: .125rem; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: .5625rem .875rem;
+      border: 1.5px solid var(--border-color); border-radius: .75rem;
+      font-size: .875rem; font-family: inherit; color: #262E3A;
+      background: #F8FAFC; outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: #0E8186; background: #fff;
+      box-shadow: 0 0 0 3px rgba(14,129,134,.1);
+    }
+    .form-input[aria-invalid="true"], .form-select[aria-invalid="true"] {
+      border-color: #E11D48; box-shadow: 0 0 0 3px rgba(225,29,72,.08);
+    }
+    .form-error { font-size: .75rem; color: #DC2626; margin-top: .3rem; display: none; }
+    .form-error.is-visible { display: block; }
+    .form-hint { font-size: .75rem; color: #9AA6B4; margin-top: .3rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .875rem; }
+    @media (max-width: 479px) { .form-row { grid-template-columns: 1fr; } }
+    .form-checkbox-group { display: flex; flex-direction: column; gap: .5rem; }
+    .form-checkbox-item { display: flex; align-items: center; gap: .5rem; }
+    .form-checkbox-item input[type="checkbox"] {
+      width: 1rem; height: 1rem; accent-color: #0E8186; cursor: pointer;
+    }
+    .form-checkbox-item label { font-size: .875rem; color: #374151; cursor: pointer; }
+    .form-section-divider {
+      border: none; border-top: 1px solid #F0F4F8; margin: 1.125rem 0;
+    }
+    .form-toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .75rem 0; border-bottom: 1px solid #F0F4F8; gap: .75rem;
+    }
+    .form-toggle-row:last-child { border-bottom: none; }
+    .form-toggle-info { flex: 1; min-width: 0; }
+    .form-toggle-label { font-size: .875rem; font-weight: 700; color: #262E3A; }
+    .form-toggle-hint  { font-size: .75rem; color: #9AA6B4; margin-top: .125rem; }
+
+    /* ── Honesty/Warning box ── */
+    .honesty-box {
+      display: flex; align-items: flex-start; gap: .625rem;
+      padding: .875rem 1rem;
+      background: #FFFBEB; border: 1.5px solid #FDE68A;
+      border-radius: .875rem; font-size: .8125rem; color: #92400E; line-height: 1.6;
+    }
+    .honesty-box svg { flex-shrink: 0; margin-top: .125rem; color: #D97706; }
+    .honesty-box.danger-box {
+      background: #FFF1F2; border-color: #FECDD3; color: #9F1239;
+    }
+    .honesty-box.danger-box svg { color: #E11D48; }
+
+    /* ══════════════════════════════════════════════════════════
+       INTEGRATION PAGE-SPECIFIC STYLES
+    ══════════════════════════════════════════════════════════ */
+
+    /* ── Overview stats grid (6 tiles) ── */
+    .intg-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .875rem;
+      margin-bottom: 1.75rem;
+    }
+    @media (min-width: 480px) { .intg-stats-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 900px) { .intg-stats-grid { grid-template-columns: repeat(6, 1fr); } }
+
+    .stat-tile {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 1.125rem;
+      padding: 1.125rem 1rem 1rem;
+      box-shadow: var(--shadow-card);
+      display: flex; flex-direction: column; align-items: center;
+      gap: .25rem; text-align: center;
+      transition: box-shadow .2s, transform .2s;
+      position: relative; overflow: hidden;
+    }
+    .stat-tile:hover { box-shadow: var(--shadow-pop); transform: translateY(-2px); }
+    .stat-tile-accent {
+      position: absolute; top: 0; inset-inline-start: 0; inset-inline-end: 0;
+      height: 3px; border-radius: 1.125rem 1.125rem 0 0;
+    }
+    .stat-tile-icon {
+      width: 2.5rem; height: 2.5rem; border-radius: .75rem;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: .25rem; margin-top: .25rem;
+    }
+    .stat-tile-value {
+      font-size: 1.875rem; font-weight: 800; color: #161C26; line-height: 1;
+      letter-spacing: -.02em;
+    }
+    .stat-tile-label {
+      font-size: .75rem; font-weight: 600; color: #6B7889; line-height: 1.3;
+    }
+    .stat-tile-demo {
+      font-size: .5625rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .06em; padding: .125rem .375rem; border-radius: .3125rem;
+      background: #FEF9C3; color: #A16207; margin-top: .125rem;
+    }
+
+    /* ── Category tabs ── */
+    .category-tabs-section { margin-bottom: 1.5rem; }
+    .category-tabs-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: .875rem; gap: .75rem; flex-wrap: wrap;
+    }
+    .category-tabs-wrap {
+      display: flex; gap: .375rem; overflow-x: auto;
+      scrollbar-width: none; padding-bottom: .125rem;
+    }
+    .category-tabs-wrap::-webkit-scrollbar { display: none; }
+    .category-tab {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .5rem 1.125rem; border-radius: 9999px;
+      border: 1.5px solid var(--border-color);
+      background: transparent; color: #6B7889;
+      font-size: .875rem; font-weight: 600; font-family: inherit;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      transition: all .15s;
+    }
+    .category-tab:hover { border-color: #0E8186; color: #0E8186; background: #F0FAFA; }
+    .category-tab[aria-selected="true"] {
+      background: linear-gradient(135deg, #042B2E, #0E8186);
+      border-color: transparent; color: #fff; font-weight: 700;
+      box-shadow: 0 2px 8px rgba(14,129,134,.25);
+    }
+    .category-tab:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+    .tab-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 1.375rem; height: 1.375rem; border-radius: 9999px;
+      font-size: .6875rem; font-weight: 700; padding: 0 .25rem;
+      background: #EEF1F5; color: #6B7889;
+      transition: background .15s, color .15s;
+    }
+    .category-tab[aria-selected="true"] .tab-count {
+      background: rgba(255,255,255,.25); color: #fff;
+    }
+    .category-tabs-meta {
+      font-size: .8125rem; color: #9AA6B4;
+      display: flex; align-items: center; gap: .375rem; flex-shrink: 0;
+    }
+
+    /* ── Integration card grid ── */
+    .integration-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+      gap: 1rem;
+      margin-bottom: .5rem;
+    }
+
+    /* ── Integration card ── */
+    .intg-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 1.25rem;
+      box-shadow: var(--shadow-card);
+      display: flex; flex-direction: column;
+      transition: box-shadow .2s, transform .2s, border-color .15s;
+      overflow: hidden;
+    }
+    .intg-card:hover { box-shadow: var(--shadow-pop); transform: translateY(-2px); }
+    .intg-card.is-connected { border-color: rgba(22,163,74,.25); }
+    .intg-card.is-coming-soon { opacity: .7; }
+
+    .intg-card-top {
+      display: flex; align-items: flex-start; gap: .875rem;
+      padding: 1.25rem 1.375rem 1rem;
+    }
+    .intg-card-icon {
+      width: 2.75rem; height: 2.75rem; border-radius: .875rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-weight: 900; font-size: .875rem;
+    }
+    .intg-card-header { flex: 1; min-width: 0; }
+    .intg-card-name {
+      font-size: .9375rem; font-weight: 800; color: #161C26;
+      line-height: 1.25; margin-bottom: .25rem;
+    }
+    .intg-card-category {
+      font-size: .6875rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: #9AA6B4;
+    }
+
+    .intg-card-body {
+      padding: 0 1.375rem .875rem;
+      border-bottom: 1px solid #F0F4F8;
+      flex: 1;
+    }
+    .intg-card-desc {
+      font-size: .8125rem; color: #6B7889; line-height: 1.6; margin-bottom: .625rem;
+    }
+    .intg-card-meta {
+      display: flex; flex-direction: column; gap: .3rem;
+    }
+    .intg-meta-row {
+      display: flex; align-items: center; gap: .375rem;
+      font-size: .75rem; color: #9AA6B4;
+    }
+    .intg-meta-row svg { flex-shrink: 0; }
+    .intg-meta-val { color: #6B7889; font-weight: 600; }
+
+    /* Health dot */
+    .health-dot {
+      display: inline-block; width: .625rem; height: .625rem;
+      border-radius: 50%; flex-shrink: 0;
+    }
+    .health-dot-ok     { background: #22C55E; }
+    .health-dot-warn   { background: #F59E0B; }
+    .health-dot-review { background: #F97316; }
+    .health-dot-off    { background: #CBD5E1; }
+    .health-dot-error  { background: #EF4444; }
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .6; transform: scale(1.35); }
+    }
+    .health-dot-warn, .health-dot-review {
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .health-dot-warn, .health-dot-review { animation: none; }
+    }
+
+    /* Warning inline in card body */
+    .intg-warning {
+      display: flex; align-items: flex-start; gap: .375rem;
+      padding: .5rem .75rem; background: #FFFBEB; border: 1px solid #FDE68A;
+      border-radius: .625rem; font-size: .75rem; color: #92400E;
+      line-height: 1.5; margin-top: .625rem;
+    }
+    .intg-warning svg { flex-shrink: 0; margin-top: .0625rem; color: #D97706; }
+
+    .intg-card-footer {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .875rem 1.375rem;
+      flex-wrap: wrap;
+    }
+    .intg-toggle-wrap {
+      display: flex; align-items: center; gap: .5rem; flex-shrink: 0;
+    }
+    .intg-toggle-label {
+      font-size: .75rem; font-weight: 700; color: #6B7889;
+      transition: color .15s;
+    }
+    .intg-toggle-label.is-on { color: #0E8186; }
+    .intg-actions { display: flex; align-items: center; gap: .375rem; flex-wrap: wrap; flex: 1; justify-content: flex-end; }
+    .btn-intg {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .375rem .75rem; border-radius: .625rem;
+      font-size: .8125rem; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: all .12s; white-space: nowrap;
+    }
+    .btn-intg-cfg {
+      background: #ECFBFB; border: 1.5px solid #A4E9EA; color: #0E8186;
+    }
+    .btn-intg-cfg:hover { background: #0E8186; color: #fff; border-color: #0E8186; }
+    .btn-intg-test {
+      background: transparent; border: 1.5px solid var(--border-color); color: #6B7889;
+    }
+    .btn-intg-test:hover { border-color: #0E8186; color: #0E8186; background: #F0FAFA; }
+    .btn-intg:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+    .btn-intg:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* ── Activity log ── */
+    .activity-log { display: flex; flex-direction: column; }
+    .activity-item {
+      display: flex; align-items: flex-start; gap: .875rem;
+      padding: .875rem 1.375rem;
+      border-bottom: 1px solid #F0F4F8;
+      transition: background .1s;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item:hover { background: #FAFBFC; }
+    .activity-dot-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      flex-shrink: 0; padding-top: .125rem;
+    }
+    .activity-dot {
+      width: .75rem; height: .75rem; border-radius: 50%; flex-shrink: 0;
+    }
+    .activity-dot-info  { background: #3B82F6; }
+    .activity-dot-error { background: #EF4444; }
+    .activity-dot-warn  { background: #F59E0B; }
+    .activity-text { flex: 1; min-width: 0; }
+    .activity-event { font-size: .875rem; color: #262E3A; line-height: 1.5; }
+    .activity-time  { font-size: .75rem; color: #9AA6B4; margin-top: .125rem; }
+    .activity-severity {
+      display: inline-flex; align-items: center; gap: .2rem;
+      padding: .125rem .5rem; border-radius: 9999px;
+      font-size: .625rem; font-weight: 700; align-self: flex-start; flex-shrink: 0;
+    }
+    .sev-info  { background: #DBEAFE; color: #1D4ED8; }
+    .sev-error { background: #FEE2E2; color: #B91C1C; }
+    .sev-warn  { background: #FEF3C7; color: #A16207; }
+
+    /* ── Health panel ── */
+    .health-panel {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; box-shadow: var(--shadow-card);
+      padding: 1.375rem 1.5rem;
+    }
+    .health-panel-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: .875rem; margin-top: 1rem;
+    }
+    @media (min-width: 640px) { .health-panel-grid { grid-template-columns: repeat(4, 1fr); } }
+    .health-metric {
+      display: flex; flex-direction: column; gap: .25rem;
+      padding: .875rem 1rem; border-radius: .875rem;
+      border: 1px solid var(--border-color); background: #FAFBFC;
+    }
+    .health-metric-icon { font-size: 1.25rem; margin-bottom: .125rem; }
+    .health-metric-val { font-size: 1.375rem; font-weight: 800; color: #161C26; line-height: 1; }
+    .health-metric-label { font-size: .75rem; font-weight: 600; color: #6B7889; }
+    .health-overall {
+      display: flex; align-items: center; gap: .625rem;
+      padding: .75rem 1rem; border-radius: .875rem; font-size: .875rem; font-weight: 700;
+      margin-bottom: .25rem;
+    }
+    .health-overall-ok   { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
+    .health-overall-warn { background: #FFFBEB; color: #A16207; border: 1px solid #FDE68A; }
+    .health-overall-error { background: #FFF1F2; color: #BE123C; border: 1px solid #FECDD3; }
+
+    /* ── Usage bars (for later pages) ── */
+    .usage-bar-track {
+      height: 8px; background: #EEF1F5; border-radius: 9999px; overflow: hidden;
+    }
+    .usage-bar-fill {
+      height: 100%; border-radius: 9999px;
+      background: linear-gradient(90deg, #0E8186, #38BCC0);
+      transition: width .3s ease;
+    }
+
+    /* ── Buttons in header band ── */
+    .btn-header {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .5625rem 1.125rem; border-radius: .875rem;
+      font-size: .875rem; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all .15s; white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn-header-primary {
+      background: #fff; color: #0E8186; border: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
+    }
+    .btn-header-primary:hover { background: #F0FAFA; box-shadow: 0 4px 14px rgba(0,0,0,.15); transform: translateY(-1px); }
+    .btn-header-outline {
+      background: rgba(255,255,255,.12); color: #fff;
+      border: 1.5px solid rgba(255,255,255,.3);
+    }
+    .btn-header-outline:hover { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.5); }
+    .btn-header:focus-visible { outline: 2px solid rgba(255,255,255,.8); outline-offset: 2px; }
+  </style>
+</head>
+
+<body class="antialiased font-sans">
+
+  <!-- Skip navigation -->
+  <a href="#main" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
+
+  <!-- ARIA live announcer -->
+  <div id="dash-announcer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════════════════════════════════════ -->
+  <aside id="sidebar-drawer" class="dash-sidebar" aria-label="قائمة لوحة التحكم" inert>
+
+    <div class="sidebar-brand">
+      <a href="index.html" class="flex items-center gap-2 no-underline focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded-md" aria-label="الصفحة الرئيسية للوحة التحكم">
+        <span class="w-8 h-8 bg-lagoon-500 rounded-lg flex items-center justify-center flex-shrink-0" aria-hidden="true">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2" aria-hidden="true">
+            <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+          </svg>
+        </span>
+        <div>
+          <div class="sidebar-brand-name">رحلاتي</div>
+          <div class="sidebar-brand-sub">لوحة التحكم التجريبية</div>
+        </div>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="روابط لوحة التحكم">
+
+      <p class="sidebar-section-label">الرئيسية</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="index.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>الرئيسية</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="sidebar-section-label">إدارة العروض</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="deals.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            <span>العروض</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="create-deal.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>إضافة عرض</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="coupons.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+            <span>الكوبونات</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="sidebar-section-label">العمليات</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="#" class="sidebar-nav-link" data-coming-soon>
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>طلبات الحجز</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="#" class="sidebar-nav-link" data-coming-soon>
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            <span>العملاء</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="analytics.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+            <span>التحليلات</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="sidebar-section-label">الإعدادات</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="integrations.html" class="sidebar-nav-link" aria-current="page">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M7 17l-5 5"/><path d="M17 7l5-5"/><path d="M11 3l3 3-7 7-3-3z"/><path d="M13 21l-3-3 7-7 3 3z"/></svg>
+            <span>التكاملات</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="settings.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            <span>الإعدادات</span>
+          </a>
+        </li>
+      </ul>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="../pages/index.html" class="sidebar-nav-link text-lagoon-300 hover:text-white">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>العودة للموقع</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <button type="button" class="sidebar-nav-link w-full text-start" data-action="logout">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>تسجيل الخروج</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+  </aside>
+
+  <!-- Scrim -->
+  <div id="sidebar-scrim" class="dash-scrim" hidden aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       MAIN AREA
+  ══════════════════════════════════════════════════════════════════════ -->
+  <div class="dash-main">
+
+    <!-- ── Topbar ───────────────────────────────────────────────────────── -->
+    <header class="dash-topbar" role="banner" aria-label="شريط التحكم العلوي">
+
+      <button
+        id="btn-mobile-menu"
+        type="button"
+        class="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors flex-shrink-0"
+        aria-label="فتح القائمة الجانبية"
+        aria-controls="sidebar-drawer"
+        aria-expanded="false"
+      >
+        <svg width="22" height="22" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="hidden sm:flex items-center gap-1.5 text-sm text-ink-500 flex-shrink-0">
+        <a href="index.html" class="text-ink-700 font-semibold hover:text-lagoon-600">لوحة التحكم</a>
+        <svg width="14" height="14" aria-hidden="true" class="text-ink-300 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <span class="text-ink-400">التكاملات</span>
+      </div>
+
+      <button
+        type="button"
+        class="hidden lg:flex items-center gap-2 px-2.5 py-1.5 rounded-xl border border-ink-200 hover:bg-ink-50 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors text-sm flex-shrink-0"
+        data-coming-soon
+        aria-label="تبديل الشركة — قابل للربط لاحقاً"
+      >
+        <span class="w-5 h-5 bg-lagoon-700 rounded-md text-white font-extrabold text-xs flex items-center justify-center flex-shrink-0 select-none" aria-hidden="true">ش</span>
+        <span class="font-semibold text-ink-800 max-w-[130px] truncate">شركة رحلات الشرق</span>
+        <svg width="12" height="12" aria-hidden="true" class="text-ink-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <div class="flex-1 min-w-2"></div>
+
+      <form id="topbar-search-form" role="search" class="topbar-search hidden md:flex" aria-label="البحث في لوحة التحكم">
+        <svg width="16" height="16" aria-hidden="true" class="text-ink-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="topbar-search-input" type="search" name="q" placeholder="بحث تجريبي…" autocomplete="off" dir="auto" aria-label="حقل البحث">
+      </form>
+
+      <div class="relative flex-shrink-0">
+        <button
+          id="btn-notifications"
+          type="button"
+          class="relative flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors"
+          aria-label="الإشعارات"
+          aria-haspopup="menu"
+          aria-controls="dropdown-notifications"
+          aria-expanded="false"
+        >
+          <svg width="20" height="20" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="absolute top-1.5 end-1.5 w-2.5 h-2.5 bg-danger rounded-full border-2 border-white" aria-hidden="true"></span>
+        </button>
+        <div id="dropdown-notifications" class="dash-dropdown" role="menu" aria-label="الإشعارات" hidden style="min-width:300px">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-ink-100">
+            <span class="font-bold text-sm text-ink-800">الإشعارات</span>
+            <span class="text-xs text-lagoon-600 font-semibold">بيانات تجريبية</span>
+          </div>
+          <div class="p-3 text-center text-sm text-ink-400">لا إشعارات جديدة — واجهة أمامية فقط</div>
+        </div>
+      </div>
+
+      <div class="relative flex-shrink-0">
+        <button
+          id="btn-quick-add"
+          type="button"
+          class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-lagoon-600 hover:bg-lagoon-700 text-white text-sm font-bold focus-visible:ring-2 focus-visible:ring-lagoon-400 transition-colors"
+          aria-label="إضافة سريعة"
+          aria-haspopup="menu"
+          aria-controls="dropdown-quick-add"
+          aria-expanded="false"
+        >
+          <svg width="15" height="15" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span class="hidden sm:inline">إضافة</span>
+        </button>
+        <div id="dropdown-quick-add" class="dash-dropdown" role="menu" aria-label="خيارات الإضافة السريعة" hidden>
+          <div class="p-2">
+            <a href="create-deal.html" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-ink-700 hover:bg-ink-50 transition-colors no-underline">
+              <span class="w-7 h-7 bg-lagoon-100 text-lagoon-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              </span>
+              إضافة عرض جديد
+            </a>
+            <a href="create-coupon.html" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-ink-700 hover:bg-ink-50 transition-colors no-underline">
+              <span class="w-7 h-7 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+              </span>
+              إنشاء كوبون
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative flex-shrink-0">
+        <button
+          id="btn-user-menu"
+          type="button"
+          class="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-ink-50 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors"
+          aria-haspopup="menu"
+          aria-controls="dropdown-user-menu"
+          aria-expanded="false"
+          aria-label="قائمة المستخدم"
+        >
+          <span class="w-8 h-8 bg-gradient-to-br from-lagoon-400 to-lagoon-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">أ</span>
+          <span class="hidden lg:block text-sm font-semibold text-ink-800 max-w-[100px] truncate">أحمد العمري</span>
+          <svg width="12" height="12" aria-hidden="true" class="text-ink-400 hidden lg:block flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div id="dropdown-user-menu" class="dash-dropdown" role="menu" aria-label="قائمة المستخدم" hidden>
+          <div class="px-4 py-3 border-b border-ink-100">
+            <div class="font-bold text-sm text-ink-800">أحمد العمري</div>
+            <div class="text-xs text-ink-500">مدير الوكالة — شركة رحلات الشرق</div>
+            <div class="text-xs text-warning font-semibold mt-1">باقة النمو (تجريبي)</div>
+          </div>
+          <div class="p-2">
+            <button type="button" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-ink-700 hover:bg-ink-50 transition-colors" data-coming-soon>
+              <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>الملف الشخصي
+            </button>
+            <div class="h-px bg-ink-100 my-1"></div>
+            <button type="button" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-danger hover:bg-danger/5 transition-colors" data-action="logout">
+              <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>تسجيل الخروج
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </header>
+
+    <!-- ── Content ──────────────────────────────────────────────────────── -->
+    <main id="main" tabindex="-1">
+      <div class="dash-content">
+
+        <!-- Breadcrumb -->
+        <nav class="dash-breadcrumb" aria-label="مسار التنقل">
+          <a href="../pages/index.html">الموقع الرئيسي</a>
+          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+          <a href="index.html">لوحة التحكم</a>
+          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+          <span aria-current="page">التكاملات</span>
+        </nav>
+
+        <!-- ════════════════════════════════════════════════════════
+             T015 — Page header
+        ═════════════════════════════════════════════════════════ -->
+        <div class="dash-page-header">
+          <div class="page-header-band">
+            <div class="page-header-inner">
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2.5 mb-1.5">
+                    <span class="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2">
+                        <path d="M18 6L6 18"/><path d="M7 17l-5 5"/><path d="M17 7l5-5"/>
+                        <path d="M11 3l3 3-7 7-3-3z"/><path d="M13 21l-3-3 7-7 3 3z"/>
+                      </svg>
+                    </span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-white leading-tight">التكاملات</h1>
+                  </div>
+                  <p class="text-sm text-white/75 max-w-lg leading-relaxed">
+                    اربط مصادر الكوبونات والعروض والأسعار — Affiliate وAPIs وقنوات الإشعارات والمراجعة اليدوية.
+                  </p>
+                  <div class="safe-note" role="note">
+                    <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <span>لا يتم الاتصال بأي مصدر خارجي في هذه النسخة — واجهة أمامية فقط / مثال توضيحي</span>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 shrink-0 md:items-start">
+                  <button
+                    type="button"
+                    id="btn-add-intg"
+                    class="btn-header btn-header-primary"
+                    aria-label="إضافة تكامل تجريبي"
+                  >
+                    <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    إضافة تكامل تجريبي
+                  </button>
+                  <button
+                    type="button"
+                    id="btn-test-all"
+                    class="btn-header btn-header-outline"
+                    aria-label="اختبار كل التكاملات تجريبياً"
+                  >
+                    <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    اختبار الكل
+                  </button>
+                  <button
+                    type="button"
+                    id="btn-review-sources"
+                    class="btn-header btn-header-outline"
+                    aria-label="مراجعة المصادر"
+                  >
+                    <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    مراجعة المصادر
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             T015 — Overview stats (6 tiles)
+        ═════════════════════════════════════════════════════════ -->
+        <section aria-label="إحصاءات التكاملات" class="dash-section">
+          <div class="intg-stats-grid">
+
+            <!-- متصل -->
+            <div class="stat-tile">
+              <div class="stat-tile-accent" style="background:linear-gradient(90deg,#16A34A,#4ADE80)"></div>
+              <div class="stat-tile-icon" style="background:#F0FDF4;color:#16A34A">
+                <svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+              </div>
+              <div class="stat-tile-value">2</div>
+              <div class="stat-tile-label">متصل</div>
+              <div class="stat-tile-demo">تجريبي</div>
+            </div>
+
+            <!-- غير متصل -->
+            <div class="stat-tile">
+              <div class="stat-tile-accent" style="background:linear-gradient(90deg,#94A3B8,#CBD5E1)"></div>
+              <div class="stat-tile-icon" style="background:#F8FAFC;color:#64748B">
+                <svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0119 12.55"/><path d="M5 12.55a10.94 10.94 0 015.17-2.39"/><path d="M10.71 5.05A16 16 0 0122.56 9"/><path d="M1.42 9a15.91 15.91 0 014.7-2.88"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+              </div>
+              <div class="stat-tile-value">5</div>
+              <div class="stat-tile-label">غير متصل</div>
+              <div class="stat-tile-demo">تجريبي</div>
+            </div>
+
+            <!-- جاهز للربط -->
+            <div class="stat-tile">
+              <div class="stat-tile-accent" style="background:linear-gradient(90deg,#2563EB,#60A5FA)"></div>
+              <div class="stat-tile-icon" style="background:#EFF6FF;color:#2563EB">
+                <svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div class="stat-tile-value">4</div>
+              <div class="stat-tile-label">جاهز للربط</div>
+              <div class="stat-tile-demo">تجريبي</div>
+            </div>
+
+            <!-- يحتاج ضبط -->
+            <div class="stat-tile">
+              <div class="stat-tile-accent" style="background:linear-gradient(90deg,#D97706,#FCD34D)"></div>
+              <div class="stat-tile-icon" style="background:#FFFBEB;color:#D97706">
+                <svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+              </div>
+              <div class="stat-tile-value">3</div>
+              <div class="stat-tile-label">يحتاج ضبط</div>
+              <div class="stat-tile-demo">تجريبي</div>
+            </div>
+
+            <!-- يحتاج مراجعة -->
+            <div class="stat-tile">
+              <div class="stat-tile-accent" style="background:linear-gradient(90deg,#EA580C,#FB923C)"></div>
+              <div class="stat-tile-icon" style="background:#FFEDD5;color:#C2410C">
+                <svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div class="stat-tile-value">2</div>
+              <div class="stat-tile-label">يحتاج مراجعة</div>
+              <div class="stat-tile-demo">تجريبي</div>
+            </div>
+
+            <!-- قريباً -->
+            <div class="stat-tile">
+              <div class="stat-tile-accent" style="background:linear-gradient(90deg,#7C3AED,#A78BFA)"></div>
+              <div class="stat-tile-icon" style="background:#EDE9FE;color:#7C3AED">
+                <svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="stat-tile-value">3</div>
+              <div class="stat-tile-label">قريباً</div>
+              <div class="stat-tile-demo">تجريبي</div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T015 — Category tabs (7)
+        ═════════════════════════════════════════════════════════ -->
+        <section class="category-tabs-section">
+          <div class="category-tabs-header">
+            <div>
+              <h2 class="dash-section-title">مصادر التكاملات</h2>
+              <p class="dash-section-sub">اختر تصنيفاً لعرض التكاملات المتاحة</p>
+            </div>
+            <span
+              id="intg-visible-count"
+              class="category-tabs-meta"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M7 17l-5 5"/><path d="M17 7l5-5"/><path d="M11 3l3 3-7 7-3-3z"/><path d="M13 21l-3-3 7-7 3 3z"/></svg>
+              <span id="intg-count-text">24 تكاملاً</span>
+            </span>
+          </div>
+
+          <div
+            class="category-tabs-wrap"
+            role="tablist"
+            aria-label="تصنيفات التكاملات"
+            id="category-tablist"
+          >
+            <button
+              type="button"
+              class="category-tab"
+              role="tab"
+              aria-selected="true"
+              data-category="all"
+              aria-controls="integration-grid-region"
+            >
+              الكل
+              <span class="tab-count">24</span>
+            </button>
+            <button
+              type="button"
+              class="category-tab"
+              role="tab"
+              aria-selected="false"
+              data-category="affiliate"
+              aria-controls="integration-grid-region"
+            >
+              Affiliate
+              <span class="tab-count">6</span>
+            </button>
+            <button
+              type="button"
+              class="category-tab"
+              role="tab"
+              aria-selected="false"
+              data-category="travel-apis"
+              aria-controls="integration-grid-region"
+            >
+              Travel APIs
+              <span class="tab-count">4</span>
+            </button>
+            <button
+              type="button"
+              class="category-tab"
+              role="tab"
+              aria-selected="false"
+              data-category="coupons"
+              aria-controls="integration-grid-region"
+            >
+              Coupons
+              <span class="tab-count">4</span>
+            </button>
+            <button
+              type="button"
+              class="category-tab"
+              role="tab"
+              aria-selected="false"
+              data-category="scraping-review"
+              aria-controls="integration-grid-region"
+            >
+              Scraping Review
+              <span class="tab-count">5</span>
+            </button>
+            <button
+              type="button"
+              class="category-tab"
+              role="tab"
+              aria-selected="false"
+              data-category="notifications"
+              aria-controls="integration-grid-region"
+            >
+              Notifications
+              <span class="tab-count">5</span>
+            </button>
+            <button
+              type="button"
+              class="category-tab"
+              role="tab"
+              aria-selected="false"
+              data-category="manual"
+              aria-controls="integration-grid-region"
+            >
+              Manual
+              <span class="tab-count">4</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T016 — Integration cards grid (placeholder)
+        ═════════════════════════════════════════════════════════ -->
+        <section
+          id="integration-grid-region"
+          aria-label="بطاقات التكاملات"
+          class="dash-section"
+        >
+          <div class="integration-grid" id="integration-grid">
+
+            <!-- ── AFFILIATE ─────────────────────────────────────────── -->
+
+            <div class="intg-card" data-category="affiliate" data-key="travelpayouts">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#ECFBFB;color:#0E8186" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Travelpayouts</div>
+                  <div class="intg-card-category">Affiliate</div>
+                </div>
+                <span class="badge badge-needs-config">يحتاج ضبط</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">شبكة Affiliate رائدة لعروض الطيران والفنادق والجولات — تحتاج ضبط Marker ID</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-warn" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">تحذير</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">Marker ID + API Token</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Travelpayouts"><input type="checkbox" id="toggle-travelpayouts"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-travelpayouts">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-travelpayouts" aria-label="ضبط Travelpayouts">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="travelpayouts" aria-label="اختبار Travelpayouts">اختبار</button>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-trigger" aria-label="خيارات Travelpayouts" aria-expanded="false" aria-haspopup="menu"><svg width="14" height="14" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button>
+                    <div class="row-action-menu" hidden role="menu"><button type="button" role="menuitem" data-analytics-toast="توثيق Travelpayouts — قابل للربط لاحقاً">التوثيق</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="affiliate" data-key="booking-affiliate">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#EFF6FF;color:#1D4ED8" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Booking.com Affiliate</div>
+                  <div class="intg-card-category">Affiliate</div>
+                </div>
+                <span class="badge badge-not-connected">غير متصل</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">برنامج Affiliate لـ Booking.com لعروض الفنادق والشقق المفروشة</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">غير نشط</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">Affiliate ID + رابط القالب</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Booking.com Affiliate"><input type="checkbox" id="toggle-booking-affiliate"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-booking-affiliate">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-booking-affiliate">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="booking-affiliate">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="affiliate" data-key="expedia-partner">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#EEF2FF;color:#4338CA" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Expedia Partner</div>
+                  <div class="intg-card-category">Affiliate</div>
+                </div>
+                <span class="badge badge-not-connected">غير متصل</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">برنامج شراكة Expedia لعروض الفنادق والطيران</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">غير نشط</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">Partner ID</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Expedia Partner"><input type="checkbox" id="toggle-expedia-partner"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-expedia-partner">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-expedia-partner">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="expedia-partner">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="affiliate" data-key="skyscanner-partner">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#F0F9FF;color:#0284C7" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Skyscanner Partner</div>
+                  <div class="intg-card-category">Affiliate</div>
+                </div>
+                <span class="badge badge-needs-config">يحتاج ضبط</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">أداة بحث الطيران من Skyscanner — تحتاج ضبط Partner ID</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-warn" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">تحذير</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">Partner ID</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Skyscanner Partner"><input type="checkbox" id="toggle-skyscanner-partner"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-skyscanner-partner">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-skyscanner-partner">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="skyscanner-partner">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="affiliate" data-key="kiwi-tequila">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#F0FDF4;color:#16A34A" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Kiwi / Tequila</div>
+                  <div class="intg-card-category">Affiliate</div>
+                </div>
+                <span class="badge badge-not-connected">غير متصل</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">منصة تذاكر الطيران منخفضة التكلفة من Kiwi.com</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">غير نشط</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">API Key</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Kiwi/Tequila"><input type="checkbox" id="toggle-kiwi-tequila"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-kiwi-tequila">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="ضبط Kiwi/Tequila — قابل للربط لاحقاً">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="kiwi-tequila">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card is-coming-soon" data-category="affiliate" data-key="partner-link-template">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#F8FAFC;color:#64748B" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">قالب رابط شريك مخصص</div>
+                  <div class="intg-card-category">Affiliate</div>
+                </div>
+                <span class="badge badge-coming-soon">قريباً</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">إضافة روابط Affiliate لأي شريك مخصص — قيد التطوير</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">قريباً</span></span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل قالب رابط شريك — غير متاح بعد"><input type="checkbox" id="toggle-partner-link-template" disabled><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-partner-link-template">قريباً</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" disabled aria-disabled="true">قريباً</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── TRAVEL APIS ─────────────────────────────────────── -->
+
+            <div class="intg-card" data-category="travel-apis" data-key="amadeus">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#EFF6FF;color:#2563EB" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Amadeus API</div>
+                  <div class="intg-card-category">Travel APIs</div>
+                </div>
+                <span class="badge badge-api-ready">جاهز للربط</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">واجهة برمجية متكاملة للطيران والفنادق والوجهات — جاهزة للربط</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-ok" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">جيد</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">API Key + API Secret</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Amadeus API"><input type="checkbox" id="toggle-amadeus"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-amadeus">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-amadeus">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="amadeus">اختبار</button>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-trigger" aria-label="خيارات Amadeus" aria-expanded="false" aria-haspopup="menu"><svg width="14" height="14" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button>
+                    <div class="row-action-menu" hidden role="menu"><button type="button" role="menuitem" data-analytics-toast="توثيق Amadeus API — قابل للربط لاحقاً">التوثيق</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="travel-apis" data-key="duffel">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#EDE9FE;color:#7C3AED" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Duffel API</div>
+                  <div class="intg-card-category">Travel APIs</div>
+                </div>
+                <span class="badge badge-api-ready">جاهز للربط</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">واجهة برمجية حديثة لحجوزات الطيران — جاهزة للربط</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-ok" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">جيد</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">API Token</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Duffel API"><input type="checkbox" id="toggle-duffel"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-duffel">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-duffel">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="duffel">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="travel-apis" data-key="expedia-rapid">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#FFF7ED;color:#C2410C" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Expedia Rapid API</div>
+                  <div class="intg-card-category">Travel APIs</div>
+                </div>
+                <span class="badge badge-api-ready">جاهز للربط</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">واجهة برمجية للفنادق من Expedia بمعدلات تنافسية — جاهزة للربط</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-ok" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">جيد</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">API/Rapid Key</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Expedia Rapid API"><input type="checkbox" id="toggle-expedia-rapid"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-expedia-rapid">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-expedia-rapid">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="expedia-rapid">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="travel-apis" data-key="hotelbeds">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#ECFBFB;color:#0E8186" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="12"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Hotelbeds</div>
+                  <div class="intg-card-category">Travel APIs</div>
+                </div>
+                <span class="badge badge-api-ready">جاهز للربط</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">موزّع فنادق عالمي من خلال Hotelbeds — جاهز للربط</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-ok" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">جيد</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">API Key + Secret</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Hotelbeds"><input type="checkbox" id="toggle-hotelbeds"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-hotelbeds">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-hotelbeds">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="hotelbeds">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── COUPONS ──────────────────────────────────────────── -->
+
+            <div class="intg-card" data-category="coupons" data-key="coupon-api">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#EDE9FE;color:#7C3AED" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Coupon API</div>
+                  <div class="intg-card-category">Coupons</div>
+                </div>
+                <span class="badge badge-needs-config">يحتاج ضبط</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">استيراد كوبونات من مصدر خارجي عبر API — يحتاج مراجعة يدوية قبل النشر</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-warn" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">تحذير</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">API Key + Region</span></div>
+                </div>
+                <div class="intg-warning" role="note">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  لا يتم استيراد أي كوبون أو عرض تلقائياً — كل المحتوى يحتاج مراجعة يدوية قبل النشر
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Coupon API"><input type="checkbox" id="toggle-coupon-api"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-coupon-api">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-coupon-api">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="coupon-api">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="coupons" data-key="affiliate-coupon-feed">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#FDF2F8;color:#9D174D" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1" fill="currentColor"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Affiliate Coupon Feed</div>
+                  <div class="intg-card-category">Coupons</div>
+                </div>
+                <span class="badge badge-not-connected">غير متصل</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">استيراد كوبونات من شبكات Affiliate — يتطلب مراجعة يدوية</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">غير نشط</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">Feed URL</span></div>
+                </div>
+                <div class="intg-warning" role="note">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  لا يتم نشر أي كوبون تلقائياً — كل المحتوى المستورد يحتاج مراجعة يدوية قبل النشر
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Affiliate Coupon Feed"><input type="checkbox" id="toggle-affiliate-coupon-feed"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-affiliate-coupon-feed">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="ضبط Feed URL — قابل للربط لاحقاً">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="affiliate-coupon-feed">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card is-connected" data-category="coupons" data-key="manual-coupons">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#F0FDF4;color:#16A34A" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">كوبونات يدوية</div>
+                  <div class="intg-card-category">Coupons</div>
+                </div>
+                <span class="badge badge-connected">متصل (تجريبي)</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">إنشاء وإدارة الكوبونات يدوياً من لوحة التحكم — مفعّل حالياً</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-ok" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">يعمل</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">اليوم 11:30 (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">لا تلزم بيانات</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل الكوبونات اليدوية"><input type="checkbox" id="toggle-manual-coupons" checked><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label is-on" id="lbl-manual-coupons">مفعّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="الكوبونات اليدوية تُدار من صفحة الكوبونات">إدارة</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="manual-coupons">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="coupons" data-key="coupon-import-review">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#FFFBEB;color:#D97706" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">مراجعة استيراد الكوبونات</div>
+                  <div class="intg-card-category">Coupons</div>
+                </div>
+                <span class="badge badge-needs-review">يحتاج مراجعة</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">قائمة مراجعة يدوية للكوبونات المستوردة — 3 كوبونات بانتظار الموافقة</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-review" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">يحتاج مراجعة</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر تحديث: <span class="intg-meta-val">اليوم 09:15 (تجريبي)</span></div>
+                </div>
+                <div class="intg-warning" role="note">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  لا يتم نشر أي كوبون مستورد قبل مراجعتك وموافقتك اليدوية
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل مراجعة استيراد الكوبونات"><input type="checkbox" id="toggle-coupon-import-review"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-coupon-import-review">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="مراجعة الكوبونات المستوردة — قابل للربط لاحقاً">مراجعة</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="coupon-import-review">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── SCRAPING REVIEW ──────────────────────────────────── -->
+
+            <div class="intg-card" id="scraping-section" data-category="scraping-review" data-key="scraping-review-queue">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#FFEDD5;color:#C2410C" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Scraping Review Queue</div>
+                  <div class="intg-card-category">Scraping Review</div>
+                </div>
+                <span class="badge badge-needs-review">يحتاج مراجعة</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">قائمة مراجعة يدوية لمحتوى يتطلب المراجعة — لا يُنشر أي شيء تلقائياً</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-review" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">يحتاج مراجعة</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر فحص: <span class="intg-meta-val">اليوم 09:00 (تجريبي)</span></div>
+                </div>
+                <div class="intg-warning danger-box" role="alert">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <span>⚠️ <strong>لا يتم تشغيل أي scraping فعلياً</strong> في هذه النسخة. لا يتم نشر أي كوبون أو عرض مجمّع تلقائياً قبل المراجعة اليدوية. كل المصادر تحتاج احترام سياسة الموقع قبل استخدامها.</span>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Scraping Review Queue"><input type="checkbox" id="toggle-scraping-review-queue"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-scraping-review-queue">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-scraping-review-queue">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="scraping-review-queue">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="scraping-review" data-key="source-url-monitor">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#F1F5F9;color:#475569" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Source URL Monitor</div>
+                  <div class="intg-card-category">Scraping Review</div>
+                </div>
+                <span class="badge badge-disabled">معطّل</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">مراقبة روابط المصادر للتحقق من صحتها — معطّل حالياً</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">معطّل</span></span></div>
+                </div>
+                <div class="intg-warning" role="note">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  لا يتم تشغيل أي أتمتة — لأغراض المراجعة اليدوية فقط
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Source URL Monitor"><input type="checkbox" id="toggle-source-url-monitor"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-source-url-monitor">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="ضبط Source URL Monitor — قابل للربط لاحقاً">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="source-url-monitor">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card is-connected" data-category="scraping-review" data-key="manual-approval-workflow">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#F0FDF4;color:#16A34A" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Manual Approval Workflow</div>
+                  <div class="intg-card-category">Scraping Review</div>
+                </div>
+                <span class="badge badge-connected">متصل (تجريبي)</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">سير عمل الموافقة اليدوية على المحتوى — مفعّل ويضمن عدم النشر التلقائي</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-ok" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">يعمل</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر تحديث: <span class="intg-meta-val">اليوم 10:00 (تجريبي)</span></div>
+                </div>
+                <div class="intg-warning" role="note">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  كل المحتوى يمر عبر هذا السير قبل النشر — لا يوجد نشر تلقائي
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Manual Approval Workflow"><input type="checkbox" id="toggle-manual-approval-workflow" checked><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label is-on" id="lbl-manual-approval-workflow">مفعّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="سير العمل اليدوي نشط تلقائياً — لا توجد إعدادات إضافية">تفاصيل</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="manual-approval-workflow">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card is-coming-soon" data-category="scraping-review" data-key="duplicate-coupon-detector">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#FFFBEB;color:#D97706" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Duplicate Coupon Detector</div>
+                  <div class="intg-card-category">Scraping Review</div>
+                </div>
+                <span class="badge badge-coming-soon">قريباً</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">كشف الكوبونات المكررة تلقائياً — قيد التطوير</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">قريباً</span></span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Duplicate Coupon Detector — غير متاح بعد"><input type="checkbox" id="toggle-duplicate-coupon-detector" disabled><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-duplicate-coupon-detector">قريباً</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" disabled aria-disabled="true">قريباً</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="scraping-review" data-key="expiry-validator">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#FFF1F2;color:#BE123C" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">Expiry Validator</div>
+                  <div class="intg-card-category">Scraping Review</div>
+                </div>
+                <span class="badge badge-not-connected">غير متصل</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">التحقق من تواريخ انتهاء الكوبونات قبل عرضها</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">غير نشط</span></span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل Expiry Validator"><input type="checkbox" id="toggle-expiry-validator"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-expiry-validator">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="ضبط Expiry Validator — قابل للربط لاحقاً">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="expiry-validator">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── NOTIFICATIONS ────────────────────────────────────── -->
+
+            <div class="intg-card is-connected" data-category="notifications" data-key="email-notifications">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#EFF6FF;color:#2563EB" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">إشعارات البريد الإلكتروني</div>
+                  <div class="intg-card-category">Notifications</div>
+                </div>
+                <span class="badge badge-connected">متصل (تجريبي)</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">إرسال إشعارات البريد للفريق والعملاء — متصل (تجريبي) / لا يتم إرسال رسائل حقيقية</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-ok" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">يعمل</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر اختبار: <span class="intg-meta-val">اليوم 11:00 (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">Sender Email + API Key</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل إشعارات البريد الإلكتروني"><input type="checkbox" id="toggle-email-notifications" checked><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label is-on" id="lbl-email-notifications">مفعّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-email-notifications">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="email-notifications" aria-label="إرسال بريد اختباري">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="notifications" data-key="whatsapp-notifications">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#F0FDF4;color:#16A34A" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">إشعارات واتساب</div>
+                  <div class="intg-card-category">Notifications</div>
+                </div>
+                <span class="badge badge-not-connected">غير متصل</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">إرسال إشعارات عبر واتساب للفريق — غير متصل / لا يتم إرسال رسائل حقيقية</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">غير نشط</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر مزامنة: <span class="intg-meta-val">لم تتم المزامنة (تجريبي)</span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> البيانات: <span class="intg-meta-val">Provider + API Key + رقم هاتف</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل إشعارات واتساب"><input type="checkbox" id="toggle-whatsapp-notifications"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-whatsapp-notifications">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-modal-open="modal-cfg-whatsapp-notifications">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="whatsapp-notifications">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card is-connected" data-category="notifications" data-key="dashboard-alerts">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#ECFBFB;color:#0E8186" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">تنبيهات لوحة التحكم</div>
+                  <div class="intg-card-category">Notifications</div>
+                </div>
+                <span class="badge badge-connected">متصل (تجريبي)</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">إشعارات داخل لوحة التحكم — مفعّل افتراضياً</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-ok" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">يعمل</span></span></div>
+                  <div class="intg-meta-row"><svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> آخر تحديث: <span class="intg-meta-val">اليوم (تجريبي)</span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل تنبيهات لوحة التحكم"><input type="checkbox" id="toggle-dashboard-alerts" checked><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label is-on" id="lbl-dashboard-alerts">مفعّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="الإشعارات الداخلية تعمل تلقائياً — لا توجد إعدادات إضافية">إدارة</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="dashboard-alerts">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="notifications" data-key="daily-summary">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#EDE9FE;color:#7C3AED" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">ملخص يومي</div>
+                  <div class="intg-card-category">Notifications</div>
+                </div>
+                <span class="badge badge-not-connected">غير متصل</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">إرسال ملخص يومي للأداء عبر البريد — غير مفعّل</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">غير نشط</span></span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل الملخص اليومي"><input type="checkbox" id="toggle-daily-summary"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-daily-summary">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="ضبط الملخص اليومي — يحتاج ربط البريد الإلكتروني أولاً">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="daily-summary">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card is-coming-soon" data-category="notifications" data-key="weekly-reports">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#EFF6FF;color:#2563EB" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">تقارير أسبوعية</div>
+                  <div class="intg-card-category">Notifications</div>
+                </div>
+                <span class="badge badge-coming-soon">قريباً</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">تقارير أسبوعية مفصّلة — قيد التطوير</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">قريباً</span></span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل التقارير الأسبوعية — غير متاح بعد"><input type="checkbox" id="toggle-weekly-reports" disabled><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-weekly-reports">قريباً</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" disabled aria-disabled="true">قريباً</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── MANUAL ───────────────────────────────────────────── -->
+
+            <div class="intg-card" data-category="manual" data-key="manual-csv-import">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#F1F5F9;color:#475569" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">رفع ملف CSV / Excel</div>
+                  <div class="intg-card-category">Manual</div>
+                </div>
+                <span class="badge badge-not-connected">غير متصل</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">استيراد الكوبونات والعروض يدوياً عبر ملف CSV أو Excel — قابل للربط لاحقاً</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">غير نشط</span></span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل رفع CSV/Excel"><input type="checkbox" id="toggle-manual-csv-import"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-manual-csv-import">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="رفع ملف CSV/Excel — قابل للربط لاحقاً">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="manual-csv-import">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="manual" data-key="manual-booking-entry">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#EFF6FF;color:#2563EB" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">إدخال طلب حجز يدوي</div>
+                  <div class="intg-card-category">Manual</div>
+                </div>
+                <span class="badge badge-not-connected">غير متصل</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">إدخال طلبات الحجز وبيانات العملاء يدوياً بدون API — قابل للربط لاحقاً</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">غير نشط</span></span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل إدخال طلب حجز يدوي"><input type="checkbox" id="toggle-manual-booking-entry"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-manual-booking-entry">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="إدخال حجز يدوي — قابل للربط لاحقاً">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="manual-booking-entry">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card is-connected" data-category="manual" data-key="manual-price-sheet">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#FFF7ED;color:#C2410C" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">قائمة أسعار يدوية</div>
+                  <div class="intg-card-category">Manual</div>
+                </div>
+                <span class="badge badge-connected">متصل (تجريبي)</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">إدارة قوائم الأسعار يدوياً — مفعّل ويعمل من لوحة التحكم</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-ok" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">يعمل</span></span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل قائمة الأسعار اليدوية"><input type="checkbox" id="toggle-manual-price-sheet" checked><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label is-on" id="lbl-manual-price-sheet">مفعّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="قائمة الأسعار تُدار من لوحة العروض">إدارة</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="manual-price-sheet">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="intg-card" data-category="manual" data-key="manual-data-sync">
+              <div class="intg-card-top">
+                <div class="intg-card-icon" style="background:#F0FDF4;color:#16A34A" aria-hidden="true">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+                </div>
+                <div class="intg-card-header">
+                  <div class="intg-card-name">مزامنة يدوية</div>
+                  <div class="intg-card-category">Manual</div>
+                </div>
+                <span class="badge badge-not-connected">غير متصل</span>
+              </div>
+              <div class="intg-card-body">
+                <p class="intg-card-desc">تشغيل مزامنة يدوية بين المصادر المُعدّة — قابل للربط لاحقاً</p>
+                <div class="intg-card-meta">
+                  <div class="intg-meta-row"><span class="health-dot health-dot-off" aria-hidden="true"></span> <span>الحالة: <span class="intg-meta-val">غير نشط</span></span></div>
+                </div>
+              </div>
+              <div class="intg-card-footer">
+                <div class="intg-toggle-wrap">
+                  <label class="toggle-switch" aria-label="تفعيل المزامنة اليدوية"><input type="checkbox" id="toggle-manual-data-sync"><span class="toggle-track"></span></label>
+                  <span class="intg-toggle-label" id="lbl-manual-data-sync">معطّل</span>
+                </div>
+                <div class="intg-actions">
+                  <button type="button" class="btn-intg btn-intg-cfg" data-analytics-toast="مزامنة يدوية — قابل للربط لاحقاً">ضبط</button>
+                  <button type="button" class="btn-intg btn-intg-test" data-intg-test="manual-data-sync">اختبار</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Filter empty state (shown via JS when 0 cards match filter) -->
+          <div id="intg-empty-state" class="empty-state card" hidden>
+            <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 6L6 18"/><path d="M7 17l-5 5"/><path d="M17 7l5-5"/><path d="M11 3l3 3-7 7-3-3z"/><path d="M13 21l-3-3 7-7 3 3z"/></svg>
+            <p class="empty-state-title">لا تكاملات في هذا التصنيف</p>
+            <p class="empty-state-body">جرّب تصنيفاً آخر أو اعرض الكل</p>
+          </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T017 — Activity Log
+        ═════════════════════════════════════════════════════════ -->
+        <section class="dash-section" aria-label="سجل النشاط">
+          <div class="dash-section-header">
+            <div>
+              <h2 class="dash-section-title">سجل النشاط</h2>
+              <p class="dash-section-sub">آخر 8 أحداث — بيانات تجريبية / لا يتم تسجيل نشاط حقيقي</p>
+            </div>
+          </div>
+          <div class="card" style="overflow:hidden">
+            <div class="activity-log" role="log" aria-label="سجل النشاط">
+
+              <div class="activity-item">
+                <div class="activity-dot-wrap" aria-hidden="true">
+                  <span class="activity-dot activity-dot-info"></span>
+                </div>
+                <div class="activity-text">
+                  <div class="activity-event">تم ضبط إعدادات Travelpayouts (تجريبي)</div>
+                  <div class="activity-time">اليوم 10:24</div>
+                </div>
+                <span class="activity-severity sev-info">معلومة</span>
+              </div>
+
+              <div class="activity-item">
+                <div class="activity-dot-wrap" aria-hidden="true">
+                  <span class="activity-dot activity-dot-error"></span>
+                </div>
+                <div class="activity-text">
+                  <div class="activity-event">اختبار اتصال Coupon API فشل — لا يتم الاتصال بأي مصدر خارجي</div>
+                  <div class="activity-time">اليوم 09:40</div>
+                </div>
+                <span class="activity-severity sev-error">خطأ</span>
+              </div>
+
+              <div class="activity-item">
+                <div class="activity-dot-wrap" aria-hidden="true">
+                  <span class="activity-dot activity-dot-info"></span>
+                </div>
+                <div class="activity-text">
+                  <div class="activity-event">تمت إضافة مصدر مراجعة جديد (تجريبي)</div>
+                  <div class="activity-time">اليوم 09:15</div>
+                </div>
+                <span class="activity-severity sev-info">معلومة</span>
+              </div>
+
+              <div class="activity-item">
+                <div class="activity-dot-wrap" aria-hidden="true">
+                  <span class="activity-dot activity-dot-warn"></span>
+                </div>
+                <div class="activity-text">
+                  <div class="activity-event">محتوى بانتظار المراجعة اليدوية — 3 عناصر جديدة</div>
+                  <div class="activity-time">أمس 18:30</div>
+                </div>
+                <span class="activity-severity sev-warn">تحذير</span>
+              </div>
+
+              <div class="activity-item">
+                <div class="activity-dot-wrap" aria-hidden="true">
+                  <span class="activity-dot activity-dot-info"></span>
+                </div>
+                <div class="activity-text">
+                  <div class="activity-event">تم إرسال بريد اختباري — تجريبي / لا يتم إرسال رسائل حقيقية</div>
+                  <div class="activity-time">أمس 14:10</div>
+                </div>
+                <span class="activity-severity sev-info">معلومة</span>
+              </div>
+
+              <div class="activity-item">
+                <div class="activity-dot-wrap" aria-hidden="true">
+                  <span class="activity-dot activity-dot-warn"></span>
+                </div>
+                <div class="activity-text">
+                  <div class="activity-event">تم تعطيل تكامل واتساب مؤقتاً</div>
+                  <div class="activity-time">أمس 11:05</div>
+                </div>
+                <span class="activity-severity sev-warn">تحذير</span>
+              </div>
+
+              <div class="activity-item">
+                <div class="activity-dot-wrap" aria-hidden="true">
+                  <span class="activity-dot activity-dot-info"></span>
+                </div>
+                <div class="activity-text">
+                  <div class="activity-event">تم تحديث معامل API Key (placeholder — لا يتم الحفظ على خادم)</div>
+                  <div class="activity-time">منذ يومين</div>
+                </div>
+                <span class="activity-severity sev-info">معلومة</span>
+              </div>
+
+              <div class="activity-item">
+                <div class="activity-dot-wrap" aria-hidden="true">
+                  <span class="activity-dot activity-dot-warn"></span>
+                </div>
+                <div class="activity-text">
+                  <div class="activity-event">تخطّت المزامنة — لا يوجد مصدر متصل فعلياً</div>
+                  <div class="activity-time">منذ يومين</div>
+                </div>
+                <span class="activity-severity sev-warn">تحذير</span>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T017 — Health Panel
+        ═════════════════════════════════════════════════════════ -->
+        <section class="dash-section" aria-label="صحة التكاملات">
+          <div class="dash-section-header">
+            <div>
+              <h2 class="dash-section-title">صحة التكاملات</h2>
+              <p class="dash-section-sub">ملخص حالة التكاملات — بيانات تجريبية</p>
+            </div>
+          </div>
+          <div class="health-panel">
+            <div class="health-overall health-overall-warn" role="status">
+              <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              وضع التكاملات: <strong>يحتاج انتباهاً</strong> — آخر فحص: اليوم 11:00 (تجريبي)
+            </div>
+            <div class="health-panel-grid">
+              <div class="health-metric">
+                <div class="health-metric-icon" aria-hidden="true">🔴</div>
+                <div class="health-metric-val">1</div>
+                <div class="health-metric-label">مشكلة نشطة</div>
+              </div>
+              <div class="health-metric">
+                <div class="health-metric-icon" aria-hidden="true">⚠️</div>
+                <div class="health-metric-val">2</div>
+                <div class="health-metric-label">تحذيرات</div>
+              </div>
+              <div class="health-metric">
+                <div class="health-metric-icon" aria-hidden="true">🔍</div>
+                <div class="health-metric-val">2</div>
+                <div class="health-metric-label">تحتاج مراجعة</div>
+              </div>
+              <div class="health-metric">
+                <div class="health-metric-icon" aria-hidden="true">✅</div>
+                <div class="health-metric-val">5</div>
+                <div class="health-metric-label">تعمل بشكل جيد</div>
+              </div>
+            </div>
+            <p class="text-xs mt-3" style="color:#9AA6B4;font-size:.75rem">بيانات تجريبية / لا يتم إجراء فحص حقيقي على أي مصدر خارجي في هذه النسخة</p>
+          </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════
+             T017 — FAQ
+        ═════════════════════════════════════════════════════════ -->
+        <section class="dash-section" aria-label="الأسئلة الشائعة حول التكاملات">
+          <div class="dash-section-header">
+            <div>
+              <h2 class="dash-section-title">الأسئلة الشائعة</h2>
+              <p class="dash-section-sub">إجابات حول التكاملات والبيانات التجريبية</p>
+            </div>
+          </div>
+          <div class="faq-wrap">
+
+            <details class="faq-item">
+              <summary>
+                هل التكاملات المعروضة متصلة فعليًا؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                لا. جميع التكاملات الموضحة هي <strong>بيانات تجريبية ثابتة</strong>. البطاقات التي تظهر "متصل (تجريبي)" لا تعني وجود اتصال حقيقي بأي API خارجي. هذه الصفحة <strong>واجهة أمامية فقط</strong> لعرض مثال على ما ستبدو عليه لوحة التكاملات عند الربط بخادم حقيقي.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يمكن استخدام Travelpayouts لاحقًا؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                نعم، هذه الصفحة <strong>قابلة للربط لاحقاً</strong>. عند تطوير الخادم يمكن تفعيل Travelpayouts عبر إدخال Marker ID وAPI Token الحقيقيين. ستُحفظ البيانات على الخادم ويبدأ الاتصال الفعلي. حقول الإعداد الموضحة مثال على ما سيحتاجه المطور.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يمكن ربط Amadeus أو Duffel؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                نعم، كلا الـ APIs جاهزان للربط. تظهر حالتهما "جاهز للربط" لأن هيكل البيانات والحقول المطلوبة معروف مسبقاً. عند الربط بخادم، يكفي تمرير API Key و Secret في حقول الإعداد الظاهرة لبدء الاتصال. بيئة Production في Amadeus معطّلة حتى الربط الفعلي.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يتم تشغيل Scraping الآن؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                <strong>لا يتم تشغيل أي Scraping فعلياً</strong> في هذه النسخة. بطاقات "Scraping Review" هي أدوات مراجعة يدوية فقط. أي محتوى يصل عبر مصدر خارجي يجب أن يمر بمراجعة يدوية قبل النشر. لا يُنشر أي كوبون أو عرض تلقائياً. المصادر ملزمة باحترام سياسة الموقع المصدر.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يتم إرسال رسائل WhatsApp أو Email؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                <strong>لا يتم إرسال أي رسائل حقيقية</strong> في هذه النسخة. حقل "Email متصل (تجريبي)" هو حالة افتراضية تجريبية. زر "اختبار" الموجود في بطاقات الإشعارات يُظهر رسالة تنبيه بأنه اختبار تجريبي فقط ولا يُرسَل فعلياً. عند الربط بخادم حقيقي سيتم الإرسال عبر مزود البريد أو WhatsApp API المُعدّ.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يتم نشر الكوبونات تلقائيًا عبر التكاملات؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">
+                <strong>لا يتم نشر أي كوبون أو عرض تلقائياً.</strong> حتى في النظام الحقيقي، كل محتوى مستورد — سواء من Coupon API أو Affiliate Feed أو أي مصدر آخر — يجب أن يمر عبر سير العمل اليدوي (Manual Approval Workflow) ومراجعة يدوية كاملة قبل الظهور على الموقع. هذا القرار مبدئي ولا يمكن تجاوزه.
+              </div>
+            </details>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- ── Footer ── -->
+    <footer class="dash-footer" role="contentinfo">
+      <span>رحلاتي — لوحة التحكم التجريبية · بيانات تجريبية / واجهة أمامية فقط</span>
+      <div class="flex gap-1 flex-wrap">
+        <a href="index.html">الرئيسية</a>
+        <span aria-hidden="true">·</span>
+        <a href="deals.html">العروض</a>
+        <span aria-hidden="true">·</span>
+        <a href="coupons.html">الكوبونات</a>
+        <span aria-hidden="true">·</span>
+        <a href="analytics.html">التحليلات</a>
+        <span aria-hidden="true">·</span>
+        <a href="settings.html">الإعدادات</a>
+      </div>
+    </footer>
+
+  </div>
+  <!-- /dash-main -->
+
+  <!-- ═══════════════════════════════════════════════════════════
+       T017 — Configure Modals (12 total, ≥10 required)
+  ════════════════════════════════════════════════════════════ -->
+
+  <!-- 1. Travelpayouts -->
+  <div id="modal-cfg-travelpayouts" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-travelpayouts" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div>
+        <div><h2 id="title-cfg-travelpayouts" class="modal-title">ضبط Travelpayouts</h2><p class="modal-subtitle">اختبار تجريبي — لا يتم الحفظ على خادم</p></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-tp-marker">Marker ID <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-tp-marker" type="text" placeholder="أدخل Marker ID" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-tp-marker">حقل مطلوب</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-tp-token">API Token <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-tp-token" type="text" placeholder="placeholder — لا يتم التحقق" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-tp-token">حقل مطلوب</p>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="cfg-tp-currency">العملة الافتراضية</label>
+          <select class="form-select" id="cfg-tp-currency"><option value="USD">USD</option><option value="EUR">EUR</option><option value="SAR">SAR</option><option value="AED">AED</option><option value="EGP">EGP</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cfg-tp-lang">اللغة الافتراضية</label>
+          <select class="form-select" id="cfg-tp-lang"><option value="ar">العربية</option><option value="en">English</option></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">المنتجات</label>
+        <div class="form-checkbox-group">
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-tp-flights" checked><label for="cfg-tp-flights">الطيران (Flights)</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-tp-hotels" checked><label for="cfg-tp-hotels">الفنادق (Hotels)</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-tp-tours"><label for="cfg-tp-tours">الجولات (Tours)</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-tp-insurance"><label for="cfg-tp-insurance">التأمين (Insurance)</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-tp-car"><label for="cfg-tp-car">تأجير السيارات (Car rental)</label></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-tp-tracking">معامل التتبع</label>
+        <input class="form-input" id="cfg-tp-tracking" type="text" placeholder="مثال: utm_source=rihlaty" dir="ltr">
+        <p class="form-hint">لأغراض تتبع النقرات — اختياري</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-travelpayouts">إلغاء</button>
+        <button type="button" class="btn-secondary-modal" data-intg-test="travelpayouts">اختبار اتصال</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-travelpayouts">حفظ الإعدادات</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Booking.com Affiliate -->
+  <div id="modal-cfg-booking-affiliate" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-booking-affiliate" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div><h2 id="title-cfg-booking-affiliate" class="modal-title">ضبط Booking.com Affiliate</h2><p class="modal-subtitle">اختبار تجريبي — لا يتم الحفظ على خادم</p></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-bk-id">Affiliate ID <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-bk-id" type="text" placeholder="Affiliate ID" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-bk-id">حقل مطلوب</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-bk-dest">الوجهة الافتراضية</label>
+        <input class="form-input" id="cfg-bk-dest" type="text" placeholder="مثال: Dubai">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-bk-template">قالب الرابط</label>
+        <input class="form-input" id="cfg-bk-template" type="text" placeholder="https://www.booking.com/?aid={ID}" dir="ltr">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="cfg-bk-tracking">معامل التتبع</label>
+          <input class="form-input" id="cfg-bk-tracking" type="text" dir="ltr" placeholder="utm_source=rihlaty">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cfg-bk-lang">اللغة</label>
+          <select class="form-select" id="cfg-bk-lang"><option value="ar">العربية</option><option value="en">English</option></select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-booking-affiliate">إلغاء</button>
+        <button type="button" class="btn-secondary-modal" data-intg-test="booking-affiliate">اختبار</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-booking-affiliate">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Expedia Partner -->
+  <div id="modal-cfg-expedia-partner" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-expedia-partner" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></div>
+        <div><h2 id="title-cfg-expedia-partner" class="modal-title">ضبط Expedia Partner</h2><p class="modal-subtitle">اختبار تجريبي — لا يتم الحفظ على خادم</p></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-ex-id">Partner ID <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-ex-id" type="text" placeholder="Partner ID" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-ex-id">حقل مطلوب</p>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="cfg-ex-market">السوق الافتراضي</label>
+          <select class="form-select" id="cfg-ex-market"><option value="SA">السعودية</option><option value="AE">الإمارات</option><option value="EG">مصر</option><option value="US">US</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cfg-ex-currency">العملة</label>
+          <select class="form-select" id="cfg-ex-currency"><option value="USD">USD</option><option value="SAR">SAR</option><option value="AED">AED</option></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-ex-template">قالب الرابط</label>
+        <input class="form-input" id="cfg-ex-template" type="text" placeholder="https://www.expedia.com/?affcid={ID}" dir="ltr">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-expedia-partner">إلغاء</button>
+        <button type="button" class="btn-secondary-modal" data-intg-test="expedia-partner">اختبار</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-expedia-partner">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Skyscanner Partner -->
+  <div id="modal-cfg-skyscanner-partner" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-skyscanner-partner" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></svg></div>
+        <div><h2 id="title-cfg-skyscanner-partner" class="modal-title">ضبط Skyscanner Partner</h2><p class="modal-subtitle">اختبار تجريبي — لا يتم الحفظ على خادم</p></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-sky-id">Partner ID <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-sky-id" type="text" placeholder="Partner ID" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-sky-id">حقل مطلوب</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-sky-market">السوق الافتراضي</label>
+        <select class="form-select" id="cfg-sky-market"><option value="SA">السعودية</option><option value="AE">الإمارات</option><option value="EG">مصر</option></select>
+      </div>
+      <div class="form-toggle-row">
+        <div class="form-toggle-info">
+          <div class="form-toggle-label">وضع الأداة المدمجة (Widget)</div>
+          <div class="form-toggle-hint">إظهار أداة البحث داخل الموقع</div>
+        </div>
+        <label class="toggle-switch" aria-label="تفعيل وضع الأداة المدمجة"><input type="checkbox" id="cfg-sky-widget"><span class="toggle-track"></span></label>
+      </div>
+      <div class="form-toggle-row">
+        <div class="form-toggle-info">
+          <div class="form-toggle-label">API جاهز (Placeholder)</div>
+          <div class="form-toggle-hint">للعرض فقط — قابل للربط لاحقاً</div>
+        </div>
+        <label class="toggle-switch" aria-label="API جاهز — placeholder"><input type="checkbox" id="cfg-sky-api-ready" disabled><span class="toggle-track"></span></label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-skyscanner-partner">إلغاء</button>
+        <button type="button" class="btn-secondary-modal" data-intg-test="skyscanner-partner">اختبار</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-skyscanner-partner">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Amadeus API -->
+  <div id="modal-cfg-amadeus" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-amadeus" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+        <div><h2 id="title-cfg-amadeus" class="modal-title">ضبط Amadeus API</h2><p class="modal-subtitle">اختبار تجريبي — لا يتم الحفظ على خادم</p></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-am-key">API Key <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-am-key" type="text" placeholder="Amadeus API Key" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-am-key">حقل مطلوب</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-am-secret">API Secret <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-am-secret" type="text" placeholder="placeholder — لا يتم التحقق" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-am-secret">حقل مطلوب</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-am-env">البيئة <span class="req" aria-hidden="true">*</span></label>
+        <select class="form-select" id="cfg-am-env" required aria-required="true">
+          <option value="test" selected>Test (اختباري)</option>
+          <option value="production" disabled>Production (غير متاح — اتصل بالدعم)</option>
+        </select>
+        <p class="form-hint">بيئة Production معطّلة حتى استكمال إعداد الخادم</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">المنتجات المُفعّلة</label>
+        <div class="form-checkbox-group">
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-am-flights" checked><label for="cfg-am-flights">الطيران (Flights)</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-am-hotels" checked><label for="cfg-am-hotels">الفنادق (Hotels)</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-am-destinations"><label for="cfg-am-destinations">الوجهات (Destinations)</label></div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-amadeus">إلغاء</button>
+        <button type="button" class="btn-secondary-modal" data-intg-test="amadeus">اختبار اتصال</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-amadeus">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Duffel API -->
+  <div id="modal-cfg-duffel" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-duffel" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+        <div><h2 id="title-cfg-duffel" class="modal-title">ضبط Duffel API</h2><p class="modal-subtitle">اختبار تجريبي — لا يتم الحفظ على خادم</p></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-du-token">API Token <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-du-token" type="text" placeholder="duffel_test_... (placeholder)" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-du-token">حقل مطلوب</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-du-env">البيئة</label>
+        <select class="form-select" id="cfg-du-env">
+          <option value="sandbox" selected>Sandbox (اختباري)</option>
+          <option value="live">Live (إنتاج)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">المنتجات</label>
+        <div class="form-checkbox-group">
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-du-flights" checked><label for="cfg-du-flights">حجوزات الطيران</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-du-seats"><label for="cfg-du-seats">اختيار المقاعد</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-du-baggage"><label for="cfg-du-baggage">الأمتعة الإضافية</label></div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-duffel">إلغاء</button>
+        <button type="button" class="btn-secondary-modal" data-intg-test="duffel">اختبار</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-duffel">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Expedia Rapid API (extra modal) -->
+  <div id="modal-cfg-expedia-rapid" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-expedia-rapid" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div><h2 id="title-cfg-expedia-rapid" class="modal-title">ضبط Expedia Rapid API</h2><p class="modal-subtitle">اختبار تجريبي — لا يتم الحفظ على خادم</p></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-er-key">API / Rapid Key <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-er-key" type="text" placeholder="placeholder — لا يتم التحقق" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-er-key">حقل مطلوب</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-er-market">السوق</label>
+        <select class="form-select" id="cfg-er-market"><option value="SA">السعودية</option><option value="AE">الإمارات</option><option value="EG">مصر</option><option value="US">US</option></select>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-expedia-rapid">إلغاء</button>
+        <button type="button" class="btn-secondary-modal" data-intg-test="expedia-rapid">اختبار</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-expedia-rapid">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Hotelbeds (extra modal) -->
+  <div id="modal-cfg-hotelbeds" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-hotelbeds" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div>
+        <div><h2 id="title-cfg-hotelbeds" class="modal-title">ضبط Hotelbeds</h2><p class="modal-subtitle">اختبار تجريبي — لا يتم الحفظ على خادم</p></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-hb-key">API Key <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-hb-key" type="text" placeholder="placeholder — لا يتم التحقق" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-hb-key">حقل مطلوب</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-hb-secret">API Secret <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-hb-secret" type="text" placeholder="placeholder — لا يتم التحقق" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-hb-secret">حقل مطلوب</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-hotelbeds">إلغاء</button>
+        <button type="button" class="btn-secondary-modal" data-intg-test="hotelbeds">اختبار</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-hotelbeds">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. Coupon API -->
+  <div id="modal-cfg-coupon-api" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-coupon-api" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div><h2 id="title-cfg-coupon-api" class="modal-title">ضبط Coupon API</h2><p class="modal-subtitle">اختبار تجريبي — لا يتم الحفظ على خادم</p></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-ca-key">API Key <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-ca-key" type="text" placeholder="placeholder — لا يتم التحقق" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-ca-key">حقل مطلوب</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-ca-region">المنطقة</label>
+        <select class="form-select" id="cfg-ca-region"><option value="mena">الشرق الأوسط وشمال أفريقيا</option><option value="global">Global</option><option value="sa">السعودية</option><option value="ae">الإمارات</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">الفئات المُفعّلة</label>
+        <div class="form-checkbox-group">
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-ca-travel" checked><label for="cfg-ca-travel">السفر والسياحة</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-ca-hotels" checked><label for="cfg-ca-hotels">الفنادق</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-ca-flights"><label for="cfg-ca-flights">الطيران</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-ca-activities"><label for="cfg-ca-activities">الأنشطة والجولات</label></div>
+        </div>
+      </div>
+      <hr class="form-section-divider">
+      <div class="form-toggle-row">
+        <div class="form-toggle-info">
+          <div class="form-toggle-label">استيراد تلقائي</div>
+          <div class="form-toggle-hint">استيراد الكوبونات الجديدة تلقائياً</div>
+        </div>
+        <label class="toggle-switch" aria-label="تفعيل الاستيراد التلقائي"><input type="checkbox" id="cfg-ca-auto-import"><span class="toggle-track"></span></label>
+      </div>
+      <div class="form-toggle-row">
+        <div class="form-toggle-info">
+          <div class="form-toggle-label">مراجعة يدوية مطلوبة</div>
+          <div class="form-toggle-hint">لا يُنشر أي كوبون مستورد قبل المراجعة</div>
+        </div>
+        <label class="toggle-switch" aria-label="تفعيل المراجعة اليدوية"><input type="checkbox" id="cfg-ca-manual-review" checked><span class="toggle-track"></span></label>
+      </div>
+      <div class="honesty-box" role="note" style="margin-top:.75rem">
+        <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        لا يتم استيراد أي كوبون تلقائياً — كل المحتوى يحتاج مراجعة يدوية قبل النشر
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-coupon-api">إلغاء</button>
+        <button type="button" class="btn-secondary-modal" data-intg-test="coupon-api">اختبار</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-coupon-api">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. Scraping Review Queue — with strong honesty warning -->
+  <div id="modal-cfg-scraping-review-queue" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-scraping" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-warning" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div><h2 id="title-cfg-scraping" class="modal-title">ضبط Scraping Review Queue</h2><p class="modal-subtitle">مراجعة يدوية — لا يتم scraping فعلياً</p></div>
+      </div>
+      <div class="honesty-box danger-box" role="alert" style="margin-bottom:1rem">
+        <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span><strong>لا يتم نشر أي كوبون أو عرض مجمّع تلقائياً قبل المراجعة اليدوية.</strong> كل المصادر تحتاج احترام سياسة الموقع. لا يتم تشغيل أي scraping فعلياً في هذه النسخة.</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-srq-name">اسم المصدر <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-srq-name" type="text" placeholder="مثال: مصدر كوبونات الفنادق" required aria-required="true">
+        <p class="form-error" id="err-srq-name">حقل مطلوب</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-srq-url">رابط المصدر <span class="req" aria-hidden="true">*</span></label>
+        <input class="form-input" id="cfg-srq-url" type="text" placeholder="https://example.com/feed" required aria-required="true" dir="ltr">
+        <p class="form-error" id="err-srq-url">رابط مطلوب</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-srq-freq">تكرار الفحص</label>
+        <select class="form-select" id="cfg-srq-freq">
+          <option value="daily">يومياً</option>
+          <option value="weekly">أسبوعياً</option>
+          <option value="manual" selected>يدوياً فقط</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-srq-notes">ملاحظات</label>
+        <textarea class="form-textarea" id="cfg-srq-notes" rows="2" placeholder="ملاحظات حول المصدر..."></textarea>
+      </div>
+      <hr class="form-section-divider">
+      <div class="form-toggle-row">
+        <div class="form-toggle-info">
+          <div class="form-toggle-label">مراجعة يدوية مطلوبة</div>
+          <div class="form-toggle-hint">لا يُنشر محتوى قبل الموافقة</div>
+        </div>
+        <label class="toggle-switch" aria-label="تفعيل المراجعة اليدوية"><input type="checkbox" id="cfg-srq-manual" checked><span class="toggle-track"></span></label>
+      </div>
+      <div class="form-toggle-row">
+        <div class="form-toggle-info">
+          <div class="form-toggle-label">كشف التكرار</div>
+          <div class="form-toggle-hint">التحقق من الكوبونات المكررة</div>
+        </div>
+        <label class="toggle-switch" aria-label="تفعيل كشف التكرار"><input type="checkbox" id="cfg-srq-dedup" checked><span class="toggle-track"></span></label>
+      </div>
+      <div class="form-toggle-row">
+        <div class="form-toggle-info">
+          <div class="form-toggle-label">التحقق من تواريخ الانتهاء</div>
+          <div class="form-toggle-hint">تصفية الكوبونات المنتهية تلقائياً</div>
+        </div>
+        <label class="toggle-switch" aria-label="تفعيل التحقق من تواريخ الانتهاء"><input type="checkbox" id="cfg-srq-expiry"><span class="toggle-track"></span></label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-scraping-review-queue">إلغاء</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-scraping-review-queue">حفظ المصدر</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. Email Notifications -->
+  <div id="modal-cfg-email-notifications" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-email" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg></div>
+        <div><h2 id="title-cfg-email" class="modal-title">ضبط إشعارات البريد</h2><p class="modal-subtitle">لا يتم إرسال رسائل حقيقية — تجريبي</p></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="cfg-em-name">اسم المرسِل <span class="req" aria-hidden="true">*</span></label>
+          <input class="form-input" id="cfg-em-name" type="text" placeholder="مثال: رحلاتي" required aria-required="true">
+          <p class="form-error" id="err-em-name">حقل مطلوب</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cfg-em-email">بريد المرسِل <span class="req" aria-hidden="true">*</span></label>
+          <input class="form-input" id="cfg-em-email" type="email" placeholder="noreply@example.com" required aria-required="true" dir="ltr">
+          <p class="form-error" id="err-em-email">بريد إلكتروني مطلوب</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-em-apikey">API Key (Placeholder)</label>
+        <input class="form-input" id="cfg-em-apikey" type="text" placeholder="placeholder — لا يتم التحقق" dir="ltr">
+        <p class="form-hint">مزود الخدمة: SendGrid أو Mailgun أو غيره — قابل للربط لاحقاً</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">أنواع الإشعارات</label>
+        <div class="form-checkbox-group">
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-em-booking" checked><label for="cfg-em-booking">طلبات الحجز الجديدة</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-em-coupon" checked><label for="cfg-em-coupon">نسخ الكوبونات</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-em-expiry"><label for="cfg-em-expiry">تنبيه انتهاء العروض</label></div>
+        </div>
+      </div>
+      <div class="form-toggle-row">
+        <div class="form-toggle-info">
+          <div class="form-toggle-label">ملخص يومي</div>
+          <div class="form-toggle-hint">إرسال ملخص يومي للأداء</div>
+        </div>
+        <label class="toggle-switch" aria-label="تفعيل الملخص اليومي"><input type="checkbox" id="cfg-em-daily"><span class="toggle-track"></span></label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-email-notifications">إلغاء</button>
+        <button type="button" class="btn-secondary-modal" data-intg-test="email-notifications">إرسال بريد تجريبي</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-email-notifications">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. WhatsApp Notifications -->
+  <div id="modal-cfg-whatsapp-notifications" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="title-cfg-whatsapp" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div><h2 id="title-cfg-whatsapp" class="modal-title">ضبط إشعارات واتساب</h2><p class="modal-subtitle">لا يتم إرسال رسائل حقيقية — تجريبي</p></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-wa-provider">الجهة المزودة (Placeholder)</label>
+        <input class="form-input" id="cfg-wa-provider" type="text" placeholder="مثال: Twilio أو WhatsApp Cloud API" dir="ltr">
+        <p class="form-hint">قابل للربط لاحقاً</p>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="cfg-wa-name">اسم المرسِل</label>
+          <input class="form-input" id="cfg-wa-name" type="text" placeholder="مثال: رحلاتي">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cfg-wa-phone">رقم الهاتف (Placeholder)</label>
+          <input class="form-input" id="cfg-wa-phone" type="text" placeholder="+966xxxxxxxxx" dir="ltr">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cfg-wa-apikey">API Key (Placeholder)</label>
+        <input class="form-input" id="cfg-wa-apikey" type="text" placeholder="placeholder — لا يتم التحقق" dir="ltr">
+      </div>
+      <div class="form-group">
+        <label class="form-label">أنواع الإشعارات</label>
+        <div class="form-checkbox-group">
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-wa-booking" checked><label for="cfg-wa-booking">طلبات الحجز الجديدة</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-wa-status"><label for="cfg-wa-status">تحديثات حالة الحجز</label></div>
+          <div class="form-checkbox-item"><input type="checkbox" id="cfg-wa-review"><label for="cfg-wa-review">تنبيهات المراجعة</label></div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close="modal-cfg-whatsapp-notifications">إلغاء</button>
+        <button type="button" class="btn-secondary-modal" data-intg-test="whatsapp-notifications">إرسال رسالة تجريبية</button>
+        <button type="button" class="btn-primary-modal" data-modal-save="modal-cfg-whatsapp-notifications">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../src/js/ui.js" defer></script>
+  <script src="../src/js/main.js" defer></script>
+  <script src="../src/js/dashboard.js" defer></script>
+
+</body>
+</html>

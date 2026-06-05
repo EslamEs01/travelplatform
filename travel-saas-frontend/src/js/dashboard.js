@@ -2361,17 +2361,772 @@ function initMerchantAnalytics() {
   });
 }
 
-// ─── merchant-integrations controller (stub — implemented in T018) ───────────
+// ─── merchant-integrations controller (T018 — Phase 4 US2) ───────────────────
 function initMerchantIntegrations() {
-  // Filled in by T018 (Phase 4 US2).
-  // Reuses: DropdownController, validateAndSubmit, confirmModal, toast, announce (closure).
-  // Handles: category tabs filter, configure modals, Save/Test toasts, enable/disable toggles.
+  // Reuses: DropdownController, validateAndSubmit, toast, announce (closure above).
+  // Handles: category tabs, configure modals, Save/Test toasts, toggles, coming-soon.
+  // State: frontend/session-only — reload restores mock defaults.
+
+  var grid        = document.getElementById('integration-grid');
+  var emptyState  = document.getElementById('intg-empty-state');
+  var countText   = document.getElementById('intg-count-text');
+  var tablist     = document.getElementById('category-tablist');
+
+  // ── Row-action menus for integration cards ───────────────────────────────
+  document.querySelectorAll('.intg-card .row-action-trigger').forEach(function (trigger) {
+    var wrap = trigger.closest('.row-action-wrap');
+    if (!wrap) return;
+    var menu = wrap.querySelector('.row-action-menu');
+    if (!menu) return;
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = !menu.hidden;
+      // Close all open row menus
+      document.querySelectorAll('.intg-card .row-action-menu').forEach(function (m) {
+        m.hidden = true;
+        var t = m.closest('.row-action-wrap').querySelector('.row-action-trigger');
+        if (t) t.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        menu.hidden = false;
+        trigger.setAttribute('aria-expanded', 'true');
+        var first = menu.querySelector('button, a');
+        if (first) first.focus();
+      }
+    });
+
+    // Close on outside click
+    document.addEventListener('click', function (e) {
+      if (!wrap.contains(e.target)) {
+        menu.hidden = true;
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Escape key
+    menu.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        menu.hidden = true;
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.focus();
+      }
+    });
+  });
+
+  // ── Category tab filtering ────────────────────────────────────────────────
+  function filterCards(category) {
+    if (!grid) return;
+    var cards = grid.querySelectorAll('[data-category]');
+    var visibleCount = 0;
+
+    cards.forEach(function (card) {
+      var cat = card.getAttribute('data-category');
+      var show = (category === 'all') || (cat === category);
+      card.hidden = !show;
+      if (show) visibleCount++;
+    });
+
+    // Update count
+    if (countText) {
+      countText.textContent = visibleCount + ' تكاملاً';
+    }
+
+    // Show/hide empty state
+    if (emptyState) {
+      emptyState.hidden = (visibleCount > 0);
+    }
+
+    // Announce to screen readers
+    announce(visibleCount + ' تكامل في التصنيف المحدد');
+  }
+
+  if (tablist) {
+    tablist.addEventListener('click', function (e) {
+      var tab = e.target.closest('[role="tab"]');
+      if (!tab) return;
+
+      // Update aria-selected
+      tablist.querySelectorAll('[role="tab"]').forEach(function (t) {
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.setAttribute('aria-selected', 'true');
+
+      var category = tab.getAttribute('data-category') || 'all';
+      filterCards(category);
+    });
+
+    // Keyboard nav on tablist (arrow keys)
+    tablist.addEventListener('keydown', function (e) {
+      var tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+      var idx = tabs.indexOf(document.activeElement);
+      if (idx === -1) return;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        tabs[(idx + 1) % tabs.length].focus();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        tabs[(idx - 1 + tabs.length) % tabs.length].focus();
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        tabs[idx].click();
+      }
+    });
+  }
+
+  // ── Configure modals — open ───────────────────────────────────────────────
+  // Cards use data-modal-open="modal-cfg-{key}". We open the matching overlay.
+  var _lastModalTrigger = null;
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-modal-open]');
+    if (!btn) return;
+    var modalId = btn.getAttribute('data-modal-open');
+    if (!modalId || modalId.indexOf('modal-cfg-') !== 0) return; // Only integration modals
+    var modal = document.getElementById(modalId);
+    if (!modal) return;
+    _lastModalTrigger = btn;
+    modal.hidden = false;
+    // Focus first focusable element
+    var focusable = modal.querySelector('input, select, textarea, button:not([disabled])');
+    if (focusable) focusable.focus();
+  });
+
+  // Close on overlay backdrop click (integration modals only)
+  document.querySelectorAll('[id^="modal-cfg-"]').forEach(function (modal) {
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) {
+        modal.hidden = true;
+        if (_lastModalTrigger) { _lastModalTrigger.focus(); _lastModalTrigger = null; }
+      }
+    });
+  });
+
+  // Escape closes topmost visible integration modal
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    var open = document.querySelector('[id^="modal-cfg-"]:not([hidden])');
+    if (open) {
+      open.hidden = true;
+      if (_lastModalTrigger) { _lastModalTrigger.focus(); _lastModalTrigger = null; }
+    }
+  });
+
+  // Close via data-modal-close button (cancel buttons)
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-modal-close]');
+    if (!btn) return;
+    var modalId = btn.getAttribute('data-modal-close');
+    if (!modalId || modalId.indexOf('modal-cfg-') !== 0) return;
+    var modal = document.getElementById(modalId);
+    if (modal) {
+      modal.hidden = true;
+      if (_lastModalTrigger) { _lastModalTrigger.focus(); _lastModalTrigger = null; }
+    }
+  });
+
+  // ── Modal Save — validate required fields, show toast ────────────────────
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-modal-save]');
+    if (!btn) return;
+    var modalId = btn.getAttribute('data-modal-save');
+    if (!modalId || modalId.indexOf('modal-cfg-') !== 0) return;
+    var modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    // Validate required fields inside this modal
+    var required = modal.querySelectorAll('input[required], select[required]');
+    var firstInvalid = null;
+
+    required.forEach(function (field) {
+      var errEl = modal.querySelector('#err-' + field.id.replace('cfg-', ''));
+      field.removeAttribute('aria-invalid');
+      if (errEl) { errEl.style.display = 'none'; }
+
+      if (!field.value.trim()) {
+        field.setAttribute('aria-invalid', 'true');
+        if (errEl) { errEl.style.display = 'block'; }
+        if (!firstInvalid) firstInvalid = field;
+      }
+    });
+
+    if (firstInvalid) {
+      firstInvalid.focus();
+      toast('يرجى ملء جميع الحقول المطلوبة', 'warning');
+      return;
+    }
+
+    // Save mock
+    modal.hidden = true;
+    if (_lastModalTrigger) { _lastModalTrigger.focus(); _lastModalTrigger = null; }
+    toast('تم حفظ الإعداد (تجريبي) — لا يتم الحفظ على خادم', 'success');
+    announce('تم حفظ الإعداد تجريبياً');
+  });
+
+  // ── Test connection — card Test button & modal Test button ────────────────
+  // Also handles "اختبار كل التكاملات" header button
+  var _testToastTimer = null;
+
+  function showTestToast() {
+    if (_testToastTimer) return; // Debounce rapid clicks
+    toast('اختبار اتصال تجريبي — لا يتم الاتصال بأي مصدر خارجي', 'info');
+    announce('اختبار اتصال تجريبي');
+    _testToastTimer = setTimeout(function () { _testToastTimer = null; }, 2500);
+  }
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-intg-test]');
+    if (!btn) return;
+    showTestToast();
+  });
+
+  var testAllBtn = document.getElementById('btn-test-all');
+  if (testAllBtn) {
+    testAllBtn.addEventListener('click', showTestToast);
+  }
+
+  // ── Enable/disable toggles ────────────────────────────────────────────────
+  // Each card toggle: #toggle-{key}, label: #lbl-{key}
+  var _toggleCooldown = {};
+
+  if (grid) {
+    grid.addEventListener('change', function (e) {
+      var toggle = e.target.closest('.intg-card input[type="checkbox"]');
+      if (!toggle) return;
+
+      // Ignore disabled (coming-soon) toggles
+      if (toggle.disabled) return;
+
+      var key = toggle.id.replace('toggle-', '');
+
+      // Cooldown: prevent stacking duplicate toasts from rapid toggling
+      if (_toggleCooldown[key]) {
+        return;
+      }
+      _toggleCooldown[key] = true;
+      setTimeout(function () { delete _toggleCooldown[key]; }, 800);
+
+      var labelEl = document.getElementById('lbl-' + key);
+      var isOn = toggle.checked;
+
+      // Update label text + class
+      if (labelEl) {
+        labelEl.textContent = isOn ? 'مفعّل' : 'معطّل';
+        if (isOn) {
+          labelEl.classList.add('is-on');
+        } else {
+          labelEl.classList.remove('is-on');
+        }
+      }
+
+      // Update card border accent for connected state
+      var card = toggle.closest('.intg-card');
+      if (card) {
+        if (isOn) {
+          card.classList.add('is-connected');
+        } else {
+          card.classList.remove('is-connected');
+        }
+      }
+
+      // Announce
+      var cardName = card ? (card.querySelector('.intg-card-name') || {}).textContent || key : key;
+      announce(cardName + ': ' + (isOn ? 'مفعّل' : 'معطّل'));
+    });
+  }
+
+  // ── "Add integration" button ──────────────────────────────────────────────
+  var addBtn = document.getElementById('btn-add-intg');
+  if (addBtn) {
+    addBtn.addEventListener('click', function () {
+      toast('إضافة تكامل تجريبي — قابل للربط لاحقاً', 'info');
+    });
+  }
+
+  // ── "Review sources" button — scrolls to scraping section ────────────────
+  var reviewBtn = document.getElementById('btn-review-sources');
+  if (reviewBtn) {
+    reviewBtn.addEventListener('click', function () {
+      var scrapingCard = document.getElementById('scraping-section');
+      if (scrapingCard) {
+        scrapingCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrapingCard.focus();
+        announce('تم التنقل إلى قسم مراجعة المصادر');
+      } else {
+        // Fall back: activate the Scraping Review tab
+        var scrapingTab = tablist && tablist.querySelector('[data-category="scraping-review"]');
+        if (scrapingTab) scrapingTab.click();
+      }
+    });
+  }
+
+  // ── Generic analytics toast (data-analytics-toast) ───────────────────────
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-analytics-toast]');
+    if (!btn) return;
+    toast(btn.getAttribute('data-analytics-toast'), 'info');
+  });
+
+  // ── Coming-soon handler for topbar / sidebar items ────────────────────────
+  // (already handled globally via main.js but we add integration-page guard)
+
+  // ── Initial count ────────────────────────────────────────────────────────
+  if (grid && countText) {
+    var totalCards = grid.querySelectorAll('[data-category]').length;
+    countText.textContent = totalCards + ' تكاملاً';
+  }
 }
 
-// ─── merchant-settings controller (stub — implemented in T023) ───────────────
+// ─── merchant-settings controller (T023) ─────────────────────────────────────
 function initMerchantSettings() {
-  // Filled in by T023 (Phase 5 US3).
-  // Reuses: DropdownController, validateAndSubmit, confirmModal, toast, announce (closure).
-  // Handles: tab/anchor nav, form validation, branding live preview, notification toggles,
-  // invite/change-role/disable-remove modals, change-password, 2FA, upgrade coming-soon, danger zone.
+
+  /* ── helpers (scoped) ───────────────────────────────────────────────── */
+  function toast(msg, type) {
+    if (window.TUI && TUI.toast) { TUI.toast(msg, { type: type || 'success', duration: 4000 }); return; }
+    var root = document.getElementById('toast-root');
+    if (!root) return;
+    var el = document.createElement('div');
+    el.style.cssText = 'background:#1E293B;color:#fff;padding:.75rem 1.125rem;border-radius:.875rem;font-size:.875rem;box-shadow:0 4px 16px rgba(0,0,0,.2);max-width:320px;line-height:1.5;display:flex;align-items:center;gap:.5rem';
+    if (type === 'error') el.style.background = '#7F1D1D';
+    el.setAttribute('role', 'status');
+    el.textContent = msg;
+    root.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 4000);
+  }
+
+  function announce(msg) {
+    var el = document.getElementById('dash-announcer');
+    if (!el) return;
+    el.textContent = '';
+    setTimeout(function(){ el.textContent = msg; }, 50);
+  }
+
+  // Open a modal and wire close/backdrop/Escape
+  function openModal(id, afterOpen) {
+    var overlay = document.getElementById(id);
+    if (!overlay) return;
+    overlay.removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+    if (typeof afterOpen === 'function') afterOpen(overlay);
+    function close() {
+      overlay.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+      overlay.removeEventListener('click', onBg);
+      document.removeEventListener('keydown', onKey);
+    }
+    function onBg(e) { if (e.target === overlay) close(); }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    overlay.addEventListener('click', onBg);
+    document.addEventListener('keydown', onKey);
+    overlay.querySelectorAll('[data-modal-close],[data-modal-cancel]').forEach(function(b){
+      b.addEventListener('click', close, { once: true });
+    });
+    var first = overlay.querySelector('input,select,textarea,[data-modal-close]');
+    if (first) setTimeout(function(){ first.focus(); }, 40);
+  }
+
+  function closeModal(id) {
+    var overlay = document.getElementById(id);
+    if (overlay) { overlay.setAttribute('hidden', ''); document.body.style.overflow = ''; }
+  }
+
+  // Simple inline form validator
+  function validateForm(formEl, rules) {
+    var ok = true;
+    rules.forEach(function(r) {
+      var field = formEl.elements[r.name] || formEl.querySelector('#' + r.id);
+      var errEl = r.errId ? document.getElementById(r.errId) : null;
+      if (!field) return;
+      var val = field.value.trim();
+      var msg = '';
+      if (r.required && !val) msg = r.requiredMsg || 'هذا الحقل مطلوب';
+      else if (r.email && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) msg = 'البريد الإلكتروني غير صحيح';
+      else if (r.minLen && val.length < r.minLen) msg = r.minLenMsg || 'القيمة قصيرة جداً';
+      else if (r.matchId) {
+        var other = document.getElementById(r.matchId);
+        if (other && val !== other.value.trim()) msg = r.matchMsg || 'القيمتان غير متطابقتين';
+      }
+      if (msg) {
+        ok = false;
+        field.setAttribute('aria-invalid', 'true');
+        if (errEl) { errEl.textContent = msg; errEl.classList.add('is-visible'); }
+      } else {
+        field.removeAttribute('aria-invalid');
+        if (errEl) { errEl.textContent = ''; errEl.classList.remove('is-visible'); }
+      }
+    });
+    return ok;
+  }
+
+  function clearFormErrors(formEl) {
+    formEl.querySelectorAll('[aria-invalid]').forEach(function(f){ f.removeAttribute('aria-invalid'); });
+    formEl.querySelectorAll('.form-error').forEach(function(e){ e.textContent = ''; e.classList.remove('is-visible'); });
+  }
+
+  /* ── Tab / anchor navigation ────────────────────────────────────────── */
+  var navLinks = document.querySelectorAll('.settings-nav-link[data-settings-tab]');
+  var panels   = document.querySelectorAll('.settings-panel');
+
+  function activateTab(tabKey) {
+    navLinks.forEach(function(link) {
+      var active = link.getAttribute('data-settings-tab') === tabKey;
+      link.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    panels.forEach(function(panel) {
+      var show = panel.id === 'section-' + tabKey;
+      if (show) panel.removeAttribute('hidden'); else panel.setAttribute('hidden', '');
+    });
+    announce(tabKey + ' — القسم نشط');
+  }
+
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var key = link.getAttribute('data-settings-tab');
+      activateTab(key);
+      history.replaceState(null, '', '#' + key);
+    });
+    link.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); link.click(); }
+    });
+  });
+
+  // Honor #section deep link on load
+  (function() {
+    var hash = location.hash.replace('#', '');
+    var valid = ['company','branding','booking','notifications','team','security','plan'];
+    if (hash && valid.indexOf(hash) !== -1) activateTab(hash);
+  })();
+
+  /* ── Save-all / Reset-all (header buttons) ──────────────────────────── */
+  var btnSaveAll  = document.getElementById('btn-save-all');
+  var btnResetAll = document.getElementById('btn-reset-all');
+  if (btnSaveAll)  btnSaveAll.addEventListener('click', function(){ toast('تم حفظ كل التغييرات تجريبياً — لا يتم الحفظ على خادم الآن'); });
+  if (btnResetAll) btnResetAll.addEventListener('click', function(){
+    openModal('modal-danger-reset');
+  });
+
+  /* ── Company form ────────────────────────────────────────────────────── */
+  var formCompany = document.getElementById('form-company');
+  if (formCompany) {
+    formCompany.addEventListener('submit', function(e) {
+      e.preventDefault();
+      clearFormErrors(formCompany);
+      var ok = validateForm(formCompany, [
+        { name:'company_name', errId:'co-name-err', required:true, requiredMsg:'اسم الشركة مطلوب' },
+        { name:'phone',        errId:'co-phone-err',required:true, requiredMsg:'رقم الهاتف مطلوب' },
+        { name:'email',        errId:'co-email-err',required:true, requiredMsg:'البريد مطلوب', email:true }
+      ]);
+      if (ok) toast('تم حفظ بيانات الشركة تجريبياً — لا يتم الحفظ على خادم الآن');
+    });
+    var btnResetCo = formCompany.querySelector('[data-action="reset-company"]');
+    if (btnResetCo) btnResetCo.addEventListener('click', function(){ clearFormErrors(formCompany); toast('تمت إعادة التعيين تجريبياً', 'info'); });
+  }
+
+  /* ── Logo / cover upload ─────────────────────────────────────────────── */
+  var btnLogo  = document.getElementById('btn-upload-logo');
+  var btnCover = document.getElementById('btn-upload-cover');
+  if (btnLogo)  btnLogo.addEventListener('click', function(){ toast('لا يتم رفع ملفات حقيقية الآن — قابل للربط لاحقاً', 'info'); });
+  if (btnCover) btnCover.addEventListener('click', function(){ toast('لا يتم رفع ملفات حقيقية الآن — قابل للربط لاحقاً', 'info'); });
+
+  /* ── Branding live preview ───────────────────────────────────────────── */
+  var primaryInput   = document.getElementById('co-primary-color');
+  var secondaryInput = document.getElementById('co-secondary-color');
+  var slugInput      = document.getElementById('co-slug');
+  var previewCard    = document.getElementById('brand-preview-card');
+  var primarySwatch  = document.getElementById('primary-color-preview');
+  var secondarySwatch= document.getElementById('secondary-color-preview');
+  var primaryVal     = document.getElementById('primary-color-val');
+  var secondaryVal   = document.getElementById('secondary-color-val');
+  var slugPreviewFull= document.getElementById('slug-preview-full');
+  var brandUrlPreview= document.getElementById('brand-url-preview');
+
+  function updateBrandPreview() {
+    var primary   = primaryInput   ? primaryInput.value   : '#0E7C7B';
+    var secondary = secondaryInput ? secondaryInput.value : '#F4A300';
+    var slug      = slugInput      ? slugInput.value.trim() || 'your-agency' : 'your-agency';
+    var url       = 'travel.example.com/' + slug;
+    if (previewCard)     previewCard.style.setProperty('--preview-primary', primary);
+    if (previewCard)     previewCard.style.setProperty('--preview-secondary', secondary);
+    if (primarySwatch)  primarySwatch.style.background   = primary;
+    if (secondarySwatch) secondarySwatch.style.background = secondary;
+    if (primaryVal)     primaryVal.textContent   = primary;
+    if (secondaryVal)   secondaryVal.textContent = secondary;
+    if (slugPreviewFull) slugPreviewFull.textContent = url;
+    if (brandUrlPreview) brandUrlPreview.textContent = url;
+    // also update the public-page preview card url
+    var pubUrlEl = document.querySelector('#section-plan .brand-url-preview');
+    if (pubUrlEl) pubUrlEl.textContent = url;
+  }
+
+  if (primaryInput)   primaryInput.addEventListener('input', updateBrandPreview);
+  if (secondaryInput) secondaryInput.addEventListener('input', updateBrandPreview);
+  if (slugInput)      slugInput.addEventListener('input', updateBrandPreview);
+
+  // Branding save
+  var btnSaveBranding = document.getElementById('btn-save-branding');
+  if (btnSaveBranding) btnSaveBranding.addEventListener('click', function(){
+    toast('تم حفظ الهوية البصرية تجريبياً — لا يتم الحفظ على خادم الآن');
+  });
+
+  var btnResetBranding = document.querySelector('[data-action="reset-branding"]');
+  if (btnResetBranding) btnResetBranding.addEventListener('click', function(){
+    if (primaryInput)   primaryInput.value   = '#0E7C7B';
+    if (secondaryInput) secondaryInput.value = '#F4A300';
+    if (slugInput)      slugInput.value      = 'alufuq-travel';
+    updateBrandPreview();
+    toast('تمت إعادة التعيين تجريبياً', 'info');
+  });
+
+  /* ── Booking form ─────────────────────────────────────────────────────── */
+  var formBooking = document.getElementById('form-booking');
+  if (formBooking) {
+    formBooking.addEventListener('submit', function(e) {
+      e.preventDefault();
+      toast('تم حفظ تفضيلات الحجز تجريبياً — لا يتم الحفظ على خادم الآن');
+    });
+    var btnResetBk = formBooking.querySelector('[data-action="reset-booking"]');
+    if (btnResetBk) btnResetBk.addEventListener('click', function(){ toast('تمت إعادة التعيين تجريبياً', 'info'); });
+  }
+
+  /* ── Notification toggles ────────────────────────────────────────────── */
+  var notifLive = document.getElementById('notif-live');
+  document.querySelectorAll('[data-notif-key]').forEach(function(toggle) {
+    toggle.addEventListener('change', function() {
+      var key     = toggle.getAttribute('data-notif-key');
+      var channel = toggle.getAttribute('data-channel');
+      var state   = toggle.checked ? 'مفعّل' : 'معطّل';
+      var msg     = channel + ' — ' + state + ' (تجريبي)';
+      if (notifLive) { notifLive.textContent = ''; setTimeout(function(){ notifLive.textContent = msg; }, 30); }
+    });
+  });
+  var btnSaveNotif = document.getElementById('btn-save-notif');
+  if (btnSaveNotif) btnSaveNotif.addEventListener('click', function(){
+    toast('تم حفظ تفضيلات الإشعارات تجريبياً — لا يتم إرسال رسائل حقيقية');
+  });
+
+  /* ── generic data-toast buttons (inside settings panels) ────────────── */
+  document.querySelectorAll('#section-notifications [data-toast], #section-plan [data-toast], #section-security [data-toast]').forEach(function(btn){
+    btn.addEventListener('click', function(){ toast(btn.getAttribute('data-toast'), 'info'); });
+  });
+
+  /* ── Team: row-action menus ─────────────────────────────────────────── */
+  document.querySelectorAll('#section-team .row-action-trigger').forEach(function(trigger) {
+    var menu = trigger.nextElementSibling;
+    if (!menu) return;
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = !menu.hidden;
+      document.querySelectorAll('.row-action-menu').forEach(function(m){ m.setAttribute('hidden',''); });
+      document.querySelectorAll('.row-action-trigger').forEach(function(t){ t.setAttribute('aria-expanded','false'); });
+      if (!isOpen) { menu.removeAttribute('hidden'); trigger.setAttribute('aria-expanded','true'); }
+    });
+  });
+  document.addEventListener('click', function(){
+    document.querySelectorAll('#section-team .row-action-menu').forEach(function(m){ m.setAttribute('hidden',''); });
+    document.querySelectorAll('#section-team .row-action-trigger').forEach(function(t){ t.setAttribute('aria-expanded','false'); });
+  });
+
+  /* ── Team: invite modal ─────────────────────────────────────────────── */
+  document.querySelectorAll('[data-modal-open="modal-invite"]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var formInv = document.getElementById('form-invite');
+      if (formInv) { formInv.reset(); clearFormErrors(formInv); }
+      openModal('modal-invite');
+    });
+  });
+  var formInvite = document.getElementById('form-invite');
+  if (formInvite) {
+    formInvite.addEventListener('submit', function(e) {
+      e.preventDefault();
+      clearFormErrors(formInvite);
+      var ok = validateForm(formInvite, [
+        { name:'name',  errId:'invite-name-err',  required:true, requiredMsg:'الاسم مطلوب' },
+        { name:'email', errId:'invite-email-err', required:true, requiredMsg:'البريد مطلوب', email:true },
+        { name:'role',  errId:'invite-role-err',  required:true, requiredMsg:'الدور مطلوب' }
+      ]);
+      if (ok) {
+        closeModal('modal-invite');
+        toast('دعوة تجريبية — لا يتم إرسال دعوة فعلية');
+      }
+    });
+  }
+
+  /* ── Team: change-role modal ─────────────────────────────────────────── */
+  document.querySelectorAll('[data-modal-open="modal-change-role"]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var name   = btn.getAttribute('data-member-name') || '—';
+      var idVal  = btn.getAttribute('data-member-id')   || '';
+      var nameEl = document.getElementById('change-role-member-name');
+      var idEl   = document.getElementById('change-role-member-id');
+      if (nameEl) nameEl.textContent = 'العضو: ' + name;
+      if (idEl)   idEl.value = idVal;
+      var formCR = document.getElementById('form-change-role');
+      if (formCR) { formCR.reset(); clearFormErrors(formCR); }
+      openModal('modal-change-role');
+    });
+  });
+  var formChangeRole = document.getElementById('form-change-role');
+  if (formChangeRole) {
+    formChangeRole.addEventListener('submit', function(e) {
+      e.preventDefault();
+      clearFormErrors(formChangeRole);
+      var ok = validateForm(formChangeRole, [
+        { name:'new_role', errId:'new-role-err', required:true, requiredMsg:'اختر الدور الجديد' }
+      ]);
+      if (ok) {
+        closeModal('modal-change-role');
+        toast('تم تغيير الدور تجريبياً — لا تغيير فعلي على الخادم');
+      }
+    });
+  }
+
+  /* ── Team: disable modal ────────────────────────────────────────────── */
+  document.querySelectorAll('[data-modal-open="modal-disable-member"]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var name    = btn.getAttribute('data-member-name') || '—';
+      var idVal   = btn.getAttribute('data-member-id')   || '';
+      var action  = btn.getAttribute('data-member-action') || 'disable';
+      var nameEl  = document.getElementById('disable-member-name');
+      var titleEl = document.getElementById('modal-disable-title');
+      var descEl  = document.getElementById('disable-action-desc');
+      var confirmBtn = document.getElementById('btn-confirm-disable');
+      if (nameEl)  nameEl.textContent  = 'العضو: ' + name;
+      if (titleEl) titleEl.textContent = action === 'enable' ? 'تفعيل الحساب' : 'تعطيل الحساب';
+      if (descEl)  descEl.textContent  = action === 'enable'
+        ? 'سيتم إعادة تفعيل وصول هذا العضو. تجريبي — لا تغيير فعلي.'
+        : 'سيتم تعطيل وصول هذا العضو مؤقتاً. يمكن إعادة تفعيله لاحقاً.';
+      if (confirmBtn) {
+        confirmBtn.textContent = action === 'enable' ? 'تأكيد التفعيل' : 'تأكيد التعطيل';
+        confirmBtn.setAttribute('data-action', action);
+        confirmBtn.setAttribute('data-member-id', idVal);
+      }
+      openModal('modal-disable-member');
+    });
+  });
+  var btnConfirmDisable = document.getElementById('btn-confirm-disable');
+  if (btnConfirmDisable) {
+    btnConfirmDisable.addEventListener('click', function(){
+      closeModal('modal-disable-member');
+      var action = btnConfirmDisable.getAttribute('data-action') || 'disable';
+      toast((action === 'enable' ? 'تم تفعيل الحساب' : 'تم تعطيل الحساب') + ' تجريبياً — لا تغيير فعلي');
+    });
+  }
+
+  /* ── Team: remove modal ─────────────────────────────────────────────── */
+  document.querySelectorAll('[data-modal-open="modal-remove-member"]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var name  = btn.getAttribute('data-member-name') || '—';
+      var idVal = btn.getAttribute('data-member-id')   || '';
+      var nameEl = document.getElementById('remove-member-name');
+      var confBtn= document.getElementById('btn-confirm-remove');
+      if (nameEl)  nameEl.textContent = 'العضو: ' + name;
+      if (confBtn) confBtn.setAttribute('data-member-id', idVal);
+      openModal('modal-remove-member');
+    });
+  });
+  var btnConfirmRemove = document.getElementById('btn-confirm-remove');
+  if (btnConfirmRemove) {
+    btnConfirmRemove.addEventListener('click', function(){
+      closeModal('modal-remove-member');
+      toast('تم إزالة العضو تجريبياً — لا حذف فعلي على الخادم');
+    });
+  }
+
+  /* ── Security: change-password form ─────────────────────────────────── */
+  var formPassword = document.getElementById('form-password');
+  if (formPassword) {
+    formPassword.addEventListener('submit', function(e) {
+      e.preventDefault();
+      clearFormErrors(formPassword);
+      var ok = validateForm(formPassword, [
+        { name:'current_password', errId:'pw-current-err', required:true, requiredMsg:'كلمة المرور الحالية مطلوبة' },
+        { name:'new_password',     errId:'pw-new-err',     required:true, requiredMsg:'كلمة المرور الجديدة مطلوبة', minLen:8, minLenMsg:'يجب أن تكون 8 أحرف على الأقل' },
+        { name:'confirm_password', errId:'pw-confirm-err', required:true, requiredMsg:'تأكيد كلمة المرور مطلوب', matchId:'pw-new', matchMsg:'كلمة المرور الجديدة وتأكيدها غير متطابقتين' }
+      ]);
+      if (ok) toast('تغيير كلمة المرور تجريبي — لا تغيير فعلي لكلمة مرورك');
+    });
+  }
+
+  /* ── Security: session end buttons ──────────────────────────────────── */
+  document.querySelectorAll('#section-security .btn-danger[data-toast]').forEach(function(btn){
+    btn.addEventListener('click', function(){ toast(btn.getAttribute('data-toast'), 'info'); });
+  });
+
+  /* ── Security: API key button ────────────────────────────────────────── */
+  document.querySelectorAll('#section-security .btn-outline[data-toast]').forEach(function(btn){
+    btn.addEventListener('click', function(){ toast(btn.getAttribute('data-toast'), 'info'); });
+  });
+
+  /* ── Security: 2FA toggle ────────────────────────────────────────────── */
+  var toggle2FA   = document.getElementById('toggle-2fa');
+  var status2FA   = document.getElementById('2fa-status-text');
+  if (toggle2FA) {
+    toggle2FA.addEventListener('change', function(){
+      var on = toggle2FA.checked;
+      if (status2FA) status2FA.textContent = on ? 'مفعّل (تجريبي)' : 'غير مفعّل';
+      toast('المصادقة الثنائية ' + (on ? 'مفعّلة' : 'معطّلة') + ' تجريبياً — لا تغيير فعلي');
+      announce('المصادقة الثنائية ' + (on ? 'مفعّلة' : 'معطّلة'));
+    });
+  }
+
+  /* ── Plan: upgrade button ────────────────────────────────────────────── */
+  var btnUpgrade = document.getElementById('btn-upgrade-plan');
+  if (btnUpgrade) {
+    btnUpgrade.addEventListener('click', function(){
+      toast('ترقية الباقة قادمة قريباً — الفوترة غير متاحة في هذه النسخة', 'info');
+    });
+  }
+
+  /* ── Danger Zone modals ─────────────────────────────────────────────── */
+  // Deactivate
+  document.querySelectorAll('[data-modal-open="modal-danger-deactivate"]').forEach(function(btn){
+    btn.addEventListener('click', function(){ openModal('modal-danger-deactivate'); });
+  });
+  var btnConfirmDeactivate = document.getElementById('btn-confirm-deactivate');
+  var deactivateInput      = document.getElementById('deactivate-confirm-input');
+  if (btnConfirmDeactivate) {
+    btnConfirmDeactivate.addEventListener('click', function(){
+      var val = deactivateInput ? deactivateInput.value.trim() : '';
+      if (val !== 'تعليق') { toast('اكتب كلمة "تعليق" للتأكيد', 'error'); return; }
+      closeModal('modal-danger-deactivate');
+      toast('تم تعليق النشاط تجريبياً — لا تغيير فعلي في هذه النسخة', 'info');
+    });
+  }
+
+  // Reset
+  document.querySelectorAll('[data-modal-open="modal-danger-reset"]').forEach(function(btn){
+    btn.addEventListener('click', function(){ openModal('modal-danger-reset'); });
+  });
+  var btnConfirmReset = document.getElementById('btn-confirm-reset');
+  if (btnConfirmReset) {
+    btnConfirmReset.addEventListener('click', function(){
+      closeModal('modal-danger-reset');
+      toast('تمت إعادة التعيين تجريبياً — يُعيد تحميل الصفحة فقط', 'info');
+      setTimeout(function(){ location.reload(); }, 1500);
+    });
+  }
+
+  // Delete
+  document.querySelectorAll('[data-modal-open="modal-danger-delete"]').forEach(function(btn){
+    btn.addEventListener('click', function(){ openModal('modal-danger-delete'); });
+  });
+  var btnConfirmDelete = document.getElementById('btn-confirm-delete');
+  var deleteInput      = document.getElementById('delete-confirm-input');
+  if (btnConfirmDelete) {
+    btnConfirmDelete.addEventListener('click', function(){
+      var val = deleteInput ? deleteInput.value.trim() : '';
+      if (val !== 'حذف') { toast('اكتب كلمة "حذف" للتأكيد', 'error'); return; }
+      closeModal('modal-danger-delete');
+      toast('تم تنفيذ الحذف تجريبياً — لا يحذف أي بيانات فعلية في هذه النسخة', 'info');
+    });
+  }
+
+  /* ── data-modal-open (generic fallback for any unhandled triggers) ───── */
+  document.querySelectorAll('[data-modal-open]').forEach(function(btn){
+    if (btn._settingsHandled) return;
+    btn.addEventListener('click', function(){
+      openModal(btn.getAttribute('data-modal-open'));
+    });
+  });
 }

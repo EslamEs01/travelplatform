@@ -1,0 +1,2584 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth" data-page="merchant-settings">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>الإعدادات – رحلاتي (تجريبي)</title>
+  <meta name="description" content="إعدادات لوحة التحكم — الشركة والهوية البصرية والإشعارات والفريق والأمان والباقة. بيانات تجريبية وواجهة أمامية فقط.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0E8186">
+  <meta property="og:title" content="الإعدادات – رحلاتي">
+  <meta property="og:locale" content="ar_AR">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/tailwind.css">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"الرئيسية","item":"https://rihlaty.example.com"},{"@type":"ListItem","position":2,"name":"لوحة التحكم","item":"https://rihlaty.example.com/dashboard"},{"@type":"ListItem","position":3,"name":"الإعدادات","item":"https://rihlaty.example.com/dashboard/settings"}]}
+  </script>
+
+  <style>
+    /* ── dashboard/settings.html page-scoped styles ───────────────────────── */
+
+    :root {
+      --sidebar-w:          260px;
+      --topbar-h:            64px;
+      --sidebar-bg:         #042B2E;
+      --sidebar-active:     #0E8186;
+      --sidebar-hover:      rgba(14,129,134,.18);
+      --sidebar-text:       #A4E9EA;
+      --body-bg:            #F4F6F9;
+      --card-bg:            #ffffff;
+      --border-color:       #E2E8F0;
+      --shadow-card:        0 1px 3px rgba(38,46,58,.07),0 1px 2px rgba(38,46,58,.04);
+      --shadow-pop:         0 10px 25px -5px rgba(38,46,58,.12),0 4px 10px -6px rgba(38,46,58,.08);
+      --shadow-elevated:    0 20px 40px -8px rgba(38,46,58,.15),0 8px 16px -4px rgba(38,46,58,.08);
+      --z-dd:               1000;
+      --z-drawer-overlay:   1030;
+      --z-drawer:           1040;
+      --z-modal-overlay:    1050;
+      --z-modal:            1060;
+      --z-toast:            1080;
+    }
+
+    /* ── Skip link ── */
+    .skip-link {
+      position: absolute; inset-inline-start: -999px; top: .5rem;
+      background: #0E8186; color: #fff;
+      padding: .5rem 1.25rem; border-radius: 0 .5rem .5rem 0;
+      font-weight: 700; font-size: .875rem; z-index: 9999;
+      text-decoration: none; transition: inset-inline-start .15s;
+    }
+    .skip-link:focus { inset-inline-start: 0; }
+
+    /* ── Shell ── */
+    body { background: var(--body-bg); }
+
+    .dash-sidebar {
+      position: fixed; top: 0; bottom: 0; inset-inline-start: 0;
+      width: var(--sidebar-w); background: var(--sidebar-bg);
+      display: flex; flex-direction: column;
+      overflow-y: auto; overflow-x: hidden;
+      z-index: var(--z-drawer);
+      transition: transform .25s cubic-bezier(.4,0,.2,1);
+      scrollbar-width: thin; scrollbar-color: rgba(14,129,134,.4) transparent;
+    }
+    .dash-sidebar:not(.is-open) { transform: translateX(100%); }
+    html[dir="ltr"] .dash-sidebar:not(.is-open) { transform: translateX(-100%); }
+    @media (min-width: 1024px) {
+      .dash-sidebar,
+      html[dir="ltr"] .dash-sidebar { transform: translateX(0) !important; transition: none !important; z-index: 10; }
+    }
+
+    .dash-scrim {
+      position: fixed; inset: 0; background: rgba(22,28,38,.6);
+      z-index: var(--z-drawer-overlay); opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .dash-scrim.is-visible { opacity: 1; pointer-events: auto; }
+
+    .dash-main { display: flex; flex-direction: column; min-height: 100dvh; }
+    @media (min-width: 1024px) { .dash-main { margin-inline-start: var(--sidebar-w); } }
+
+    body.sidebar-open { overflow: hidden; }
+
+    /* ── Topbar ── */
+    .dash-topbar {
+      position: sticky; top: 0; height: var(--topbar-h);
+      background: var(--card-bg); border-bottom: 1px solid var(--border-color);
+      display: flex; align-items: center;
+      gap: .5rem; padding: 0 1.25rem;
+      z-index: var(--z-dd); box-shadow: 0 1px 3px rgba(38,46,58,.05);
+    }
+
+    .dash-dropdown {
+      position: absolute; top: calc(var(--topbar-h) - 4px); inset-inline-end: 0;
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: .875rem; box-shadow: var(--shadow-pop);
+      min-width: 280px; z-index: var(--z-dd); overflow: hidden;
+    }
+    .dash-dropdown[hidden] { display: none; }
+    .dash-dropdown.is-open { display: block; }
+    .dash-dropdown.dd-animate { animation: dd-pop .15s cubic-bezier(.4,0,.2,1); }
+    @keyframes dd-pop {
+      from { opacity:0; transform: translateY(-8px) scale(.97); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) { .dash-dropdown.dd-animate { animation: none; } }
+
+    .topbar-search {
+      display: flex; align-items: center; background: #F7F8FA;
+      border: 1px solid var(--border-color); border-radius: .625rem;
+      padding: 0 .75rem; height: 2.25rem; gap: .375rem;
+      flex: 1; max-width: 280px; transition: border-color .15s, box-shadow .15s;
+    }
+    .topbar-search:focus-within {
+      border-color: #16A0A5; box-shadow: 0 0 0 3px rgba(22,160,165,.12); background: #fff;
+    }
+    .topbar-search input {
+      border: none; background: transparent; font-family: inherit;
+      font-size: .875rem; color: #262E3A; width: 100%; outline: none;
+    }
+    .topbar-search input::placeholder { color: #9AA6B4; }
+
+    /* ── Sidebar nav ── */
+    .sidebar-brand {
+      display: flex; align-items: center; gap: .75rem;
+      padding: 1.375rem 1.25rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.08); flex-shrink: 0;
+    }
+    .sidebar-brand-name { font-size: 1.125rem; font-weight: 800; color: #fff; letter-spacing: -.01em; }
+    .sidebar-brand-sub  { font-size: .6875rem; color: #6FD7D9; font-weight: 500; }
+    .sidebar-nav { flex: 1; padding: .75rem 0; }
+    .sidebar-nav-item { list-style: none; }
+    .sidebar-nav-link {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .6875rem 1.25rem; color: var(--sidebar-text);
+      text-decoration: none; border-radius: .625rem;
+      margin: .125rem .75rem; font-size: .9375rem; font-weight: 500;
+      transition: background .15s, color .15s; white-space: nowrap;
+    }
+    .sidebar-nav-link:hover { background: var(--sidebar-hover); color: #fff; }
+    .sidebar-nav-link[aria-current="page"] {
+      background: var(--sidebar-active); color: #fff; font-weight: 700;
+    }
+    .sidebar-nav-link svg { width: 1.125rem; height: 1.125rem; flex-shrink: 0; }
+    .sidebar-section-label {
+      font-size: .6875rem; font-weight: 700; letter-spacing: .07em;
+      color: rgba(164,233,234,.5); text-transform: uppercase;
+      padding: .75rem 1.25rem .25rem; margin: 0;
+    }
+    .sidebar-bottom { border-top: 1px solid rgba(255,255,255,.08); padding: .75rem 0; flex-shrink: 0; }
+
+    /* ── Content ── */
+    .dash-content {
+      flex: 1; padding: 1.25rem 1rem 2.5rem;
+      max-width: 1400px; width: 100%; margin-inline: auto;
+    }
+    @media (min-width: 768px)  { .dash-content { padding: 1.75rem 1.75rem 3rem; } }
+    @media (min-width: 1280px) { .dash-content { padding: 2rem 2.5rem 3rem; } }
+
+    /* ── Breadcrumb ── */
+    .dash-breadcrumb {
+      display: flex; align-items: center; gap: .375rem; font-size: .8125rem;
+      color: #9AA6B4; padding-bottom: 1.125rem;
+    }
+    .dash-breadcrumb a { color: #6B7889; text-decoration: none; }
+    .dash-breadcrumb a:hover { color: #0E8186; text-decoration: underline; }
+    .dash-breadcrumb-sep { color: #C5CDD7; user-select: none; }
+
+    /* ── Page header band ── */
+    .dash-page-header { padding: .25rem 0 1.75rem; }
+    .page-header-band {
+      background: linear-gradient(135deg, #042B2E 0%, #0B545A 50%, #16A0A5 100%);
+      border-radius: 1.5rem; padding: 2rem 2.25rem;
+      position: relative; overflow: hidden;
+      box-shadow: 0 12px 32px -6px rgba(4,43,46,.4);
+    }
+    .page-header-band::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 85% 40%, rgba(56,188,192,.2) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .page-header-band::after {
+      content: ''; position: absolute;
+      inset-block-start: -30px; inset-inline-end: 1.5rem;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-header-inner { position: relative; z-index: 1; }
+
+    /* ── Safe note ── */
+    .safe-note {
+      display: inline-flex; align-items: flex-start; gap: .5rem;
+      padding: .5rem .875rem;
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+      border-radius: .75rem; font-size: .75rem; color: rgba(255,255,255,.8);
+      margin-top: .875rem;
+    }
+
+    /* ── sr-only ── */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; box-shadow: var(--shadow-card);
+    }
+
+    /* ── Toggle switch ── */
+    .toggle-switch {
+      position: relative; display: inline-block; width: 2.75rem; height: 1.5rem; flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-track {
+      position: absolute; inset: 0; cursor: pointer;
+      background: #CBD5E1; border-radius: 9999px; transition: background .2s;
+    }
+    .toggle-track::after {
+      content: ''; position: absolute;
+      left: 3px; top: 3px; width: 1.125rem; height: 1.125rem;
+      background: #fff; border-radius: 50%;
+      transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+    html[dir="rtl"] .toggle-track::after { left: auto; right: 3px; }
+    .toggle-switch input:checked + .toggle-track { background: #0E8186; }
+    .toggle-switch input:checked + .toggle-track::after { transform: translateX(1.25rem); }
+    html[dir="rtl"] .toggle-switch input:checked + .toggle-track::after { transform: translateX(-1.25rem); }
+    .toggle-switch input:focus-visible + .toggle-track {
+      outline: 2px solid #16A0A5; outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .toggle-track, .toggle-track::after { transition: none; }
+    }
+
+    /* ── Skeleton ── */
+    @keyframes shimmer {
+      from { background-position: -600px 0; }
+      to   { background-position:  600px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg,#EEF1F5 25%,#F7F8FA 50%,#EEF1F5 75%);
+      background-size: 600px 100%; animation: shimmer 1.5s infinite linear; border-radius: .5rem;
+    }
+    @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; background: #EEF1F5; } }
+
+    /* ── Empty state ── */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 3rem 1.5rem; text-align: center; color: #9AA6B4;
+    }
+    .empty-state svg { opacity: .3; margin-bottom: .875rem; }
+    .empty-state-title { font-size: 1rem; font-weight: 700; color: #6B7889; }
+    .empty-state-body  { font-size: .875rem; margin-top: .375rem; }
+
+    /* ── Section wrapper ── */
+    .dash-section { margin-bottom: 2rem; }
+    .dash-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem; gap: .75rem; flex-wrap: wrap;
+    }
+    .dash-section-title {
+      font-size: 1.0625rem; font-weight: 800; color: #161C26; margin: 0; line-height: 1.4;
+    }
+    .dash-section-sub { font-size: .8125rem; color: #9AA6B4; margin-top: .125rem; }
+
+    /* ── Footer ── */
+    .dash-footer {
+      border-top: 1px solid var(--border-color); background: var(--card-bg);
+      padding: 1rem 1.75rem;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: .5rem; font-size: .8125rem; color: #9AA6B4;
+    }
+    .dash-footer a { color: #6B7889; text-decoration: none; }
+    .dash-footer a:hover { color: #0E8186; text-decoration: underline; }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: .25rem;
+      padding: .2rem .6rem; border-radius: 9999px;
+      font-size: .6875rem; font-weight: 700; white-space: nowrap; line-height: 1.4;
+    }
+    .badge-active   { background: #DCFCE7; color: #15803D; }
+    .badge-invited  { background: #FEF3C7; color: #A16207; }
+    .badge-disabled { background: #FEE2E2; color: #B91C1C; }
+    .badge-owner    { background: #EDE9FE; color: #6D28D9; }
+    .badge-manager  { background: #DBEAFE; color: #1D4ED8; }
+    .badge-agent    { background: #F0FDF4; color: #15803D; }
+    .badge-marketing { background: #FDF2F8; color: #9D174D; }
+    .badge-support  { background: #F0F9FF; color: #0284C7; }
+
+    /* ── FAQ ── */
+    .faq-wrap {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; box-shadow: var(--shadow-card); overflow: hidden;
+    }
+    .faq-item { border-bottom: 1px solid #F0F4F8; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary {
+      padding: 1rem 1.5rem; font-size: .9375rem; font-weight: 700; color: #262E3A;
+      cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between; align-items: center; gap: .75rem;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-chevron { transition: transform .2s; color: #9AA6B4; flex-shrink: 0; }
+    .faq-item[open] .faq-chevron { transform: rotate(180deg); }
+    @media (prefers-reduced-motion: reduce) { .faq-chevron { transition: none; } }
+    .faq-body { padding: 0 1.5rem 1rem; font-size: .875rem; color: #6B7889; line-height: 1.75; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(22,28,38,.55); backdrop-filter: blur(4px);
+      z-index: var(--z-modal-overlay); display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay[hidden] { display: none; }
+    .modal-box {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.375rem; box-shadow: var(--shadow-elevated);
+      padding: 1.875rem; max-width: 520px; width: 100%;
+      animation: modal-in .18s cubic-bezier(.4,0,.2,1);
+      max-height: 90dvh; overflow-y: auto;
+    }
+    @keyframes modal-in {
+      from { opacity:0; transform: scale(.95) translateY(8px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) { .modal-box { animation: none; } }
+    .modal-header {
+      display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem;
+    }
+    .modal-icon {
+      width: 2.75rem; height: 2.75rem; border-radius: .875rem;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .modal-icon-teal   { background: #ECFBFB; color: #0E8186; }
+    .modal-icon-danger { background: #FEE2E2; color: #B91C1C; }
+    .modal-icon-warning { background: #FEF9C3; color: #A16207; }
+    .modal-title { font-size: 1.125rem; font-weight: 800; color: #161C26; line-height: 1.3; }
+    .modal-subtitle { font-size: .8125rem; color: #9AA6B4; margin-top: .25rem; }
+    .modal-body  { font-size: .875rem; color: #4D5969; line-height: 1.65; }
+    .modal-actions {
+      display: flex; gap: .625rem; margin-top: 1.5rem; justify-content: flex-end; flex-wrap: wrap;
+    }
+    .btn-cancel {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .5625rem 1.25rem; border-radius: .75rem;
+      background: #F1F5F9; color: #475569;
+      font-size: .875rem; font-weight: 600; border: none; cursor: pointer; font-family: inherit;
+      transition: background .12s;
+    }
+    .btn-cancel:hover { background: #E2E8F0; }
+    .btn-cancel:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+    .btn-primary-modal {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .5625rem 1.25rem; border-radius: .75rem;
+      background: linear-gradient(135deg,#0E8186,#16A0A5); color: #fff;
+      font-size: .875rem; font-weight: 700; border: none; cursor: pointer; font-family: inherit;
+      transition: opacity .12s; box-shadow: 0 2px 8px rgba(14,129,134,.3);
+    }
+    .btn-primary-modal:hover { opacity: .9; }
+    .btn-primary-modal:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+    .btn-danger-modal {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .5625rem 1.25rem; border-radius: .75rem;
+      background: #DC2626; color: #fff;
+      font-size: .875rem; font-weight: 700; border: none; cursor: pointer; font-family: inherit;
+      transition: background .12s;
+    }
+    .btn-danger-modal:hover { background: #B91C1C; }
+    .btn-danger-modal:focus-visible { outline: 2px solid #EF4444; outline-offset: 2px; }
+
+    /* ── Form fields ── */
+    .form-group { margin-bottom: 1rem; }
+    .form-label {
+      display: block; font-size: .8125rem; font-weight: 700; color: #374151;
+      margin-bottom: .375rem;
+    }
+    .form-label .req { color: #E11D48; margin-inline-start: .125rem; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: .5625rem .875rem;
+      border: 1.5px solid var(--border-color); border-radius: .75rem;
+      font-size: .875rem; font-family: inherit; color: #262E3A;
+      background: #F8FAFC; outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: #0E8186; background: #fff;
+      box-shadow: 0 0 0 3px rgba(14,129,134,.1);
+    }
+    .form-input[aria-invalid="true"], .form-select[aria-invalid="true"] {
+      border-color: #E11D48; box-shadow: 0 0 0 3px rgba(225,29,72,.08);
+    }
+    .form-error { font-size: .75rem; color: #DC2626; margin-top: .3rem; display: none; }
+    .form-error.is-visible { display: block; }
+    .form-hint { font-size: .75rem; color: #9AA6B4; margin-top: .3rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .875rem; }
+    @media (max-width: 479px) { .form-row { grid-template-columns: 1fr; } }
+    .form-checkbox-group { display: flex; flex-direction: column; gap: .5rem; }
+    .form-checkbox-item { display: flex; align-items: center; gap: .5rem; }
+    .form-checkbox-item input[type="checkbox"] {
+      width: 1rem; height: 1rem; accent-color: #0E8186; cursor: pointer;
+    }
+    .form-checkbox-item label { font-size: .875rem; color: #374151; cursor: pointer; }
+    .form-section-divider { border: none; border-top: 1px solid #F0F4F8; margin: 1.125rem 0; }
+    .form-toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .75rem 0; border-bottom: 1px solid #F0F4F8; gap: .75rem;
+    }
+    .form-toggle-row:last-child { border-bottom: none; }
+    .form-toggle-info { flex: 1; min-width: 0; }
+    .form-toggle-label { font-size: .875rem; font-weight: 700; color: #262E3A; }
+    .form-toggle-hint  { font-size: .75rem; color: #9AA6B4; margin-top: .125rem; }
+
+    /* ── Honesty box ── */
+    .honesty-box {
+      display: flex; align-items: flex-start; gap: .625rem;
+      padding: .875rem 1rem;
+      background: #FFFBEB; border: 1.5px solid #FDE68A;
+      border-radius: .875rem; font-size: .8125rem; color: #92400E; line-height: 1.6;
+    }
+    .honesty-box svg { flex-shrink: 0; margin-top: .125rem; color: #D97706; }
+    .honesty-box.danger-box {
+      background: #FFF1F2; border-color: #FECDD3; color: #9F1239;
+    }
+    .honesty-box.danger-box svg { color: #E11D48; }
+
+    /* ── Row action button ── */
+    .row-action-wrap { position: relative; }
+    .row-action-menu {
+      position: absolute; inset-inline-end: 0; top: calc(100% + 4px);
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: .75rem; box-shadow: var(--shadow-pop);
+      min-width: 180px; z-index: calc(var(--z-dd) + 5); overflow: hidden;
+    }
+    .row-action-menu[hidden] { display: none; }
+    .row-action-menu button, .row-action-menu a {
+      display: flex; align-items: center; gap: .625rem;
+      width: 100%; padding: .625rem 1rem; font-size: .875rem; color: #262E3A;
+      background: none; border: none; cursor: pointer; text-decoration: none;
+      text-align: start; transition: background .1s;
+    }
+    .row-action-menu button:hover, .row-action-menu a:hover { background: #F7F8FA; }
+    .row-action-trigger {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.875rem; height: 1.875rem; border-radius: .5rem;
+      background: transparent; border: 1px solid transparent;
+      cursor: pointer; color: #6B7889; transition: all .12s;
+    }
+    .row-action-trigger:hover { background: #EEF1F5; border-color: var(--border-color); color: #262E3A; }
+    .row-action-trigger:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+
+    /* ── Buttons ── */
+    .btn-header {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .5625rem 1.125rem; border-radius: .875rem;
+      font-size: .875rem; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: all .15s; white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn-header-primary {
+      background: #fff; color: #0E8186; border: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
+    }
+    .btn-header-primary:hover { background: #F0FAFA; box-shadow: 0 4px 14px rgba(0,0,0,.15); transform: translateY(-1px); }
+    .btn-header-outline {
+      background: rgba(255,255,255,.12); color: #fff;
+      border: 1.5px solid rgba(255,255,255,.3);
+    }
+    .btn-header-outline:hover { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.5); }
+    .btn-header:focus-visible { outline: 2px solid rgba(255,255,255,.8); outline-offset: 2px; }
+    .btn-save {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .5rem 1.25rem; border-radius: .75rem;
+      background: linear-gradient(135deg,#0E8186,#16A0A5); color: #fff;
+      font-size: .875rem; font-weight: 700; border: none; cursor: pointer; font-family: inherit;
+      transition: opacity .12s; box-shadow: 0 2px 6px rgba(14,129,134,.25);
+    }
+    .btn-save:hover { opacity: .9; }
+    .btn-save:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .5rem 1.25rem; border-radius: .75rem;
+      background: transparent; color: #6B7889;
+      border: 1.5px solid var(--border-color);
+      font-size: .875rem; font-weight: 600; cursor: pointer; font-family: inherit;
+      transition: all .12s;
+    }
+    .btn-outline:hover { border-color: #0E8186; color: #0E8186; background: #F0FAFA; }
+    .btn-outline:focus-visible { outline: 2px solid #16A0A5; outline-offset: 2px; }
+    .btn-danger {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .5rem 1.25rem; border-radius: .75rem;
+      background: transparent; color: #DC2626;
+      border: 1.5px solid #FCA5A5;
+      font-size: .875rem; font-weight: 700; cursor: pointer; font-family: inherit;
+      transition: all .12s;
+    }
+    .btn-danger:hover { background: #FEF2F2; border-color: #DC2626; }
+    .btn-danger:focus-visible { outline: 2px solid #EF4444; outline-offset: 2px; }
+    .btn-sm { padding: .3125rem .875rem; font-size: .8125rem; }
+
+    /* ══════════════════════════════════════════════════════════
+       SETTINGS PAGE-SPECIFIC STYLES
+    ══════════════════════════════════════════════════════════ */
+
+    /* ── Two-column layout ── */
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    @media (min-width: 1024px) {
+      .settings-layout { grid-template-columns: 228px 1fr; }
+    }
+
+    /* ── Settings sidebar nav ── */
+    .settings-nav {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.25rem; box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    @media (min-width: 1024px) {
+      .settings-nav { position: sticky; top: calc(var(--topbar-h) + 1.25rem); }
+    }
+    .settings-nav-header {
+      padding: 1rem 1.25rem .75rem;
+      border-bottom: 1px solid #F0F4F8;
+      font-size: .75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .06em; color: #9AA6B4;
+    }
+    .settings-nav-list { list-style: none; padding: .5rem 0; margin: 0; }
+    @media (max-width: 1023px) {
+      .settings-nav-list { display: flex; overflow-x: auto; scrollbar-width: none; padding: .5rem; gap: .25rem; }
+      .settings-nav-list::-webkit-scrollbar { display: none; }
+      .settings-nav-header { display: none; }
+    }
+
+    .settings-nav-link {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .75rem 1.25rem; color: #6B7889;
+      font-size: .9375rem; font-weight: 600;
+      background: none; border: none; width: 100%; cursor: pointer;
+      font-family: inherit; text-align: start; text-decoration: none;
+      transition: background .12s, color .12s;
+      position: relative;
+    }
+    .settings-nav-link svg { flex-shrink: 0; }
+    .settings-nav-link:hover { background: #F7F8FA; color: #262E3A; }
+    .settings-nav-link[aria-selected="true"] {
+      color: #0E8186; font-weight: 700;
+      background: linear-gradient(90deg, #ECFBFB, #F7FFFE);
+    }
+    .settings-nav-link[aria-selected="true"]::after {
+      content: ''; position: absolute;
+      inset-block: .5rem; inset-inline-start: 0;
+      width: 3px; border-radius: 0 999px 999px 0;
+      background: #0E8186;
+    }
+    html[dir="ltr"] .settings-nav-link[aria-selected="true"]::after {
+      inset-inline-start: auto; inset-inline-end: 0;
+      border-radius: 999px 0 0 999px;
+    }
+    .settings-nav-link:focus-visible { outline: 2px solid #16A0A5; outline-offset: -2px; }
+
+    @media (max-width: 1023px) {
+      .settings-nav-link {
+        white-space: nowrap; border-radius: .875rem; padding: .5rem 1rem;
+        flex-shrink: 0; font-size: .875rem; width: auto;
+      }
+      .settings-nav-link[aria-selected="true"] {
+        background: linear-gradient(135deg, #042B2E, #0E8186);
+        color: #fff; border-radius: .875rem;
+      }
+      .settings-nav-link[aria-selected="true"]::after { display: none; }
+      .settings-nav-link svg { display: none; }
+    }
+
+    /* ── Settings panels ── */
+    .settings-panels { min-width: 0; }
+    .settings-panel {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.25rem; box-shadow: var(--shadow-card);
+      padding: 1.875rem;
+    }
+    .settings-panel[hidden] { display: none; }
+    .settings-panel-title {
+      font-size: 1.125rem; font-weight: 800; color: #161C26;
+      margin: 0 0 .25rem;
+    }
+    .settings-panel-subtitle {
+      font-size: .875rem; color: #9AA6B4; margin: 0 0 1.75rem; line-height: 1.5;
+    }
+    .settings-panel-save {
+      display: flex; justify-content: flex-end; gap: .625rem;
+      margin-top: 1.75rem; padding-top: 1.375rem;
+      border-top: 1px solid #F0F4F8;
+    }
+
+    /* ── Notification table (3 channels) ── */
+    .notif-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    .notif-table th {
+      text-align: center; font-size: .8125rem; font-weight: 700; color: #4D5969;
+      padding: .625rem .5rem; border-bottom: 2px solid var(--border-color);
+    }
+    .notif-table th:first-child { text-align: start; }
+    .notif-table td {
+      padding: .75rem .5rem; border-bottom: 1px solid #F0F4F8;
+      vertical-align: middle;
+    }
+    .notif-table tbody tr:last-child td { border-bottom: none; }
+    .notif-table td:not(:first-child) { text-align: center; }
+    .notif-label { font-size: .875rem; font-weight: 600; color: #262E3A; }
+    @media (max-width: 639px) {
+      .notif-table, .notif-table tbody, .notif-table tr, .notif-table td { display: block; }
+      .notif-table thead { display: none; }
+      .notif-table tbody tr {
+        padding: .875rem; margin-bottom: .5rem;
+        border: 1px solid var(--border-color); border-radius: .875rem;
+        background: var(--card-bg);
+      }
+      .notif-table td {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: .5rem; padding: .375rem 0; border: none;
+      }
+      .notif-table td::before {
+        content: attr(data-label); font-weight: 700; color: #6B7889;
+        font-size: .8125rem;
+      }
+    }
+
+    /* ── Team table → cards ── */
+    .team-table-wrap {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 1.125rem; box-shadow: var(--shadow-card); overflow: hidden;
+    }
+    .team-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    .team-table th {
+      background: #F7F8FA; padding: .75rem 1rem; text-align: start;
+      font-weight: 700; font-size: .8125rem; color: #4D5969; white-space: nowrap;
+      border-bottom: 2px solid var(--border-color);
+    }
+    .team-table td {
+      padding: .875rem 1rem; border-bottom: 1px solid #EEF1F5;
+      vertical-align: middle; color: #262E3A;
+    }
+    .team-table tbody tr:last-child td { border-bottom: none; }
+    .team-table tbody tr:hover { background: #FAFBFC; }
+    @media (max-width: 767px) {
+      .team-table thead { display: none; }
+      .team-table, .team-table tbody, .team-table tr, .team-table td { display: block; }
+      .team-table tbody tr {
+        padding: .875rem; margin: .5rem;
+        border: 1px solid var(--border-color); border-radius: .875rem;
+        background: var(--card-bg); box-shadow: var(--shadow-card);
+      }
+      .team-table td {
+        display: flex; align-items: flex-start; gap: .5rem;
+        padding: .3125rem 0; border: none; font-size: .875rem; line-height: 1.45;
+      }
+      .team-table td::before {
+        content: attr(data-label); font-weight: 700; color: #4D5969;
+        flex-shrink: 0; min-width: 7rem; font-size: .8125rem;
+      }
+      .team-table td.cell-actions::before { display: none; }
+      .team-table td.cell-actions { justify-content: flex-end; }
+    }
+
+    /* ── Usage bars ── */
+    .usage-item { margin-bottom: 1.25rem; }
+    .usage-item:last-child { margin-bottom: 0; }
+    .usage-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: .375rem; gap: .5rem;
+    }
+    .usage-label { font-size: .875rem; font-weight: 600; color: #262E3A; }
+    .usage-count { font-size: .8125rem; color: #6B7889; font-weight: 600; flex-shrink: 0; }
+    .usage-bar-track {
+      height: 10px; background: #EEF1F5; border-radius: 9999px; overflow: hidden;
+    }
+    .usage-bar-fill {
+      height: 100%; border-radius: 9999px;
+      background: linear-gradient(90deg, #0E8186, #38BCC0);
+      transition: width .4s ease;
+    }
+    .usage-bar-fill.bar-warning { background: linear-gradient(90deg,#D97706,#FCD34D); }
+    .usage-bar-fill.bar-danger  { background: linear-gradient(90deg,#DC2626,#F87171); }
+    .usage-note { font-size: .75rem; color: #9AA6B4; margin-top: .25rem; }
+
+    /* ── Plan card ── */
+    .plan-card {
+      background: linear-gradient(135deg, #042B2E 0%, #0E8186 100%);
+      border-radius: 1.25rem; padding: 1.5rem; color: #fff;
+      box-shadow: 0 8px 24px -4px rgba(14,129,134,.3);
+      position: relative; overflow: hidden;
+    }
+    .plan-card::before {
+      content: ''; position: absolute; inset-block-start: -20px; inset-inline-end: -20px;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(255,255,255,.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .plan-name {
+      font-size: 1.375rem; font-weight: 800; margin-bottom: .25rem;
+    }
+    .plan-renewal { font-size: .8125rem; color: rgba(255,255,255,.7); margin-bottom: 1rem; }
+    .plan-billing-note { font-size: .75rem; color: rgba(255,255,255,.6); }
+
+    /* ── Color preview ── */
+    .color-preview-swatch {
+      display: inline-block; width: 2rem; height: 2rem; border-radius: .5rem;
+      border: 2px solid rgba(0,0,0,.1); vertical-align: middle;
+      margin-inline-start: .5rem; flex-shrink: 0;
+    }
+    .brand-preview-card {
+      border: 2px solid var(--border-color); border-radius: 1rem;
+      padding: 1.25rem; background: #FAFBFC;
+      display: flex; flex-direction: column; gap: .75rem;
+      transition: border-color .2s;
+    }
+    .brand-logo-placeholder {
+      width: 3rem; height: 3rem; border-radius: .875rem;
+      background: var(--preview-primary, #0E8186);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 800; font-size: 1.125rem;
+      transition: background .2s;
+    }
+    .brand-name-preview {
+      font-size: 1rem; font-weight: 800; color: var(--preview-primary, #0E8186);
+      transition: color .2s;
+    }
+    .brand-url-preview { font-size: .8125rem; color: #9AA6B4; word-break: break-all; }
+
+    /* ── Danger zone ── */
+    .danger-zone {
+      background: #FFF1F2; border: 1.5px solid #FECDD3;
+      border-radius: 1.25rem; padding: 1.5rem; margin-top: 2rem;
+    }
+    .danger-zone-title {
+      font-size: 1rem; font-weight: 800; color: #BE123C; margin: 0 0 .375rem;
+    }
+    .danger-zone-sub { font-size: .8125rem; color: #9F1239; margin: 0 0 1.25rem; }
+    .danger-zone-actions { display: flex; flex-direction: column; gap: .75rem; }
+    .danger-action {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem; background: #fff; border: 1px solid #FECDD3;
+      border-radius: .875rem; gap: 1rem; flex-wrap: wrap;
+    }
+    .danger-action-info { flex: 1; min-width: 0; }
+    .danger-action-title { font-size: .9375rem; font-weight: 700; color: #BE123C; }
+    .danger-action-desc { font-size: .8125rem; color: #9F1239; margin-top: .125rem; }
+
+    /* ── Security items ── */
+    .security-placeholder {
+      display: flex; align-items: center; gap: .875rem;
+      padding: 1rem; background: #F8FAFC; border: 1px solid var(--border-color);
+      border-radius: .875rem; margin-bottom: .75rem;
+    }
+    .security-placeholder-icon {
+      width: 2.5rem; height: 2.5rem; border-radius: .75rem;
+      display: flex; align-items: center; justify-content: center;
+      background: #EEF1F5; color: #6B7889; flex-shrink: 0;
+    }
+    .security-placeholder-text { flex: 1; }
+    .security-placeholder-title { font-size: .9375rem; font-weight: 700; color: #262E3A; }
+    .security-placeholder-sub { font-size: .8125rem; color: #9AA6B4; margin-top: .125rem; }
+
+    /* ── Session list item ── */
+    .session-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .875rem 1rem; border-bottom: 1px solid #F0F4F8; gap: .75rem; flex-wrap: wrap;
+    }
+    .session-item:last-child { border-bottom: none; }
+    .session-info { flex: 1; min-width: 0; }
+    .session-device { font-size: .875rem; font-weight: 700; color: #262E3A; }
+    .session-meta { font-size: .75rem; color: #9AA6B4; margin-top: .125rem; }
+    .session-current { font-size: .6875rem; font-weight: 700; background: #DCFCE7; color: #15803D; padding: .15rem .5rem; border-radius: 999px; }
+  </style>
+</head>
+
+<body class="antialiased font-sans">
+
+  <!-- Skip navigation -->
+  <a href="#main" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
+
+  <!-- ARIA live announcer -->
+  <div id="dash-announcer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════════════════════════════════════ -->
+  <aside id="sidebar-drawer" class="dash-sidebar" aria-label="قائمة لوحة التحكم" inert>
+
+    <div class="sidebar-brand">
+      <a href="index.html" class="flex items-center gap-2 no-underline focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded-md" aria-label="الصفحة الرئيسية للوحة التحكم">
+        <span class="w-8 h-8 bg-lagoon-500 rounded-lg flex items-center justify-center flex-shrink-0" aria-hidden="true">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+        </span>
+        <div>
+          <div class="sidebar-brand-name">رحلاتي</div>
+          <div class="sidebar-brand-sub">لوحة التحكم التجريبية</div>
+        </div>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="روابط لوحة التحكم">
+
+      <p class="sidebar-section-label">الرئيسية</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="index.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>الرئيسية</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="sidebar-section-label">إدارة العروض</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="deals.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            <span>العروض</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="create-deal.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>إضافة عرض</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="coupons.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+            <span>الكوبونات</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="sidebar-section-label">العمليات</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="#" class="sidebar-nav-link" data-coming-soon>
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>طلبات الحجز</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="#" class="sidebar-nav-link" data-coming-soon>
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            <span>العملاء</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="analytics.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+            <span>التحليلات</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="sidebar-section-label">الإعدادات</p>
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="integrations.html" class="sidebar-nav-link">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M7 17l-5 5"/><path d="M17 7l5-5"/><path d="M11 3l3 3-7 7-3-3z"/><path d="M13 21l-3-3 7-7 3 3z"/></svg>
+            <span>التكاملات</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="settings.html" class="sidebar-nav-link" aria-current="page">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            <span>الإعدادات</span>
+          </a>
+        </li>
+      </ul>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+      <ul class="list-none p-0 m-0">
+        <li class="sidebar-nav-item">
+          <a href="../pages/index.html" class="sidebar-nav-link text-lagoon-300 hover:text-white">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>العودة للموقع</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <button type="button" class="sidebar-nav-link w-full text-start" data-action="logout">
+            <svg width="18" height="18" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>تسجيل الخروج</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+  </aside>
+
+  <!-- Scrim -->
+  <div id="sidebar-scrim" class="dash-scrim" hidden aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       MAIN AREA
+  ══════════════════════════════════════════════════════════════════════ -->
+  <div class="dash-main">
+
+    <!-- ── Topbar ── -->
+    <header class="dash-topbar" role="banner" aria-label="شريط التحكم العلوي">
+
+      <button id="btn-mobile-menu" type="button"
+        class="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors flex-shrink-0"
+        aria-label="فتح القائمة الجانبية" aria-controls="sidebar-drawer" aria-expanded="false">
+        <svg width="22" height="22" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="hidden sm:flex items-center gap-1.5 text-sm text-ink-500 flex-shrink-0">
+        <a href="index.html" class="text-ink-700 font-semibold hover:text-lagoon-600">لوحة التحكم</a>
+        <svg width="14" height="14" aria-hidden="true" class="text-ink-300 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <span class="text-ink-400">الإعدادات</span>
+      </div>
+
+      <button type="button"
+        class="hidden lg:flex items-center gap-2 px-2.5 py-1.5 rounded-xl border border-ink-200 hover:bg-ink-50 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors text-sm flex-shrink-0"
+        data-coming-soon aria-label="تبديل الشركة — قابل للربط لاحقاً">
+        <span class="w-5 h-5 bg-lagoon-700 rounded-md text-white font-extrabold text-xs flex items-center justify-center flex-shrink-0 select-none" aria-hidden="true">ش</span>
+        <span class="font-semibold text-ink-800 max-w-[130px] truncate">شركة رحلات الشرق</span>
+        <svg width="12" height="12" aria-hidden="true" class="text-ink-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <div class="flex-1 min-w-2"></div>
+
+      <form id="topbar-search-form" role="search" class="topbar-search hidden md:flex" aria-label="البحث في لوحة التحكم">
+        <svg width="16" height="16" aria-hidden="true" class="text-ink-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="topbar-search-input" type="search" name="q" placeholder="بحث تجريبي…" autocomplete="off" dir="auto" aria-label="حقل البحث">
+      </form>
+
+      <div class="relative flex-shrink-0">
+        <button id="btn-notifications" type="button"
+          class="relative flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors"
+          aria-label="الإشعارات" aria-haspopup="menu" aria-controls="dropdown-notifications" aria-expanded="false">
+          <svg width="20" height="20" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="absolute top-1.5 end-1.5 w-2.5 h-2.5 bg-danger rounded-full border-2 border-white" aria-hidden="true"></span>
+        </button>
+        <div id="dropdown-notifications" class="dash-dropdown" role="menu" aria-label="الإشعارات" hidden style="min-width:300px">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-ink-100">
+            <span class="font-bold text-sm text-ink-800">الإشعارات</span>
+            <span class="text-xs text-lagoon-600 font-semibold">بيانات تجريبية</span>
+          </div>
+          <div class="p-3 text-center text-sm text-ink-400">لا إشعارات جديدة — واجهة أمامية فقط</div>
+        </div>
+      </div>
+
+      <div class="relative flex-shrink-0">
+        <button id="btn-quick-add" type="button"
+          class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-lagoon-600 hover:bg-lagoon-700 text-white text-sm font-bold focus-visible:ring-2 focus-visible:ring-lagoon-400 transition-colors"
+          aria-label="إضافة سريعة" aria-haspopup="menu" aria-controls="dropdown-quick-add" aria-expanded="false">
+          <svg width="15" height="15" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span class="hidden sm:inline">إضافة</span>
+        </button>
+        <div id="dropdown-quick-add" class="dash-dropdown" role="menu" aria-label="خيارات الإضافة السريعة" hidden>
+          <div class="p-2">
+            <a href="create-deal.html" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-ink-700 hover:bg-ink-50 transition-colors no-underline">
+              <span class="w-7 h-7 bg-lagoon-100 text-lagoon-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              </span>
+              إضافة عرض جديد
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative flex-shrink-0">
+        <button id="btn-user-menu" type="button"
+          class="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-ink-50 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors"
+          aria-haspopup="menu" aria-controls="dropdown-user-menu" aria-expanded="false" aria-label="قائمة المستخدم">
+          <span class="w-8 h-8 bg-gradient-to-br from-lagoon-400 to-lagoon-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">أ</span>
+          <span class="hidden lg:block text-sm font-semibold text-ink-800 max-w-[100px] truncate">أحمد العمري</span>
+          <svg width="12" height="12" aria-hidden="true" class="text-ink-400 hidden lg:block flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div id="dropdown-user-menu" class="dash-dropdown" role="menu" aria-label="قائمة المستخدم" hidden>
+          <div class="px-4 py-3 border-b border-ink-100">
+            <div class="font-bold text-sm text-ink-800">أحمد العمري</div>
+            <div class="text-xs text-ink-500">مدير الوكالة — شركة رحلات الشرق</div>
+          </div>
+          <div class="p-2">
+            <button type="button" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-danger hover:bg-danger/5 transition-colors" data-action="logout">
+              <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>تسجيل الخروج
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </header>
+
+    <!-- ── Content ── -->
+    <main id="main" tabindex="-1">
+      <div class="dash-content">
+
+        <!-- Breadcrumb -->
+        <nav class="dash-breadcrumb" aria-label="مسار التنقل">
+          <a href="../pages/index.html">الموقع الرئيسي</a>
+          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+          <a href="index.html">لوحة التحكم</a>
+          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+          <span aria-current="page">الإعدادات</span>
+        </nav>
+
+        <!-- ════════════════════════════════════════════════════════
+             T019 — Page header
+        ═════════════════════════════════════════════════════════ -->
+        <div class="dash-page-header">
+          <div class="page-header-band">
+            <div class="page-header-inner">
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2.5 mb-1.5">
+                    <span class="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+                      </svg>
+                    </span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-white leading-tight">الإعدادات</h1>
+                  </div>
+                  <p class="text-sm text-white/75 max-w-lg leading-relaxed">
+                    إدارة بيانات الشركة والهوية البصرية والفريق والأمان وإعدادات الباقة.
+                  </p>
+                  <div class="safe-note" role="note">
+                    <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <span>الإعدادات هنا تجريبية ولا يتم حفظها على خادم — واجهة أمامية فقط</span>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 shrink-0 md:items-start">
+                  <button type="button" id="btn-save-all" class="btn-header btn-header-primary" aria-label="حفظ كل التغييرات">
+                    <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    حفظ كل التغييرات
+                  </button>
+                  <button type="button" id="btn-reset-all" class="btn-header btn-header-outline" aria-label="إعادة التعيين">
+                    <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+                    إعادة التعيين
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             T019 — Settings layout (nav + panels)
+        ═════════════════════════════════════════════════════════ -->
+        <div class="settings-layout">
+
+          <!-- Settings nav (7 items) -->
+          <nav class="settings-nav" aria-label="أقسام الإعدادات">
+            <div class="settings-nav-header" aria-hidden="true">الأقسام</div>
+            <ul class="settings-nav-list" role="tablist" aria-label="أقسام الإعدادات" id="settings-tablist">
+
+              <li role="presentation">
+                <button type="button" class="settings-nav-link" role="tab" id="tab-company"
+                  aria-selected="true" aria-controls="section-company" data-settings-tab="company">
+                  <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  بيانات الشركة
+                </button>
+              </li>
+
+              <li role="presentation">
+                <button type="button" class="settings-nav-link" role="tab" id="tab-branding"
+                  aria-selected="false" aria-controls="section-branding" data-settings-tab="branding">
+                  <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="5" r="2"/><circle cx="6" cy="12" r="2.5"/><circle cx="3.5" cy="15.5" r="2.5"/><circle cx="14" cy="15.5" r="2.5"/><circle cx="6" cy="19" r="2"/></svg>
+                  الهوية البصرية
+                </button>
+              </li>
+
+              <li role="presentation">
+                <button type="button" class="settings-nav-link" role="tab" id="tab-booking"
+                  aria-selected="false" aria-controls="section-booking" data-settings-tab="booking">
+                  <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  تفضيلات الحجز
+                </button>
+              </li>
+
+              <li role="presentation">
+                <button type="button" class="settings-nav-link" role="tab" id="tab-notifications"
+                  aria-selected="false" aria-controls="section-notifications" data-settings-tab="notifications">
+                  <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                  الإشعارات
+                </button>
+              </li>
+
+              <li role="presentation">
+                <button type="button" class="settings-nav-link" role="tab" id="tab-team"
+                  aria-selected="false" aria-controls="section-team" data-settings-tab="team">
+                  <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                  الفريق
+                </button>
+              </li>
+
+              <li role="presentation">
+                <button type="button" class="settings-nav-link" role="tab" id="tab-security"
+                  aria-selected="false" aria-controls="section-security" data-settings-tab="security">
+                  <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  الأمان
+                </button>
+              </li>
+
+              <li role="presentation">
+                <button type="button" class="settings-nav-link" role="tab" id="tab-plan"
+                  aria-selected="false" aria-controls="section-plan" data-settings-tab="plan">
+                  <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+                  الباقة والاستخدام
+                </button>
+              </li>
+
+            </ul>
+          </nav>
+
+          <!-- Settings panels (all in DOM, JS shows/hides) -->
+          <div class="settings-panels" id="settings-panels-region">
+
+            <!-- Section 1: Company Profile -->
+            <section id="section-company" class="settings-panel" role="tabpanel"
+              aria-labelledby="tab-company" tabindex="0">
+              <h2 class="settings-panel-title">بيانات الشركة</h2>
+              <p class="settings-panel-subtitle">المعلومات الأساسية عن الوكالة — لا يتم حفظها على خادم في هذه النسخة</p>
+
+              <form id="form-company" novalidate>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="co-name">اسم الشركة <span class="req" aria-hidden="true">*</span></label>
+                    <input id="co-name" name="company_name" type="text" class="form-input"
+                      value="وكالة الأفق للسفر" required
+                      aria-required="true" autocomplete="organization">
+                    <p class="form-error" id="co-name-err" role="alert"></p>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="co-type">نوع النشاط التجاري</label>
+                    <select id="co-type" name="business_type" class="form-select">
+                      <option value="agency" selected>وكالة سياحة</option>
+                      <option value="operator">منظم رحلات</option>
+                      <option value="b2b">مزود B2B</option>
+                      <option value="other">أخرى</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="co-phone">رقم الهاتف <span class="req" aria-hidden="true">*</span></label>
+                    <input id="co-phone" name="phone" type="tel" class="form-input"
+                      value="+966500000000" dir="ltr" required aria-required="true"
+                      autocomplete="tel" placeholder="+966…">
+                    <p class="form-error" id="co-phone-err" role="alert"></p>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="co-email">البريد الإلكتروني <span class="req" aria-hidden="true">*</span></label>
+                    <input id="co-email" name="email" type="email" class="form-input"
+                      value="info@example.com" dir="ltr" required aria-required="true"
+                      autocomplete="email" placeholder="info@example.com">
+                    <p class="form-error" id="co-email-err" role="alert"></p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="co-website">الموقع الإلكتروني</label>
+                  <input id="co-website" name="website" type="url" class="form-input"
+                    value="https://example.com" dir="ltr"
+                    autocomplete="url" placeholder="https://…">
+                  <p class="form-hint">اختياري — يُعرض على صفحتك العامة</p>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="co-address">العنوان</label>
+                  <input id="co-address" name="address" type="text" class="form-input"
+                    value="طريق الملك فهد، برج المعرفة، الدور 12"
+                    autocomplete="street-address">
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="co-country">الدولة</label>
+                    <select id="co-country" name="country" class="form-select" autocomplete="country-name">
+                      <option value="SA" selected>السعودية</option>
+                      <option value="AE">الإمارات</option>
+                      <option value="EG">مصر</option>
+                      <option value="KW">الكويت</option>
+                      <option value="QA">قطر</option>
+                      <option value="JO">الأردن</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="co-city">المدينة</label>
+                    <input id="co-city" name="city" type="text" class="form-input"
+                      value="الرياض" autocomplete="address-level2">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="co-support">جهة الاتصال الداعمة</label>
+                    <input id="co-support" name="support_contact" type="email" class="form-input"
+                      value="support@example.com" dir="ltr" placeholder="support@example.com">
+                    <p class="form-hint">يُستخدم لمراسلات الدعم الداخلية (تجريبي)</p>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="co-hours">ساعات العمل</label>
+                    <input id="co-hours" name="working_hours" type="text" class="form-input"
+                      value="الأحد – الخميس، 9ص – 6م">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="co-license">رقم الترخيص / السجل التجاري</label>
+                  <input id="co-license" name="license" type="text" class="form-input"
+                    value="RX-0000 (مثال توضيحي)" dir="ltr">
+                  <p class="form-hint">مثال توضيحي — لا يتم التحقق من الترخيص في هذه النسخة</p>
+                </div>
+
+                <div class="honesty-box" role="note">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  بيانات تجريبية — لا يتم حفظ أي تغيير على خادم في هذه النسخة. قابل للربط بنظام إدارة حقيقي لاحقاً.
+                </div>
+
+                <div class="settings-panel-save">
+                  <button type="button" class="btn-outline btn-sm" data-action="reset-company">إعادة التعيين</button>
+                  <button type="submit" class="btn-save btn-sm">
+                    <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    حفظ بيانات الشركة
+                  </button>
+                </div>
+
+              </form>
+            </section>
+
+            <!-- Section 2: Branding -->
+            <section id="section-branding" class="settings-panel" role="tabpanel"
+              aria-labelledby="tab-branding" tabindex="0" hidden>
+              <h2 class="settings-panel-title">الهوية البصرية</h2>
+              <p class="settings-panel-subtitle">ألوان الشركة وشعارها والرابط العام — لا يتم حفظها على خادم</p>
+
+              <!-- Upload row -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin-bottom:1.25rem">
+                <div>
+                  <p class="form-label" style="margin-bottom:.5rem">شعار الشركة</p>
+                  <div style="display:flex;align-items:center;gap:.75rem">
+                    <div style="width:3.5rem;height:3.5rem;border-radius:.875rem;background:var(--preview-primary,#0E8186);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.25rem;flex-shrink:0" aria-hidden="true">أ</div>
+                    <button type="button" class="btn-outline btn-sm" id="btn-upload-logo" aria-label="رفع شعار الشركة">
+                      <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+                      رفع شعار
+                    </button>
+                  </div>
+                  <p class="form-hint">PNG أو SVG — لا يتم رفع ملفات حقيقية</p>
+                </div>
+                <div>
+                  <p class="form-label" style="margin-bottom:.5rem">صورة الغلاف</p>
+                  <div style="display:flex;align-items:center;gap:.75rem">
+                    <div style="width:3.5rem;height:3.5rem;border-radius:.875rem;background:linear-gradient(135deg,#0E8186,#F4A300);flex-shrink:0" aria-hidden="true"></div>
+                    <button type="button" class="btn-outline btn-sm" id="btn-upload-cover" aria-label="رفع صورة الغلاف">
+                      <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+                      رفع غلاف
+                    </button>
+                  </div>
+                  <p class="form-hint">JPG أو PNG بعرض ≥ 1200px — لا يتم رفع ملفات حقيقية</p>
+                </div>
+              </div>
+
+              <hr class="form-section-divider">
+
+              <!-- Colors -->
+              <div class="form-row" style="margin-bottom:1.25rem">
+                <div class="form-group">
+                  <label class="form-label" for="co-primary-color">اللون الأساسي</label>
+                  <div style="display:flex;align-items:center;gap:.625rem">
+                    <input type="color" id="co-primary-color" name="primary_color" value="#0E7C7B"
+                      class="form-input" style="width:3.5rem;height:2.5rem;padding:.2rem;border-radius:.625rem;cursor:pointer"
+                      aria-describedby="primary-color-preview">
+                    <span id="primary-color-preview" class="color-preview-swatch" style="background:#0E7C7B" aria-hidden="true"></span>
+                    <span style="font-size:.8125rem;color:#6B7889" id="primary-color-val">#0E7C7B</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="co-secondary-color">اللون الثانوي</label>
+                  <div style="display:flex;align-items:center;gap:.625rem">
+                    <input type="color" id="co-secondary-color" name="secondary_color" value="#F4A300"
+                      class="form-input" style="width:3.5rem;height:2.5rem;padding:.2rem;border-radius:.625rem;cursor:pointer"
+                      aria-describedby="secondary-color-preview">
+                    <span id="secondary-color-preview" class="color-preview-swatch" style="background:#F4A300" aria-hidden="true"></span>
+                    <span style="font-size:.8125rem;color:#6B7889" id="secondary-color-val">#F4A300</span>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="form-section-divider">
+
+              <!-- Slug + URL preview -->
+              <div class="form-group">
+                <label class="form-label" for="co-slug">الرابط المخصص (slug)</label>
+                <div style="display:flex;align-items:center;gap:.375rem">
+                  <span style="font-size:.875rem;color:#9AA6B4;flex-shrink:0;padding:.5rem .25rem" dir="ltr">travel.example.com/</span>
+                  <input id="co-slug" name="slug" type="text" class="form-input"
+                    value="alufuq-travel" dir="ltr" pattern="[a-z0-9\-]+"
+                    aria-describedby="slug-preview-url" placeholder="your-agency">
+                </div>
+                <p class="form-hint" id="slug-preview-url">
+                  الرابط المتوقع: <span id="slug-preview-full" style="direction:ltr;unicode-bidi:isolate;color:#0E8186;font-weight:600">travel.example.com/alufuq-travel</span>
+                </p>
+              </div>
+
+              <!-- Social links -->
+              <hr class="form-section-divider">
+              <p class="form-label" style="margin-bottom:.75rem">روابط التواصل الاجتماعي</p>
+              <div class="form-group">
+                <label class="form-label" for="co-instagram">إنستغرام</label>
+                <input id="co-instagram" name="instagram" type="url" class="form-input"
+                  dir="ltr" placeholder="https://instagram.com/…">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="co-x">X (تويتر)</label>
+                <input id="co-x" name="x_account" type="url" class="form-input"
+                  dir="ltr" placeholder="https://x.com/…">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="co-facebook">فيسبوك</label>
+                <input id="co-facebook" name="facebook" type="url" class="form-input"
+                  dir="ltr" placeholder="https://facebook.com/…">
+              </div>
+
+              <!-- Brand preview card -->
+              <hr class="form-section-divider">
+              <p class="form-label" style="margin-bottom:.75rem">معاينة العلامة التجارية</p>
+              <div class="brand-preview-card" id="brand-preview-card"
+                style="--preview-primary:#0E7C7B;--preview-secondary:#F4A300">
+                <div style="display:flex;align-items:center;gap:.75rem">
+                  <div class="brand-logo-placeholder" id="brand-logo-preview" aria-hidden="true">أ</div>
+                  <div>
+                    <div class="brand-name-preview" id="brand-name-preview">وكالة الأفق للسفر</div>
+                    <div class="brand-url-preview" id="brand-url-preview" dir="ltr">travel.example.com/alufuq-travel</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:.5rem;margin-top:.25rem">
+                  <span style="display:inline-block;padding:.25rem .75rem;border-radius:9999px;font-size:.75rem;font-weight:700;color:#fff;background:var(--preview-primary,#0E7C7B)" id="preview-primary-badge">اللون الأساسي</span>
+                  <span style="display:inline-block;padding:.25rem .75rem;border-radius:9999px;font-size:.75rem;font-weight:700;color:#1a1a1a;background:var(--preview-secondary,#F4A300)" id="preview-secondary-badge">اللون الثانوي</span>
+                </div>
+                <p style="font-size:.75rem;color:#9AA6B4;margin:0">معاينة تجريبية — لا تمثل التصميم النهائي</p>
+              </div>
+
+              <div class="settings-panel-save">
+                <button type="button" class="btn-outline btn-sm" data-action="reset-branding">إعادة التعيين</button>
+                <button type="button" id="btn-save-branding" class="btn-save btn-sm"
+                  data-toast="تم حفظ الهوية البصرية تجريبياً — لا يتم الحفظ على خادم">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  حفظ الهوية البصرية
+                </button>
+              </div>
+            </section>
+
+            <!-- Section 3: Booking Preferences -->
+            <section id="section-booking" class="settings-panel" role="tabpanel"
+              aria-labelledby="tab-booking" tabindex="0" hidden>
+              <h2 class="settings-panel-title">تفضيلات الحجز</h2>
+              <p class="settings-panel-subtitle">إعدادات نظام الحجز والعملة والرسائل — لا يتم حفظها على خادم</p>
+
+              <form id="form-booking" novalidate>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="bk-currency">العملة الافتراضية</label>
+                    <select id="bk-currency" name="currency" class="form-select">
+                      <option value="SAR" selected>ريال سعودي (SAR)</option>
+                      <option value="AED">درهم إماراتي (AED)</option>
+                      <option value="EGP">جنيه مصري (EGP)</option>
+                      <option value="USD">دولار أمريكي (USD)</option>
+                      <option value="EUR">يورو (EUR)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="bk-response">وقت الاستجابة المتوقع</label>
+                    <input id="bk-response" name="response_time" type="text" class="form-input"
+                      value="خلال ساعتين (تجريبي)" placeholder="خلال ساعتين…">
+                    <p class="form-hint">يُعرض للعملاء عند إرسال طلب — تجريبي</p>
+                  </div>
+                </div>
+
+                <!-- Booking mode -->
+                <div class="form-group">
+                  <p class="form-label" style="margin-bottom:.625rem">طريقة الحجز الافتراضية</p>
+                  <div style="display:flex;flex-direction:column;gap:.5rem">
+                    <label style="display:flex;align-items:flex-start;gap:.75rem;padding:.875rem 1rem;border:1.5px solid var(--border-color);border-radius:.875rem;cursor:pointer;transition:border-color .15s" id="mode-inquiry-wrap">
+                      <input type="radio" name="booking_mode" value="inquiry" checked
+                        style="margin-top:.125rem;width:1rem;height:1rem;accent-color:#0E8186;flex-shrink:0"
+                        aria-describedby="mode-inquiry-desc">
+                      <div>
+                        <span style="font-size:.9375rem;font-weight:700;color:#262E3A;display:block">طلب استفسار</span>
+                        <span id="mode-inquiry-desc" style="font-size:.8125rem;color:#6B7889">يتلقى العميل ردّاً يدوياً منك قبل التأكيد</span>
+                      </div>
+                    </label>
+                    <label style="display:flex;align-items:flex-start;gap:.75rem;padding:.875rem 1rem;border:1.5px solid var(--border-color);border-radius:.875rem;cursor:pointer;transition:border-color .15s" id="mode-redirect-wrap">
+                      <input type="radio" name="booking_mode" value="redirect"
+                        style="margin-top:.125rem;width:1rem;height:1rem;accent-color:#0E8186;flex-shrink:0"
+                        aria-describedby="mode-redirect-desc">
+                      <div>
+                        <span style="font-size:.9375rem;font-weight:700;color:#262E3A;display:block">إعادة توجيه للشريك</span>
+                        <span id="mode-redirect-desc" style="font-size:.8125rem;color:#6B7889">يُحوَّل العميل مباشرة إلى موقع الشريك للإكمال</span>
+                      </div>
+                    </label>
+                    <label style="display:flex;align-items:flex-start;gap:.75rem;padding:.875rem 1rem;border:1.5px solid var(--border-color);border-radius:.875rem;cursor:pointer;transition:border-color .15s" id="mode-manual-wrap">
+                      <input type="radio" name="booking_mode" value="manual"
+                        style="margin-top:.125rem;width:1rem;height:1rem;accent-color:#0E8186;flex-shrink:0"
+                        aria-describedby="mode-manual-desc">
+                      <div>
+                        <span style="font-size:.9375rem;font-weight:700;color:#262E3A;display:block">تأكيد يدوي</span>
+                        <span id="mode-manual-desc" style="font-size:.8125rem;color:#6B7889">تتولى إدارة كل حجز يدوياً عبر لوحة التحكم</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="bk-confirm-msg">رسالة التأكيد للعميل</label>
+                  <textarea id="bk-confirm-msg" name="confirmation_message" class="form-textarea"
+                    rows="3" style="resize:vertical">شكراً لتواصلك مع وكالة الأفق للسفر. سنتواصل معك خلال ساعتين لتأكيد تفاصيل حجزك.</textarea>
+                  <p class="form-hint">تُرسل للعميل بعد إتمام الطلب — تجريبي، لا تُرسل رسائل حقيقية</p>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="bk-deposit">الحد الأدنى للعربون (تجريبي)</label>
+                  <input id="bk-deposit" name="min_deposit" type="text" class="form-input"
+                    placeholder="مثال: 500 SAR — اختياري" dir="ltr">
+                  <p class="form-hint">مثال توضيحي — لا يُطبَّق فعلياً</p>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="bk-cancel">شروط الإلغاء</label>
+                  <textarea id="bk-cancel" name="cancellation_note" class="form-textarea"
+                    rows="2" style="resize:vertical">يمكن إلغاء الحجز قبل 48 ساعة من موعد السفر مقابل استرداد كامل — شروط تجريبية</textarea>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="bk-refund">سياسة الاسترداد</label>
+                  <textarea id="bk-refund" name="refund_note" class="form-textarea"
+                    rows="2" style="resize:vertical">يُعاد المبلغ خلال 7–14 يوم عمل حسب وسيلة الدفع — شروط تجريبية</textarea>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="bk-hours">ساعات الاستقبال</label>
+                  <input id="bk-hours" name="booking_hours" type="text" class="form-input"
+                    value="الأحد – الخميس، 9ص – 6م">
+                </div>
+
+                <!-- Required documents -->
+                <hr class="form-section-divider">
+                <p class="form-label" style="margin-bottom:.625rem">المستندات المطلوبة من العميل</p>
+                <div class="form-checkbox-group">
+                  <div class="form-checkbox-item">
+                    <input type="checkbox" id="doc-passport" name="docs" value="passport" checked>
+                    <label for="doc-passport">جواز السفر</label>
+                  </div>
+                  <div class="form-checkbox-item">
+                    <input type="checkbox" id="doc-id" name="docs" value="id" checked>
+                    <label for="doc-id">الهوية الوطنية / الإقامة</label>
+                  </div>
+                  <div class="form-checkbox-item">
+                    <input type="checkbox" id="doc-receipt" name="docs" value="receipt" checked>
+                    <label for="doc-receipt">إثبات الدفع / الإيصال</label>
+                  </div>
+                  <div class="form-checkbox-item">
+                    <input type="checkbox" id="doc-travelers" name="docs" value="travelerNames" checked>
+                    <label for="doc-travelers">أسماء جميع المسافرين</label>
+                  </div>
+                  <div class="form-checkbox-item">
+                    <input type="checkbox" id="doc-visa" name="docs" value="visa" checked>
+                    <label for="doc-visa">تأشيرة (إن لزم)</label>
+                  </div>
+                </div>
+
+                <div class="honesty-box" role="note" style="margin-top:1.25rem">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  تفضيلات تجريبية — لا يتم حفظها ولا تُطبَّق على أي حجز فعلي. قابل للربط لاحقاً.
+                </div>
+
+                <div class="settings-panel-save">
+                  <button type="button" class="btn-outline btn-sm" data-action="reset-booking">إعادة التعيين</button>
+                  <button type="submit" class="btn-save btn-sm">
+                    <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    حفظ تفضيلات الحجز
+                  </button>
+                </div>
+
+              </form>
+            </section>
+
+            <!-- Section 4: Notifications -->
+            <section id="section-notifications" class="settings-panel" role="tabpanel"
+              aria-labelledby="tab-notifications" tabindex="0" hidden>
+              <h2 class="settings-panel-title">تفضيلات الإشعارات</h2>
+              <p class="settings-panel-subtitle">تحكم في قنوات الإشعارات — لا يتم إرسال رسائل حقيقية في هذه النسخة</p>
+
+              <div class="honesty-box" role="note" style="margin-bottom:1.25rem">
+                <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span>لا يتم إرسال إشعارات حقيقية — الحالة تجريبية وتُعاد عند إعادة تحميل الصفحة. قابل للربط بنظام إشعارات حقيقي لاحقاً.</span>
+              </div>
+
+              <div aria-live="polite" aria-atomic="false" id="notif-live" class="sr-only"></div>
+
+              <table class="notif-table" role="grid" aria-label="تفضيلات قنوات الإشعارات">
+                <thead>
+                  <tr>
+                    <th scope="col">الإشعار</th>
+                    <th scope="col">
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:.25rem">
+                        <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        لوحة التحكم
+                      </div>
+                    </th>
+                    <th scope="col">
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:.25rem">
+                        <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        البريد الإلكتروني
+                      </div>
+                    </th>
+                    <th scope="col">
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:.25rem">
+                        <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                        واتساب
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- 1: New booking inquiry -->
+                  <tr>
+                    <td data-label="الإشعار"><span class="notif-label">طلب حجز جديد</span></td>
+                    <td data-label="لوحة التحكم">
+                      <label class="toggle-switch" aria-label="لوحة التحكم — طلب حجز جديد">
+                        <input type="checkbox" data-notif-key="newInquiry" data-channel="dashboard" checked>
+                        <span class="toggle-track"></span>
+                      </label>
+                    </td>
+                    <td data-label="البريد الإلكتروني">
+                      <label class="toggle-switch" aria-label="البريد — طلب حجز جديد">
+                        <input type="checkbox" data-notif-key="newInquiry" data-channel="email" checked>
+                        <span class="toggle-track"></span>
+                      </label>
+                    </td>
+                    <td data-label="واتساب">
+                      <label class="toggle-switch" aria-label="واتساب — طلب حجز جديد">
+                        <input type="checkbox" data-notif-key="newInquiry" data-channel="whatsapp">
+                        <span class="toggle-track"></span>
+                      </label>
+                    </td>
+                  </tr>
+                  <!-- 2: Booking status change -->
+                  <tr>
+                    <td data-label="الإشعار"><span class="notif-label">تغيير حالة الحجز</span></td>
+                    <td data-label="لوحة التحكم"><label class="toggle-switch" aria-label="لوحة التحكم — تغيير حالة الحجز"><input type="checkbox" data-notif-key="bookingStatusChange" data-channel="dashboard" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="البريد الإلكتروني"><label class="toggle-switch" aria-label="البريد — تغيير حالة الحجز"><input type="checkbox" data-notif-key="bookingStatusChange" data-channel="email" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="واتساب"><label class="toggle-switch" aria-label="واتساب — تغيير حالة الحجز"><input type="checkbox" data-notif-key="bookingStatusChange" data-channel="whatsapp"><span class="toggle-track"></span></label></td>
+                  </tr>
+                  <!-- 3: Coupon copied -->
+                  <tr>
+                    <td data-label="الإشعار"><span class="notif-label">نسخ كوبون</span></td>
+                    <td data-label="لوحة التحكم"><label class="toggle-switch" aria-label="لوحة التحكم — نسخ كوبون"><input type="checkbox" data-notif-key="couponCopied" data-channel="dashboard" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="البريد الإلكتروني"><label class="toggle-switch" aria-label="البريد — نسخ كوبون"><input type="checkbox" data-notif-key="couponCopied" data-channel="email"><span class="toggle-track"></span></label></td>
+                    <td data-label="واتساب"><label class="toggle-switch" aria-label="واتساب — نسخ كوبون"><input type="checkbox" data-notif-key="couponCopied" data-channel="whatsapp"><span class="toggle-track"></span></label></td>
+                  </tr>
+                  <!-- 4: Deal expiring soon -->
+                  <tr>
+                    <td data-label="الإشعار"><span class="notif-label">عرض يوشك على الانتهاء</span></td>
+                    <td data-label="لوحة التحكم"><label class="toggle-switch" aria-label="لوحة التحكم — عرض يوشك على الانتهاء"><input type="checkbox" data-notif-key="dealExpiringSoon" data-channel="dashboard" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="البريد الإلكتروني"><label class="toggle-switch" aria-label="البريد — عرض يوشك على الانتهاء"><input type="checkbox" data-notif-key="dealExpiringSoon" data-channel="email" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="واتساب"><label class="toggle-switch" aria-label="واتساب — عرض يوشك على الانتهاء"><input type="checkbox" data-notif-key="dealExpiringSoon" data-channel="whatsapp"><span class="toggle-track"></span></label></td>
+                  </tr>
+                  <!-- 5: Integration failed -->
+                  <tr>
+                    <td data-label="الإشعار"><span class="notif-label">فشل تكامل</span></td>
+                    <td data-label="لوحة التحكم"><label class="toggle-switch" aria-label="لوحة التحكم — فشل تكامل"><input type="checkbox" data-notif-key="integrationFailed" data-channel="dashboard" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="البريد الإلكتروني"><label class="toggle-switch" aria-label="البريد — فشل تكامل"><input type="checkbox" data-notif-key="integrationFailed" data-channel="email" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="واتساب"><label class="toggle-switch" aria-label="واتساب — فشل تكامل"><input type="checkbox" data-notif-key="integrationFailed" data-channel="whatsapp"><span class="toggle-track"></span></label></td>
+                  </tr>
+                  <!-- 6: Daily summary -->
+                  <tr>
+                    <td data-label="الإشعار"><span class="notif-label">ملخص يومي</span></td>
+                    <td data-label="لوحة التحكم"><label class="toggle-switch" aria-label="لوحة التحكم — ملخص يومي"><input type="checkbox" data-notif-key="dailySummary" data-channel="dashboard" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="البريد الإلكتروني"><label class="toggle-switch" aria-label="البريد — ملخص يومي"><input type="checkbox" data-notif-key="dailySummary" data-channel="email" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="واتساب"><label class="toggle-switch" aria-label="واتساب — ملخص يومي"><input type="checkbox" data-notif-key="dailySummary" data-channel="whatsapp"><span class="toggle-track"></span></label></td>
+                  </tr>
+                  <!-- 7: Weekly analytics report -->
+                  <tr>
+                    <td data-label="الإشعار"><span class="notif-label">تقرير التحليلات الأسبوعي</span></td>
+                    <td data-label="لوحة التحكم"><label class="toggle-switch" aria-label="لوحة التحكم — تقرير أسبوعي"><input type="checkbox" data-notif-key="weeklyAnalytics" data-channel="dashboard"><span class="toggle-track"></span></label></td>
+                    <td data-label="البريد الإلكتروني"><label class="toggle-switch" aria-label="البريد — تقرير أسبوعي"><input type="checkbox" data-notif-key="weeklyAnalytics" data-channel="email" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="واتساب"><label class="toggle-switch" aria-label="واتساب — تقرير أسبوعي"><input type="checkbox" data-notif-key="weeklyAnalytics" data-channel="whatsapp"><span class="toggle-track"></span></label></td>
+                  </tr>
+                  <!-- 8: Payment pending -->
+                  <tr>
+                    <td data-label="الإشعار"><span class="notif-label">دفعة معلقة <span style="font-size:.75rem;color:#9AA6B4">(تجريبي)</span></span></td>
+                    <td data-label="لوحة التحكم"><label class="toggle-switch" aria-label="لوحة التحكم — دفعة معلقة"><input type="checkbox" data-notif-key="paymentPending" data-channel="dashboard" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="البريد الإلكتروني"><label class="toggle-switch" aria-label="البريد — دفعة معلقة"><input type="checkbox" data-notif-key="paymentPending" data-channel="email"><span class="toggle-track"></span></label></td>
+                    <td data-label="واتساب"><label class="toggle-switch" aria-label="واتساب — دفعة معلقة"><input type="checkbox" data-notif-key="paymentPending" data-channel="whatsapp"><span class="toggle-track"></span></label></td>
+                  </tr>
+                  <!-- 9: Customer follow-up -->
+                  <tr>
+                    <td data-label="الإشعار"><span class="notif-label">متابعة عميل</span></td>
+                    <td data-label="لوحة التحكم"><label class="toggle-switch" aria-label="لوحة التحكم — متابعة عميل"><input type="checkbox" data-notif-key="customerFollowUp" data-channel="dashboard" checked><span class="toggle-track"></span></label></td>
+                    <td data-label="البريد الإلكتروني"><label class="toggle-switch" aria-label="البريد — متابعة عميل"><input type="checkbox" data-notif-key="customerFollowUp" data-channel="email"><span class="toggle-track"></span></label></td>
+                    <td data-label="واتساب"><label class="toggle-switch" aria-label="واتساب — متابعة عميل"><input type="checkbox" data-notif-key="customerFollowUp" data-channel="whatsapp"><span class="toggle-track"></span></label></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="settings-panel-save">
+                <button type="button" class="btn-save btn-sm" id="btn-save-notif"
+                  data-toast="تم حفظ تفضيلات الإشعارات تجريبياً — لا يتم إرسال رسائل حقيقية">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  حفظ الإشعارات
+                </button>
+              </div>
+            </section>
+
+            <!-- Section 5: Team -->
+            <section id="section-team" class="settings-panel" role="tabpanel"
+              aria-labelledby="tab-team" tabindex="0" hidden>
+              <h2 class="settings-panel-title">الفريق</h2>
+              <p class="settings-panel-subtitle">إدارة أعضاء الفريق وصلاحياتهم — لا يتم إرسال دعوات فعلية</p>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap">
+                <div>
+                  <span style="font-size:.875rem;color:#6B7889">
+                    <strong style="color:#262E3A">6</strong> أعضاء ·
+                    <strong style="color:#15803D">4</strong> نشط ·
+                    <strong style="color:#A16207">1</strong> دعوة معلقة ·
+                    <strong style="color:#B91C1C">1</strong> معطّل
+                  </span>
+                </div>
+                <button type="button" class="btn-save btn-sm" data-modal-open="modal-invite">
+                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  دعوة عضو جديد
+                </button>
+              </div>
+
+              <div class="honesty-box" role="note" style="margin-bottom:1.25rem">
+                <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                لا يتم إرسال دعوات فعلية — الجدول تجريبي ويُعاد عند إعادة تحميل الصفحة.
+              </div>
+
+              <div class="team-table-wrap">
+                <table class="team-table" aria-label="جدول أعضاء الفريق">
+                  <thead>
+                    <tr>
+                      <th scope="col">الاسم</th>
+                      <th scope="col">البريد الإلكتروني</th>
+                      <th scope="col">الدور</th>
+                      <th scope="col">الحالة</th>
+                      <th scope="col">آخر نشاط</th>
+                      <th scope="col">الصلاحيات</th>
+                      <th scope="col"><span class="sr-only">إجراءات</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Owner: سارة العتيبي -->
+                    <tr>
+                      <td data-label="الاسم">
+                        <div style="display:flex;align-items:center;gap:.625rem">
+                          <span style="width:2rem;height:2rem;border-radius:50%;background:linear-gradient(135deg,#6D28D9,#A78BFA);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.75rem;flex-shrink:0" aria-hidden="true">س</span>
+                          <span style="font-weight:700;color:#262E3A">سارة العتيبي</span>
+                        </div>
+                      </td>
+                      <td data-label="البريد الإلكتروني"><span dir="ltr">sara@example.com</span></td>
+                      <td data-label="الدور"><span class="badge badge-owner">Owner</span></td>
+                      <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                      <td data-label="آخر نشاط" style="color:#6B7889;font-size:.875rem">اليوم</td>
+                      <td data-label="الصلاحيات" style="font-size:.8125rem;color:#6B7889">كل الصلاحيات</td>
+                      <td class="cell-actions">
+                        <div class="row-action-wrap">
+                          <button type="button" class="row-action-trigger" aria-label="إجراءات — سارة العتيبي" aria-haspopup="menu" aria-expanded="false">
+                            <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+                          </button>
+                          <div class="row-action-menu" role="menu" hidden>
+                            <button type="button" role="menuitem" data-modal-open="modal-change-role" data-member-id="u-001" data-member-name="سارة العتيبي" data-member-role="Owner">تغيير الدور</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- Manager: أحمد الزهراني -->
+                    <tr>
+                      <td data-label="الاسم">
+                        <div style="display:flex;align-items:center;gap:.625rem">
+                          <span style="width:2rem;height:2rem;border-radius:50%;background:linear-gradient(135deg,#1D4ED8,#60A5FA);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.75rem;flex-shrink:0" aria-hidden="true">أ</span>
+                          <span style="font-weight:700;color:#262E3A">أحمد الزهراني</span>
+                        </div>
+                      </td>
+                      <td data-label="البريد الإلكتروني"><span dir="ltr">ahmad@example.com</span></td>
+                      <td data-label="الدور"><span class="badge badge-manager">Manager</span></td>
+                      <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                      <td data-label="آخر نشاط" style="color:#6B7889;font-size:.875rem">اليوم</td>
+                      <td data-label="الصلاحيات" style="font-size:.8125rem;color:#6B7889">إدارة العروض والكوبونات والفريق</td>
+                      <td class="cell-actions">
+                        <div class="row-action-wrap">
+                          <button type="button" class="row-action-trigger" aria-label="إجراءات — أحمد الزهراني" aria-haspopup="menu" aria-expanded="false">
+                            <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+                          </button>
+                          <div class="row-action-menu" role="menu" hidden>
+                            <button type="button" role="menuitem" data-modal-open="modal-change-role" data-member-id="u-002" data-member-name="أحمد الزهراني" data-member-role="Manager">تغيير الدور</button>
+                            <button type="button" role="menuitem" data-modal-open="modal-disable-member" data-member-id="u-002" data-member-name="أحمد الزهراني" data-member-action="disable">تعطيل الحساب</button>
+                            <button type="button" role="menuitem" class="text-danger" data-modal-open="modal-remove-member" data-member-id="u-002" data-member-name="أحمد الزهراني" data-member-action="remove">إزالة من الفريق</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- Agent: ليلى الشمري -->
+                    <tr>
+                      <td data-label="الاسم">
+                        <div style="display:flex;align-items:center;gap:.625rem">
+                          <span style="width:2rem;height:2rem;border-radius:50%;background:linear-gradient(135deg,#0E8186,#38BCC0);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.75rem;flex-shrink:0" aria-hidden="true">ل</span>
+                          <span style="font-weight:700;color:#262E3A">ليلى الشمري</span>
+                        </div>
+                      </td>
+                      <td data-label="البريد الإلكتروني"><span dir="ltr">layla@example.com</span></td>
+                      <td data-label="الدور"><span class="badge badge-agent">Agent</span></td>
+                      <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                      <td data-label="آخر نشاط" style="color:#6B7889;font-size:.875rem">أمس</td>
+                      <td data-label="الصلاحيات" style="font-size:.8125rem;color:#6B7889">عرض الطلبات والرد عليها</td>
+                      <td class="cell-actions">
+                        <div class="row-action-wrap">
+                          <button type="button" class="row-action-trigger" aria-label="إجراءات — ليلى الشمري" aria-haspopup="menu" aria-expanded="false">
+                            <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+                          </button>
+                          <div class="row-action-menu" role="menu" hidden>
+                            <button type="button" role="menuitem" data-modal-open="modal-change-role" data-member-id="u-003" data-member-name="ليلى الشمري" data-member-role="Agent">تغيير الدور</button>
+                            <button type="button" role="menuitem" data-modal-open="modal-disable-member" data-member-id="u-003" data-member-name="ليلى الشمري" data-member-action="disable">تعطيل الحساب</button>
+                            <button type="button" role="menuitem" class="text-danger" data-modal-open="modal-remove-member" data-member-id="u-003" data-member-name="ليلى الشمري" data-member-action="remove">إزالة من الفريق</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- Marketing: محمد القحطاني -->
+                    <tr>
+                      <td data-label="الاسم">
+                        <div style="display:flex;align-items:center;gap:.625rem">
+                          <span style="width:2rem;height:2rem;border-radius:50%;background:linear-gradient(135deg,#9D174D,#F9A8D4);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.75rem;flex-shrink:0" aria-hidden="true">م</span>
+                          <span style="font-weight:700;color:#262E3A">محمد القحطاني</span>
+                        </div>
+                      </td>
+                      <td data-label="البريد الإلكتروني"><span dir="ltr">mohammed@example.com</span></td>
+                      <td data-label="الدور"><span class="badge badge-marketing">Marketing</span></td>
+                      <td data-label="الحالة"><span class="badge badge-active">نشط</span></td>
+                      <td data-label="آخر نشاط" style="color:#6B7889;font-size:.875rem">منذ يومين</td>
+                      <td data-label="الصلاحيات" style="font-size:.8125rem;color:#6B7889">إدارة العروض والكوبونات والتحليلات</td>
+                      <td class="cell-actions">
+                        <div class="row-action-wrap">
+                          <button type="button" class="row-action-trigger" aria-label="إجراءات — محمد القحطاني" aria-haspopup="menu" aria-expanded="false">
+                            <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+                          </button>
+                          <div class="row-action-menu" role="menu" hidden>
+                            <button type="button" role="menuitem" data-modal-open="modal-change-role" data-member-id="u-004" data-member-name="محمد القحطاني" data-member-role="Marketing">تغيير الدور</button>
+                            <button type="button" role="menuitem" data-modal-open="modal-disable-member" data-member-id="u-004" data-member-name="محمد القحطاني" data-member-action="disable">تعطيل الحساب</button>
+                            <button type="button" role="menuitem" class="text-danger" data-modal-open="modal-remove-member" data-member-id="u-004" data-member-name="محمد القحطاني" data-member-action="remove">إزالة من الفريق</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- Support: نورة الدوسري (invited) -->
+                    <tr>
+                      <td data-label="الاسم">
+                        <div style="display:flex;align-items:center;gap:.625rem">
+                          <span style="width:2rem;height:2rem;border-radius:50%;background:#EEF1F5;display:inline-flex;align-items:center;justify-content:center;color:#6B7889;font-weight:800;font-size:.75rem;flex-shrink:0" aria-hidden="true">ن</span>
+                          <span style="font-weight:700;color:#262E3A">نورة الدوسري</span>
+                        </div>
+                      </td>
+                      <td data-label="البريد الإلكتروني"><span dir="ltr">noura@example.com</span></td>
+                      <td data-label="الدور"><span class="badge badge-support">Support</span></td>
+                      <td data-label="الحالة"><span class="badge badge-invited">دعوة معلقة</span></td>
+                      <td data-label="آخر نشاط" style="color:#9AA6B4;font-size:.875rem;font-style:italic">دعوة معلقة</td>
+                      <td data-label="الصلاحيات" style="font-size:.8125rem;color:#6B7889">عرض الطلبات والتواصل مع العملاء</td>
+                      <td class="cell-actions">
+                        <div class="row-action-wrap">
+                          <button type="button" class="row-action-trigger" aria-label="إجراءات — نورة الدوسري" aria-haspopup="menu" aria-expanded="false">
+                            <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+                          </button>
+                          <div class="row-action-menu" role="menu" hidden>
+                            <button type="button" role="menuitem" data-toast="تم إعادة إرسال الدعوة تجريبياً — لا يتم إرسال بريد حقيقي" data-member-id="u-005">إعادة إرسال الدعوة</button>
+                            <button type="button" role="menuitem" class="text-danger" data-modal-open="modal-remove-member" data-member-id="u-005" data-member-name="نورة الدوسري" data-member-action="remove">إلغاء الدعوة</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- Agent: خالد المطيري (disabled) -->
+                    <tr style="opacity:.7">
+                      <td data-label="الاسم">
+                        <div style="display:flex;align-items:center;gap:.625rem">
+                          <span style="width:2rem;height:2rem;border-radius:50%;background:#EEF1F5;display:inline-flex;align-items:center;justify-content:center;color:#9AA6B4;font-weight:800;font-size:.75rem;flex-shrink:0" aria-hidden="true">خ</span>
+                          <span style="font-weight:700;color:#6B7889">خالد المطيري</span>
+                        </div>
+                      </td>
+                      <td data-label="البريد الإلكتروني"><span dir="ltr" style="color:#9AA6B4">khalid@example.com</span></td>
+                      <td data-label="الدور"><span class="badge badge-agent">Agent</span></td>
+                      <td data-label="الحالة"><span class="badge badge-disabled">معطّل</span></td>
+                      <td data-label="آخر نشاط" style="color:#9AA6B4;font-size:.875rem">منذ أسبوع</td>
+                      <td data-label="الصلاحيات" style="font-size:.8125rem;color:#9AA6B4">معطّل</td>
+                      <td class="cell-actions">
+                        <div class="row-action-wrap">
+                          <button type="button" class="row-action-trigger" aria-label="إجراءات — خالد المطيري" aria-haspopup="menu" aria-expanded="false">
+                            <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+                          </button>
+                          <div class="row-action-menu" role="menu" hidden>
+                            <button type="button" role="menuitem" data-modal-open="modal-disable-member" data-member-id="u-006" data-member-name="خالد المطيري" data-member-action="enable">تفعيل الحساب</button>
+                            <button type="button" role="menuitem" class="text-danger" data-modal-open="modal-remove-member" data-member-id="u-006" data-member-name="خالد المطيري" data-member-action="remove">إزالة من الفريق</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- Section 6: Security -->
+            <section id="section-security" class="settings-panel" role="tabpanel"
+              aria-labelledby="tab-security" tabindex="0" hidden>
+              <h2 class="settings-panel-title">الأمان</h2>
+              <p class="settings-panel-subtitle">كلمة المرور والمصادقة الثنائية وسجل الجلسات — لا تغييرات حقيقية</p>
+
+              <!-- Change password -->
+              <div class="dash-section">
+                <div class="dash-section-header">
+                  <div>
+                    <h3 class="dash-section-title">تغيير كلمة المرور</h3>
+                    <p class="dash-section-sub">لا يتم تغيير كلمة المرور فعلياً في هذه النسخة التجريبية</p>
+                  </div>
+                </div>
+                <form id="form-password" novalidate style="max-width:480px">
+                  <div class="form-group">
+                    <label class="form-label" for="pw-current">كلمة المرور الحالية <span class="req" aria-hidden="true">*</span></label>
+                    <input id="pw-current" name="current_password" type="password" class="form-input"
+                      required aria-required="true" autocomplete="current-password" placeholder="••••••••">
+                    <p class="form-error" id="pw-current-err" role="alert"></p>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="pw-new">كلمة المرور الجديدة <span class="req" aria-hidden="true">*</span></label>
+                    <input id="pw-new" name="new_password" type="password" class="form-input"
+                      required aria-required="true" minlength="8"
+                      autocomplete="new-password" placeholder="8 أحرف على الأقل">
+                    <p class="form-error" id="pw-new-err" role="alert"></p>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="pw-confirm">تأكيد كلمة المرور الجديدة <span class="req" aria-hidden="true">*</span></label>
+                    <input id="pw-confirm" name="confirm_password" type="password" class="form-input"
+                      required aria-required="true"
+                      autocomplete="new-password" placeholder="••••••••">
+                    <p class="form-error" id="pw-confirm-err" role="alert"></p>
+                  </div>
+                  <button type="submit" class="btn-save btn-sm">
+                    <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    تغيير كلمة المرور
+                  </button>
+                </form>
+              </div>
+
+              <hr class="form-section-divider">
+
+              <!-- 2FA placeholder -->
+              <div class="dash-section">
+                <div class="dash-section-header">
+                  <div>
+                    <h3 class="dash-section-title">المصادقة الثنائية (2FA)</h3>
+                    <p class="dash-section-sub">طبقة حماية إضافية — تجريبي، لا يتم تفعيلها فعلياً</p>
+                  </div>
+                </div>
+                <div class="security-placeholder">
+                  <div class="security-placeholder-icon">
+                    <svg width="20" height="20" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  </div>
+                  <div class="security-placeholder-text">
+                    <div class="security-placeholder-title">المصادقة الثنائية</div>
+                    <div class="security-placeholder-sub">قابل للربط بـ Google Authenticator أو SMS لاحقاً</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:.75rem;flex-shrink:0">
+                    <span style="font-size:.8125rem;color:#9AA6B4" id="2fa-status-text">غير مفعّل</span>
+                    <label class="toggle-switch" aria-label="تفعيل المصادقة الثنائية (تجريبي)">
+                      <input type="checkbox" id="toggle-2fa">
+                      <span class="toggle-track"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="form-section-divider">
+
+              <!-- API access placeholder -->
+              <div class="dash-section">
+                <div class="dash-section-header">
+                  <div>
+                    <h3 class="dash-section-title">وصول API</h3>
+                    <p class="dash-section-sub">مفاتيح الوصول البرمجي — قابل للربط لاحقاً، لا مفاتيح حقيقية</p>
+                  </div>
+                </div>
+                <div class="security-placeholder">
+                  <div class="security-placeholder-icon">
+                    <svg width="20" height="20" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                  </div>
+                  <div class="security-placeholder-text">
+                    <div class="security-placeholder-title">مفاتيح API</div>
+                    <div class="security-placeholder-sub">قابل للربط لاحقاً — لا مفاتيح حقيقية في هذه النسخة</div>
+                  </div>
+                  <button type="button" class="btn-outline btn-sm" data-toast="إنشاء مفتاح API تجريبي — لا يتم إنشاء مفتاح حقيقي">إنشاء مفتاح</button>
+                </div>
+              </div>
+
+              <hr class="form-section-divider">
+
+              <!-- Active sessions mock -->
+              <div class="dash-section">
+                <div class="dash-section-header">
+                  <div>
+                    <h3 class="dash-section-title">الجلسات النشطة</h3>
+                    <p class="dash-section-sub">لا تعكس جلسات حقيقية — بيانات تجريبية</p>
+                  </div>
+                </div>
+                <div class="card" style="overflow:hidden">
+                  <div class="session-item">
+                    <div class="session-info">
+                      <div class="session-device">Chrome على Windows — الرياض</div>
+                      <div class="session-meta" dir="ltr">192.168.x.x · منذ 2 ساعة</div>
+                    </div>
+                    <span class="session-current">الجلسة الحالية</span>
+                  </div>
+                  <div class="session-item">
+                    <div class="session-info">
+                      <div class="session-device">Safari على iPhone — جدة</div>
+                      <div class="session-meta" dir="ltr">10.x.x.x · منذ يومين</div>
+                    </div>
+                    <button type="button" class="btn-danger btn-sm" data-toast="تم إنهاء الجلسة تجريبياً — لا تغيير فعلي">إنهاء</button>
+                  </div>
+                  <div class="session-item">
+                    <div class="session-info">
+                      <div class="session-device">Firefox على Mac — الدمام</div>
+                      <div class="session-meta" dir="ltr">172.x.x.x · منذ أسبوع</div>
+                    </div>
+                    <button type="button" class="btn-danger btn-sm" data-toast="تم إنهاء الجلسة تجريبياً — لا تغيير فعلي">إنهاء</button>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="form-section-divider">
+
+              <!-- Login history mock -->
+              <div class="dash-section">
+                <div class="dash-section-header">
+                  <div>
+                    <h3 class="dash-section-title">سجل تسجيل الدخول</h3>
+                    <p class="dash-section-sub">تجريبي — لا يعكس نشاطاً حقيقياً</p>
+                  </div>
+                </div>
+                <div class="card" style="overflow:hidden">
+                  <div class="session-item">
+                    <div class="session-info">
+                      <div class="session-device">تسجيل دخول ناجح · Chrome · الرياض</div>
+                      <div class="session-meta">اليوم 9:30 ص — تجريبي</div>
+                    </div>
+                    <span style="font-size:.75rem;color:#15803D;font-weight:700">✓ ناجح</span>
+                  </div>
+                  <div class="session-item">
+                    <div class="session-info">
+                      <div class="session-device">تسجيل دخول ناجح · Safari · جدة</div>
+                      <div class="session-meta">أمس 11:15 م — تجريبي</div>
+                    </div>
+                    <span style="font-size:.75rem;color:#15803D;font-weight:700">✓ ناجح</span>
+                  </div>
+                  <div class="session-item">
+                    <div class="session-info">
+                      <div class="session-device">محاولة دخول فاشلة · Chrome · موقع مجهول</div>
+                      <div class="session-meta">منذ 3 أيام 2:00 ص — تجريبي</div>
+                    </div>
+                    <span style="font-size:.75rem;color:#DC2626;font-weight:700">✗ فاشل</span>
+                  </div>
+                  <div class="session-item">
+                    <div class="session-info">
+                      <div class="session-device">تسجيل دخول ناجح · Firefox · الدمام</div>
+                      <div class="session-meta">منذ أسبوع — تجريبي</div>
+                    </div>
+                    <span style="font-size:.75rem;color:#15803D;font-weight:700">✓ ناجح</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="honesty-box" role="note" style="margin-top:.5rem">
+                <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                تغيير كلمة المرور والمصادقة الثنائية تجريبيان — لا تغيير فعلي. بيانات الجلسات والسجل وهمية. قابل للربط لاحقاً.
+              </div>
+            </section>
+
+            <!-- Section 7: Plan & Usage -->
+            <section id="section-plan" class="settings-panel" role="tabpanel"
+              aria-labelledby="tab-plan" tabindex="0" hidden>
+              <h2 class="settings-panel-title">الباقة والاستخدام</h2>
+              <p class="settings-panel-subtitle">تفاصيل خطة الاشتراك واستخدام الموارد — بيانات تجريبية</p>
+
+              <!-- Plan card -->
+              <div class="plan-card" style="margin-bottom:1.5rem">
+                <div style="position:relative;z-index:1">
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+                    <div>
+                      <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.6);margin-bottom:.25rem">الباقة الحالية</div>
+                      <div class="plan-name">Growth</div>
+                      <div class="plan-renewal">التجديد التجريبي: 2026-07-01</div>
+                      <div class="plan-billing-note">الفوترة غير مفعّلة في هذه النسخة التجريبية — قابل للربط لاحقاً</div>
+                    </div>
+                    <button type="button" class="btn-header btn-header-primary" id="btn-upgrade-plan"
+                      aria-label="ترقية الباقة">
+                      <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="17 11 12 6 7 11"/><line x1="12" y1="18" x2="12" y2="6"/></svg>
+                      ترقية الباقة
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Usage bars ×7 -->
+              <div class="card" style="padding:1.375rem;margin-bottom:1.5rem">
+                <h3 class="dash-section-title" style="margin-bottom:1.25rem">استخدام الموارد</h3>
+
+                <!-- deals: 12/50 = 24% -->
+                <div class="usage-item">
+                  <div class="usage-meta">
+                    <span class="usage-label">العروض النشطة</span>
+                    <span class="usage-count">12 / 50</span>
+                  </div>
+                  <div class="usage-bar-track" role="progressbar" aria-valuenow="24" aria-valuemin="0" aria-valuemax="100" aria-label="العروض النشطة 24%">
+                    <div class="usage-bar-fill" style="width:24%"></div>
+                  </div>
+                  <p class="usage-note">24% مستخدم</p>
+                </div>
+
+                <!-- coupons: 12/50 = 24% -->
+                <div class="usage-item">
+                  <div class="usage-meta">
+                    <span class="usage-label">الكوبونات</span>
+                    <span class="usage-count">12 / 50</span>
+                  </div>
+                  <div class="usage-bar-track" role="progressbar" aria-valuenow="24" aria-valuemin="0" aria-valuemax="100" aria-label="الكوبونات 24%">
+                    <div class="usage-bar-fill" style="width:24%"></div>
+                  </div>
+                  <p class="usage-note">24% مستخدم</p>
+                </div>
+
+                <!-- team users: 6/10 = 60% — warning -->
+                <div class="usage-item">
+                  <div class="usage-meta">
+                    <span class="usage-label">أعضاء الفريق</span>
+                    <span class="usage-count" style="color:#A16207">6 / 10</span>
+                  </div>
+                  <div class="usage-bar-track" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="أعضاء الفريق 60%">
+                    <div class="usage-bar-fill bar-warning" style="width:60%"></div>
+                  </div>
+                  <p class="usage-note" style="color:#A16207">60% مستخدم — اقتربت من الحد الأقصى</p>
+                </div>
+
+                <!-- integrations: 2/8 = 25% -->
+                <div class="usage-item">
+                  <div class="usage-meta">
+                    <span class="usage-label">التكاملات المفعّلة</span>
+                    <span class="usage-count">2 / 8</span>
+                  </div>
+                  <div class="usage-bar-track" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" aria-label="التكاملات 25%">
+                    <div class="usage-bar-fill" style="width:25%"></div>
+                  </div>
+                  <p class="usage-note">25% مستخدم</p>
+                </div>
+
+                <!-- booking inquiries: 320/1000 = 32% -->
+                <div class="usage-item">
+                  <div class="usage-meta">
+                    <span class="usage-label">طلبات الحجز الشهرية</span>
+                    <span class="usage-count">320 / 1000</span>
+                  </div>
+                  <div class="usage-bar-track" role="progressbar" aria-valuenow="32" aria-valuemin="0" aria-valuemax="100" aria-label="طلبات الحجز 32%">
+                    <div class="usage-bar-fill" style="width:32%"></div>
+                  </div>
+                  <p class="usage-note">32% مستخدم هذا الشهر</p>
+                </div>
+
+                <!-- customers: 210/1000 = 21% -->
+                <div class="usage-item">
+                  <div class="usage-meta">
+                    <span class="usage-label">قاعدة العملاء</span>
+                    <span class="usage-count">210 / 1000</span>
+                  </div>
+                  <div class="usage-bar-track" role="progressbar" aria-valuenow="21" aria-valuemin="0" aria-valuemax="100" aria-label="قاعدة العملاء 21%">
+                    <div class="usage-bar-fill" style="width:21%"></div>
+                  </div>
+                  <p class="usage-note">21% مستخدم</p>
+                </div>
+
+                <!-- storage: placeholder -->
+                <div class="usage-item">
+                  <div class="usage-meta">
+                    <span class="usage-label">التخزين</span>
+                    <span class="usage-count" style="color:#9AA6B4">—</span>
+                  </div>
+                  <div class="usage-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="التخزين — قياس غير مفعّل">
+                    <div class="usage-bar-fill" style="width:0%"></div>
+                  </div>
+                  <p class="usage-note">قياس التخزين قابل للربط لاحقاً</p>
+                </div>
+              </div>
+
+              <div class="honesty-box" role="note">
+                <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                بيانات الاستخدام تجريبية وتعكس بيانات وهمية ثابتة — لا تُحسب فعلياً. ترقية الباقة غير متاحة في هذه النسخة.
+              </div>
+            </section>
+
+          </div>
+          <!-- /settings-panels-region -->
+
+        </div>
+        <!-- /settings-layout -->
+
+        <!-- ══════════════════════════════════════════════════════════
+             T022 — Public Page Preview
+        ═════════════════════════════════════════════════════════ -->
+        <div class="dash-section" style="margin-top:2rem">
+          <div class="dash-section-header">
+            <div>
+              <h2 class="dash-section-title">معاينة صفحتك العامة</h2>
+              <p class="dash-section-sub">كيف تبدو وكالتك للزوار — نموذج تجريبي</p>
+            </div>
+            <a href="../pages/index.html" class="btn-outline btn-sm" target="_blank" rel="noopener">
+              <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              عرض الصفحة
+            </a>
+          </div>
+          <div class="card" style="padding:1.5rem">
+            <div style="display:flex;align-items:flex-start;gap:1.25rem;flex-wrap:wrap">
+              <div style="width:4rem;height:4rem;border-radius:1rem;background:linear-gradient(135deg,#0E7C7B,#16A0A5);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.375rem;flex-shrink:0" aria-hidden="true">أ</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:1.125rem;font-weight:800;color:#161C26;margin-bottom:.25rem">وكالة الأفق للسفر</div>
+                <div style="font-size:.875rem;color:#9AA6B4;margin-bottom:.625rem" dir="ltr">travel.example.com/alufuq-travel</div>
+                <div style="display:flex;flex-wrap:wrap;gap:.5rem;font-size:.8125rem;color:#6B7889;margin-bottom:.875rem">
+                  <span style="display:flex;align-items:center;gap:.375rem">
+                    <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    support@example.com
+                  </span>
+                  <span style="display:flex;align-items:center;gap:.375rem">
+                    <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.09 9.8a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                    +966500000000
+                  </span>
+                  <span style="display:flex;align-items:center;gap:.375rem">
+                    <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    الأحد – الخميس، 9ص – 6م
+                  </span>
+                </div>
+                <div style="display:flex;gap:.625rem;flex-wrap:wrap">
+                  <span style="display:inline-flex;align-items:center;gap:.375rem;padding:.35rem .875rem;border-radius:9999px;background:#ECFBFB;color:#0E8186;font-size:.8125rem;font-weight:700">
+                    <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    وكالة موثوقة
+                  </span>
+                  <span style="display:inline-flex;align-items:center;gap:.375rem;padding:.35rem .875rem;border-radius:9999px;background:#F0FDF4;color:#15803D;font-size:.8125rem;font-weight:700">Growth Plan</span>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:1.25rem;padding-top:1.125rem;border-top:1px solid #F0F4F8;display:flex;gap:.625rem;flex-wrap:wrap">
+              <a href="../pages/index.html" class="btn-save btn-sm" target="_blank" rel="noopener">
+                <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                عرض الصفحة العامة
+              </a>
+              <button type="button" class="btn-outline btn-sm" data-toast="رابط الصفحة العامة سيكون متاحاً بعد ربط النطاق — قابل للربط لاحقاً">
+                <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                نسخ الرابط
+              </button>
+            </div>
+            <p style="font-size:.75rem;color:#9AA6B4;margin-top:.75rem">معاينة تجريبية — تعكس بيانات نموذجية ثابتة، لا تعكس التغييرات المحفوظة</p>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════
+             T022 — FAQ
+        ═════════════════════════════════════════════════════════ -->
+        <div class="dash-section" style="margin-top:2rem">
+          <h2 class="dash-section-title" style="margin-bottom:1rem">الأسئلة الشائعة</h2>
+          <div class="faq-wrap">
+
+            <details class="faq-item">
+              <summary>
+                هل يتم حفظ الإعدادات فعلياً؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">لا — هذه نسخة أمامية تجريبية فقط. أي تغيير تجريه يُعاد إلى القيم الافتراضية عند إعادة تحميل الصفحة. في النسخة الكاملة ستُحفظ الإعدادات على خادم آمن.</div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يمكن تغيير الرابط العام (slug) لاحقاً؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">نعم — في النسخة الكاملة يمكن تغيير الـ slug مرة واحدة أو حسب الباقة. تغيير الـ slug يُعيد توجيه الرابط القديم تلقائياً لتجنب ضياع الزوار. في هذه النسخة التجريبية حقل slug مرئي فقط ولا يُحفظ.</div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يتم إرسال دعوة فعلية لأعضاء الفريق؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">لا — الدعوات تجريبية وواجهة أمامية فقط. لا يُرسل أي بريد إلكتروني. في النسخة الكاملة ستُرسل دعوة بالبريد للعضو مع رابط تفعيل وصلاحيات محددة.</div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يمكن ربط واتساب للإشعارات؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">نعم — قابل للربط لاحقاً عبر WhatsApp Business API أو Twilio. في هذه النسخة التجريبية خيار واتساب مرئي لكن لا تُرسل رسائل فعلية.</div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل تغيير كلمة المرور فعلي؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">لا — نموذج تغيير كلمة المرور تجريبي فقط ويُحقق الصيغة والتطابق محلياً دون إرسال أي بيانات. كلمة مرورك الحقيقية لم تتغير. في النسخة الكاملة سيتم التغيير بأمان عبر خادم مشفّر.</div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                هل يمكن الترقية إلى باقة أعلى الآن؟
+                <svg class="faq-chevron" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-body">الترقية غير متاحة في هذه النسخة التجريبية — الفوترة والاشتراكات قابلة للربط لاحقاً. لإبداء اهتمامك بالنسخة الكاملة، تواصل معنا مباشرة.</div>
+            </details>
+
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════
+             T022 — Danger Zone (inside main content)
+        ═════════════════════════════════════════════════════════ -->
+        <div class="danger-zone" role="region" aria-labelledby="danger-zone-title" style="margin-top:2rem">
+          <h2 class="danger-zone-title" id="danger-zone-title">
+            <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-.2em;margin-inline-end:.375rem"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            منطقة الخطر
+          </h2>
+          <p class="danger-zone-sub">هذه الإجراءات لا رجعة فيها — تُنفَّذ تجريبياً فقط في هذه النسخة ولا تحذف أي بيانات فعلية</p>
+
+          <div class="danger-zone-actions">
+
+            <div class="danger-action">
+              <div class="danger-action-info">
+                <div class="danger-action-title">تعليق نشاط الوكالة</div>
+                <div class="danger-action-desc">إيقاف مؤقت لجميع العروض والكوبونات وحجب الصفحة العامة — تجريبي، لا تغيير فعلي</div>
+              </div>
+              <button type="button" class="btn-danger btn-sm" data-modal-open="modal-danger-deactivate">
+                <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                تعليق النشاط
+              </button>
+            </div>
+
+            <div class="danger-action">
+              <div class="danger-action-info">
+                <div class="danger-action-title">إعادة تعيين جميع الإعدادات</div>
+                <div class="danger-action-desc">استعادة جميع الإعدادات إلى القيم الافتراضية — تجريبي، يُعيد تحميل الصفحة فقط</div>
+              </div>
+              <button type="button" class="btn-danger btn-sm" data-modal-open="modal-danger-reset">
+                <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+                إعادة التعيين
+              </button>
+            </div>
+
+            <div class="danger-action">
+              <div class="danger-action-info">
+                <div class="danger-action-title">حذف حساب الوكالة</div>
+                <div class="danger-action-desc">حذف دائم للحساب وجميع البيانات — تجريبي فقط، لا يحذف أي بيانات فعلية في هذه النسخة</div>
+              </div>
+              <button type="button" class="btn-danger btn-sm" data-modal-open="modal-danger-delete">
+                <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                حذف الحساب
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ── Footer ── -->
+    <footer class="dash-footer" role="contentinfo">
+      <span>رحلاتي — لوحة التحكم التجريبية · بيانات تجريبية / واجهة أمامية فقط</span>
+      <div class="flex gap-1 flex-wrap">
+        <a href="index.html">الرئيسية</a>
+        <span aria-hidden="true">·</span>
+        <a href="deals.html">العروض</a>
+        <span aria-hidden="true">·</span>
+        <a href="coupons.html">الكوبونات</a>
+        <span aria-hidden="true">·</span>
+        <a href="analytics.html">التحليلات</a>
+        <span aria-hidden="true">·</span>
+        <a href="integrations.html">التكاملات</a>
+      </div>
+    </footer>
+
+  </div>
+  <!-- /dash-main -->
+
+  <!-- ══════════════════════════════════════════════════════════
+       T022 MODALS
+  ═════════════════════════════════════════════════════════ -->
+
+  <!-- Modal: Invite Member -->
+  <div id="modal-invite" class="modal-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="modal-invite-title" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        </div>
+        <div>
+          <h2 class="modal-title" id="modal-invite-title">دعوة عضو جديد</h2>
+          <p class="modal-subtitle">دعوة تجريبية — لا يتم إرسال بريد فعلي</p>
+        </div>
+        <button type="button" class="row-action-trigger" style="margin-inline-start:auto"
+          data-modal-close aria-label="إغلاق">
+          <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="form-invite" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="invite-name">الاسم الكامل <span class="req" aria-hidden="true">*</span></label>
+          <input id="invite-name" name="name" type="text" class="form-input" required aria-required="true">
+          <p class="form-error" id="invite-name-err" role="alert"></p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="invite-email">البريد الإلكتروني <span class="req" aria-hidden="true">*</span></label>
+          <input id="invite-email" name="email" type="email" class="form-input" dir="ltr"
+            required aria-required="true" placeholder="member@example.com">
+          <p class="form-error" id="invite-email-err" role="alert"></p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="invite-role">الدور <span class="req" aria-hidden="true">*</span></label>
+          <select id="invite-role" name="role" class="form-select" required aria-required="true">
+            <option value="">اختر الدور…</option>
+            <option value="Manager">Manager — إدارة العروض والفريق</option>
+            <option value="Agent">Agent — الرد على الطلبات</option>
+            <option value="Marketing">Marketing — العروض والكوبونات والتحليلات</option>
+            <option value="Support">Support — التواصل مع العملاء</option>
+          </select>
+          <p class="form-error" id="invite-role-err" role="alert"></p>
+        </div>
+        <div class="form-group">
+          <p class="form-label" style="margin-bottom:.5rem">الصلاحيات الإضافية</p>
+          <div class="form-checkbox-group">
+            <div class="form-checkbox-item"><input type="checkbox" id="inv-perm-analytics" name="perms" value="analytics"><label for="inv-perm-analytics">عرض التحليلات</label></div>
+            <div class="form-checkbox-item"><input type="checkbox" id="inv-perm-integrations" name="perms" value="integrations"><label for="inv-perm-integrations">إدارة التكاملات</label></div>
+            <div class="form-checkbox-item"><input type="checkbox" id="inv-perm-billing" name="perms" value="billing"><label for="inv-perm-billing">عرض بيانات الفوترة (تجريبي)</label></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="invite-note">ملاحظة للعضو (اختياري)</label>
+          <textarea id="invite-note" name="note" class="form-textarea" rows="2" style="resize:vertical" placeholder="مرحباً، تمت دعوتك للانضمام…"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" data-modal-close>إلغاء</button>
+          <button type="submit" class="btn-primary-modal">
+            <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+            إرسال الدعوة
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Change Role -->
+  <div id="modal-change-role" class="modal-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="modal-change-role-title" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-teal" aria-hidden="true">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M2 20c.6-3.5 3.8-6 9.6-6 1.5 0 2.8.2 4 .6"/><path d="M18 14l4 4-4 4"/><path d="M14 18h8"/></svg>
+        </div>
+        <div>
+          <h2 class="modal-title" id="modal-change-role-title">تغيير الدور</h2>
+          <p class="modal-subtitle" id="change-role-member-name">العضو: —</p>
+        </div>
+        <button type="button" class="row-action-trigger" style="margin-inline-start:auto"
+          data-modal-close aria-label="إغلاق">
+          <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="form-change-role" novalidate>
+        <input type="hidden" id="change-role-member-id" name="member_id">
+        <div class="form-group">
+          <label class="form-label" for="new-role">الدور الجديد <span class="req" aria-hidden="true">*</span></label>
+          <select id="new-role" name="new_role" class="form-select" required aria-required="true">
+            <option value="">اختر الدور…</option>
+            <option value="Manager">Manager — إدارة العروض والفريق</option>
+            <option value="Agent">Agent — الرد على الطلبات</option>
+            <option value="Marketing">Marketing — العروض والكوبونات والتحليلات</option>
+            <option value="Support">Support — التواصل مع العملاء</option>
+          </select>
+          <p class="form-error" id="new-role-err" role="alert"></p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="change-role-note">ملاحظة (اختياري)</label>
+          <textarea id="change-role-note" name="note" class="form-textarea" rows="2" style="resize:vertical"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" data-modal-close>إلغاء</button>
+          <button type="submit" class="btn-primary-modal">حفظ الدور</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Disable / Enable Member -->
+  <div id="modal-disable-member" class="modal-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="modal-disable-title" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-warning" aria-hidden="true">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        </div>
+        <div>
+          <h2 class="modal-title" id="modal-disable-title">تعطيل الحساب</h2>
+          <p class="modal-subtitle" id="disable-member-name">العضو: —</p>
+        </div>
+        <button type="button" class="row-action-trigger" style="margin-inline-start:auto"
+          data-modal-close aria-label="إغلاق">
+          <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="disable-action-desc">سيتم تعطيل وصول هذا العضو مؤقتاً. يمكن إعادة تفعيله لاحقاً.</p>
+        <p style="margin-top:.75rem;font-size:.8125rem;color:#9AA6B4">تجريبي — لا تغيير فعلي في هذه النسخة.</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close>إلغاء</button>
+        <button type="button" class="btn-primary-modal" id="btn-confirm-disable"
+          data-member-id="" data-action="disable">تأكيد التعطيل</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Remove Member -->
+  <div id="modal-remove-member" class="modal-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="modal-remove-title" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-danger" aria-hidden="true">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+        </div>
+        <div>
+          <h2 class="modal-title" id="modal-remove-title">إزالة من الفريق</h2>
+          <p class="modal-subtitle" id="remove-member-name">العضو: —</p>
+        </div>
+        <button type="button" class="row-action-trigger" style="margin-inline-start:auto"
+          data-modal-close aria-label="إغلاق">
+          <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>سيفقد هذا العضو وصوله الكامل إلى لوحة التحكم. هذا الإجراء تجريبي ولا يحذف بيانات فعلية.</p>
+        <div class="honesty-box danger-box" role="note" style="margin-top:.875rem">
+          <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          لا يتم حذف أي بيانات فعلية — تجريبي فقط.
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close>إلغاء</button>
+        <button type="button" class="btn-danger-modal" id="btn-confirm-remove" data-member-id="">إزالة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Danger Zone — Deactivate -->
+  <div id="modal-danger-deactivate" class="modal-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="modal-deactivate-title" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-danger" aria-hidden="true">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        </div>
+        <div>
+          <h2 class="modal-title" id="modal-deactivate-title">تعليق نشاط الوكالة</h2>
+          <p class="modal-subtitle">هذا الإجراء تجريبي — لا تعليق فعلي</p>
+        </div>
+        <button type="button" class="row-action-trigger" style="margin-inline-start:auto"
+          data-modal-close aria-label="إغلاق">
+          <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>تعليق النشاط سيوقف جميع العروض والكوبونات مؤقتاً ويحجب الصفحة العامة. يمكن التراجع لاحقاً.</p>
+        <div class="honesty-box danger-box" role="note" style="margin-top:.875rem">
+          <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          تجريبي فقط — لا يُوقف أي نشاط فعلي في هذه النسخة.
+        </div>
+        <div class="form-group" style="margin-top:1rem">
+          <label class="form-label" for="deactivate-confirm-input">اكتب <strong>تعليق</strong> للتأكيد</label>
+          <input id="deactivate-confirm-input" type="text" class="form-input" placeholder="تعليق" autocomplete="off">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close>إلغاء</button>
+        <button type="button" class="btn-danger-modal" id="btn-confirm-deactivate">تأكيد التعليق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Danger Zone — Reset Settings -->
+  <div id="modal-danger-reset" class="modal-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="modal-reset-title" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-warning" aria-hidden="true">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        </div>
+        <div>
+          <h2 class="modal-title" id="modal-reset-title">إعادة تعيين الإعدادات</h2>
+          <p class="modal-subtitle">سيُعيد الصفحة إلى القيم الافتراضية — تجريبي</p>
+        </div>
+        <button type="button" class="row-action-trigger" style="margin-inline-start:auto"
+          data-modal-close aria-label="إغلاق">
+          <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>ستُعاد جميع الإعدادات إلى قيمها الافتراضية. في هذه النسخة التجريبية يعني ذلك إعادة تحميل الصفحة فقط — لا بيانات حقيقية تُحذف.</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close>إلغاء</button>
+        <button type="button" class="btn-danger-modal" id="btn-confirm-reset">إعادة التعيين</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Danger Zone — Delete Account -->
+  <div id="modal-danger-delete" class="modal-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="modal-delete-title" hidden>
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-danger" aria-hidden="true">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </div>
+        <div>
+          <h2 class="modal-title" id="modal-delete-title">حذف حساب الوكالة</h2>
+          <p class="modal-subtitle">إجراء لا رجعة فيه — تجريبي فقط</p>
+        </div>
+        <button type="button" class="row-action-trigger" style="margin-inline-start:auto"
+          data-modal-close aria-label="إغلاق">
+          <svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>سيحذف هذا الإجراء جميع بيانات الوكالة بشكل دائم. <strong>لا يمكن التراجع</strong>. في هذه النسخة التجريبية لا يُحذف شيء فعلي.</p>
+        <div class="honesty-box danger-box" role="note" style="margin-top:.875rem">
+          <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          لا يتم حذف أي بيانات فعلية — تجريبي فقط.
+        </div>
+        <div class="form-group" style="margin-top:1rem">
+          <label class="form-label" for="delete-confirm-input">اكتب <strong>حذف</strong> للتأكيد</label>
+          <input id="delete-confirm-input" type="text" class="form-input" placeholder="حذف" autocomplete="off">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" data-modal-close>إلغاء</button>
+        <button type="button" class="btn-danger-modal" id="btn-confirm-delete">تأكيد الحذف</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast root -->
+  <div id="toast-root" aria-live="assertive" aria-atomic="false" class="sr-only" style="position:fixed;bottom:1.25rem;inset-inline-end:1.25rem;z-index:var(--z-toast);display:flex;flex-direction:column;gap:.5rem;max-width:360px"></div>
+
+  <script src="../src/js/ui.js" defer></script>
+  <script src="../src/js/main.js" defer></script>
+  <script src="../src/js/dashboard.js" defer></script>
+
+</body>
+</html>

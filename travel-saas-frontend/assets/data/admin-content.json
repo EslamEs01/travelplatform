@@ -1,0 +1,298 @@
+{
+  "homepageSections": [
+    {
+      "id": "section-hero",
+      "name": "البانر الرئيسي",
+      "status": "Published mock",
+      "itemCount": 1,
+      "lastUpdated": "2026-06-01",
+      "featuredOrder": 1
+    },
+    {
+      "id": "section-featured-deals",
+      "name": "العروض المميزة",
+      "status": "Published mock",
+      "itemCount": 4,
+      "lastUpdated": "2026-06-04",
+      "featuredOrder": 2
+    },
+    {
+      "id": "section-destinations-teaser",
+      "name": "وجهات مختارة",
+      "status": "Published mock",
+      "itemCount": 6,
+      "lastUpdated": "2026-05-28",
+      "featuredOrder": 3
+    },
+    {
+      "id": "section-coupons-teaser",
+      "name": "أحدث الكوبونات",
+      "status": "Published mock",
+      "itemCount": 4,
+      "lastUpdated": "2026-06-02",
+      "featuredOrder": 4
+    },
+    {
+      "id": "section-guides-teaser",
+      "name": "دليل المسافر",
+      "status": "Published mock",
+      "itemCount": 3,
+      "lastUpdated": "2026-05-30",
+      "featuredOrder": 5
+    },
+    {
+      "id": "section-testimonials",
+      "name": "شهادات العملاء",
+      "status": "Published mock",
+      "itemCount": 6,
+      "lastUpdated": "2026-05-15",
+      "featuredOrder": 6
+    },
+    {
+      "id": "section-final-cta",
+      "name": "نداء إجراء ختامي",
+      "status": "Published mock",
+      "itemCount": 1,
+      "lastUpdated": "2026-05-20",
+      "featuredOrder": 7
+    }
+  ],
+  "destinations": [
+    {
+      "id": "dest-dubai",
+      "destination": "دبي",
+      "region": "الخليج العربي",
+      "status": "Published mock",
+      "relatedDeals": 54,
+      "relatedArticles": 3,
+      "featured": true,
+      "lastUpdated": "2026-06-04"
+    },
+    {
+      "id": "dest-istanbul",
+      "destination": "إسطنبول",
+      "region": "أوروبا وآسيا",
+      "status": "Published mock",
+      "relatedDeals": 38,
+      "relatedArticles": 2,
+      "featured": true,
+      "lastUpdated": "2026-05-30"
+    },
+    {
+      "id": "dest-maldives",
+      "destination": "المالديف",
+      "region": "جنوب آسيا",
+      "status": "Published mock",
+      "relatedDeals": 24,
+      "relatedArticles": 1,
+      "featured": true,
+      "lastUpdated": "2026-05-25"
+    },
+    {
+      "id": "dest-cairo",
+      "destination": "القاهرة",
+      "region": "شمال أفريقيا",
+      "status": "Published mock",
+      "relatedDeals": 18,
+      "relatedArticles": 1,
+      "featured": false,
+      "lastUpdated": "2026-05-20"
+    },
+    {
+      "id": "dest-london",
+      "destination": "لندن",
+      "region": "أوروبا",
+      "status": "Published mock",
+      "relatedDeals": 16,
+      "relatedArticles": 1,
+      "featured": false,
+      "lastUpdated": "2026-05-18"
+    },
+    {
+      "id": "dest-rome",
+      "destination": "روما",
+      "region": "أوروبا",
+      "status": "Published mock",
+      "relatedDeals": 12,
+      "relatedArticles": 0,
+      "featured": false,
+      "lastUpdated": "2026-05-10"
+    }
+  ],
+  "blogPosts": [
+    {
+      "id": "art-cheap-dubai-deals",
+      "title": "كيف تجد أرخص عروض السفر إلى دبي؟",
+      "category": "أرخص وجهات",
+      "author": "فريق رحلاتي",
+      "status": "Published mock",
+      "readingTime": "8 د",
+      "relatedDestination": "دبي",
+      "lastUpdated": "2026-05-28"
+    },
+    {
+      "id": "art-travel-tips",
+      "title": "١٠ نصائح ذهبية قبل السفر لأول مرة",
+      "category": "نصائح السفر",
+      "author": "فريق رحلاتي",
+      "status": "Published mock",
+      "readingTime": "6 د",
+      "relatedDestination": "إسطنبول",
+      "lastUpdated": "2026-05-01"
+    },
+    {
+      "id": "art-summer-family",
+      "title": "أفضل وجهات العائلة في الصيف",
+      "category": "سفر عائلي",
+      "author": "نور الكاتبة",
+      "status": "Published mock",
+      "readingTime": "7 د",
+      "relatedDestination": "المالديف",
+      "lastUpdated": "2026-04-20"
+    },
+    {
+      "id": "art-save-30-percent",
+      "title": "وفّر ٣٠٪ على رحلتك القادمة",
+      "category": "توفير وكوبونات",
+      "author": "فريق رحلاتي",
+      "status": "Draft mock",
+      "readingTime": "5 د",
+      "relatedDestination": "دبي",
+      "lastUpdated": "2026-06-03"
+    },
+    {
+      "id": "art-istanbul-guide",
+      "title": "دليل إسطنبول الشامل للمسافر العربي",
+      "category": "أدلة السفر",
+      "author": "كريم المرشد",
+      "status": "Published mock",
+      "readingTime": "10 د",
+      "relatedDestination": "إسطنبول",
+      "lastUpdated": "2026-03-15"
+    }
+  ],
+  "featuredDeals": [
+    {
+      "id": "deal-001",
+      "deal": "عطلة في شرم الشيخ – 4 ليالٍ",
+      "company": "co-001",
+      "destination": "شرم الشيخ",
+      "status": "Featured mock",
+      "featuredPosition": 1,
+      "expiry": "2026-06-25"
+    },
+    {
+      "id": "deal-003",
+      "deal": "باقة دبي الفاخرة – 5 ليالٍ",
+      "company": "co-001",
+      "destination": "دبي",
+      "status": "Featured mock",
+      "featuredPosition": 2,
+      "expiry": "2026-07-31"
+    },
+    {
+      "id": "deal-005",
+      "deal": "جولة باريس العاطفية – 5 ليالٍ",
+      "company": "co-007",
+      "destination": "باريس",
+      "status": "Featured mock",
+      "featuredPosition": 3,
+      "expiry": "2026-09-30"
+    },
+    {
+      "id": "deal-007",
+      "deal": "باريس رومانسية – 6 ليالٍ",
+      "company": "co-007",
+      "destination": "باريس",
+      "status": "Featured mock",
+      "featuredPosition": 4,
+      "expiry": "2026-08-31"
+    }
+  ],
+  "featuredCoupons": [
+    {
+      "id": "coupon-flights-15",
+      "code": "FLY15",
+      "provider": "يورو ترافيل سيستمز",
+      "discount": "15%",
+      "status": "Active mock",
+      "expiry": "2026-08-31",
+      "featured": true
+    },
+    {
+      "id": "coupon-hotel-20",
+      "code": "HOTEL20",
+      "provider": "نزل شرم الريزورت",
+      "discount": "20%",
+      "status": "Active mock",
+      "expiry": "2026-09-30",
+      "featured": true
+    },
+    {
+      "id": "coupon-summer-25",
+      "code": "SUMMER25",
+      "provider": "وكالة الوفاء للسياحة",
+      "discount": "25%",
+      "status": "Active mock",
+      "expiry": "2026-08-31",
+      "featured": true
+    },
+    {
+      "id": "coupon-luxury-30",
+      "code": "LUXURY30",
+      "provider": "نخيل السفر",
+      "discount": "30%",
+      "status": "Active mock",
+      "expiry": "2026-12-31",
+      "featured": true
+    }
+  ],
+  "pendingReview": [
+    {
+      "type": "deal",
+      "title": "باقة سياحية جديدة إلى بالي – 8 ليالٍ",
+      "source": "قوافل السياحة والترفيه",
+      "reason": "عرض جديد بسعر مخفض جداً — يتطلب التحقق من صحة البيانات",
+      "submittedBy": "منصور الطيب",
+      "date": "2026-06-04",
+      "status": "Pending Review"
+    },
+    {
+      "type": "coupon",
+      "title": "كوبون خصم 60% على الفنادق",
+      "source": "سماء السفر",
+      "reason": "نسبة خصم عالية غير معتادة — يتطلب مراجعة الصلاحية والمصدر",
+      "submittedBy": "هبة الرشيد",
+      "date": "2026-06-03",
+      "status": "Pending Review"
+    },
+    {
+      "type": "article",
+      "title": "أفضل الفنادق الرخيصة في دبي 2026",
+      "source": "فريق المحتوى الخارجي",
+      "reason": "محتوى مقدم من طرف خارجي يحتاج مراجعة تحريرية وتحقق من الروابط",
+      "submittedBy": "أحمد المحتوى",
+      "date": "2026-06-02",
+      "status": "Pending Review"
+    },
+    {
+      "type": "deal",
+      "title": "عرض عمرة عائلية 2026 شامل",
+      "source": "أمل السياحة والحج والعمرة",
+      "reason": "عرض جديد يستخدم صور غير مرخصة تحتاج التحقق",
+      "submittedBy": "عبد الله الغامدي",
+      "date": "2026-06-05",
+      "status": "Pending Review"
+    }
+  ],
+  "stats": {
+    "blogPosts": 24,
+    "destinations": 18,
+    "featuredDeals": 12,
+    "featuredCoupons": 9,
+    "homepageSections": 7,
+    "drafts": 5,
+    "pendingReview": 4,
+    "published": 52
+  }
+}

@@ -1,0 +1,2224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth" data-page="admin-companies">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إدارة الشركات — رحلاتي (تجريبي)</title>
+  <meta name="description" content="إدارة شركات منصة رحلاتي: بحث، تصفية، وإدارة الاشتراكات والخطط — بيانات تجريبية وواجهة أمامية فقط.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#E08D12">
+  <meta property="og:title" content="إدارة الشركات — رحلاتي">
+  <meta property="og:locale" content="ar_AR">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/tailwind.css">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"لوحة الإدارة","item":"https://rihlaty.example.com/admin/"},{"@type":"ListItem","position":2,"name":"الشركات","item":"https://rihlaty.example.com/admin/companies.html"}]}
+  </script>
+
+  <style>
+    /* ── admin/companies.html — admin shell + companies-page-scoped styles ── */
+
+    /* ── Design tokens ────────────────────────────────────────────────────── */
+    :root {
+      --admin-sidebar-w:        268px;
+      --admin-topbar-h:          64px;
+      --admin-sidebar-bg:       #161C26;
+      --admin-sidebar-text:     #9AA6B4;
+      --admin-sidebar-active:   #E08D12;
+      --admin-sidebar-active-bg:rgba(224,141,18,.12);
+      --admin-sidebar-hover-bg: rgba(255,255,255,.055);
+      --admin-body-bg:          #F0F2F5;
+      --admin-card-bg:          #ffffff;
+      --admin-border:           #E2E6ED;
+      --admin-shadow-card: 0 1px 3px rgba(22,28,38,.07),0 1px 2px rgba(22,28,38,.05);
+      --admin-shadow-pop:  0 8px 24px rgba(22,28,38,.12),0 2px 8px rgba(22,28,38,.08);
+      --z-dd:          1000;
+      --z-overlay:     1030;
+      --z-drawer:      1040;
+      --z-modal-ov:    1050;
+      --z-modal:       1060;
+      --z-toast:       1080;
+    }
+
+    /* ── Skip link ────────────────────────────────────────────────────────── */
+    .admin-skip {
+      position: absolute;
+      inset-inline-start: -999px; top: .5rem;
+      background: var(--admin-sidebar-active); color: #fff;
+      padding: .5rem 1.25rem; border-radius: 0 .5rem .5rem 0;
+      font-weight: 700; font-size: .875rem; z-index: 9999;
+      text-decoration: none; transition: inset-inline-start .15s;
+    }
+    .admin-skip:focus { inset-inline-start: 0; }
+
+    /* ── Body ─────────────────────────────────────────────────────────────── */
+    body { background: var(--admin-body-bg); font-family: Cairo, system-ui, sans-serif; }
+    body.admin-sidebar-open { overflow: hidden; }
+
+    /* ── Sidebar ──────────────────────────────────────────────────────────── */
+    .admin-sidebar {
+      position: fixed; top: 0; bottom: 0; inset-inline-start: 0;
+      width: var(--admin-sidebar-w);
+      background: var(--admin-sidebar-bg);
+      display: flex; flex-direction: column;
+      overflow-y: auto; overflow-x: hidden;
+      z-index: var(--z-drawer);
+      transition: transform .28s cubic-bezier(.4,0,.2,1);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(224,141,18,.25) transparent;
+    }
+    .admin-sidebar:not(.is-open) { transform: translateX(100%); }
+    html[dir="ltr"] .admin-sidebar:not(.is-open) { transform: translateX(-100%); }
+    @media (min-width: 1024px) {
+      .admin-sidebar,
+      html[dir="ltr"] .admin-sidebar { transform: translateX(0) !important; transition: none !important; z-index: 10; }
+    }
+
+    /* ── Scrim ────────────────────────────────────────────────────────────── */
+    .admin-scrim {
+      position: fixed; inset: 0;
+      background: rgba(10,12,18,.62);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      z-index: var(--z-overlay);
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .admin-scrim.is-active { opacity: 1; pointer-events: auto; }
+    @media (prefers-reduced-motion: reduce) { .admin-scrim { transition: none; } }
+
+    /* ── Main layout ──────────────────────────────────────────────────────── */
+    .admin-main { display: flex; flex-direction: column; min-height: 100dvh; }
+    @media (min-width: 1024px) { .admin-main { margin-inline-start: var(--admin-sidebar-w); } }
+
+    /* ── Topbar ───────────────────────────────────────────────────────────── */
+    .admin-topbar {
+      position: sticky; top: 0;
+      height: var(--admin-topbar-h);
+      background: #fff;
+      border-bottom: 1px solid var(--admin-border);
+      display: flex; align-items: center; gap: .625rem;
+      padding: 0 1.25rem;
+      z-index: var(--z-dd);
+      box-shadow: 0 1px 3px rgba(22,28,38,.06);
+    }
+
+    /* ── Sidebar brand ────────────────────────────────────────────────────── */
+    .admin-brand {
+      display: flex; align-items: center; gap: .75rem;
+      padding: 1.125rem 1rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      flex-shrink: 0;
+    }
+    .admin-brand-icon {
+      width: 2.375rem; height: 2.375rem;
+      background: linear-gradient(135deg, #E08D12 0%, #C26C0B 100%);
+      border-radius: .625rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; box-shadow: 0 2px 8px rgba(224,141,18,.35);
+    }
+    .admin-brand-text { display: flex; flex-direction: column; min-width: 0; }
+    .admin-brand-title { font-size: .9375rem; font-weight: 800; color: #fff; line-height: 1.2; }
+    .admin-brand-sub {
+      font-size: .6875rem; color: rgba(154,166,180,.75); font-weight: 500;
+      letter-spacing: .015em; direction: ltr; text-align: right; margin-top: .0625rem;
+    }
+
+    /* ── Sidebar nav ──────────────────────────────────────────────────────── */
+    .admin-nav { flex: 1; padding: .625rem .75rem .5rem; display: flex; flex-direction: column; gap: .0625rem; }
+    .admin-nav-section {
+      font-size: .6rem; font-weight: 700; color: rgba(154,166,180,.45);
+      letter-spacing: .1em; padding: .875rem .625rem .3125rem;
+      text-transform: uppercase;
+    }
+    .admin-nav-item {
+      display: flex; align-items: center; gap: .625rem;
+      padding: .5625rem .75rem; border-radius: .5rem;
+      color: var(--admin-sidebar-text); font-size: .875rem; font-weight: 500;
+      text-decoration: none; cursor: pointer; background: transparent; border: none;
+      width: 100%; text-align: start;
+      transition: background .14s, color .14s;
+      position: relative;
+    }
+    .admin-nav-item:hover { background: var(--admin-sidebar-hover-bg); color: #fff; }
+    .admin-nav-item.is-active {
+      background: var(--admin-sidebar-active-bg);
+      color: var(--admin-sidebar-active);
+      font-weight: 600;
+    }
+    .admin-nav-item.is-active::before {
+      content: ''; position: absolute;
+      inset-inline-start: 0; top: 20%; bottom: 20%;
+      width: 3px; border-radius: 0 2px 2px 0;
+      background: var(--admin-sidebar-active);
+    }
+    .admin-nav-icon { width: 1.0625rem; height: 1.0625rem; flex-shrink: 0; opacity: .75; }
+    .admin-nav-item.is-active .admin-nav-icon { opacity: 1; }
+    .admin-nav-item:hover .admin-nav-icon { opacity: 1; }
+    .admin-nav-badge {
+      margin-inline-start: auto;
+      font-size: .625rem; font-weight: 700;
+      padding: .125rem .4375rem; border-radius: 9999px;
+      background: rgba(224,141,18,.18); color: var(--admin-sidebar-active);
+      line-height: 1.4;
+    }
+    .admin-nav-soon {
+      margin-inline-start: auto;
+      font-size: .625rem; color: rgba(154,166,180,.4); font-weight: 500;
+    }
+
+    /* ── Sidebar footer ───────────────────────────────────────────────────── */
+    .admin-sidebar-footer {
+      padding: .625rem .75rem .875rem;
+      border-top: 1px solid rgba(255,255,255,.07);
+      flex-shrink: 0;
+    }
+    .admin-sidebar-footer-label {
+      font-size: .6rem; color: rgba(154,166,180,.35); font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .5rem .625rem .25rem;
+    }
+
+    /* ── Content area ─────────────────────────────────────────────────────── */
+    .admin-content { flex: 1; padding: 1.5rem 1.75rem; }
+    @media (max-width: 767px) { .admin-content { padding: 1.125rem 1rem; } }
+
+    /* ── Topbar button ────────────────────────────────────────────────────── */
+    .admin-tb-btn {
+      position: relative;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 2.5rem; height: 2.5rem; min-width: 2.5rem;
+      border-radius: .5rem; color: #6B7889;
+      background: transparent; border: 1px solid transparent;
+      cursor: pointer; flex-shrink: 0;
+      transition: background .12s, color .12s, border-color .12s;
+    }
+    .admin-tb-btn:hover { background: #F4F5F7; border-color: #DEE3EA; color: #262E3A; }
+    .admin-tb-btn[aria-expanded="true"] { background: #EEF1F5; border-color: #DEE3EA; color: #262E3A; }
+    .admin-tb-badge {
+      position: absolute; top: .25rem; inset-inline-end: .25rem;
+      width: .9375rem; height: .9375rem;
+      background: #D64545; color: #fff;
+      font-size: .5625rem; font-weight: 800; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 1.5px solid #fff;
+    }
+
+    /* ── Topbar dropdown panels ───────────────────────────────────────────── */
+    .admin-dd {
+      position: absolute; inset-inline-end: 0; top: calc(100% + .5rem);
+      background: #fff; border: 1px solid var(--admin-border);
+      border-radius: .875rem; box-shadow: var(--admin-shadow-pop);
+      z-index: var(--z-dd); overflow: hidden;
+    }
+    .admin-dd.hidden { display: none; }
+    .admin-dd-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .875rem 1.125rem;
+      border-bottom: 1px solid var(--admin-border);
+    }
+    .admin-dd-title { font-size: .9375rem; font-weight: 700; color: #161C26; }
+    .admin-dd-item {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .8125rem 1.125rem; cursor: pointer;
+      border-bottom: 1px solid #F7F8FA;
+      transition: background .1s;
+      text-decoration: none; width: 100%; text-align: start;
+      background: transparent; border-left: none; border-right: none; border-top: none;
+      font-family: inherit; color: #262E3A;
+    }
+    .admin-dd-item:last-child { border-bottom: none; }
+    .admin-dd-item:hover { background: #F9FAFB; }
+    .admin-dd-item-icon {
+      width: 2.125rem; height: 2.125rem; border-radius: .5rem;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .admin-dd-item-text { display: flex; flex-direction: column; gap: .125rem; }
+    .admin-dd-item-label { font-size: .8125rem; font-weight: 600; color: #262E3A; }
+    .admin-dd-item-time { font-size: .75rem; color: #9AA6B4; }
+    .dd-animate { animation: dd-pop .15s cubic-bezier(.4,0,.2,1); }
+    @keyframes dd-pop { from { opacity: 0; transform: translateY(-.375rem) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .dd-animate { animation: none; } }
+
+    /* ── Breadcrumb ───────────────────────────────────────────────────────── */
+    .admin-breadcrumb {
+      display: flex; align-items: center; gap: .375rem;
+      font-size: .8125rem; color: #9AA6B4;
+      margin-bottom: 1.125rem; flex-wrap: wrap;
+    }
+    .admin-breadcrumb a { color: #6B7889; text-decoration: none; transition: color .12s; }
+    .admin-breadcrumb a:hover { color: #262E3A; }
+    .admin-breadcrumb-sep { color: #C5CDD7; }
+    .admin-breadcrumb [aria-current] { color: #262E3A; font-weight: 600; }
+
+    /* ── Page header ──────────────────────────────────────────────────────── */
+    .admin-page-header {
+      display: flex; flex-wrap: wrap; align-items: flex-start;
+      justify-content: space-between; gap: 1rem;
+      padding-bottom: 1.25rem; margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--admin-border);
+    }
+    .admin-page-title { font-size: 1.5rem; font-weight: 800; color: #161C26; line-height: 1.2; }
+    .admin-page-desc { font-size: .875rem; color: #6B7889; margin-top: .25rem; }
+    .admin-page-actions { display: flex; align-items: center; gap: .625rem; flex-wrap: wrap; }
+    @media (max-width: 639px) { .admin-page-title { font-size: 1.25rem; } }
+
+    /* ── Honesty note ─────────────────────────────────────────────────────── */
+    .admin-honesty {
+      display: inline-flex; align-items: center; gap: .4375rem;
+      padding: .375rem .75rem;
+      background: #FFFBEB; border: 1px solid #FDE68A; border-radius: .5rem;
+      font-size: .75rem; color: #92400E; white-space: nowrap;
+    }
+
+    /* ── Buttons ──────────────────────────────────────────────────────────── */
+    .admin-btn {
+      display: inline-flex; align-items: center; gap: .4375rem;
+      padding: .5625rem 1.125rem;
+      border-radius: .5rem; font-size: .875rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      border: 1px solid transparent;
+      transition: background .15s, box-shadow .15s, border-color .15s;
+      white-space: nowrap; font-family: inherit;
+    }
+    .admin-btn-primary { background: var(--admin-sidebar-active); color: #fff; }
+    .admin-btn-primary:hover { background: #C26C0B; box-shadow: 0 4px 12px rgba(224,141,18,.3); }
+    .admin-btn-secondary { background: #fff; color: #3A4453; border-color: var(--admin-border); }
+    .admin-btn-secondary:hover { background: #F7F8FA; border-color: #C5CDD7; }
+    .admin-btn-ghost { background: transparent; color: #6B7889; }
+    .admin-btn-ghost:hover { background: #F4F5F7; color: #262E3A; }
+    .admin-btn-danger { background: #D64545; color: #fff; }
+    .admin-btn-danger:hover { background: #B91C1C; }
+    .admin-btn-sm { padding: .375rem .75rem; font-size: .8125rem; }
+    .admin-btn-icon { width: 2.25rem; height: 2.25rem; padding: 0; justify-content: center; }
+
+    /* ── Cards ────────────────────────────────────────────────────────────── */
+    .admin-card {
+      background: var(--admin-card-bg);
+      border: 1px solid var(--admin-border);
+      border-radius: .875rem;
+      box-shadow: var(--admin-shadow-card);
+    }
+    .admin-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem; border-bottom: 1px solid var(--admin-border);
+      gap: .5rem;
+    }
+    .admin-card-title { font-size: .9375rem; font-weight: 700; color: #161C26; }
+    .admin-card-body { padding: 1.25rem; }
+
+    /* ── KPI grid ─────────────────────────────────────────────────────────── */
+    .admin-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .875rem;
+    }
+    @media (min-width: 640px)  { .admin-kpi-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1024px) { .admin-kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 1280px) { .admin-kpi-grid { grid-template-columns: repeat(5, 1fr); } }
+
+    .admin-kpi-card {
+      background: var(--admin-card-bg);
+      border: 1px solid var(--admin-border);
+      border-radius: .875rem; padding: 1.25rem;
+      box-shadow: var(--admin-shadow-card);
+      display: flex; flex-direction: column; gap: .625rem;
+      transition: box-shadow .18s, border-color .18s, transform .18s;
+    }
+    .admin-kpi-card:hover { box-shadow: var(--admin-shadow-pop); border-color: #C5CDD7; transform: translateY(-1px); }
+    .admin-kpi-row { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; }
+    .admin-kpi-label { font-size: .75rem; font-weight: 600; color: #6B7889; }
+    .admin-kpi-icon {
+      width: 2.375rem; height: 2.375rem; border-radius: .625rem;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .admin-kpi-value { font-size: 1.75rem; font-weight: 800; color: #161C26; line-height: 1; }
+    .admin-kpi-foot { display: flex; align-items: center; gap: .3125rem; font-size: .75rem; color: #9AA6B4; }
+    .admin-kpi-trend-up   { color: #15803D; }
+    .admin-kpi-trend-down { color: #B91C1C; }
+    .admin-kpi-trend-warn { color: #D97706; }
+
+    /* ── Stats grid (compact) ─────────────────────────────────────────────── */
+    .admin-stats-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem;
+    }
+    @media (min-width: 640px) { .admin-stats-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    /* ── Segment cards ────────────────────────────────────────────────────── */
+    .admin-segment-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: .75rem;
+    }
+    .admin-segment-card {
+      background: var(--admin-card-bg);
+      border: 2px solid var(--admin-border); border-radius: .875rem;
+      padding: 1rem .875rem; text-align: center;
+      cursor: pointer; transition: border-color .15s, box-shadow .15s;
+    }
+    .admin-segment-card:hover { border-color: #C5CDD7; }
+    .admin-segment-card.is-active,
+    .admin-segment-card:focus-visible {
+      border-color: var(--admin-sidebar-active);
+      box-shadow: 0 0 0 3px rgba(224,141,18,.14);
+      outline: none;
+    }
+    .admin-segment-value { font-size: 1.5rem; font-weight: 800; color: #161C26; }
+    .admin-segment-label { font-size: .75rem; color: #6B7889; margin-top: .25rem; line-height: 1.3; }
+
+    /* ── Table (responsive → cards) ──────────────────────────────────────── */
+    .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    .admin-table th {
+      padding: .625rem 1rem; text-align: start;
+      font-size: .6875rem; font-weight: 700; color: #6B7889; letter-spacing: .06em;
+      background: #F7F8FA; border-bottom: 1px solid var(--admin-border);
+      white-space: nowrap; text-transform: uppercase;
+    }
+    .admin-table td {
+      padding: .75rem 1rem; border-bottom: 1px solid #F0F2F5;
+      color: #262E3A; vertical-align: middle;
+    }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: #FAFBFC; }
+    @media (max-width: 640px) {
+      .admin-table thead { display: none; }
+      .admin-table tr {
+        display: block; border: 1px solid var(--admin-border);
+        border-radius: .75rem; margin-bottom: .75rem;
+        background: #fff; padding: .25rem 0;
+      }
+      .admin-table td {
+        display: flex; align-items: center;
+        justify-content: space-between; gap: .5rem;
+        padding: .5625rem 1rem; border-bottom: 1px solid #F0F2F5;
+      }
+      .admin-table td::before {
+        content: attr(data-label);
+        font-size: .75rem; font-weight: 600; color: #6B7889;
+        flex-shrink: 0; white-space: nowrap;
+      }
+      .admin-table tr:last-child td:last-child { border-bottom: none; }
+    }
+
+    /* ── Row action menu ──────────────────────────────────────────────────── */
+    .row-action-wrap { position: relative; }
+    .row-action-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 2rem; height: 2rem; border-radius: .375rem;
+      color: #9AA6B4; background: transparent;
+      border: 1px solid transparent; cursor: pointer;
+      transition: background .12s, color .12s, border-color .12s;
+    }
+    .row-action-btn:hover { background: #F4F5F7; border-color: var(--admin-border); color: #3A4453; }
+    .row-action-btn[aria-expanded="true"] { background: #EEF1F5; border-color: var(--admin-border); color: #262E3A; }
+    .row-action-menu {
+      position: absolute; inset-inline-end: 0; top: calc(100% + .25rem);
+      min-width: 200px; background: #fff;
+      border: 1px solid var(--admin-border); border-radius: .75rem;
+      box-shadow: var(--admin-shadow-pop); z-index: var(--z-dd);
+      padding: .3125rem; display: none;
+    }
+    .row-action-menu.is-open { display: block; }
+    .row-action-menu [role="menuitem"] {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .5rem .75rem; font-size: .875rem; color: #262E3A;
+      border-radius: .5rem; cursor: pointer;
+      text-decoration: none; background: transparent;
+      border: none; width: 100%; text-align: start; font-family: inherit;
+      transition: background .1s;
+    }
+    .row-action-menu [role="menuitem"]:hover { background: #F7F8FA; }
+    .row-action-menu [role="menuitem"].danger { color: #D64545; }
+    .row-action-menu [role="menuitem"].danger:hover { background: #FEF2F2; }
+    .row-action-menu [role="menuitem"][disabled],
+    .row-action-menu [role="menuitem"][aria-disabled="true"] { color: #C5CDD7; cursor: not-allowed; }
+    .row-action-menu [role="menuitem"][disabled]:hover,
+    .row-action-menu [role="menuitem"][aria-disabled="true"]:hover { background: transparent; }
+    .row-menu-sep { height: 1px; background: #F0F2F5; margin: .25rem .625rem; }
+
+    /* ── Status badges ────────────────────────────────────────────────────── */
+    .admin-badge {
+      display: inline-flex; align-items: center; gap: .25rem;
+      padding: .1875rem .625rem; border-radius: 9999px;
+      font-size: .6875rem; font-weight: 700;
+      white-space: nowrap;
+    }
+    .admin-badge::before {
+      content: ''; display: inline-block;
+      width: .3125rem; height: .3125rem; border-radius: 50%;
+      background: currentColor; flex-shrink: 0;
+    }
+    .badge-active    { background: #DCFCE7; color: #15803D; }
+    .badge-trial     { background: #FEF3C7; color: #92400E; }
+    .badge-suspended { background: #FEE2E2; color: #B91C1C; }
+    .badge-cancelled { background: #F3F4F6; color: #6B7280; }
+    .badge-pending   { background: #EFF6FF; color: #1E40AF; }
+    .badge-overdue   { background: #FEF9C3; color: #B45309; }
+    .badge-info      { background: #EFF6FF; color: #1E40AF; }
+    .badge-warning   { background: #FFFBEB; color: #D97706; }
+    .badge-danger    { background: #FEF2F2; color: #DC2626; }
+    .badge-success   { background: #DCFCE7; color: #15803D; }
+
+    /* ── Filter bar ───────────────────────────────────────────────────────── */
+    .admin-filter-bar {
+      display: flex; flex-wrap: wrap; gap: .625rem; align-items: center;
+      padding: 1rem 1.25rem; border-bottom: 1px solid var(--admin-border);
+    }
+    .admin-search-wrap { position: relative; flex: 1; min-width: 160px; max-width: 280px; }
+    .admin-search-icon {
+      position: absolute; inset-inline-start: .625rem; top: 50%; transform: translateY(-50%);
+      width: 1rem; height: 1rem; color: #9AA6B4; pointer-events: none;
+    }
+    .admin-search-input {
+      width: 100%; padding: .5rem .75rem .5rem 2.125rem;
+      border: 1px solid var(--admin-border); border-radius: .5rem;
+      font-size: .875rem; color: #262E3A; background: #fff;
+      font-family: inherit;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .admin-search-input:focus {
+      outline: none; border-color: var(--admin-sidebar-active);
+      box-shadow: 0 0 0 3px rgba(224,141,18,.12);
+    }
+    .admin-select {
+      padding: .5rem .875rem; border: 1px solid var(--admin-border); border-radius: .5rem;
+      font-size: .8125rem; color: #262E3A; background: #fff; cursor: pointer;
+      font-family: inherit;
+      transition: border-color .15s;
+    }
+    .admin-select:focus { outline: none; border-color: var(--admin-sidebar-active); box-shadow: 0 0 0 3px rgba(224,141,18,.12); }
+
+    /* Active-filter chips */
+    .admin-chips {
+      display: flex; flex-wrap: wrap; gap: .375rem;
+      padding: .625rem 1.25rem; min-height: 2.5rem;
+      border-bottom: 1px solid var(--admin-border);
+    }
+    .admin-chip {
+      display: inline-flex; align-items: center; gap: .25rem;
+      padding: .25rem .625rem; background: #EEF1F5;
+      border-radius: 9999px; font-size: .75rem; color: #3A4453; font-weight: 500;
+    }
+    .admin-chip-rm {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: .875rem; height: .875rem;
+      border-radius: 50%; color: #6B7889;
+      background: transparent; border: none; cursor: pointer;
+      font-size: .875rem; line-height: 1; padding: 0;
+      transition: background .1s, color .1s;
+    }
+    .admin-chip-rm:hover { background: #C5CDD7; color: #161C26; }
+
+    /* ── Result count ─────────────────────────────────────────────────────── */
+    .admin-count { font-size: .8125rem; color: #6B7889; }
+
+    /* ── Empty state ──────────────────────────────────────────────────────── */
+    .admin-empty {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: .875rem; padding: 4rem 1.5rem; text-align: center;
+    }
+    .admin-empty-icon { width: 3rem; height: 3rem; color: #DEE3EA; }
+    .admin-empty-title { font-size: 1rem; font-weight: 700; color: #3A4453; }
+    .admin-empty-desc { font-size: .875rem; color: #9AA6B4; }
+
+    /* ── Skeleton loader ──────────────────────────────────────────────────── */
+    .admin-skel {
+      background: linear-gradient(90deg, #EEF1F5 25%, #E2E6ED 50%, #EEF1F5 75%);
+      background-size: 200% 100%;
+      animation: skel-shimmer 1.6s infinite;
+      border-radius: .375rem;
+    }
+    @keyframes skel-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+    @media (prefers-reduced-motion: reduce) { .admin-skel { animation: none; background: #EEF1F5; } }
+
+    /* ── Modal ────────────────────────────────────────────────────────────── */
+    .modal {
+      position: fixed; inset: 0;
+      background: rgba(10,12,18,.6);
+      z-index: var(--z-modal-ov);
+      display: flex; align-items: flex-end; justify-content: center; padding: 1rem;
+    }
+    @media (min-width: 640px) { .modal { align-items: center; } }
+    .modal[hidden] { display: none; }
+    .modal-box {
+      background: #fff; border-radius: 1.125rem;
+      box-shadow: var(--admin-shadow-pop);
+      width: 100%; max-width: 540px; max-height: 92vh; overflow-y: auto;
+      animation: modal-in .22s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes modal-in { from { opacity: 0; transform: translateY(1.25rem) scale(.98); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .modal-box { animation: none; } }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid var(--admin-border);
+    }
+    .modal-title { font-size: 1.0625rem; font-weight: 700; color: #161C26; }
+    .modal-close {
+      width: 2rem; height: 2rem; border-radius: .5rem;
+      display: flex; align-items: center; justify-content: center;
+      color: #9AA6B4; background: transparent; border: none; cursor: pointer;
+      transition: background .12s, color .12s;
+    }
+    .modal-close:hover { background: #F4F5F7; color: #262E3A; }
+    .modal-body { padding: 1.25rem 1.5rem; }
+    .modal-footer {
+      display: flex; justify-content: flex-end; gap: .625rem;
+      padding: 1rem 1.5rem; border-top: 1px solid var(--admin-border);
+    }
+    .modal-form { padding: 1.25rem 1.5rem; }
+    .modal-notice {
+      font-size: .8rem; color: #9AA6B4; background: #F8F9FA;
+      padding: .5rem 1.5rem; border-bottom: 1px solid var(--admin-border);
+      border-inline-start: .25rem solid #F4BE52;
+      margin: 0;
+    }
+    .modal-actions { display: flex; justify-content: flex-end; gap: .625rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--admin-border); flex-wrap: wrap; }
+    .modal-confirm-body { padding: 1.5rem; text-align: center; }
+    .modal-confirm-icon { width: 3.5rem; height: 3.5rem; margin: 0 auto 1rem; background: #FEF2F2; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .admin-display-val { padding: .5rem .875rem; background: #F8F9FA; border: 1px solid var(--admin-border); border-radius: .5rem; font-size: .875rem; color: #262E3A; font-weight: 600; }
+    .admin-field-error { font-size: .75rem; color: #D64545; }
+    .req { color: #DC2626; margin-inline-start: .125rem; }
+
+    /* ── Form fields ──────────────────────────────────────────────────────── */
+    .admin-field { display: flex; flex-direction: column; gap: .375rem; }
+    .admin-field + .admin-field { margin-top: 1rem; }
+    .admin-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: .875rem; }
+    @media (max-width: 479px) { .admin-field-row { grid-template-columns: 1fr; } }
+    .admin-label { font-size: .8125rem; font-weight: 600; color: #3A4453; }
+    .admin-input, .admin-textarea, .admin-select-field {
+      padding: .5625rem .875rem;
+      border: 1px solid var(--admin-border); border-radius: .5rem;
+      font-size: .875rem; color: #262E3A; background: #fff; width: 100%;
+      font-family: inherit;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .admin-input:focus, .admin-textarea:focus, .admin-select-field:focus {
+      outline: none; border-color: var(--admin-sidebar-active);
+      box-shadow: 0 0 0 3px rgba(224,141,18,.12);
+    }
+    .admin-input[aria-invalid="true"], .admin-textarea[aria-invalid="true"],
+    .admin-select-field[aria-invalid="true"] { border-color: #D64545; }
+    .field-error { font-size: .75rem; color: #D64545; }
+    .admin-textarea { min-height: 5.5rem; resize: vertical; }
+
+    /* ── Bulk action bar ──────────────────────────────────────────────────── */
+    .admin-bulk-bar {
+      display: none; align-items: center; gap: .75rem; flex-wrap: wrap;
+      padding: .875rem 1.25rem;
+      background: #161C26; color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .admin-bulk-bar.is-visible { display: flex; }
+    .admin-bulk-count { font-size: .875rem; font-weight: 600; }
+    .admin-bulk-actions { display: flex; gap: .5rem; margin-inline-start: auto; }
+    .admin-bulk-btn {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .4375rem .875rem; border-radius: .5rem;
+      font-size: .8125rem; font-weight: 600; cursor: pointer;
+      background: rgba(255,255,255,.12); color: #fff;
+      border: 1px solid rgba(255,255,255,.15);
+      transition: background .12s;
+    }
+    .admin-bulk-btn:hover { background: rgba(255,255,255,.2); }
+    .admin-bulk-btn.danger { background: rgba(214,69,69,.25); border-color: rgba(214,69,69,.35); }
+    .admin-bulk-btn.danger:hover { background: rgba(214,69,69,.4); }
+
+    /* ── Footer ───────────────────────────────────────────────────────────── */
+    .admin-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: .5rem;
+      padding: 1rem 1.75rem;
+      border-top: 1px solid var(--admin-border);
+      font-size: .75rem; color: #9AA6B4; background: #fff;
+    }
+    .admin-footer-honesty { color: #B45309; font-weight: 500; }
+    @media (max-width: 767px) { .admin-footer { padding: 1rem; flex-direction: column; align-items: flex-start; gap: .375rem; } }
+
+    /* ── Focus ring ───────────────────────────────────────────────────────── */
+    :focus-visible { outline: 2px solid var(--admin-sidebar-active); outline-offset: 2px; }
+    .admin-nav-item:focus-visible { outline-offset: -2px; }
+
+    /* ── Reduced motion ───────────────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .admin-sidebar, .admin-kpi-card, .admin-btn { transition: none; }
+    }
+
+    /* ── Companies page — additional layout & component styles ────────────── */
+
+    /* Stats grid (8 cols) */
+    .co-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .875rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (min-width: 540px)  { .co-stats-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 1024px) { .co-stats-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 1280px) { .co-stats-grid { grid-template-columns: repeat(8, 1fr); } }
+
+    .co-stat-card {
+      background: #fff; border: 1px solid var(--admin-border);
+      border-radius: .875rem; padding: 1.125rem 1rem;
+      display: flex; flex-direction: column; gap: .375rem;
+      box-shadow: var(--admin-shadow-card);
+      transition: box-shadow .18s, transform .18s;
+    }
+    .co-stat-card:hover { box-shadow: var(--admin-shadow-pop); transform: translateY(-1px); }
+    .co-stat-icon {
+      width: 2rem; height: 2rem; border-radius: .5rem;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: .125rem;
+    }
+    .co-stat-value { font-size: 1.5rem; font-weight: 800; color: #161C26; line-height: 1.1; }
+    .co-stat-label { font-size: .75rem; color: #6B7889; font-weight: 500; line-height: 1.3; }
+    .co-stat-foot { font-size: .6875rem; margin-top: .125rem; }
+
+    /* Segment cards grid */
+    .co-segment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+    }
+    .co-segment-card {
+      background: #fff; border: 2px solid var(--admin-border);
+      border-radius: .875rem; padding: 1.125rem .875rem;
+      text-align: center; cursor: pointer;
+      transition: border-color .15s, box-shadow .15s, background .15s;
+    }
+    .co-segment-card:hover { border-color: #C5CDD7; background: #FAFBFC; }
+    .co-segment-card.is-active {
+      border-color: var(--admin-sidebar-active);
+      box-shadow: 0 0 0 3px rgba(224,141,18,.12);
+    }
+    .co-segment-card:focus-visible { outline: 2px solid var(--admin-sidebar-active); outline-offset: 2px; }
+    .co-seg-icon { margin: 0 auto .5rem; width: 2.25rem; height: 2.25rem; border-radius: .625rem; display: flex; align-items: center; justify-content: center; }
+    .co-seg-value { font-size: 1.375rem; font-weight: 800; color: #161C26; }
+    .co-seg-label { font-size: .6875rem; color: #6B7889; margin-top: .25rem; line-height: 1.3; font-weight: 500; }
+
+    /* Modern company avatar */
+    .co-avatar {
+      width: 2.25rem; height: 2.25rem; border-radius: .625rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .875rem; font-weight: 800; flex-shrink: 0;
+      background: linear-gradient(135deg, #E08D12 0%, #C26C0B 100%);
+      color: #fff; letter-spacing: -.02em;
+    }
+
+    /* Plan name pill */
+    .plan-pill {
+      display: inline-flex; align-items: center;
+      padding: .1875rem .625rem; border-radius: 9999px;
+      font-size: .6875rem; font-weight: 700; white-space: nowrap;
+    }
+    .plan-enterprise { background: #1E1B2E; color: #F4BE52; }
+    .plan-pro        { background: #ECFBFB; color: #0E8186; }
+    .plan-growth     { background: #EFF6FF; color: #1E40AF; }
+    .plan-starter    { background: #F3F4F6; color: #6B7280; }
+
+    /* Sort bar */
+    .co-sort-bar {
+      display: flex; align-items: center; gap: .625rem; flex-wrap: wrap;
+      padding: .75rem 1.25rem; border-bottom: 1px solid var(--admin-border);
+      background: #FAFBFC;
+    }
+    .co-sort-label { font-size: .75rem; color: #9AA6B4; font-weight: 600; white-space: nowrap; }
+    .co-sort-btn {
+      display: inline-flex; align-items: center; gap: .25rem;
+      padding: .3125rem .75rem; border-radius: .5rem;
+      font-size: .75rem; font-weight: 600; color: #6B7889;
+      background: transparent; border: 1px solid var(--admin-border);
+      cursor: pointer; font-family: inherit;
+      transition: background .12s, border-color .12s, color .12s;
+    }
+    .co-sort-btn:hover { background: #F0F2F5; color: #262E3A; }
+    .co-sort-btn.is-active {
+      background: #161C26; color: #E08D12; border-color: #161C26;
+    }
+
+    /* Table toolbar (count + bulk toggle) */
+    .co-table-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .75rem 1.25rem; border-bottom: 1px solid var(--admin-border);
+      gap: .75rem; flex-wrap: wrap;
+    }
+
+    /* Company name cell */
+    .co-name-cell { display: flex; align-items: center; gap: .75rem; }
+    .co-name-text { display: flex; flex-direction: column; gap: .125rem; }
+    .co-company-name { font-size: .875rem; font-weight: 700; color: #262E3A; }
+    .co-company-owner { font-size: .75rem; color: #9AA6B4; }
+
+    /* MRR cell */
+    .co-mrr { font-size: .875rem; font-weight: 700; color: #15803D; direction: ltr; }
+    .co-mrr-label { font-size: .625rem; color: #9AA6B4; display: block; }
+
+    /* Last active indicator */
+    .co-last-active { font-size: .75rem; color: #6B7889; }
+    .co-last-active.recent { color: #15803D; }
+    .co-last-active.stale  { color: #D97706; }
+
+    /* Integrations count pill */
+    .co-integrations-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.5rem; height: 1.5rem; border-radius: .375rem;
+      background: #EEF1F5; font-size: .6875rem; font-weight: 700; color: #3A4453;
+    }
+
+    /* FAQ accordion */
+    .admin-faq { border: 1px solid var(--admin-border); border-radius: .875rem; overflow: hidden; }
+    .admin-faq-item { border-bottom: 1px solid var(--admin-border); }
+    .admin-faq-item:last-child { border-bottom: none; }
+    .admin-faq-q {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem; gap: 1rem;
+      background: transparent; border: none; cursor: pointer; font-family: inherit;
+      font-size: .9375rem; font-weight: 600; color: #262E3A; text-align: start;
+      transition: background .1s;
+    }
+    .admin-faq-q:hover { background: #FAFBFC; }
+    .admin-faq-q[aria-expanded="true"] { background: #FFFBEB; color: var(--admin-sidebar-active); }
+    .admin-faq-q svg { flex-shrink: 0; transition: transform .2s; }
+    .admin-faq-q[aria-expanded="true"] svg { transform: rotate(180deg); }
+    .admin-faq-a { display: none; padding: 0 1.25rem 1rem; font-size: .875rem; color: #6B7889; line-height: 1.65; }
+    .admin-faq-a.is-open { display: block; }
+
+    /* Login-as disabled row style */
+    .login-as-disabled { opacity: .45; cursor: not-allowed; }
+
+    /* Honesty note (inline) */
+    .admin-honesty-note {
+      font-size: .75rem; color: #9AA6B4; background: #F8FAFC;
+      border-radius: .5rem; padding: .5rem .75rem; margin-bottom: 1rem;
+    }
+    .admin-required { color: #D64545; }
+
+    /* Section headings */
+    .admin-section-title { font-size: 1rem; font-weight: 700; color: #161C26; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Skip navigation -->
+  <a href="#main-content" class="admin-skip">تخطى إلى المحتوى الرئيسي</a>
+
+  <!-- ── Sidebar ───────────────────────────────────────────────────────── -->
+  <aside
+    id="admin-sidebar"
+    class="admin-sidebar"
+    role="navigation"
+    aria-label="قائمة إدارة المنصة"
+  >
+    <!-- Brand -->
+    <div class="admin-brand">
+      <div class="admin-brand-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="admin-brand-text">
+        <span class="admin-brand-title">رحلاتي</span>
+        <span class="admin-brand-sub">مالك المنصة · Owner Admin</span>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="admin-nav" aria-label="روابط الإدارة الرئيسية">
+      <span class="admin-nav-section">الإدارة الرئيسية</span>
+      <ul role="list" style="display:contents">
+        <li>
+          <a href="index.html" class="admin-nav-item">
+            <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-grid"/></svg>
+            الرئيسية
+          </a>
+        </li>
+        <li>
+          <a href="companies.html" class="admin-nav-item is-active" aria-current="page">
+            <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-building"/></svg>
+            الشركات
+            <span class="admin-nav-badge" aria-label="38 شركة">38</span>
+          </a>
+        </li>
+        <li>
+          <a href="plans.html" class="admin-nav-item">
+            <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-layers"/></svg>
+            الخطط
+          </a>
+        </li>
+        <li>
+          <a href="subscriptions.html" class="admin-nav-item">
+            <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-credit-card"/></svg>
+            الاشتراكات
+          </a>
+        </li>
+      </ul>
+
+      <span class="admin-nav-section" style="margin-top:.5rem">التحليل والمحتوى</span>
+      <ul role="list" style="display:contents">
+        <li>
+          <a href="analytics.html" class="admin-nav-item">
+            <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-bar-chart"/></svg>
+            التحليلات
+          </a>
+        </li>
+        <li>
+          <a href="content.html" class="admin-nav-item">
+            <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-file-text"/></svg>
+            المحتوى
+          </a>
+        </li>
+        <li>
+          <a href="analytics.html#integrations" class="admin-nav-item">
+            <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-plug"/></svg>
+            مراقبة التكاملات
+          </a>
+        </li>
+        <li>
+          <a href="#" class="admin-nav-item" data-coming-soon aria-label="الإعدادات — قريباً، غير متاحة بعد">
+            <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-settings"/></svg>
+            الإعدادات
+            <span class="admin-nav-soon" aria-hidden="true">قريباً</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Sidebar footer links -->
+    <div class="admin-sidebar-footer">
+      <div class="admin-sidebar-footer-label">روابط سريعة</div>
+      <a href="../pages/index.html" class="admin-nav-item" style="font-size:.8125rem">
+        <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-globe"/></svg>
+        العودة للموقع
+      </a>
+      <a href="../dashboard/index.html" class="admin-nav-item" style="font-size:.8125rem">
+        <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-server"/></svg>
+        لوحة الشركات
+      </a>
+    </div>
+  </aside>
+
+  <!-- Drawer scrim -->
+  <div
+    id="admin-scrim"
+    class="admin-scrim"
+    hidden
+    aria-hidden="true"
+  ></div>
+
+  <!-- ── Main ──────────────────────────────────────────────────────────── -->
+  <div class="admin-main">
+
+    <!-- Topbar -->
+    <header class="admin-topbar" role="banner" aria-label="شريط الإدارة العلوي">
+
+      <!-- Mobile menu button -->
+      <button
+        id="btn-admin-menu"
+        type="button"
+        class="admin-tb-btn lg:hidden"
+        aria-label="فتح قائمة التنقل"
+        aria-expanded="false"
+        aria-controls="admin-sidebar"
+        style="min-width:2.75rem;min-height:2.75rem"
+      >
+        <svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-menu"/></svg>
+      </button>
+
+      <!-- Platform label (desktop) -->
+      <div class="hidden lg:flex items-center gap-2 flex-shrink-0">
+        <span style="font-size:.8125rem;font-weight:800;color:#161C26">مالك المنصة</span>
+        <span style="width:1px;height:1.125rem;background:#DEE3EA"></span>
+        <span style="font-size:.75rem;color:#9AA6B4;direction:ltr">Owner Admin</span>
+      </div>
+
+      <!-- Search -->
+      <div class="admin-search-wrap hidden sm:block" style="flex:1;max-width:240px">
+        <svg class="admin-search-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-search"/></svg>
+        <input
+          type="search"
+          class="admin-search-input"
+          placeholder="بحث سريع…"
+          aria-label="بحث سريع في الإدارة"
+        >
+      </div>
+
+      <div style="flex:1"></div>
+
+      <!-- Notifications dropdown -->
+      <div style="position:relative">
+        <button
+          id="btn-notifications"
+          type="button"
+          class="admin-tb-btn"
+          aria-label="الإشعارات — 3 جديدة"
+          aria-haspopup="menu"
+          aria-expanded="false"
+          aria-controls="dd-notifications"
+        >
+          <svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>
+          <span class="admin-tb-badge" aria-hidden="true">3</span>
+        </button>
+        <div
+          id="dd-notifications"
+          class="admin-dd hidden"
+          role="menu"
+          aria-label="الإشعارات"
+          style="min-width:320px"
+        >
+          <div class="admin-dd-head">
+            <span class="admin-dd-title">الإشعارات</span>
+            <span class="admin-badge badge-info">3 جديدة</span>
+          </div>
+          <ul role="list" style="max-height:300px;overflow-y:auto">
+            <li>
+              <button type="button" class="admin-dd-item" role="menuitem">
+                <span class="admin-dd-item-icon" style="background:#FEE2E2" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D64545" stroke-width="2.5" stroke-linecap="round"><use href="#icon-alert-triangle"/></svg>
+                </span>
+                <div class="admin-dd-item-text">
+                  <span class="admin-dd-item-label">فشل تكامل Travelpayouts</span>
+                  <span class="admin-dd-item-time">منذ ١٢ دقيقة</span>
+                </div>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="admin-dd-item" role="menuitem">
+                <span class="admin-dd-item-icon" style="background:#DCFCE7" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg>
+                </span>
+                <div class="admin-dd-item-text">
+                  <span class="admin-dd-item-label">اشتراك جديد — نخيل السفر</span>
+                  <span class="admin-dd-item-time">منذ ٤٥ دقيقة</span>
+                </div>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="admin-dd-item" role="menuitem">
+                <span class="admin-dd-item-icon" style="background:#FFFBEB" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"><use href="#icon-alert-triangle"/></svg>
+                </span>
+                <div class="admin-dd-item-text">
+                  <span class="admin-dd-item-label">٣ اشتراكات تنتهي الأسبوع القادم</span>
+                  <span class="admin-dd-item-time">منذ ساعتين</span>
+                </div>
+              </button>
+            </li>
+          </ul>
+          <div style="padding:.625rem 1.125rem;border-top:1px solid var(--admin-border)">
+            <button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" style="width:100%;justify-content:center">
+              عرض كل الإشعارات
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- User menu dropdown -->
+      <div style="position:relative">
+        <button
+          id="btn-user-menu"
+          type="button"
+          class="admin-tb-btn"
+          aria-label="قائمة المستخدم — أحمد الإداري"
+          aria-haspopup="menu"
+          aria-expanded="false"
+          aria-controls="dd-user-menu"
+          style="width:auto;padding-inline:.625rem;gap:.5rem"
+        >
+          <span style="width:2rem;height:2rem;border-radius:.5rem;background:linear-gradient(135deg,#E08D12,#C26C0B);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0" aria-hidden="true">أ</span>
+          <span class="hidden sm:block" style="font-size:.8125rem;font-weight:600;color:#262E3A">أحمد الإداري</span>
+          <svg class="hidden sm:block" width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+        </button>
+        <div
+          id="dd-user-menu"
+          class="admin-dd hidden"
+          role="menu"
+          aria-label="قائمة المستخدم"
+          style="min-width:240px"
+        >
+          <div class="admin-dd-head" style="flex-direction:column;align-items:flex-start;gap:.375rem">
+            <span style="font-size:.9375rem;font-weight:700;color:#161C26">أحمد الإداري</span>
+            <span style="font-size:.75rem;color:#9AA6B4;direction:ltr">admin@rihlaty.example.com</span>
+            <span class="admin-badge badge-active">مالك المنصة</span>
+          </div>
+          <div style="padding:.3125rem">
+            <button type="button" class="admin-dd-item" role="menuitem" data-coming-soon>
+              <span class="admin-dd-item-icon" style="background:#F4F5F7" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7889" stroke-width="2" stroke-linecap="round"><use href="#icon-user"/></svg>
+              </span>
+              <div class="admin-dd-item-text">
+                <span class="admin-dd-item-label">الملف الشخصي</span>
+              </div>
+            </button>
+            <button type="button" class="admin-dd-item" role="menuitem" data-coming-soon>
+              <span class="admin-dd-item-icon" style="background:#F4F5F7" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7889" stroke-width="2" stroke-linecap="round"><use href="#icon-settings"/></svg>
+              </span>
+              <div class="admin-dd-item-text">
+                <span class="admin-dd-item-label">إعدادات الحساب</span>
+              </div>
+            </button>
+          </div>
+          <div style="padding:.625rem 1.125rem;border-top:1px solid var(--admin-border)">
+            <button
+              type="button"
+              class="admin-btn admin-btn-sm"
+              role="menuitem"
+              style="width:100%;justify-content:center;background:#FEF2F2;color:#D64545;border-color:#FEE2E2"
+              aria-label="تسجيل الخروج (تجريبي — لا يوجد تسجيل دخول حقيقي)"
+            >
+              <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-logout"/></svg>
+              تسجيل الخروج (تجريبي)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick actions dropdown -->
+      <div style="position:relative">
+        <button
+          id="btn-quick-action"
+          type="button"
+          class="admin-tb-btn"
+          aria-label="إجراءات سريعة"
+          aria-haspopup="menu"
+          aria-expanded="false"
+          aria-controls="dd-quick-action"
+          style="background:var(--admin-sidebar-active);color:#fff;border-color:var(--admin-sidebar-active);width:auto;padding-inline:.75rem;gap:.375rem;box-shadow:0 2px 8px rgba(224,141,18,.3)"
+        >
+          <svg width="15" height="15" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-plus"/></svg>
+          <span class="hidden sm:inline" style="font-size:.8125rem;font-weight:700">إجراء سريع</span>
+        </button>
+        <div
+          id="dd-quick-action"
+          class="admin-dd hidden"
+          role="menu"
+          aria-label="الإجراءات السريعة"
+          style="min-width:220px"
+        >
+          <div class="admin-dd-head">
+            <span class="admin-dd-title">إجراءات سريعة</span>
+          </div>
+          <div style="padding:.3125rem">
+            <button type="button" class="admin-dd-item" role="menuitem" id="btn-quick-add-company" data-modal-open="modal-add-company">
+              <span class="admin-dd-item-icon" style="background:#F0FDF4" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2" stroke-linecap="round"><use href="#icon-user-plus"/></svg>
+              </span>
+              <div class="admin-dd-item-text">
+                <span class="admin-dd-item-label">إضافة شركة جديدة</span>
+              </div>
+            </button>
+            <a href="analytics.html" class="admin-dd-item" role="menuitem">
+              <span class="admin-dd-item-icon" style="background:#EFF6FF" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E40AF" stroke-width="2" stroke-linecap="round"><use href="#icon-bar-chart"/></svg>
+              </span>
+              <div class="admin-dd-item-text">
+                <span class="admin-dd-item-label">عرض التقارير</span>
+              </div>
+            </a>
+            <button type="button" class="admin-dd-item" role="menuitem" data-coming-soon>
+              <span class="admin-dd-item-icon" style="background:#FFFBEB" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>
+              </span>
+              <div class="admin-dd-item-text">
+                <span class="admin-dd-item-label">جدولة إشعار</span>
+                <span class="admin-dd-item-time">قريباً</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </header><!-- /admin-topbar -->
+
+    <!-- ── Page body ──────────────────────────────────────────────────── -->
+    <main id="main-content" class="admin-content" role="main" tabindex="-1">
+
+      <!-- Breadcrumb -->
+      <nav class="admin-breadcrumb" aria-label="مسار التنقل">
+        <a href="index.html">لوحة الإدارة</a>
+        <span class="admin-breadcrumb-sep" aria-hidden="true">/</span>
+        <span aria-current="page">الشركات</span>
+      </nav>
+
+      <!-- Page header -->
+      <div class="admin-page-header">
+        <div>
+          <h1 class="admin-page-title">الشركات</h1>
+          <p class="admin-page-desc">إدارة وتصفية ومراقبة جميع شركات المنصة المشتركة</p>
+        </div>
+        <div class="admin-page-actions">
+          <div class="admin-honesty" role="note" aria-label="ملاحظة: لا يتم إنشاء أو تعديل شركات حقيقية">
+            <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-info"/></svg>
+            لا يتم إنشاء شركات حقيقية
+          </div>
+          <button
+            type="button"
+            class="admin-btn admin-btn-secondary admin-btn-sm"
+            id="btn-export-companies"
+            aria-label="تصدير قائمة الشركات (تجريبي — لا يتم إنشاء ملف)"
+          >
+            <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>
+            تصدير
+          </button>
+          <button
+            type="button"
+            class="admin-btn admin-btn-primary admin-btn-sm"
+            id="btn-add-company"
+            data-modal-open="modal-add-company"
+            aria-label="إضافة شركة تجريبية — يفتح نموذج الإضافة"
+          >
+            <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-user-plus"/></svg>
+            إضافة شركة تجريبية
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════ COMPANIES CONTENT (T017) ══════════════════════ -->
+
+      <!-- ── Stats (8 cards) ──────────────────────────────────────────────── -->
+      <section aria-labelledby="co-stats-hd" style="margin-bottom:2rem">
+        <h2 id="co-stats-hd" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">إحصائيات الشركات</h2>
+        <div class="co-stats-grid">
+
+          <div class="co-stat-card">
+            <div class="co-stat-icon" style="background:#EFF6FF" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-building"/></svg>
+            </div>
+            <div class="co-stat-value">38</div>
+            <div class="co-stat-label">إجمالي الشركات</div>
+            <div class="co-stat-foot" style="color:#9AA6B4">مسجلة في المنصة</div>
+          </div>
+
+          <div class="co-stat-card">
+            <div class="co-stat-icon" style="background:#F0FDF4" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check-circle"/></svg>
+            </div>
+            <div class="co-stat-value">26</div>
+            <div class="co-stat-label">شركات نشطة</div>
+            <div class="co-stat-foot admin-kpi-trend-up">↑ 3 هذا الشهر</div>
+          </div>
+
+          <div class="co-stat-card">
+            <div class="co-stat-icon" style="background:#FFFBEB" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-clock"/></svg>
+            </div>
+            <div class="co-stat-value">4</div>
+            <div class="co-stat-label">في فترة التجربة</div>
+            <div class="co-stat-foot admin-kpi-trend-warn">2 تنتهي قريبًا</div>
+          </div>
+
+          <div class="co-stat-card">
+            <div class="co-stat-icon" style="background:#FEF2F2" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-alert-triangle"/></svg>
+            </div>
+            <div class="co-stat-value admin-kpi-trend-down">3</div>
+            <div class="co-stat-label">متأخرة في السداد</div>
+            <div class="co-stat-foot admin-kpi-trend-down">تحتاج متابعة فورية</div>
+          </div>
+
+          <div class="co-stat-card">
+            <div class="co-stat-icon" style="background:#1E1B2E" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#F4BE52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-award"/></svg>
+            </div>
+            <div class="co-stat-value">5</div>
+            <div class="co-stat-label">خطة Enterprise</div>
+            <div class="co-stat-foot" style="color:#9AA6B4">أعلى مستوى</div>
+          </div>
+
+          <div class="co-stat-card">
+            <div class="co-stat-icon" style="background:#F0FDF4" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-user-plus"/></svg>
+            </div>
+            <div class="co-stat-value admin-kpi-trend-up">6</div>
+            <div class="co-stat-label">جديدة هذا الشهر</div>
+            <div class="co-stat-foot admin-kpi-trend-up">↑ مقارنة بالسابق</div>
+          </div>
+
+          <div class="co-stat-card">
+            <div class="co-stat-icon" style="background:#FFFBEB" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-eye"/></svg>
+            </div>
+            <div class="co-stat-value admin-kpi-trend-warn">2</div>
+            <div class="co-stat-label">تحتاج مراجعة</div>
+            <div class="co-stat-foot admin-kpi-trend-warn">مراجعة يدوية مفعّلة</div>
+          </div>
+
+          <div class="co-stat-card">
+            <div class="co-stat-icon" style="background:#F3F4F6" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pause"/></svg>
+            </div>
+            <div class="co-stat-value">1</div>
+            <div class="co-stat-label">موقوفة (mock)</div>
+            <div class="co-stat-foot" style="color:#9AA6B4">إجراء تجريبي</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Segment filter cards (7) ──────────────────────────────────────── -->
+      <section aria-labelledby="co-seg-hd" style="margin-bottom:1.75rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.875rem;flex-wrap:wrap;gap:.5rem">
+          <h2 id="co-seg-hd" class="admin-section-title">تصفية سريعة</h2>
+          <button type="button" id="btn-clear-segment" class="admin-btn admin-btn-ghost admin-btn-sm" hidden aria-label="مسح تصفية الشريحة">
+            <svg width="12" height="12" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+            مسح
+          </button>
+        </div>
+        <div class="co-segment-grid" role="group" aria-label="تصفية سريعة حسب الشريحة" id="co-segments">
+
+          <button type="button" class="co-segment-card" data-segment="trial-ending" aria-pressed="false" aria-label="تصفية: تجارب تنتهي قريبًا">
+            <div class="co-seg-icon" style="background:#FFFBEB">
+              <svg width="15" height="15" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg>
+            </div>
+            <div class="co-seg-value">2</div>
+            <div class="co-seg-label">تجارب تنتهي قريبًا</div>
+          </button>
+
+          <button type="button" class="co-segment-card" data-segment="past-due" aria-pressed="false" aria-label="تصفية: متأخرة في السداد">
+            <div class="co-seg-icon" style="background:#FEF2F2">
+              <svg width="15" height="15" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round"><use href="#icon-alert-triangle"/></svg>
+            </div>
+            <div class="co-seg-value" style="color:#DC2626">3</div>
+            <div class="co-seg-label">متأخرة في السداد</div>
+          </button>
+
+          <button type="button" class="co-segment-card" data-segment="enterprise" aria-pressed="false" aria-label="تصفية: شركات Enterprise">
+            <div class="co-seg-icon" style="background:#1E1B2E">
+              <svg width="15" height="15" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#F4BE52" stroke-width="2" stroke-linecap="round"><use href="#icon-award"/></svg>
+            </div>
+            <div class="co-seg-value">5</div>
+            <div class="co-seg-label">Enterprise</div>
+          </button>
+
+          <button type="button" class="co-segment-card" data-segment="needs-review" aria-pressed="false" aria-label="تصفية: تحتاج مراجعة">
+            <div class="co-seg-icon" style="background:#FFFBEB">
+              <svg width="15" height="15" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>
+            </div>
+            <div class="co-seg-value" style="color:#D97706">2</div>
+            <div class="co-seg-label">تحتاج مراجعة</div>
+          </button>
+
+          <button type="button" class="co-segment-card" data-segment="high-usage" aria-pressed="false" aria-label="تصفية: استخدام عالٍ">
+            <div class="co-seg-icon" style="background:#EFF6FF">
+              <svg width="15" height="15" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round"><use href="#icon-trend-up"/></svg>
+            </div>
+            <div class="co-seg-value">4</div>
+            <div class="co-seg-label">استخدام عالٍ</div>
+          </button>
+
+          <button type="button" class="co-segment-card" data-segment="no-activity" aria-pressed="false" aria-label="تصفية: غير نشطة">
+            <div class="co-seg-icon" style="background:#F3F4F6">
+              <svg width="15" height="15" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>
+            </div>
+            <div class="co-seg-value">1</div>
+            <div class="co-seg-label">غير نشطة</div>
+          </button>
+
+          <button type="button" class="co-segment-card" data-segment="integration-issues" aria-pressed="false" aria-label="تصفية: مشاكل تكاملات">
+            <div class="co-seg-icon" style="background:#FEF2F2">
+              <svg width="15" height="15" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round"><use href="#icon-plug"/></svg>
+            </div>
+            <div class="co-seg-value" style="color:#DC2626">2</div>
+            <div class="co-seg-label">مشاكل تكاملات</div>
+          </button>
+
+        </div>
+      </section>
+
+      <!-- ── Main table card ───────────────────────────────────────────────── -->
+      <div class="admin-card" id="co-card">
+
+        <!-- Filter bar (search + 8 filters + reset) -->
+        <div class="admin-filter-bar" id="co-filter-bar" role="search" aria-label="تصفية وبحث الشركات">
+          <div class="admin-search-wrap" style="min-width:200px;max-width:260px">
+            <svg class="admin-search-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-search"/></svg>
+            <input type="search" id="co-search" class="admin-search-input" placeholder="بحث بالاسم أو المالك أو البريد…" aria-label="بحث في الشركات" autocomplete="off">
+          </div>
+          <select id="f-plan" class="admin-select" aria-label="تصفية حسب الخطة">
+            <option value="">كل الخطط</option>
+            <option value="starter">Starter</option>
+            <option value="growth">Growth</option>
+            <option value="pro">Pro</option>
+            <option value="enterprise">Enterprise</option>
+          </select>
+          <select id="f-sub-status" class="admin-select" aria-label="تصفية حسب حالة الاشتراك">
+            <option value="">حالة الاشتراك</option>
+            <option value="active">نشط</option>
+            <option value="trial">تجربة مجانية</option>
+            <option value="past-due">متأخر السداد</option>
+            <option value="expiring-soon">ينتهي قريبًا</option>
+            <option value="manual-review">مراجعة يدوية</option>
+          </select>
+          <select id="f-co-status" class="admin-select" aria-label="تصفية حسب حالة الشركة">
+            <option value="">حالة الشركة</option>
+            <option value="active">نشطة</option>
+            <option value="trial">تجربة</option>
+            <option value="past-due">متأخرة</option>
+            <option value="pending-review">قيد المراجعة</option>
+          </select>
+          <select id="f-country" class="admin-select" aria-label="تصفية حسب الدولة">
+            <option value="">كل الدول</option>
+            <option value="sa">السعودية</option>
+            <option value="ae">الإمارات</option>
+            <option value="eg">مصر</option>
+            <option value="jo">الأردن</option>
+            <option value="qa">قطر</option>
+            <option value="bh">البحرين</option>
+            <option value="iq">العراق</option>
+            <option value="ma">المغرب</option>
+            <option value="tn">تونس</option>
+            <option value="sd">السودان</option>
+          </select>
+          <select id="f-activity" class="admin-select" aria-label="تصفية حسب النشاط">
+            <option value="">كل مستويات النشاط</option>
+            <option value="today">نشط اليوم</option>
+            <option value="week">نشط هذا الأسبوع</option>
+            <option value="month">نشط هذا الشهر</option>
+          </select>
+          <select id="f-integrations" class="admin-select" aria-label="تصفية حسب التكاملات">
+            <option value="">كل التكاملات</option>
+            <option value="has-integrations">لديه تكاملات</option>
+            <option value="no-integrations">بدون تكاملات</option>
+            <option value="all-integrations">كل التكاملات (8)</option>
+          </select>
+          <select id="f-trial" class="admin-select" aria-label="تصفية حسب انتهاء التجربة">
+            <option value="">كل التجارب</option>
+            <option value="ending-week">تنتهي هذا الأسبوع</option>
+            <option value="ending-month">تنتهي هذا الشهر</option>
+          </select>
+          <select id="f-payment" class="admin-select" aria-label="تصفية حسب حالة الدفع">
+            <option value="">كل حالات الدفع</option>
+            <option value="overdue">دفع متأخر</option>
+            <option value="paid">مدفوعة</option>
+          </select>
+          <button type="button" id="btn-reset-filters" class="admin-btn admin-btn-ghost admin-btn-sm" aria-label="إعادة تعيين كل الفلاتر">
+            <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+            إعادة تعيين
+          </button>
+        </div>
+
+        <!-- Sort bar (6 options) -->
+        <div class="co-sort-bar" role="group" aria-label="خيارات ترتيب الشركات">
+          <span class="co-sort-label" aria-hidden="true">ترتيب:</span>
+          <button type="button" class="co-sort-btn is-active" data-sort="newest" aria-pressed="true">الأحدث</button>
+          <button type="button" class="co-sort-btn" data-sort="last-active" aria-pressed="false">آخر نشاط</button>
+          <button type="button" class="co-sort-btn" data-sort="booking-requests" aria-pressed="false">الأعلى طلبات</button>
+          <button type="button" class="co-sort-btn" data-sort="mrr" aria-pressed="false">الأعلى إيراداً</button>
+          <button type="button" class="co-sort-btn" data-sort="trial-ends" aria-pressed="false">قاربت التجربة</button>
+          <button type="button" class="co-sort-btn" data-sort="plan" aria-pressed="false">حسب الخطة</button>
+        </div>
+
+        <!-- Active filter chips (aria-live) -->
+        <div id="co-chips" class="admin-chips" aria-label="الفلاتر النشطة" aria-live="polite" aria-atomic="false" role="region">
+          <span id="co-chips-ph" style="font-size:.75rem;color:#C5CDD7">لا توجد فلاتر نشطة حالياً</span>
+        </div>
+
+        <!-- Table toolbar -->
+        <div class="co-table-toolbar">
+          <div style="display:flex;align-items:center;gap:.875rem;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:.5rem;font-size:.8125rem;color:#6B7889;cursor:pointer;user-select:none">
+              <input type="checkbox" id="co-select-all" aria-label="تحديد كل الشركات الظاهرة" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;flex-shrink:0">
+              تحديد الكل
+            </label>
+            <span id="co-count" class="admin-count" aria-live="polite" aria-atomic="true">عرض 12 شركة</span>
+          </div>
+          <span id="co-selected-label" style="font-size:.8125rem;color:#6B7889" hidden aria-live="polite"></span>
+        </div>
+
+        <!-- Bulk actions bar -->
+        <div id="co-bulk-bar" class="admin-bulk-bar" role="toolbar" aria-label="إجراءات مجمعة">
+          <span class="admin-bulk-count"><span id="co-bulk-count" aria-live="polite" aria-atomic="true">0</span> شركة محددة</span>
+          <div class="admin-bulk-actions">
+            <button type="button" class="admin-bulk-btn" id="btn-bulk-plan" aria-label="تغيير الخطة للشركات المحددة (تجريبي — لا يتم تغيير حقيقي)">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>
+              تغيير الخطة
+            </button>
+            <button type="button" class="admin-bulk-btn" id="btn-bulk-trial" aria-label="تمديد التجربة للمحددة (تجريبي)">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg>
+              تمديد التجربة
+            </button>
+            <button type="button" class="admin-bulk-btn" id="btn-bulk-note" aria-label="إضافة ملاحظة للمحددة (تجريبي)">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>
+              إضافة ملاحظة
+            </button>
+            <button type="button" class="admin-bulk-btn" id="btn-bulk-export" aria-label="تصدير المحددة (تجريبي — لا ينشئ ملفًا)">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>
+              تصدير
+            </button>
+            <button type="button" class="admin-bulk-btn danger" id="btn-bulk-suspend" data-modal-open="modal-bulk-suspend" aria-label="إيقاف الشركات المحددة — يفتح نافذة تأكيد">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>
+              إيقاف المحددة
+            </button>
+          </div>
+        </div>
+
+        <!-- Companies table (≥12 rows, 13 cols) -->
+        <div class="admin-table-wrap" id="co-table-wrap">
+          <table class="admin-table" id="co-table" aria-label="قائمة الشركات" aria-rowcount="12">
+            <thead>
+              <tr>
+                <th scope="col" style="width:3rem;padding-inline:1rem"></th>
+                <th scope="col">الشركة</th>
+                <th scope="col">المالك</th>
+                <th scope="col">البريد الإلكتروني</th>
+                <th scope="col">الدولة</th>
+                <th scope="col">الخطة</th>
+                <th scope="col">حالة الاشتراك</th>
+                <th scope="col">حالة الشركة</th>
+                <th scope="col">العروض</th>
+                <th scope="col">طلبات الحجز</th>
+                <th scope="col">آخر نشاط</th>
+                <th scope="col">الإيراد الشهري</th>
+                <th scope="col" style="width:3.5rem"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">الإجراءات</span></th>
+              </tr>
+            </thead>
+            <tbody id="co-tbody">
+
+              <!-- ── Row 1: نخيل السفر — Pro — Active ── -->
+              <tr data-id="co-001" data-plan="pro" data-sub-status="active" data-co-status="active" data-country="sa" data-last-active="2026-06-04" data-integrations="4" data-trial-ends="" data-booking-requests="412" data-mrr="149">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد نخيل السفر" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#E08D12,#C26C0B)" aria-hidden="true">نخ</div><div class="co-name-text"><span class="co-company-name">نخيل السفر</span><span class="co-company-owner">محمد العمري</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">محمد العمري</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">m.alomri@nakhiltravel.sa</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇸🇦 السعودية</td>
+                <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-active">نشطة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">87</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">412</td>
+                <td data-label="آخر نشاط"><span class="co-last-active recent">أمس</span></td>
+                <td data-label="الإيراد الشهري"><span dir="ltr" class="co-mrr">$149<span class="co-mrr-label">/شهر</span></span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — نخيل السفر" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات نخيل السفر">
+                      <a href="company-details.html?id=co-001" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-001" data-company-name="نخيل السفر" data-current-plan="Pro"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-001" data-company-name="نخيل السفر" data-co-action="suspend"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg> إيقاف (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-001" data-company-name="نخيل السفر"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="الدخول كنخيل السفر — معطّل: ميزة الانتحال غير مفعّلة" title="معطّل — لا يتم تسجيل الدخول كالشركة فعليًا"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ── Row 2: هلا للسياحة — Enterprise — Active ── -->
+              <tr data-id="co-002" data-plan="enterprise" data-sub-status="active" data-co-status="active" data-country="ae" data-last-active="2026-06-05" data-integrations="8" data-trial-ends="" data-booking-requests="1840" data-mrr="349">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد هلا للسياحة والسفر" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#9333EA,#7C3AED)" aria-hidden="true">هل</div><div class="co-name-text"><span class="co-company-name">هلا للسياحة والسفر</span><span class="co-company-owner">سارة القحطاني</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">سارة القحطاني</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">sara@hala-tourism.ae</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇦🇪 الإمارات</td>
+                <td data-label="الخطة"><span class="plan-pill plan-enterprise">Enterprise</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-active">نشطة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">214</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">1,840</td>
+                <td data-label="آخر نشاط"><span class="co-last-active recent">اليوم</span></td>
+                <td data-label="الإيراد الشهري"><span dir="ltr" class="co-mrr">$349<span class="co-mrr-label">/شهر</span></span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — هلا للسياحة" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات هلا للسياحة">
+                      <a href="company-details.html?id=co-002" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-002" data-company-name="هلا للسياحة والسفر" data-current-plan="Enterprise"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-002" data-company-name="هلا للسياحة والسفر" data-co-action="suspend"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg> إيقاف (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-002" data-company-name="هلا للسياحة والسفر"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="الدخول كهلا للسياحة — معطّل" title="معطّل"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ── Row 3: الوفاء — Growth — Active ── -->
+              <tr data-id="co-003" data-plan="growth" data-sub-status="active" data-co-status="active" data-country="sa" data-last-active="2026-06-04" data-integrations="3" data-trial-ends="" data-booking-requests="218" data-mrr="79">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد الوفاء لتنظيم الرحلات" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#2563EB,#1D4ED8)" aria-hidden="true">وف</div><div class="co-name-text"><span class="co-company-name">الوفاء لتنظيم الرحلات</span><span class="co-company-owner">خالد الزهراني</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">خالد الزهراني</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">k.zahrani@wafatrips.sa</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇸🇦 السعودية</td>
+                <td data-label="الخطة"><span class="plan-pill plan-growth">Growth</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-active">نشطة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">43</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">218</td>
+                <td data-label="آخر نشاط"><span class="co-last-active recent">أمس</span></td>
+                <td data-label="الإيراد الشهري"><span dir="ltr" class="co-mrr">$79<span class="co-mrr-label">/شهر</span></span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — الوفاء لتنظيم الرحلات" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات الوفاء">
+                      <a href="company-details.html?id=co-003" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-003" data-company-name="الوفاء لتنظيم الرحلات" data-current-plan="Growth"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-003" data-company-name="الوفاء لتنظيم الرحلات" data-co-action="suspend"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg> إيقاف (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-003" data-company-name="الوفاء لتنظيم الرحلات"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="معطّل" title="معطّل"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ── Row 4: مسافر للسياحة — Starter — Trial ── -->
+              <tr data-id="co-004" data-plan="starter" data-sub-status="trial" data-co-status="trial" data-country="jo" data-last-active="2026-06-03" data-integrations="1" data-trial-ends="2026-06-19" data-booking-requests="24" data-mrr="0">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد مسافر للسياحة" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#16A34A,#15803D)" aria-hidden="true">مس</div><div class="co-name-text"><span class="co-company-name">مسافر للسياحة</span><span class="co-company-owner">ريم الحسيني</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">ريم الحسيني</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">reem@musafir-tourism.jo</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇯🇴 الأردن</td>
+                <td data-label="الخطة"><span class="plan-pill plan-starter">Starter</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-trial">تجربة مجانية</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-trial">تجربة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">8</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">24</td>
+                <td data-label="آخر نشاط"><span class="co-last-active">منذ يومين</span></td>
+                <td data-label="الإيراد الشهري"><span style="color:#9AA6B4;font-size:.8125rem">تجريبي</span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — مسافر للسياحة" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات مسافر للسياحة">
+                      <a href="company-details.html?id=co-004" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-004" data-company-name="مسافر للسياحة" data-current-plan="Starter"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-004" data-company-name="مسافر للسياحة" data-co-action="suspend"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg> إيقاف (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة <span style="margin-inline-start:auto;font-size:.6875rem;color:#D97706">تنتهي 19 يونيو</span></button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-004" data-company-name="مسافر للسياحة"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="معطّل" title="معطّل"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ── Row 5: رواق السفر — Pro — Active ── -->
+              <tr data-id="co-005" data-plan="pro" data-sub-status="active" data-co-status="active" data-country="qa" data-last-active="2026-06-05" data-integrations="4" data-trial-ends="" data-booking-requests="358" data-mrr="149">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد رواق السفر والسياحة" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#DC2626,#B91C1C)" aria-hidden="true">رو</div><div class="co-name-text"><span class="co-company-name">رواق السفر والسياحة</span><span class="co-company-owner">عمر النعيمي</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">عمر النعيمي</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">omar@riwaq-travel.qa</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇶🇦 قطر</td>
+                <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-active">نشطة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">76</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">358</td>
+                <td data-label="آخر نشاط"><span class="co-last-active recent">اليوم</span></td>
+                <td data-label="الإيراد الشهري"><span dir="ltr" class="co-mrr">$149<span class="co-mrr-label">/شهر</span></span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — رواق السفر" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات رواق السفر">
+                      <a href="company-details.html?id=co-005" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-005" data-company-name="رواق السفر والسياحة" data-current-plan="Pro"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-005" data-company-name="رواق السفر والسياحة" data-co-action="suspend"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg> إيقاف (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-005" data-company-name="رواق السفر والسياحة"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="معطّل" title="معطّل"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ── Row 6: أجنحة للسفر — Growth — Past Due ── -->
+              <tr data-id="co-006" data-plan="growth" data-sub-status="past-due" data-co-status="past-due" data-country="bh" data-last-active="2026-05-28" data-integrations="2" data-trial-ends="" data-booking-requests="142" data-mrr="79">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد أجنحة للسفر والأعمال" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#EA580C,#C2410C)" aria-hidden="true">أج</div><div class="co-name-text"><span class="co-company-name">أجنحة للسفر والأعمال</span><span class="co-company-owner">فيصل المنصوري</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">فيصل المنصوري</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">faisal@ajniha.bh</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇧🇭 البحرين</td>
+                <td data-label="الخطة"><span class="plan-pill plan-growth">Growth</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-overdue">متأخر السداد</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-overdue">متأخرة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">31</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">142</td>
+                <td data-label="آخر نشاط"><span class="co-last-active stale">منذ أسبوع</span></td>
+                <td data-label="الإيراد الشهري"><span dir="ltr" class="co-mrr" style="color:#B91C1C">$79<span class="co-mrr-label" style="color:#B91C1C">/شهر</span></span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — أجنحة للسفر" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات أجنحة للسفر">
+                      <a href="company-details.html?id=co-006" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-006" data-company-name="أجنحة للسفر والأعمال" data-current-plan="Growth"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-006" data-company-name="أجنحة للسفر والأعمال" data-co-action="reactivate"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-play"/></svg> إعادة تفعيل (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-006" data-company-name="أجنحة للسفر والأعمال"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="معطّل" title="معطّل"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ── Row 7: رياح الشرق — Pro — Active ── -->
+              <tr data-id="co-007" data-plan="pro" data-sub-status="active" data-co-status="active" data-country="iq" data-last-active="2026-06-04" data-integrations="4" data-trial-ends="" data-booking-requests="290" data-mrr="149">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد رياح الشرق للسياحة" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#0D9488,#0F766E)" aria-hidden="true">ري</div><div class="co-name-text"><span class="co-company-name">رياح الشرق للسياحة</span><span class="co-company-owner">داود العبيدي</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">داود العبيدي</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">daoud@riyah-alsharq.iq</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇮🇶 العراق</td>
+                <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-active">نشطة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">62</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">290</td>
+                <td data-label="آخر نشاط"><span class="co-last-active recent">أمس</span></td>
+                <td data-label="الإيراد الشهري"><span dir="ltr" class="co-mrr">$149<span class="co-mrr-label">/شهر</span></span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — رياح الشرق للسياحة" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات رياح الشرق">
+                      <a href="company-details.html?id=co-007" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-007" data-company-name="رياح الشرق للسياحة" data-current-plan="Pro"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-007" data-company-name="رياح الشرق للسياحة" data-co-action="suspend"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg> إيقاف (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-007" data-company-name="رياح الشرق للسياحة"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="معطّل" title="معطّل"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ── Row 8: درب السفر — Starter — Active ── -->
+              <tr data-id="co-008" data-plan="starter" data-sub-status="active" data-co-status="active" data-country="ma" data-last-active="2026-06-04" data-integrations="1" data-trial-ends="" data-booking-requests="68" data-mrr="29">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد درب السفر" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#4F46E5,#4338CA)" aria-hidden="true">در</div><div class="co-name-text"><span class="co-company-name">درب السفر</span><span class="co-company-owner">لمياء بن سعيد</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">لمياء بن سعيد</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">lamia@darb-assafar.ma</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇲🇦 المغرب</td>
+                <td data-label="الخطة"><span class="plan-pill plan-starter">Starter</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-active">نشطة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">15</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">68</td>
+                <td data-label="آخر نشاط"><span class="co-last-active recent">أمس</span></td>
+                <td data-label="الإيراد الشهري"><span dir="ltr" class="co-mrr">$29<span class="co-mrr-label">/شهر</span></span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — درب السفر" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات درب السفر">
+                      <a href="company-details.html?id=co-008" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-008" data-company-name="درب السفر" data-current-plan="Starter"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-008" data-company-name="درب السفر" data-co-action="suspend"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg> إيقاف (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-008" data-company-name="درب السفر"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="معطّل" title="معطّل"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ── Row 9: قوافل السياحة — Pro — Expiring Soon ── -->
+              <tr data-id="co-009" data-plan="pro" data-sub-status="expiring-soon" data-co-status="active" data-country="sd" data-last-active="2026-06-05" data-integrations="3" data-trial-ends="" data-booking-requests="225" data-mrr="149">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد قوافل السياحة والترفيه" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#EC4899,#DB2777)" aria-hidden="true">قو</div><div class="co-name-text"><span class="co-company-name">قوافل السياحة والترفيه</span><span class="co-company-owner">منصور الطيب</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">منصور الطيب</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">mansour@qawafil.sd</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇸🇩 السودان</td>
+                <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-warning">ينتهي قريبًا</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-active">نشطة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">54</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">225</td>
+                <td data-label="آخر نشاط"><span class="co-last-active recent">اليوم</span></td>
+                <td data-label="الإيراد الشهري"><span dir="ltr" class="co-mrr">$149<span class="co-mrr-label">/شهر</span></span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — قوافل السياحة" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات قوافل السياحة">
+                      <a href="company-details.html?id=co-009" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-009" data-company-name="قوافل السياحة والترفيه" data-current-plan="Pro"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-009" data-company-name="قوافل السياحة والترفيه" data-co-action="suspend"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg> إيقاف (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-009" data-company-name="قوافل السياحة والترفيه"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="معطّل" title="معطّل"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ── Row 10: بوصلة للسياحة — Growth — Active ── -->
+              <tr data-id="co-010" data-plan="growth" data-sub-status="active" data-co-status="active" data-country="tn" data-last-active="2026-06-04" data-integrations="3" data-trial-ends="" data-booking-requests="176" data-mrr="79">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد بوصلة للسياحة والسفر" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#D97706,#B45309)" aria-hidden="true">بو</div><div class="co-name-text"><span class="co-company-name">بوصلة للسياحة والسفر</span><span class="co-company-owner">نور الدين حداد</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">نور الدين حداد</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">noureddine@bousslah.tn</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇹🇳 تونس</td>
+                <td data-label="الخطة"><span class="plan-pill plan-growth">Growth</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-active">نشطة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">38</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">176</td>
+                <td data-label="آخر نشاط"><span class="co-last-active recent">أمس</span></td>
+                <td data-label="الإيراد الشهري"><span dir="ltr" class="co-mrr">$79<span class="co-mrr-label">/شهر</span></span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — بوصلة للسياحة" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات بوصلة للسياحة">
+                      <a href="company-details.html?id=co-010" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-010" data-company-name="بوصلة للسياحة والسفر" data-current-plan="Growth"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-010" data-company-name="بوصلة للسياحة والسفر" data-co-action="suspend"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg> إيقاف (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-010" data-company-name="بوصلة للسياحة والسفر"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="معطّل" title="معطّل"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ── Row 11: أمل السياحة — Enterprise — Active ── -->
+              <tr data-id="co-011" data-plan="enterprise" data-sub-status="active" data-co-status="active" data-country="sa" data-last-active="2026-06-05" data-integrations="8" data-trial-ends="" data-booking-requests="2100" data-mrr="349">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد أمل السياحة والحج والعمرة" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#475569,#334155)" aria-hidden="true">أم</div><div class="co-name-text"><span class="co-company-name">أمل السياحة والحج والعمرة</span><span class="co-company-owner">عبد الله الغامدي</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">عبد الله الغامدي</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">alaghamdi@amal-travel.sa</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇸🇦 السعودية</td>
+                <td data-label="الخطة"><span class="plan-pill plan-enterprise">Enterprise</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-active">نشطة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">189</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">2,100</td>
+                <td data-label="آخر نشاط"><span class="co-last-active recent">اليوم</span></td>
+                <td data-label="الإيراد الشهري"><span dir="ltr" class="co-mrr">$349<span class="co-mrr-label">/شهر</span></span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — أمل السياحة" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات أمل السياحة">
+                      <a href="company-details.html?id=co-011" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-011" data-company-name="أمل السياحة والحج والعمرة" data-current-plan="Enterprise"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-011" data-company-name="أمل السياحة والحج والعمرة" data-co-action="suspend"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg> إيقاف (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-011" data-company-name="أمل السياحة والحج والعمرة"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="معطّل" title="معطّل"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ── Row 12: سماء السفر — Pro — Manual Review ── -->
+              <tr data-id="co-012" data-plan="pro" data-sub-status="manual-review" data-co-status="pending-review" data-country="eg" data-last-active="2026-05-31" data-integrations="2" data-trial-ends="" data-booking-requests="98" data-mrr="149">
+                <td data-label="" style="padding-inline:1rem"><input type="checkbox" class="co-row-check" aria-label="تحديد سماء السفر" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active);cursor:pointer;display:block;margin:auto"></td>
+                <td data-label="الشركة"><div class="co-name-cell"><div class="co-avatar" style="background:linear-gradient(135deg,#7C3AED,#6D28D9)" aria-hidden="true">سم</div><div class="co-name-text"><span class="co-company-name">سماء السفر</span><span class="co-company-owner">هبة الرشيد</span></div></div></td>
+                <td data-label="المالك" style="color:#6B7889;font-size:.875rem">هبة الرشيد</td>
+                <td data-label="البريد الإلكتروني"><span dir="ltr" style="font-size:.8125rem;color:#6B7889">heba@samaa-safar.eg</span></td>
+                <td data-label="الدولة" style="font-size:.875rem">🇪🇬 مصر</td>
+                <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+                <td data-label="حالة الاشتراك"><span class="admin-badge badge-pending">مراجعة يدوية</span></td>
+                <td data-label="حالة الشركة"><span class="admin-badge badge-pending">قيد المراجعة</span></td>
+                <td data-label="العروض" style="font-weight:700;color:#262E3A">44</td>
+                <td data-label="طلبات الحجز" style="font-weight:600;color:#262E3A">98</td>
+                <td data-label="آخر نشاط"><span class="co-last-active stale">منذ 5 أيام</span></td>
+                <td data-label="الإيراد الشهري"><span dir="ltr" class="co-mrr">$149<span class="co-mrr-label">/شهر</span></span></td>
+                <td>
+                  <div class="row-action-wrap">
+                    <button type="button" class="row-action-btn" aria-label="إجراءات — سماء السفر" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-more"/></svg></button>
+                    <div class="row-action-menu" role="menu" aria-label="إجراءات سماء السفر">
+                      <a href="company-details.html?id=co-012" role="menuitem"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg> عرض التفاصيل</a>
+                      <button type="button" role="menuitem" data-modal-open="modal-change-plan" data-company-id="co-012" data-company-name="سماء السفر" data-current-plan="Pro"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg> تغيير الخطة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-suspend" data-company-id="co-012" data-company-name="سماء السفر" data-co-action="suspend"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg> إيقاف (mock)</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg> تمديد التجربة</button>
+                      <button type="button" role="menuitem" data-modal-open="modal-add-note" data-company-id="co-012" data-company-name="سماء السفر"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg> إضافة ملاحظة</button>
+                      <button type="button" role="menuitem" data-coming-soon><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg> التواصل مع المالك</button>
+                      <div class="row-menu-sep" role="separator"></div>
+                      <button type="button" role="menuitem" class="login-as-disabled" disabled aria-disabled="true" aria-label="معطّل" title="معطّل"><svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-key"/></svg> الدخول كالشركة <span style="margin-inline-start:auto;font-size:.6rem;background:#F3F4F6;color:#9AA6B4;padding:.125rem .375rem;border-radius:.25rem">معطّل</span></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div><!-- /admin-table-wrap -->
+
+        <!-- Empty state -->
+        <div id="co-empty" class="admin-empty" role="status" aria-live="polite" hidden>
+          <svg class="admin-empty-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-building"/></svg>
+          <p class="admin-empty-title">لا توجد شركات تطابق بحثك</p>
+          <p class="admin-empty-desc">حاول تعديل معايير التصفية أو إعادة تعيينها لعرض النتائج</p>
+          <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" id="btn-empty-reset" aria-label="إعادة تعيين جميع الفلاتر وعرض كل الشركات">
+            <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-refresh"/></svg>
+            إعادة التعيين
+          </button>
+        </div>
+
+        <!-- Skeleton loader (shown while data loads) -->
+        <div id="co-skeleton" hidden aria-label="جارٍ تحميل قائمة الشركات" aria-live="polite">
+          <div class="admin-table-wrap">
+            <table class="admin-table" aria-hidden="true">
+              <tbody>
+                <tr><td style="padding-inline:1rem"><div class="admin-skel" style="width:1rem;height:1rem;border-radius:.25rem"></div></td><td><div style="display:flex;align-items:center;gap:.75rem"><div class="admin-skel" style="width:2.25rem;height:2.25rem;border-radius:.625rem;flex-shrink:0"></div><div><div class="admin-skel" style="height:.875rem;width:9rem;margin-bottom:.375rem"></div><div class="admin-skel" style="height:.75rem;width:6rem"></div></div></div></td><td><div class="admin-skel" style="height:.875rem;width:7rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:10rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:5rem"></div></td><td><div class="admin-skel" style="height:1.375rem;width:4.5rem;border-radius:9999px"></div></td><td><div class="admin-skel" style="height:1.375rem;width:4rem;border-radius:9999px"></div></td><td><div class="admin-skel" style="height:1.375rem;width:4rem;border-radius:9999px"></div></td><td><div class="admin-skel" style="height:.875rem;width:2rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:3rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:4.5rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:4rem"></div></td><td></td></tr>
+                <tr><td style="padding-inline:1rem"><div class="admin-skel" style="width:1rem;height:1rem;border-radius:.25rem"></div></td><td><div style="display:flex;align-items:center;gap:.75rem"><div class="admin-skel" style="width:2.25rem;height:2.25rem;border-radius:.625rem;flex-shrink:0"></div><div><div class="admin-skel" style="height:.875rem;width:11rem;margin-bottom:.375rem"></div><div class="admin-skel" style="height:.75rem;width:7rem"></div></div></div></td><td><div class="admin-skel" style="height:.875rem;width:6rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:12rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:4.5rem"></div></td><td><div class="admin-skel" style="height:1.375rem;width:5.5rem;border-radius:9999px"></div></td><td><div class="admin-skel" style="height:1.375rem;width:3.5rem;border-radius:9999px"></div></td><td><div class="admin-skel" style="height:1.375rem;width:3.5rem;border-radius:9999px"></div></td><td><div class="admin-skel" style="height:.875rem;width:2.5rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:3.5rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:4rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:4.5rem"></div></td><td></td></tr>
+                <tr><td style="padding-inline:1rem"><div class="admin-skel" style="width:1rem;height:1rem;border-radius:.25rem"></div></td><td><div style="display:flex;align-items:center;gap:.75rem"><div class="admin-skel" style="width:2.25rem;height:2.25rem;border-radius:.625rem;flex-shrink:0"></div><div><div class="admin-skel" style="height:.875rem;width:8rem;margin-bottom:.375rem"></div><div class="admin-skel" style="height:.75rem;width:5.5rem"></div></div></div></td><td><div class="admin-skel" style="height:.875rem;width:8rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:9rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:5.5rem"></div></td><td><div class="admin-skel" style="height:1.375rem;width:4rem;border-radius:9999px"></div></td><td><div class="admin-skel" style="height:1.375rem;width:4.5rem;border-radius:9999px"></div></td><td><div class="admin-skel" style="height:1.375rem;width:4.5rem;border-radius:9999px"></div></td><td><div class="admin-skel" style="height:.875rem;width:2rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:2.5rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:5rem"></div></td><td><div class="admin-skel" style="height:.875rem;width:3.5rem"></div></td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /co-card -->
+
+      <!-- ── FAQ ────────────────────────────────────────────────────────────── -->
+      <section aria-labelledby="co-faq-hd" style="margin-top:2rem">
+        <h2 id="co-faq-hd" class="admin-section-title" style="margin-bottom:.875rem">الأسئلة الشائعة</h2>
+        <div class="admin-faq">
+
+          <div class="admin-faq-item" role="listitem">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="faq-a1">
+              هل تُنشئ هذه الواجهة شركات حقيقية في المنصة؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="faq-a1" class="admin-faq-a" role="region">
+              لا. زر "إضافة شركة تجريبية" يفتح نموذجًا تجريبيًا فقط — لا يُرسل أي بيانات إلى خادم ولا تُنشأ شركة حقيقية. جميع البيانات الظاهرة هي نماذج تجريبية قابلة للربط لاحقًا بالنظام الفعلي.
+            </div>
+          </div>
+
+          <div class="admin-faq-item" role="listitem">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="faq-a2">
+              هل يتم تغيير الخطة فعليًا عند الضغط على "تغيير الخطة"؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="faq-a2" class="admin-faq-a" role="region">
+              لا. إجراء تغيير الخطة تجريبي بالكامل — يظهر النموذج ويُعرض toast تأكيد فقط. لا يتم تعديل أي خطة اشتراك حقيقية ولا تُرسل أي طلبات إلى واجهة برمجة التطبيقات. النتيجة الظاهرة تنتهي بإعادة تحميل الصفحة (جلسة مؤقتة).
+            </div>
+          </div>
+
+          <div class="admin-faq-item" role="listitem">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="faq-a3">
+              ماذا يحدث عند إيقاف شركة؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="faq-a3" class="admin-faq-a" role="region">
+              إجراء الإيقاف تجريبي — تظهر نافذة تأكيد ثم يُعرض toast بالنتيجة. لا توقف فعلي على الخادم ولا إيقاف أي خدمة. شارة الحالة قد تتغير بصريًا في الجلسة الحالية فقط وتعود لقيمتها الأصلية عند إعادة التحميل.
+            </div>
+          </div>
+
+          <div class="admin-faq-item" role="listitem">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="faq-a4">
+              لماذا زر "الدخول كالشركة" غير متاح دائمًا؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="faq-a4" class="admin-faq-a" role="region">
+              ميزة الانتحال (Impersonation) معطّلة عن قصد في هذه النسخة التجريبية لأسباب أمنية. لا يتم تسجيل الدخول كأي شركة فعليًا. الزر موجود في الواجهة كمرجع مرئي فقط ويبقى معطّلًا حتى يتم تفعيل الميزة بضمانات أمنية مناسبة في النظام الفعلي.
+            </div>
+          </div>
+
+          <div class="admin-faq-item" role="listitem">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="faq-a5">
+              هل يتم إرسال إشعار للمالك عند التواصل معه من هنا؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="faq-a5" class="admin-faq-a" role="region">
+              لا. خيار "التواصل مع المالك" تجريبي — لا يُرسل أي بريد إلكتروني أو رسالة WhatsApp أو إشعار من أي نوع. قابل للربط لاحقًا بنظام الإشعارات الفعلي عند تكامله مع المنصة.
+            </div>
+          </div>
+
+          <div class="admin-faq-item" role="listitem">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="faq-a6">
+              هل يتم حفظ ملاحظات المدير على الشركة في قاعدة البيانات؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="faq-a6" class="admin-faq-a" role="region">
+              لا. الملاحظات المُضافة عبر نافذة "إضافة ملاحظة" لا تُحفظ على الخادم. الحالة تجريبية في الجلسة الحالية فقط وتختفي عند إعادة تحميل الصفحة. قابل للربط لاحقًا بنظام الملاحظات الإدارية الفعلي.
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="admin-footer" role="contentinfo">
+      <span>© <span data-year>2026</span> رحلاتي — جميع الحقوق محفوظة</span>
+      <span class="admin-footer-honesty">بيانات تجريبية / واجهة أمامية فقط / لا يتم إنشاء أو تعديل شركات حقيقية في هذه النسخة</span>
+    </footer>
+
+  </div><!-- /admin-main -->
+
+  <!-- ══════════════════════ MODALS (T017) ══════════════════════ -->
+
+  <!-- Modal: Add Company -->
+  <div id="modal-add-company" class="modal" role="dialog" aria-modal="true" aria-labelledby="mac-title" hidden>
+    <div class="modal-box" style="max-width:36rem">
+      <div class="modal-header">
+        <h2 id="mac-title" class="modal-title">إضافة شركة تجريبية</h2>
+        <button type="button" class="modal-close" data-modal-close aria-label="إغلاق النافذة">
+          <svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+        </button>
+      </div>
+      <p class="modal-notice" role="note">إجراء تجريبي — لا يتم إنشاء شركة حقيقية في هذه النسخة.</p>
+      <form id="form-add-company" class="modal-form" novalidate aria-label="نموذج إضافة شركة تجريبية">
+        <div class="admin-field">
+          <label for="mac-company-name" class="admin-label">اسم الشركة <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="mac-company-name" name="companyName" class="admin-input" required autocomplete="organization" placeholder="مثال: نخيل السفر والسياحة" aria-describedby="mac-company-name-err" aria-required="true">
+          <span id="mac-company-name-err" class="admin-field-error" aria-live="polite" hidden></span>
+        </div>
+        <div class="admin-field">
+          <label for="mac-owner-name" class="admin-label">اسم المالك <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="mac-owner-name" name="ownerName" class="admin-input" required autocomplete="name" placeholder="الاسم الكامل" aria-describedby="mac-owner-name-err" aria-required="true">
+          <span id="mac-owner-name-err" class="admin-field-error" aria-live="polite" hidden></span>
+        </div>
+        <div class="admin-field">
+          <label for="mac-owner-email" class="admin-label">البريد الإلكتروني <span class="req" aria-hidden="true">*</span></label>
+          <input type="email" id="mac-owner-email" name="ownerEmail" class="admin-input" dir="ltr" required autocomplete="email" placeholder="owner@company.com" aria-describedby="mac-owner-email-err" aria-required="true">
+          <span id="mac-owner-email-err" class="admin-field-error" aria-live="polite" hidden></span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="admin-field">
+            <label for="mac-phone" class="admin-label">رقم الهاتف</label>
+            <input type="tel" id="mac-phone" name="phone" class="admin-input" dir="ltr" autocomplete="tel" placeholder="+966 5x xxx xxxx">
+          </div>
+          <div class="admin-field">
+            <label for="mac-country" class="admin-label">الدولة</label>
+            <select id="mac-country" name="country" class="admin-select admin-input">
+              <option value="">اختر الدولة</option>
+              <option value="sa">السعودية</option>
+              <option value="ae">الإمارات</option>
+              <option value="eg">مصر</option>
+              <option value="jo">الأردن</option>
+              <option value="qa">قطر</option>
+              <option value="bh">البحرين</option>
+              <option value="iq">العراق</option>
+              <option value="ma">المغرب</option>
+              <option value="tn">تونس</option>
+              <option value="sd">السودان</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-field">
+          <label for="mac-city" class="admin-label">المدينة</label>
+          <input type="text" id="mac-city" name="city" class="admin-input" autocomplete="address-level2" placeholder="مثال: الرياض">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="admin-field">
+            <label for="mac-plan" class="admin-label">الخطة</label>
+            <select id="mac-plan" name="plan" class="admin-select admin-input">
+              <option value="starter">Starter — $29/شهر</option>
+              <option value="growth">Growth — $79/شهر</option>
+              <option value="pro" selected>Pro — $149/شهر</option>
+              <option value="enterprise">Enterprise — $349/شهر</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label for="mac-trial-days" class="admin-label">أيام التجربة المجانية</label>
+            <input type="number" id="mac-trial-days" name="trialDays" class="admin-input" min="0" max="90" value="14" dir="ltr">
+          </div>
+        </div>
+        <div class="admin-field">
+          <label for="mac-notes" class="admin-label">ملاحظات (اختياري)</label>
+          <textarea id="mac-notes" name="notes" class="admin-input" rows="3" placeholder="ملاحظات داخلية للمدير عند التسجيل…" style="resize:vertical;min-height:4.5rem"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="admin-btn admin-btn-ghost" data-modal-close>إلغاء</button>
+          <button type="submit" class="admin-btn admin-btn-primary">
+            <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-user-plus"/></svg>
+            إضافة (تجريبي)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Change Plan -->
+  <div id="modal-change-plan" class="modal" role="dialog" aria-modal="true" aria-labelledby="mcp-title" hidden>
+    <div class="modal-box" style="max-width:32rem">
+      <div class="modal-header">
+        <h2 id="mcp-title" class="modal-title">تغيير الخطة</h2>
+        <button type="button" class="modal-close" data-modal-close aria-label="إغلاق النافذة">
+          <svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+        </button>
+      </div>
+      <p class="modal-notice" role="note">إجراء تجريبي — لا يتم تغيير خطة الاشتراك الفعلية في هذه النسخة.</p>
+      <form id="form-change-plan" class="modal-form" novalidate aria-label="نموذج تغيير الخطة">
+        <div class="admin-field">
+          <label class="admin-label">الشركة</label>
+          <div id="mcp-company-display" class="admin-display-val" aria-live="polite">—</div>
+        </div>
+        <div class="admin-field">
+          <label class="admin-label">الخطة الحالية</label>
+          <div id="mcp-current-plan-display" class="admin-display-val" aria-live="polite">—</div>
+        </div>
+        <div class="admin-field">
+          <label for="mcp-new-plan" class="admin-label">الخطة الجديدة <span class="req" aria-hidden="true">*</span></label>
+          <select id="mcp-new-plan" name="newPlan" class="admin-select admin-input" required aria-required="true">
+            <option value="">اختر الخطة</option>
+            <option value="starter">Starter — $29/شهر</option>
+            <option value="growth">Growth — $79/شهر</option>
+            <option value="pro">Pro — $149/شهر</option>
+            <option value="enterprise">Enterprise — $349/شهر</option>
+          </select>
+        </div>
+        <div class="admin-field">
+          <label for="mcp-billing-cycle" class="admin-label">دورة الفوترة</label>
+          <select id="mcp-billing-cycle" name="billingCycle" class="admin-select admin-input">
+            <option value="monthly">شهري</option>
+            <option value="yearly">سنوي (خصم 17%)</option>
+          </select>
+        </div>
+        <div class="admin-field">
+          <label for="mcp-reason" class="admin-label">سبب التغيير</label>
+          <textarea id="mcp-reason" name="reason" class="admin-input" rows="2" placeholder="لماذا يتم تغيير الخطة؟ (اختياري)" style="resize:vertical;min-height:3.5rem"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="admin-btn admin-btn-ghost" data-modal-close>إلغاء</button>
+          <button type="submit" class="admin-btn admin-btn-primary">
+            <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-layers"/></svg>
+            تغيير الخطة (تجريبي)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Suspend / Reactivate -->
+  <div id="modal-suspend" class="modal" role="dialog" aria-modal="true" aria-labelledby="ms-title" hidden>
+    <div class="modal-box" style="max-width:30rem">
+      <div class="modal-header">
+        <h2 id="ms-title" class="modal-title" id="ms-title-label">إيقاف الشركة</h2>
+        <button type="button" class="modal-close" data-modal-close aria-label="إغلاق النافذة">
+          <svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+        </button>
+      </div>
+      <p class="modal-notice" role="note">إجراء تجريبي — لا يتم إيقاف أو تفعيل الشركة فعليًا في هذه النسخة.</p>
+      <form id="form-suspend" class="modal-form" novalidate aria-label="نموذج إيقاف/تفعيل الشركة">
+        <div class="admin-field">
+          <label class="admin-label">الشركة</label>
+          <div id="ms-company-display" class="admin-display-val" aria-live="polite">—</div>
+        </div>
+        <div class="admin-field">
+          <label for="ms-reason" class="admin-label">سبب الإجراء <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="ms-reason" name="reason" class="admin-input" rows="3" required placeholder="أدخل سبب الإيقاف أو إعادة التفعيل…" style="resize:vertical;min-height:4.5rem" aria-required="true" aria-describedby="ms-reason-err"></textarea>
+          <span id="ms-reason-err" class="admin-field-error" aria-live="polite" hidden></span>
+        </div>
+        <div class="admin-field">
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.875rem;color:#4B5563;cursor:pointer">
+            <input type="checkbox" id="ms-notify" name="notifyOwner" style="width:1rem;height:1rem;accent-color:var(--admin-sidebar-active)">
+            إشعار المالك (تجريبي — لا يتم الإرسال فعليًا)
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="admin-btn admin-btn-ghost" data-modal-close>إلغاء</button>
+          <button type="submit" class="admin-btn admin-btn-danger">
+            <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-pause"/></svg>
+            <span id="ms-action-label">تنفيذ الإجراء (تجريبي)</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Admin Note -->
+  <div id="modal-add-note" class="modal" role="dialog" aria-modal="true" aria-labelledby="man-title" hidden>
+    <div class="modal-box" style="max-width:32rem">
+      <div class="modal-header">
+        <h2 id="man-title" class="modal-title">إضافة ملاحظة إدارية</h2>
+        <button type="button" class="modal-close" data-modal-close aria-label="إغلاق النافذة">
+          <svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+        </button>
+      </div>
+      <p class="modal-notice" role="note">إجراء تجريبي — لا يتم حفظ الملاحظة على الخادم في هذه النسخة.</p>
+      <form id="form-add-note" class="modal-form" novalidate aria-label="نموذج إضافة ملاحظة إدارية">
+        <div class="admin-field">
+          <label class="admin-label">الشركة</label>
+          <div id="man-company-display" class="admin-display-val" aria-live="polite">—</div>
+        </div>
+        <div class="admin-field">
+          <label for="man-note" class="admin-label">الملاحظة <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="man-note" name="note" class="admin-input" rows="4" required placeholder="أدخل الملاحظة الإدارية هنا…" style="resize:vertical;min-height:5.5rem" aria-required="true" aria-describedby="man-note-err"></textarea>
+          <span id="man-note-err" class="admin-field-error" aria-live="polite" hidden></span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="admin-field">
+            <label for="man-type" class="admin-label">نوع الملاحظة</label>
+            <select id="man-type" name="type" class="admin-select admin-input">
+              <option value="general">عامة</option>
+              <option value="billing">فوترة</option>
+              <option value="support">دعم فني</option>
+              <option value="sales">مبيعات</option>
+              <option value="warning">تحذير</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label for="man-followup" class="admin-label">تاريخ المتابعة</label>
+            <input type="date" id="man-followup" name="followUpDate" class="admin-input" dir="ltr">
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="admin-btn admin-btn-ghost" data-modal-close>إلغاء</button>
+          <button type="submit" class="admin-btn admin-btn-primary">
+            <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-file-text"/></svg>
+            حفظ الملاحظة (تجريبي)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Bulk Suspend Confirm -->
+  <div id="modal-bulk-suspend" class="modal" role="dialog" aria-modal="true" aria-labelledby="mbs-title" hidden>
+    <div class="modal-box" style="max-width:28rem">
+      <div class="modal-header">
+        <h2 id="mbs-title" class="modal-title">تأكيد الإيقاف الجماعي</h2>
+        <button type="button" class="modal-close" data-modal-close aria-label="إغلاق النافذة">
+          <svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+        </button>
+      </div>
+      <div class="modal-confirm-body">
+        <div class="modal-confirm-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-alert-triangle"/></svg>
+        </div>
+        <p style="font-size:.9375rem;color:#262E3A;font-weight:600;margin-bottom:.5rem">هل أنت متأكد؟</p>
+        <p style="font-size:.875rem;color:#6B7889;line-height:1.6">
+          سيتم إيقاف <strong id="mbs-count" aria-live="polite">0</strong> شركة محددة.
+          هذا إجراء تجريبي — لا يتم إيقاف الشركات فعليًا في هذه النسخة.
+        </p>
+        <p style="font-size:.8125rem;color:#9AA6B4;margin-top:.75rem;background:#F8F9FA;padding:.625rem .75rem;border-radius:.5rem;border-inline-start:.25rem solid #E5E7EB">
+          حالة تجريبية · لا يتم الحفظ على خادم
+        </p>
+      </div>
+      <div class="modal-actions" style="margin-top:1.25rem">
+        <button type="button" class="admin-btn admin-btn-ghost" data-modal-close>إلغاء</button>
+        <button type="button" class="admin-btn admin-btn-danger" id="btn-confirm-bulk-suspend" data-modal-close>
+          <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-pause"/></svg>
+          إيقاف المحدد (تجريبي)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast root -->
+  <div
+    id="toast-root"
+    aria-live="polite"
+    aria-atomic="false"
+    aria-label="الإشعارات"
+    style="position:fixed;bottom:1.25rem;inset-inline-end:1.25rem;z-index:var(--z-toast,1080);display:flex;flex-direction:column;gap:.5rem;max-width:360px;pointer-events:none"
+  ></div>
+
+  <!-- Scripts (defer, in order) -->
+  <script src="../src/js/ui.js" defer></script>
+  <script src="../src/js/main.js" defer></script>
+  <script src="../src/js/admin.js" defer></script>
+
+</body>
+</html>

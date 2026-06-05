@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth" data-page="admin-subscriptions">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>الاشتراكات — رحلاتي (تجريبي)</title>
+  <meta name="description" content="إدارة اشتراكات شركات منصة رحلاتي — بيانات تجريبية / واجهة أمامية فقط / لا توجد مدفوعات أو فواتير حقيقية.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#E08D12">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/tailwind.css">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"لوحة الإدارة","item":"https://rihlaty.example.com/admin/"},{"@type":"ListItem","position":2,"name":"الاشتراكات","item":"https://rihlaty.example.com/admin/subscriptions.html"}]}
+  </script>
+
+  <style>
+    /* ── admin/subscriptions.html — admin shell + page-scoped styles ── */
+
+    /* ── Design tokens ────────────────────────────────────────────────── */
+    :root {
+      --admin-sidebar-w:        268px;
+      --admin-topbar-h:          64px;
+      --admin-sidebar-bg:       #161C26;
+      --admin-sidebar-text:     #9AA6B4;
+      --admin-sidebar-active:   #E08D12;
+      --admin-sidebar-active-bg:rgba(224,141,18,.12);
+      --admin-sidebar-hover-bg: rgba(255,255,255,.055);
+      --admin-body-bg:          #F0F2F5;
+      --admin-card-bg:          #ffffff;
+      --admin-border:           #E2E6ED;
+      --admin-shadow-card: 0 1px 3px rgba(22,28,38,.07),0 1px 2px rgba(22,28,38,.05);
+      --admin-shadow-pop:  0 8px 24px rgba(22,28,38,.12),0 2px 8px rgba(22,28,38,.08);
+      --z-dd:          1000;
+      --z-overlay:     1030;
+      --z-drawer:      1040;
+      --z-modal-ov:    1050;
+      --z-modal:       1060;
+      --z-toast:       1080;
+    }
+
+    /* ── Skip link ──────────────────────────────────────────────────── */
+    .admin-skip {
+      position: absolute;
+      inset-inline-start: -999px; top: .5rem;
+      background: var(--admin-sidebar-active); color: #fff;
+      padding: .5rem 1.25rem; border-radius: 0 .5rem .5rem 0;
+      font-weight: 700; font-size: .875rem; z-index: 9999;
+      text-decoration: none; transition: inset-inline-start .15s;
+    }
+    .admin-skip:focus { inset-inline-start: 0; }
+
+    body { background: var(--admin-body-bg); font-family: Cairo, system-ui, sans-serif; }
+    body.admin-sidebar-open { overflow: hidden; }
+
+    /* ── Sidebar ────────────────────────────────────────────────────── */
+    .admin-sidebar {
+      position: fixed; top: 0; bottom: 0; inset-inline-start: 0;
+      width: var(--admin-sidebar-w);
+      background: var(--admin-sidebar-bg);
+      display: flex; flex-direction: column;
+      overflow-y: auto; overflow-x: hidden;
+      z-index: var(--z-drawer);
+      transition: transform .28s cubic-bezier(.4,0,.2,1);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(224,141,18,.25) transparent;
+    }
+    .admin-sidebar:not(.is-open) { transform: translateX(100%); }
+    html[dir="ltr"] .admin-sidebar:not(.is-open) { transform: translateX(-100%); }
+    @media (min-width: 1024px) {
+      .admin-sidebar,
+      html[dir="ltr"] .admin-sidebar { transform: translateX(0) !important; transition: none !important; z-index: 10; }
+    }
+
+    .admin-scrim {
+      position: fixed; inset: 0;
+      background: rgba(10,12,18,.62);
+      backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+      z-index: var(--z-overlay);
+      opacity: 0; pointer-events: none; transition: opacity .25s;
+    }
+    .admin-scrim.is-active { opacity: 1; pointer-events: auto; }
+    @media (prefers-reduced-motion: reduce) { .admin-scrim { transition: none; } }
+
+    .admin-main { display: flex; flex-direction: column; min-height: 100dvh; }
+    @media (min-width: 1024px) { .admin-main { margin-inline-start: var(--admin-sidebar-w); } }
+
+    /* ── Topbar ─────────────────────────────────────────────────────── */
+    .admin-topbar {
+      position: sticky; top: 0;
+      height: var(--admin-topbar-h);
+      background: #fff; border-bottom: 1px solid var(--admin-border);
+      display: flex; align-items: center; gap: .625rem;
+      padding: 0 1.25rem; z-index: var(--z-dd);
+      box-shadow: 0 1px 3px rgba(22,28,38,.06);
+    }
+
+    /* ── Sidebar brand ──────────────────────────────────────────────── */
+    .admin-brand {
+      display: flex; align-items: center; gap: .75rem;
+      padding: 1.125rem 1rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.07); flex-shrink: 0;
+    }
+    .admin-brand-icon {
+      width: 2.375rem; height: 2.375rem;
+      background: linear-gradient(135deg, #E08D12 0%, #C26C0B 100%);
+      border-radius: .625rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; box-shadow: 0 2px 8px rgba(224,141,18,.35);
+    }
+    .admin-brand-text { display: flex; flex-direction: column; min-width: 0; }
+    .admin-brand-title { font-size: .9375rem; font-weight: 800; color: #fff; line-height: 1.2; }
+    .admin-brand-sub { font-size: .6875rem; color: rgba(154,166,180,.75); font-weight: 500; letter-spacing: .015em; direction: ltr; text-align: right; margin-top: .0625rem; }
+
+    /* ── Sidebar nav ────────────────────────────────────────────────── */
+    .admin-nav { flex: 1; padding: .625rem .75rem .5rem; display: flex; flex-direction: column; gap: .0625rem; }
+    .admin-nav-section { font-size: .6rem; font-weight: 700; color: rgba(154,166,180,.45); letter-spacing: .1em; padding: .875rem .625rem .3125rem; text-transform: uppercase; }
+    .admin-nav-item {
+      display: flex; align-items: center; gap: .625rem;
+      padding: .5625rem .75rem; border-radius: .5rem;
+      color: var(--admin-sidebar-text); font-size: .875rem; font-weight: 500;
+      text-decoration: none; cursor: pointer; background: transparent; border: none;
+      width: 100%; text-align: start;
+      transition: background .14s, color .14s; position: relative;
+    }
+    .admin-nav-item:hover { background: var(--admin-sidebar-hover-bg); color: #fff; }
+    .admin-nav-item.is-active { background: var(--admin-sidebar-active-bg); color: var(--admin-sidebar-active); font-weight: 600; }
+    .admin-nav-item.is-active::before { content: ''; position: absolute; inset-inline-start: 0; top: 20%; bottom: 20%; width: 3px; border-radius: 0 2px 2px 0; background: var(--admin-sidebar-active); }
+    .admin-nav-icon { width: 1.0625rem; height: 1.0625rem; flex-shrink: 0; opacity: .75; }
+    .admin-nav-item.is-active .admin-nav-icon,
+    .admin-nav-item:hover .admin-nav-icon { opacity: 1; }
+    .admin-nav-badge { margin-inline-start: auto; font-size: .625rem; font-weight: 700; padding: .125rem .4375rem; border-radius: 9999px; background: rgba(224,141,18,.18); color: var(--admin-sidebar-active); line-height: 1.4; }
+    .admin-nav-soon { margin-inline-start: auto; font-size: .625rem; color: rgba(154,166,180,.4); font-weight: 500; }
+
+    .admin-sidebar-footer { padding: .625rem .75rem .875rem; border-top: 1px solid rgba(255,255,255,.07); flex-shrink: 0; }
+    .admin-sidebar-footer-label { font-size: .6rem; color: rgba(154,166,180,.35); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: .5rem .625rem .25rem; }
+
+    .admin-content { flex: 1; padding: 1.5rem 1.75rem; }
+    @media (max-width: 767px) { .admin-content { padding: 1.125rem 1rem; } }
+
+    /* ── Topbar button ──────────────────────────────────────────────── */
+    .admin-tb-btn {
+      position: relative;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 2.5rem; height: 2.5rem; min-width: 2.5rem;
+      border-radius: .5rem; color: #6B7889;
+      background: transparent; border: 1px solid transparent;
+      cursor: pointer; flex-shrink: 0;
+      transition: background .12s, color .12s, border-color .12s;
+    }
+    .admin-tb-btn:hover { background: #F4F5F7; border-color: #DEE3EA; color: #262E3A; }
+    .admin-tb-btn[aria-expanded="true"] { background: #EEF1F5; border-color: #DEE3EA; color: #262E3A; }
+    .admin-tb-badge { position: absolute; top: .25rem; inset-inline-end: .25rem; width: .9375rem; height: .9375rem; background: #D64545; color: #fff; font-size: .5625rem; font-weight: 800; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid #fff; }
+
+    /* ── Topbar dropdown ────────────────────────────────────────────── */
+    .admin-dd { position: absolute; inset-inline-end: 0; top: calc(100% + .5rem); background: #fff; border: 1px solid var(--admin-border); border-radius: .875rem; box-shadow: var(--admin-shadow-pop); z-index: var(--z-dd); overflow: hidden; }
+    .admin-dd.hidden { display: none; }
+    .admin-dd-head { display: flex; align-items: center; justify-content: space-between; padding: .875rem 1.125rem; border-bottom: 1px solid var(--admin-border); }
+    .admin-dd-title { font-size: .9375rem; font-weight: 700; color: #161C26; }
+    .admin-dd-item { display: flex; align-items: flex-start; gap: .75rem; padding: .8125rem 1.125rem; cursor: pointer; border-bottom: 1px solid #F7F8FA; transition: background .1s; text-decoration: none; width: 100%; text-align: start; background: transparent; border-left: none; border-right: none; border-top: none; font-family: inherit; color: #262E3A; }
+    .admin-dd-item:last-child { border-bottom: none; }
+    .admin-dd-item:hover { background: #F9FAFB; }
+    .admin-dd-item-icon { width: 2.125rem; height: 2.125rem; border-radius: .5rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .admin-dd-item-text { display: flex; flex-direction: column; gap: .125rem; }
+    .admin-dd-item-label { font-size: .8125rem; font-weight: 600; color: #262E3A; }
+    .admin-dd-item-time { font-size: .75rem; color: #9AA6B4; }
+    .dd-animate { animation: dd-pop .15s cubic-bezier(.4,0,.2,1); }
+    @keyframes dd-pop { from { opacity: 0; transform: translateY(-.375rem) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .dd-animate { animation: none; } }
+
+    /* ── Breadcrumb ─────────────────────────────────────────────────── */
+    .admin-breadcrumb { display: flex; align-items: center; gap: .375rem; font-size: .8125rem; color: #9AA6B4; margin-bottom: 1.125rem; flex-wrap: wrap; }
+    .admin-breadcrumb a { color: #6B7889; text-decoration: none; transition: color .12s; }
+    .admin-breadcrumb a:hover { color: #262E3A; }
+    .admin-breadcrumb-sep { color: #C5CDD7; }
+    .admin-breadcrumb [aria-current] { color: #262E3A; font-weight: 600; }
+
+    /* ── Page header ────────────────────────────────────────────────── */
+    .admin-page-header { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem; padding-bottom: 1.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--admin-border); }
+    .admin-page-title { font-size: 1.5rem; font-weight: 800; color: #161C26; line-height: 1.2; }
+    .admin-page-desc { font-size: .875rem; color: #6B7889; margin-top: .25rem; }
+    .admin-page-actions { display: flex; align-items: center; gap: .625rem; flex-wrap: wrap; }
+    @media (max-width: 639px) { .admin-page-title { font-size: 1.25rem; } }
+
+    .admin-honesty { display: inline-flex; align-items: center; gap: .4375rem; padding: .375rem .75rem; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: .5rem; font-size: .75rem; color: #92400E; white-space: nowrap; }
+
+    /* ── Buttons ────────────────────────────────────────────────────── */
+    .admin-btn { display: inline-flex; align-items: center; gap: .4375rem; padding: .5625rem 1.125rem; border-radius: .5rem; font-size: .875rem; font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid transparent; transition: background .15s, box-shadow .15s, border-color .15s; white-space: nowrap; font-family: inherit; }
+    .admin-btn-primary { background: var(--admin-sidebar-active); color: #fff; }
+    .admin-btn-primary:hover { background: #C26C0B; box-shadow: 0 4px 12px rgba(224,141,18,.3); }
+    .admin-btn-secondary { background: #fff; color: #3A4453; border-color: var(--admin-border); }
+    .admin-btn-secondary:hover { background: #F7F8FA; border-color: #C5CDD7; }
+    .admin-btn-ghost { background: transparent; color: #6B7889; }
+    .admin-btn-ghost:hover { background: #F4F5F7; color: #262E3A; }
+    .admin-btn-danger { background: #D64545; color: #fff; }
+    .admin-btn-danger:hover { background: #B91C1C; }
+    .admin-btn-warn { background: #FEF3C7; color: #92400E; border-color: #FDE68A; }
+    .admin-btn-warn:hover { background: #FDE68A; }
+    .admin-btn-sm { padding: .375rem .75rem; font-size: .8125rem; }
+    .admin-btn-icon { width: 2.25rem; height: 2.25rem; padding: 0; justify-content: center; }
+
+    /* ── Cards ──────────────────────────────────────────────────────── */
+    .admin-card { background: var(--admin-card-bg); border: 1px solid var(--admin-border); border-radius: .875rem; box-shadow: var(--admin-shadow-card); }
+    .admin-card-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--admin-border); gap: .5rem; flex-wrap: wrap; }
+    .admin-card-title { font-size: .9375rem; font-weight: 700; color: #161C26; }
+    .admin-card-body { padding: 1.25rem; }
+
+    /* ── Badges ─────────────────────────────────────────────────────── */
+    .admin-badge { display: inline-flex; align-items: center; gap: .3rem; font-size: .6875rem; font-weight: 700; padding: .1875rem .5rem; border-radius: 9999px; line-height: 1.4; white-space: nowrap; }
+    .badge-active  { background: #DCFCE7; color: #15803D; }
+    .badge-trial   { background: #FEF3C7; color: #92400E; }
+    .badge-warning { background: #FFFBEB; color: #D97706; }
+    .badge-pending { background: #EFF6FF; color: #1E40AF; }
+    .badge-error   { background: #FEF2F2; color: #B91C1C; }
+    .badge-neutral { background: #F3F4F6; color: #6B7280; }
+    .badge-paid    { background: #DCFCE7; color: #15803D; }
+    .badge-due     { background: #FEF2F2; color: #B91C1C; }
+    .badge-overdue { background: #FEF2F2; color: #991B1B; }
+
+    /* ── Plan pills ─────────────────────────────────────────────────── */
+    .plan-pill { display: inline-flex; align-items: center; font-size: .6875rem; font-weight: 700; padding: .25rem .625rem; border-radius: 9999px; }
+    .plan-starter    { background: #F3F4F6; color: #374151; }
+    .plan-growth     { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+    .plan-pro        { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+    .plan-enterprise { background: #1E1B2E; color: #F4BE52; border: 1px solid #F4BE52; }
+
+    /* ── Section title ──────────────────────────────────────────────── */
+    .admin-section-title { font-size: 1rem; font-weight: 700; color: #161C26; }
+
+    /* ── Filter input ───────────────────────────────────────────────── */
+    .admin-input, .admin-select, .admin-textarea {
+      padding: .5625rem .875rem; border: 1px solid var(--admin-border);
+      border-radius: .5rem; font-size: .875rem; color: #262E3A;
+      background: #fff; font-family: inherit;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .admin-input:focus, .admin-select:focus, .admin-textarea:focus {
+      outline: none; border-color: var(--admin-sidebar-active);
+      box-shadow: 0 0 0 3px rgba(224,141,18,.12);
+    }
+    .admin-input[aria-invalid="true"] { border-color: #D64545; }
+    .admin-label { font-size: .8125rem; font-weight: 600; color: #3A4453; }
+    .admin-field { display: flex; flex-direction: column; gap: .375rem; }
+    .admin-field + .admin-field { margin-top: 1rem; }
+    .admin-field-error { font-size: .75rem; color: #D64545; }
+    .admin-textarea { min-height: 5rem; resize: vertical; }
+    .req { color: #DC2626; margin-inline-start: .125rem; }
+
+    /* ── Modal ──────────────────────────────────────────────────────── */
+    .modal { position: fixed; inset: 0; background: rgba(10,12,18,.52); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: var(--z-modal-ov); display: flex; align-items: flex-end; justify-content: center; padding: 1rem; }
+    @media (min-width: 640px) { .modal { align-items: center; } }
+    .modal[hidden] { display: none; }
+    .modal-box { background: #fff; border-radius: 1.125rem; box-shadow: var(--admin-shadow-pop); width: 100%; max-width: 540px; max-height: 92vh; overflow-y: auto; animation: modal-in .22s cubic-bezier(.4,0,.2,1); }
+    @keyframes modal-in { from { opacity: 0; transform: translateY(1.25rem) scale(.98); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .modal-box { animation: none; } }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem 1rem; border-bottom: 1px solid var(--admin-border); }
+    .modal-title { font-size: 1.0625rem; font-weight: 700; color: #161C26; }
+    .modal-close { width: 2rem; height: 2rem; border-radius: .5rem; display: flex; align-items: center; justify-content: center; color: #9AA6B4; background: transparent; border: none; cursor: pointer; transition: background .12s, color .12s; }
+    .modal-close:hover { background: #F4F5F7; color: #262E3A; }
+    .modal-form { padding: 1.25rem 1.5rem; }
+    .modal-notice { font-size: .8rem; color: #9AA6B4; background: #F8F9FA; padding: .5rem 1.5rem; border-bottom: 1px solid var(--admin-border); border-inline-start: .25rem solid #F4BE52; margin: 0; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: .625rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--admin-border); flex-wrap: wrap; }
+    .modal-confirm-body { padding: 1.5rem; text-align: center; }
+    .modal-confirm-icon { width: 3.5rem; height: 3.5rem; margin: 0 auto 1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+    /* ── FAQ ────────────────────────────────────────────────────────── */
+    .admin-faq { display: flex; flex-direction: column; gap: .5rem; }
+    .admin-faq-item { background: var(--admin-card-bg); border: 1px solid var(--admin-border); border-radius: .75rem; overflow: hidden; }
+    .admin-faq-q { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: .9375rem 1.125rem; text-align: start; font-size: .875rem; font-weight: 600; color: #262E3A; background: transparent; border: none; cursor: pointer; gap: .75rem; font-family: inherit; transition: background .12s; }
+    .admin-faq-q:hover { background: #F9FAFB; }
+    .admin-faq-q[aria-expanded="true"] { color: var(--admin-sidebar-active); }
+    .admin-faq-q[aria-expanded="true"] svg { transform: rotate(180deg); }
+    .admin-faq-q svg { flex-shrink: 0; transition: transform .2s; color: #9AA6B4; }
+    .admin-faq-a { display: none; padding: 0 1.125rem 1rem; font-size: .875rem; color: #4B5563; line-height: 1.75; }
+    .admin-faq-q[aria-expanded="true"] + .admin-faq-a { display: block; }
+
+    /* ── Footer ─────────────────────────────────────────────────────── */
+    .admin-footer { display: flex; align-items: center; justify-content: space-between; padding: .875rem 1.75rem; border-top: 1px solid var(--admin-border); background: #fff; flex-wrap: wrap; gap: .5rem; font-size: .75rem; color: #9AA6B4; }
+    .admin-footer-honesty { font-size: .6875rem; color: #C5CDD7; }
+
+    /* ══════════════════════════════════════════════════════════════════ */
+    /* ── SUBSCRIPTIONS page-scoped styles ─────────────────────────── */
+    /* ══════════════════════════════════════════════════════════════════ */
+
+    /* ── Stats grid (8 cards) ─────────────────────────────────────── */
+    .sub-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 1023px) { .sub-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 479px)  { .sub-stats-grid { grid-template-columns: 1fr; } }
+
+    .sub-stat-card {
+      background: #fff; border: 1px solid var(--admin-border);
+      border-radius: .875rem; padding: 1rem 1.125rem;
+      box-shadow: var(--admin-shadow-card);
+      display: flex; flex-direction: column; gap: .375rem;
+    }
+    .sub-stat-label { font-size: .75rem; font-weight: 600; color: #9AA6B4; }
+    .sub-stat-value { font-size: 1.625rem; font-weight: 900; color: #161C26; line-height: 1.1; }
+    .sub-stat-value.ltr { direction: ltr; display: inline-block; }
+    .sub-stat-meta  { font-size: .75rem; color: #9AA6B4; }
+    .sub-stat-trend { font-size: .75rem; font-weight: 700; display: flex; align-items: center; gap: .25rem; }
+    .sub-stat-trend.up   { color: #15803D; }
+    .sub-stat-trend.down { color: #D64545; }
+    .sub-stat-trend.warn { color: #D97706; }
+
+    /* ── Filter / search bar ─────────────────────────────────────── */
+    .sub-filter-card {
+      background: #fff; border: 1px solid var(--admin-border);
+      border-radius: .875rem; padding: 1rem 1.25rem;
+      box-shadow: var(--admin-shadow-card); margin-bottom: 1.25rem;
+    }
+    .sub-filter-row { display: flex; flex-wrap: wrap; gap: .625rem; align-items: flex-end; }
+    .sub-search-wrap { position: relative; flex: 1; min-width: 220px; }
+    .sub-search-icon { position: absolute; inset-inline-start: .75rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: #9AA6B4; width: 1rem; height: 1rem; }
+    .sub-search-input { width: 100%; padding-inline-start: 2.25rem !important; }
+
+    /* ── Active filter chips ─────────────────────────────────────── */
+    .sub-chips-row { display: flex; flex-wrap: wrap; gap: .375rem; align-items: center; margin-top: .625rem; min-height: 0; }
+    .sub-chip {
+      display: inline-flex; align-items: center; gap: .3125rem;
+      padding: .25rem .625rem; border-radius: 9999px;
+      background: #EEF1F5; border: 1px solid #DEE3EA;
+      font-size: .75rem; font-weight: 600; color: #3A4453;
+      white-space: nowrap;
+    }
+    .sub-chip-remove { width: 1.125rem; height: 1.125rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: transparent; border: none; cursor: pointer; color: #6B7889; transition: background .1s; }
+    .sub-chip-remove:hover { background: #D1D5DB; color: #262E3A; }
+
+    /* ── Result count / sort bar ─────────────────────────────────── */
+    .sub-results-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: .75rem; gap: .75rem; flex-wrap: wrap;
+    }
+    .sub-result-count { font-size: .8125rem; color: #6B7889; font-weight: 500; }
+    .sub-result-count strong { color: #262E3A; font-weight: 800; }
+
+    /* ── Bulk actions bar ────────────────────────────────────────── */
+    .sub-bulk-bar {
+      display: flex; align-items: center; gap: .625rem;
+      padding: .75rem 1rem; background: #EFF6FF;
+      border: 1px solid #BFDBFE; border-radius: .75rem;
+      margin-bottom: .75rem; flex-wrap: wrap;
+    }
+    .sub-bulk-count { font-size: .875rem; font-weight: 700; color: #1E40AF; flex: 1; }
+
+    /* ── Main table ──────────────────────────────────────────────── */
+    .sub-table-wrap { overflow-x: auto; border-radius: .875rem; border: 1px solid var(--admin-border); background: #fff; box-shadow: var(--admin-shadow-card); }
+    .sub-table { width: 100%; border-collapse: collapse; font-size: .8125rem; min-width: 900px; }
+    .sub-table thead tr { background: #F9FAFB; border-bottom: 2px solid var(--admin-border); }
+    .sub-table th { padding: .75rem 1rem; text-align: start; font-size: .6875rem; font-weight: 700; color: #9AA6B4; white-space: nowrap; }
+    .sub-table th:first-child { width: 2.5rem; padding-inline-end: .375rem; }
+    .sub-table td { padding: .8125rem 1rem; border-bottom: 1px solid #F0F2F5; vertical-align: middle; color: #262E3A; }
+    .sub-table tbody tr:last-child td { border-bottom: none; }
+    .sub-table tbody tr:hover td { background: #FAFBFC; }
+    .sub-table td.ltr { direction: ltr; text-align: start; }
+    .sub-company-name { font-weight: 700; color: #161C26; font-size: .875rem; }
+    .sub-company-id   { font-size: .6875rem; color: #9AA6B4; }
+
+    /* ── Row action menu ─────────────────────────────────────────── */
+    .sub-row-menu-wrap { position: relative; display: inline-block; }
+    .sub-row-menu {
+      position: absolute; inset-inline-end: 0; top: calc(100% + .25rem);
+      min-width: 190px; background: #fff;
+      border: 1px solid var(--admin-border); border-radius: .75rem;
+      box-shadow: var(--admin-shadow-pop); z-index: var(--z-dd);
+      overflow: hidden;
+    }
+    .sub-row-menu.hidden { display: none; }
+    .sub-row-menu-item {
+      display: flex; align-items: center; gap: .625rem;
+      padding: .625rem .875rem; font-size: .8125rem; font-weight: 500;
+      color: #262E3A; cursor: pointer; background: transparent;
+      border: none; width: 100%; text-align: start; font-family: inherit;
+      transition: background .1s;
+    }
+    .sub-row-menu-item:hover { background: #F9FAFB; }
+    .sub-row-menu-item.danger { color: #D64545; }
+    .sub-row-menu-item.danger:hover { background: #FEF2F2; }
+    .sub-row-menu-sep { height: 1px; background: var(--admin-border); margin: .25rem 0; }
+
+    /* ── Skeleton / empty states ─────────────────────────────────── */
+    .sub-skeleton { animation: skeleton-pulse 1.4s ease-in-out infinite; }
+    @keyframes skeleton-pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
+    @media (prefers-reduced-motion: reduce) { .sub-skeleton { animation: none; } }
+    .sub-skeleton-row td { padding: .875rem 1rem; }
+    .sub-skeleton-cell { height: 1rem; border-radius: .375rem; background: #E5E7EB; }
+
+    .sub-empty-state { text-align: center; padding: 3.5rem 1.5rem; }
+    .sub-empty-icon { width: 3.5rem; height: 3.5rem; margin: 0 auto .875rem; background: #F0F2F5; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+    /* ── Table → cards ≤640px ────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .sub-table-wrap { border-radius: 0; border-left: none; border-right: none; }
+      .sub-table { min-width: unset; }
+      .sub-table thead { display: none; }
+      .sub-table tbody tr { display: block; border: 1px solid var(--admin-border); border-radius: .875rem; margin-bottom: .875rem; padding: .875rem; background: #fff; box-shadow: var(--admin-shadow-card); }
+      .sub-table td { display: flex; justify-content: space-between; align-items: center; padding: .4375rem 0; border-bottom: 1px solid #F7F8FA; font-size: .8125rem; }
+      .sub-table td:last-child { border-bottom: none; }
+      .sub-table td::before { content: attr(data-label); font-weight: 700; color: #6B7889; font-size: .6875rem; flex-shrink: 0; margin-inline-end: .5rem; }
+      .sub-table td:first-child::before { content: none; }
+      .sub-table td.ltr { direction: ltr; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <a href="#main-content" class="admin-skip">تخطى إلى المحتوى الرئيسي</a>
+
+  <!-- ── Sidebar ───────────────────────────────────────────────────── -->
+  <aside id="admin-sidebar" class="admin-sidebar" role="navigation" aria-label="قائمة إدارة المنصة">
+    <div class="admin-brand">
+      <div class="admin-brand-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="admin-brand-text">
+        <span class="admin-brand-title">رحلاتي</span>
+        <span class="admin-brand-sub">مالك المنصة · Owner Admin</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav" aria-label="روابط الإدارة الرئيسية">
+      <span class="admin-nav-section">الإدارة الرئيسية</span>
+      <ul role="list" style="display:contents">
+        <li><a href="index.html" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-grid"/></svg>الرئيسية</a></li>
+        <li><a href="companies.html" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-building"/></svg>الشركات<span class="admin-nav-badge">38</span></a></li>
+        <li><a href="plans.html" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-layers"/></svg>الخطط</a></li>
+        <li>
+          <a href="subscriptions.html" class="admin-nav-item is-active" aria-current="page">
+            <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-credit-card"/></svg>
+            الاشتراكات
+          </a>
+        </li>
+      </ul>
+
+      <span class="admin-nav-section" style="margin-top:.5rem">التحليل والمحتوى</span>
+      <ul role="list" style="display:contents">
+        <li><a href="analytics.html" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-bar-chart"/></svg>التحليلات</a></li>
+        <li><a href="content.html" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-file-text"/></svg>المحتوى</a></li>
+        <li><a href="analytics.html#integrations" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-plug"/></svg>مراقبة التكاملات</a></li>
+        <li><a href="#" class="admin-nav-item" data-coming-soon aria-label="الإعدادات — قريباً"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-settings"/></svg>الإعدادات<span class="admin-nav-soon">قريباً</span></a></li>
+      </ul>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      <div class="admin-sidebar-footer-label">روابط سريعة</div>
+      <a href="../pages/index.html" class="admin-nav-item" style="font-size:.8125rem"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-globe"/></svg>العودة للموقع</a>
+      <a href="../dashboard/index.html" class="admin-nav-item" style="font-size:.8125rem"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-server"/></svg>لوحة الشركات</a>
+    </div>
+  </aside>
+
+  <div id="admin-scrim" class="admin-scrim" hidden aria-hidden="true"></div>
+
+  <!-- ── Main ──────────────────────────────────────────────────────── -->
+  <div class="admin-main">
+    <header class="admin-topbar" role="banner" aria-label="شريط الإدارة العلوي">
+      <button id="btn-admin-menu" type="button" class="admin-tb-btn lg:hidden" aria-label="فتح قائمة التنقل" aria-expanded="false" aria-controls="admin-sidebar" style="min-width:2.75rem;min-height:2.75rem">
+        <svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-menu"/></svg>
+      </button>
+      <div class="hidden lg:flex items-center gap-2 flex-shrink-0">
+        <span style="font-size:.8125rem;font-weight:800;color:#161C26">مالك المنصة</span>
+        <span style="width:1px;height:1.125rem;background:#DEE3EA"></span>
+        <span style="font-size:.75rem;color:#9AA6B4;direction:ltr">Owner Admin</span>
+      </div>
+      <div style="position:relative;flex:1;max-width:240px" class="hidden sm:block">
+        <svg style="position:absolute;inset-inline-start:.75rem;top:50%;transform:translateY(-50%);pointer-events:none;color:#9AA6B4;width:1rem;height:1rem" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-search"/></svg>
+        <input type="search" style="width:100%;padding:.5rem .875rem .5rem 2.25rem;border:1px solid var(--admin-border);border-radius:.5rem;font-size:.875rem;color:#262E3A;background:#F9FAFB;font-family:inherit" placeholder="بحث سريع…" aria-label="بحث سريع">
+      </div>
+      <div style="flex:1"></div>
+      <div style="position:relative">
+        <button id="btn-notifications" type="button" class="admin-tb-btn" aria-label="الإشعارات" aria-haspopup="menu" aria-expanded="false" aria-controls="dd-notifications">
+          <svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>
+          <span class="admin-tb-badge" aria-hidden="true">3</span>
+        </button>
+        <div id="dd-notifications" class="admin-dd hidden" role="menu" style="min-width:300px">
+          <div class="admin-dd-head"><span class="admin-dd-title">الإشعارات</span><span class="admin-badge badge-pending">3 جديدة</span></div>
+          <div style="padding:.625rem 1.125rem;border-top:1px solid var(--admin-border)"><button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" style="width:100%;justify-content:center">عرض الكل</button></div>
+        </div>
+      </div>
+      <div style="position:relative">
+        <button id="btn-user-menu" type="button" class="admin-tb-btn" aria-label="قائمة المستخدم" aria-haspopup="menu" aria-expanded="false" aria-controls="dd-user-menu" style="width:auto;padding-inline:.625rem;gap:.5rem">
+          <span style="width:2rem;height:2rem;border-radius:.5rem;background:linear-gradient(135deg,#E08D12,#C26C0B);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0" aria-hidden="true">أ</span>
+          <span class="hidden sm:block" style="font-size:.8125rem;font-weight:600;color:#262E3A">أحمد الإداري</span>
+          <svg class="hidden sm:block" width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+        </button>
+        <div id="dd-user-menu" class="admin-dd hidden" role="menu" style="min-width:220px">
+          <div class="admin-dd-head" style="flex-direction:column;align-items:flex-start;gap:.375rem">
+            <span style="font-size:.9375rem;font-weight:700;color:#161C26">أحمد الإداري</span>
+            <span style="font-size:.75rem;color:#9AA6B4;direction:ltr">admin@rihlaty.example.com</span>
+          </div>
+          <div style="padding:.625rem 1.125rem;border-top:1px solid var(--admin-border)">
+            <button type="button" class="admin-btn admin-btn-sm" role="menuitem" style="width:100%;justify-content:center;background:#FEF2F2;color:#D64545;border-color:#FEE2E2">
+              <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-logout"/></svg>
+              تسجيل الخروج (تجريبي)
+            </button>
+          </div>
+        </div>
+      </div>
+      <div style="position:relative">
+        <button id="btn-quick-action" type="button" class="admin-tb-btn" aria-label="إجراءات سريعة" aria-haspopup="menu" aria-expanded="false" aria-controls="dd-quick-action" style="background:var(--admin-sidebar-active);color:#fff;border-color:var(--admin-sidebar-active);width:auto;padding-inline:.75rem;gap:.375rem;box-shadow:0 2px 8px rgba(224,141,18,.3)">
+          <svg width="15" height="15" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-plus"/></svg>
+          <span class="hidden sm:inline" style="font-size:.8125rem;font-weight:700">إجراء سريع</span>
+        </button>
+        <div id="dd-quick-action" class="admin-dd hidden" role="menu" style="min-width:210px">
+          <div class="admin-dd-head"><span class="admin-dd-title">إجراءات سريعة</span></div>
+          <div style="padding:.3125rem">
+            <a href="companies.html" class="admin-dd-item" role="menuitem">
+              <span class="admin-dd-item-icon" style="background:#EEF1F5" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7889" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg></span>
+              <div class="admin-dd-item-text"><span class="admin-dd-item-label">إدارة الشركات</span></div>
+            </a>
+            <a href="plans.html" class="admin-dd-item" role="menuitem">
+              <span class="admin-dd-item-icon" style="background:#FEF3C7" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg></span>
+              <div class="admin-dd-item-text"><span class="admin-dd-item-label">إدارة الخطط</span></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="admin-content" role="main" tabindex="-1">
+
+      <nav class="admin-breadcrumb" aria-label="مسار التنقل">
+        <a href="index.html">لوحة الإدارة</a>
+        <span class="admin-breadcrumb-sep" aria-hidden="true">/</span>
+        <span aria-current="page">الاشتراكات</span>
+      </nav>
+
+      <!-- ══════════════════ SUBSCRIPTIONS CONTENT (T026) ════════════ -->
+
+      <!-- ── Page header ─────────────────────────────────────────────── -->
+      <div class="admin-page-header">
+        <div>
+          <h1 class="admin-page-title">الاشتراكات</h1>
+          <p class="admin-page-desc">
+            إدارة اشتراكات شركات المنصة والتجديدات والفواتير
+            <span class="admin-honesty" style="margin-inline-start:.5rem">
+              <svg width="12" height="12" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-info"/></svg>
+              لا توجد مدفوعات أو فواتير حقيقية في هذه النسخة
+            </span>
+          </p>
+        </div>
+        <div class="admin-page-actions">
+          <button type="button" class="admin-btn admin-btn-secondary" data-sub-action="export-all">
+            <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>
+            تصدير (تجريبي)
+          </button>
+          <button type="button" class="admin-btn admin-btn-primary" data-modal-open="modal-sub-detail">
+            <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-plus"/></svg>
+            إضافة اشتراك تجريبي
+          </button>
+        </div>
+      </div>
+
+      <!-- ── 8 stats cards ─────────────────────────────────────────────── -->
+      <div class="sub-stats-grid">
+        <div class="sub-stat-card">
+          <span class="sub-stat-label">الاشتراكات النشطة</span>
+          <span class="sub-stat-value">8</span>
+          <span class="sub-stat-trend up">
+            <svg width="12" height="12" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-trend-up"/></svg>
+            +2 هذا الشهر
+          </span>
+        </div>
+        <div class="sub-stat-card">
+          <span class="sub-stat-label">فترة تجريبية</span>
+          <span class="sub-stat-value">1</span>
+          <span class="sub-stat-meta">تنتهي 2026-06-19</span>
+        </div>
+        <div class="sub-stat-card" style="border-color:#FECACA">
+          <span class="sub-stat-label">متأخر السداد</span>
+          <span class="sub-stat-value" style="color:#D64545">1</span>
+          <span class="sub-stat-trend down">
+            <svg width="12" height="12" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-alert-triangle"/></svg>
+            يحتاج متابعة عاجلة
+          </span>
+        </div>
+        <div class="sub-stat-card" style="border-color:#FDE68A">
+          <span class="sub-stat-label">ينتهي قريبًا</span>
+          <span class="sub-stat-value" style="color:#D97706">1</span>
+          <span class="sub-stat-meta">خلال 7 أيام</span>
+        </div>
+        <div class="sub-stat-card">
+          <span class="sub-stat-label">تجديدات هذا الشهر</span>
+          <span class="sub-stat-value">5</span>
+          <span class="sub-stat-meta">اشتراكات معلقة للتجديد</span>
+        </div>
+        <div class="sub-stat-card" style="border-color:#BFDBFE">
+          <span class="sub-stat-label">MRR (تقديري)</span>
+          <span class="sub-stat-value ltr" style="color:#1E40AF">$1,332</span>
+          <span class="sub-stat-meta">الإيراد الشهري المتكرر — تجريبي</span>
+        </div>
+        <div class="sub-stat-card" style="border-color:#BFDBFE">
+          <span class="sub-stat-label">ARR (تقديري)</span>
+          <span class="sub-stat-value ltr" style="color:#1E40AF">$15,984</span>
+          <span class="sub-stat-meta">الإيراد السنوي المتكرر — تجريبي</span>
+        </div>
+        <div class="sub-stat-card" style="border-color:#FECACA">
+          <span class="sub-stat-label">مدفوعات فاشلة</span>
+          <span class="sub-stat-value" style="color:#D64545">1</span>
+          <span class="sub-stat-meta">لا توجد مدفوعات حقيقية</span>
+        </div>
+      </div>
+
+      <!-- ── Filter + search bar ────────────────────────────────────────── -->
+      <div class="sub-filter-card">
+        <div class="sub-filter-row">
+          <div class="sub-search-wrap">
+            <svg class="sub-search-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-search"/></svg>
+            <input type="search" id="sub-search" class="admin-input sub-search-input" placeholder="ابحث بالشركة أو رقم الفاتورة…" aria-label="بحث في الاشتراكات">
+          </div>
+          <select id="sub-filter-plan" class="admin-select" aria-label="تصفية حسب الخطة" style="min-width:130px">
+            <option value="">كل الخطط</option>
+            <option value="Starter">Starter</option>
+            <option value="Growth">Growth</option>
+            <option value="Pro">Pro</option>
+            <option value="Enterprise">Enterprise</option>
+          </select>
+          <select id="sub-filter-status" class="admin-select" aria-label="تصفية حسب الحالة" style="min-width:140px">
+            <option value="">كل الحالات</option>
+            <option value="Active">نشط</option>
+            <option value="Trial">تجريبي</option>
+            <option value="Past Due">متأخر السداد</option>
+            <option value="Expiring Soon">ينتهي قريبًا</option>
+            <option value="Manual Review">قيد المراجعة</option>
+          </select>
+          <select id="sub-filter-billing" class="admin-select" aria-label="دورة الفوترة" style="min-width:130px">
+            <option value="">كل الدورات</option>
+            <option value="monthly">شهري</option>
+            <option value="yearly">سنوي</option>
+          </select>
+          <select id="sub-filter-payment" class="admin-select" aria-label="حالة الدفع" style="min-width:135px">
+            <option value="">كل حالات الدفع</option>
+            <option value="Paid mock">مدفوع</option>
+            <option value="Failed mock">فاشل</option>
+            <option value="Pending mock">معلق</option>
+          </select>
+          <button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" id="sub-reset-filters" aria-label="إعادة ضبط التصفية">
+            <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-refresh"/></svg>
+            إعادة ضبط
+          </button>
+        </div>
+        <div class="sub-chips-row" id="sub-chips-row" aria-label="مرشحات نشطة">
+          <!-- active chips injected by T027; example chip for static view: -->
+          <span class="sub-chip" data-chip-filter="status" data-chip-value="Active">
+            الحالة: نشط
+            <button type="button" class="sub-chip-remove" aria-label="إزالة مرشح الحالة">
+              <svg width="10" height="10" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </span>
+        </div>
+      </div>
+
+      <!-- ── Sort + result count ────────────────────────────────────────── -->
+      <div class="sub-results-bar">
+        <p class="sub-result-count" aria-live="polite" aria-atomic="true" id="sub-result-count">
+          عرض <strong id="sub-visible-count">12</strong> اشتراك
+        </p>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <label for="sub-sort" style="font-size:.8125rem;font-weight:600;color:#6B7889;white-space:nowrap">ترتيب حسب:</label>
+          <select id="sub-sort" class="admin-select admin-btn-sm" style="min-width:165px">
+            <option value="renewal-asc">أقرب تجديد</option>
+            <option value="amount-desc">أعلى مبلغ</option>
+            <option value="newest">الأحدث</option>
+            <option value="past-due">المتأخر أولًا</option>
+            <option value="trial-ending">انتهاء التجربة</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ── Bulk actions bar ───────────────────────────────────────────── -->
+      <div class="sub-bulk-bar" id="sub-bulk-bar" hidden>
+        <span class="sub-bulk-count" id="sub-bulk-count" aria-live="polite">0 محدد</span>
+        <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" data-sub-bulk="export">تصدير المحدد</button>
+        <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" data-sub-bulk="send-reminders">إرسال تذكيرات</button>
+        <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" data-sub-bulk="extend-trials">تمديد تجريبي</button>
+        <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" data-sub-bulk="mark-review">وضع علامة مراجعة</button>
+        <button type="button" class="admin-btn admin-btn-danger admin-btn-sm" data-modal-open="modal-sub-bulk-cancel">إلغاء المحدد</button>
+      </div>
+
+      <!-- ── Subscriptions table ────────────────────────────────────────── -->
+      <div class="sub-table-wrap">
+        <table class="sub-table" aria-label="جدول الاشتراكات" id="sub-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="sub-select-all" aria-label="تحديد الكل" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></th>
+              <th>الشركة</th>
+              <th>الخطة</th>
+              <th>المبلغ</th>
+              <th>الفوترة</th>
+              <th>الحالة</th>
+              <th>حالة الدفع</th>
+              <th>التجديد التالي</th>
+              <th>آخر دفع</th>
+              <th>نهاية التجربة</th>
+              <th>رقم الفاتورة</th>
+              <th style="text-align:center">إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="sub-tbody">
+
+            <!-- sub-001 — نخيل السفر — Pro/Active -->
+            <tr data-sub-id="sub-001" data-sub-plan="Pro" data-sub-status="Active" data-sub-payment="Paid mock" data-sub-billing="monthly" data-sub-company="co-001">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد نخيل السفر" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">نخيل السفر</span><br><span class="sub-company-id">co-001</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+              <td data-label="المبلغ" class="ltr"><strong>$149</strong></td>
+              <td data-label="الفوترة">شهري</td>
+              <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-active" style="font-size:.625rem">مدفوع</span></td>
+              <td data-label="التجديد التالي" class="ltr">2026-07-01</td>
+              <td data-label="آخر دفع" class="ltr">2026-06-01</td>
+              <td data-label="نهاية التجربة"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="رقم الفاتورة" class="ltr" style="font-size:.75rem;color:#6B7889">INV-2026-0601</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-001" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-001">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-001" role="menu">
+                    <a href="company-details.html?id=co-001" class="sub-row-menu-item" role="menuitem"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-modal-open="modal-sub-detail" data-sub-action-id="sub-001"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-modal-open="modal-sub-invoice" data-sub-action-id="sub-001"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>عرض الفاتورة</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-sub-action="change-plan" data-sub-action-id="sub-001"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-sub-action="extend-trial" data-sub-action-id="sub-001" data-modal-open="modal-sub-extend-trial"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg>تمديد تجريبي</button>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-sub-action="mark-paid" data-sub-action-id="sub-001"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/></svg>تعيين مدفوع (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-sub-action="send-reminder" data-sub-action-id="sub-001"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-sub-action="download-invoice" data-sub-action-id="sub-001"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>تنزيل الفاتورة (تجريبي)</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" role="menuitem" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-001"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- sub-002 — هلا للسياحة — Enterprise/Active/yearly -->
+            <tr data-sub-id="sub-002" data-sub-plan="Enterprise" data-sub-status="Active" data-sub-payment="Paid mock" data-sub-billing="yearly" data-sub-company="co-002">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد هلا للسياحة" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">هلا للسياحة والسفر</span><br><span class="sub-company-id">co-002</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-enterprise">Enterprise</span></td>
+              <td data-label="المبلغ" class="ltr"><strong>$349</strong></td>
+              <td data-label="الفوترة">سنوي</td>
+              <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-active" style="font-size:.625rem">مدفوع</span></td>
+              <td data-label="التجديد التالي" class="ltr">2027-01-15</td>
+              <td data-label="آخر دفع" class="ltr">2026-01-15</td>
+              <td data-label="نهاية التجربة"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="رقم الفاتورة" class="ltr" style="font-size:.75rem;color:#6B7889">INV-2026-0115</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-002" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-002">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-002" role="menu">
+                    <a href="company-details.html?id=co-002" class="sub-row-menu-item" role="menuitem"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-modal-open="modal-sub-detail" data-sub-action-id="sub-002"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-modal-open="modal-sub-invoice" data-sub-action-id="sub-002"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>عرض الفاتورة</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-sub-action="change-plan" data-sub-action-id="sub-002"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-sub-action="mark-paid" data-sub-action-id="sub-002"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/></svg>تعيين مدفوع (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-sub-action="send-reminder" data-sub-action-id="sub-002"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" role="menuitem" data-sub-action="download-invoice" data-sub-action-id="sub-002"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>تنزيل الفاتورة (تجريبي)</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" role="menuitem" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-002"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- sub-003 — الوفاء — Growth/Active -->
+            <tr data-sub-id="sub-003" data-sub-plan="Growth" data-sub-status="Active" data-sub-payment="Paid mock" data-sub-billing="monthly" data-sub-company="co-003">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد الوفاء" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">الوفاء لتنظيم الرحلات</span><br><span class="sub-company-id">co-003</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-growth">Growth</span></td>
+              <td data-label="المبلغ" class="ltr"><strong>$79</strong></td>
+              <td data-label="الفوترة">شهري</td>
+              <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-active" style="font-size:.625rem">مدفوع</span></td>
+              <td data-label="التجديد التالي" class="ltr">2026-07-05</td>
+              <td data-label="آخر دفع" class="ltr">2026-06-05</td>
+              <td data-label="نهاية التجربة"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="رقم الفاتورة" class="ltr" style="font-size:.75rem;color:#6B7889">INV-2026-0605</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-003" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-003">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-003" role="menu">
+                    <a href="company-details.html?id=co-003" class="sub-row-menu-item"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-detail" data-sub-action-id="sub-003"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-invoice" data-sub-action-id="sub-003"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>عرض الفاتورة</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="change-plan" data-sub-action-id="sub-003"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="mark-paid" data-sub-action-id="sub-003"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/></svg>تعيين مدفوع (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="send-reminder" data-sub-action-id="sub-003"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="download-invoice" data-sub-action-id="sub-003"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>تنزيل الفاتورة (تجريبي)</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-003"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- sub-004 — مسافر — Starter/Trial -->
+            <tr data-sub-id="sub-004" data-sub-plan="Starter" data-sub-status="Trial" data-sub-payment="N/A" data-sub-billing="monthly" data-sub-company="co-004" style="background:#FFFBEB">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد مسافر" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">مسافر للسياحة</span><br><span class="sub-company-id">co-004</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-starter">Starter</span></td>
+              <td data-label="المبلغ" class="ltr" style="color:#9AA6B4">—</td>
+              <td data-label="الفوترة">شهري</td>
+              <td data-label="الحالة"><span class="admin-badge badge-trial">تجريبي</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="التجديد التالي" class="ltr" style="color:#9AA6B4">—</td>
+              <td data-label="آخر دفع" class="ltr" style="color:#9AA6B4">—</td>
+              <td data-label="نهاية التجربة" class="ltr" style="color:#D97706;font-weight:700">2026-06-19</td>
+              <td data-label="رقم الفاتورة" class="ltr" style="color:#9AA6B4">—</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-004" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-004">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-004" role="menu">
+                    <a href="company-details.html?id=co-004" class="sub-row-menu-item"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-detail" data-sub-action-id="sub-004"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="change-plan" data-sub-action-id="sub-004"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-extend-trial" data-sub-action-id="sub-004"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-clock"/></svg>تمديد التجربة</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="send-reminder" data-sub-action-id="sub-004"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-004"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- sub-005 — رواق السفر — Pro/Active -->
+            <tr data-sub-id="sub-005" data-sub-plan="Pro" data-sub-status="Active" data-sub-payment="Paid mock" data-sub-billing="monthly" data-sub-company="co-005">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد رواق السفر" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">رواق السفر والسياحة</span><br><span class="sub-company-id">co-005</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+              <td data-label="المبلغ" class="ltr"><strong>$149</strong></td>
+              <td data-label="الفوترة">شهري</td>
+              <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-active" style="font-size:.625rem">مدفوع</span></td>
+              <td data-label="التجديد التالي" class="ltr">2026-07-03</td>
+              <td data-label="آخر دفع" class="ltr">2026-06-03</td>
+              <td data-label="نهاية التجربة"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="رقم الفاتورة" class="ltr" style="font-size:.75rem;color:#6B7889">INV-2026-0603</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-005" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-005">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-005" role="menu">
+                    <a href="company-details.html?id=co-005" class="sub-row-menu-item"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-detail" data-sub-action-id="sub-005"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-invoice" data-sub-action-id="sub-005"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>عرض الفاتورة</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="change-plan" data-sub-action-id="sub-005"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="mark-paid" data-sub-action-id="sub-005"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/></svg>تعيين مدفوع (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="send-reminder" data-sub-action-id="sub-005"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="download-invoice" data-sub-action-id="sub-005"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>تنزيل الفاتورة (تجريبي)</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-005"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- sub-006 — أجنحة — Growth/Past Due -->
+            <tr data-sub-id="sub-006" data-sub-plan="Growth" data-sub-status="Past Due" data-sub-payment="Failed mock" data-sub-billing="monthly" data-sub-company="co-006" style="background:#FEF2F2">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد أجنحة" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">أجنحة للسفر والأعمال</span><br><span class="sub-company-id">co-006</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-growth">Growth</span></td>
+              <td data-label="المبلغ" class="ltr"><strong>$79</strong></td>
+              <td data-label="الفوترة">شهري</td>
+              <td data-label="الحالة"><span class="admin-badge badge-error">متأخر السداد</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-error" style="font-size:.625rem">فاشل</span></td>
+              <td data-label="التجديد التالي" class="ltr" style="color:#D64545;font-weight:700">2026-06-01</td>
+              <td data-label="آخر دفع" class="ltr">2026-05-01</td>
+              <td data-label="نهاية التجربة"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="رقم الفاتورة" class="ltr" style="font-size:.75rem;color:#6B7889">INV-2026-0501</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-006" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-006">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-006" role="menu">
+                    <a href="company-details.html?id=co-006" class="sub-row-menu-item"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-detail" data-sub-action-id="sub-006"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-invoice" data-sub-action-id="sub-006"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>عرض الفاتورة</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="change-plan" data-sub-action-id="sub-006"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="mark-paid" data-sub-action-id="sub-006"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/></svg>تعيين مدفوع (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="send-reminder" data-sub-action-id="sub-006"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير عاجل</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="download-invoice" data-sub-action-id="sub-006"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>تنزيل الفاتورة (تجريبي)</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-006"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- sub-007 — رياح الشرق — Pro/Active -->
+            <tr data-sub-id="sub-007" data-sub-plan="Pro" data-sub-status="Active" data-sub-payment="Paid mock" data-sub-billing="monthly" data-sub-company="co-007">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد رياح الشرق" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">رياح الشرق للسياحة</span><br><span class="sub-company-id">co-007</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+              <td data-label="المبلغ" class="ltr"><strong>$149</strong></td>
+              <td data-label="الفوترة">شهري</td>
+              <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-active" style="font-size:.625rem">مدفوع</span></td>
+              <td data-label="التجديد التالي" class="ltr">2026-07-08</td>
+              <td data-label="آخر دفع" class="ltr">2026-06-08</td>
+              <td data-label="نهاية التجربة"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="رقم الفاتورة" class="ltr" style="font-size:.75rem;color:#6B7889">INV-2026-0608</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-007" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-007">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-007" role="menu">
+                    <a href="company-details.html?id=co-007" class="sub-row-menu-item"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-detail" data-sub-action-id="sub-007"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-invoice" data-sub-action-id="sub-007"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>عرض الفاتورة</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="change-plan" data-sub-action-id="sub-007"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="mark-paid" data-sub-action-id="sub-007"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/></svg>تعيين مدفوع (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="send-reminder" data-sub-action-id="sub-007"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="download-invoice" data-sub-action-id="sub-007"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>تنزيل الفاتورة (تجريبي)</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-007"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- sub-008 — درب السفر — Starter/Active -->
+            <tr data-sub-id="sub-008" data-sub-plan="Starter" data-sub-status="Active" data-sub-payment="Paid mock" data-sub-billing="monthly" data-sub-company="co-008">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد درب السفر" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">درب السفر</span><br><span class="sub-company-id">co-008</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-starter">Starter</span></td>
+              <td data-label="المبلغ" class="ltr"><strong>$29</strong></td>
+              <td data-label="الفوترة">شهري</td>
+              <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-active" style="font-size:.625rem">مدفوع</span></td>
+              <td data-label="التجديد التالي" class="ltr">2026-07-10</td>
+              <td data-label="آخر دفع" class="ltr">2026-06-10</td>
+              <td data-label="نهاية التجربة"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="رقم الفاتورة" class="ltr" style="font-size:.75rem;color:#6B7889">INV-2026-0610</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-008" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-008">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-008" role="menu">
+                    <a href="company-details.html?id=co-008" class="sub-row-menu-item"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-detail" data-sub-action-id="sub-008"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-invoice" data-sub-action-id="sub-008"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>عرض الفاتورة</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="change-plan" data-sub-action-id="sub-008"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="mark-paid" data-sub-action-id="sub-008"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/></svg>تعيين مدفوع (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="send-reminder" data-sub-action-id="sub-008"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="download-invoice" data-sub-action-id="sub-008"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>تنزيل الفاتورة (تجريبي)</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-008"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- sub-009 — قوافل — Pro/Expiring Soon -->
+            <tr data-sub-id="sub-009" data-sub-plan="Pro" data-sub-status="Expiring Soon" data-sub-payment="Paid mock" data-sub-billing="monthly" data-sub-company="co-009" style="background:#FFFBEB">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد قوافل" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">قوافل السياحة والترفيه</span><br><span class="sub-company-id">co-009</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+              <td data-label="المبلغ" class="ltr"><strong>$149</strong></td>
+              <td data-label="الفوترة">شهري</td>
+              <td data-label="الحالة"><span class="admin-badge badge-warning">ينتهي قريبًا</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-active" style="font-size:.625rem">مدفوع</span></td>
+              <td data-label="التجديد التالي" class="ltr" style="color:#D97706;font-weight:700">2026-06-12</td>
+              <td data-label="آخر دفع" class="ltr">2026-05-12</td>
+              <td data-label="نهاية التجربة"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="رقم الفاتورة" class="ltr" style="font-size:.75rem;color:#6B7889">INV-2026-0512</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-009" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-009">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-009" role="menu">
+                    <a href="company-details.html?id=co-009" class="sub-row-menu-item"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-detail" data-sub-action-id="sub-009"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-invoice" data-sub-action-id="sub-009"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>عرض الفاتورة</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="change-plan" data-sub-action-id="sub-009"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="send-reminder" data-sub-action-id="sub-009"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير تجديد</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="mark-paid" data-sub-action-id="sub-009"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/></svg>تعيين مدفوع (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="download-invoice" data-sub-action-id="sub-009"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>تنزيل الفاتورة (تجريبي)</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-009"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- sub-010 — بوصلة — Growth/Active -->
+            <tr data-sub-id="sub-010" data-sub-plan="Growth" data-sub-status="Active" data-sub-payment="Paid mock" data-sub-billing="monthly" data-sub-company="co-010">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد بوصلة" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">بوصلة للسياحة والسفر</span><br><span class="sub-company-id">co-010</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-growth">Growth</span></td>
+              <td data-label="المبلغ" class="ltr"><strong>$79</strong></td>
+              <td data-label="الفوترة">شهري</td>
+              <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-active" style="font-size:.625rem">مدفوع</span></td>
+              <td data-label="التجديد التالي" class="ltr">2026-07-02</td>
+              <td data-label="آخر دفع" class="ltr">2026-06-02</td>
+              <td data-label="نهاية التجربة"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="رقم الفاتورة" class="ltr" style="font-size:.75rem;color:#6B7889">INV-2026-0602</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-010" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-010">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-010" role="menu">
+                    <a href="company-details.html?id=co-010" class="sub-row-menu-item"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-detail" data-sub-action-id="sub-010"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-invoice" data-sub-action-id="sub-010"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>عرض الفاتورة</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="change-plan" data-sub-action-id="sub-010"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="mark-paid" data-sub-action-id="sub-010"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/></svg>تعيين مدفوع (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="send-reminder" data-sub-action-id="sub-010"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="download-invoice" data-sub-action-id="sub-010"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>تنزيل الفاتورة (تجريبي)</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-010"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- sub-011 — أمل السياحة — Enterprise/Active/yearly -->
+            <tr data-sub-id="sub-011" data-sub-plan="Enterprise" data-sub-status="Active" data-sub-payment="Paid mock" data-sub-billing="yearly" data-sub-company="co-011">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد أمل السياحة" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">أمل السياحة والحج</span><br><span class="sub-company-id">co-011</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-enterprise">Enterprise</span></td>
+              <td data-label="المبلغ" class="ltr"><strong>$349</strong></td>
+              <td data-label="الفوترة">سنوي</td>
+              <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-active" style="font-size:.625rem">مدفوع</span></td>
+              <td data-label="التجديد التالي" class="ltr">2027-02-20</td>
+              <td data-label="آخر دفع" class="ltr">2026-02-20</td>
+              <td data-label="نهاية التجربة"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="رقم الفاتورة" class="ltr" style="font-size:.75rem;color:#6B7889">INV-2026-0220</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-011" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-011">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-011" role="menu">
+                    <a href="company-details.html?id=co-011" class="sub-row-menu-item"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-detail" data-sub-action-id="sub-011"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-invoice" data-sub-action-id="sub-011"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>عرض الفاتورة</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="change-plan" data-sub-action-id="sub-011"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="mark-paid" data-sub-action-id="sub-011"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/></svg>تعيين مدفوع (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="send-reminder" data-sub-action-id="sub-011"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="download-invoice" data-sub-action-id="sub-011"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>تنزيل الفاتورة (تجريبي)</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-011"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- sub-012 — سماء السفر — Pro/Manual Review -->
+            <tr data-sub-id="sub-012" data-sub-plan="Pro" data-sub-status="Manual Review" data-sub-payment="Pending mock" data-sub-billing="monthly" data-sub-company="co-012" style="background:#EFF6FF">
+              <td data-label=""><input type="checkbox" class="sub-row-check" aria-label="تحديد سماء السفر" style="width:1.0625rem;height:1.0625rem;cursor:pointer;accent-color:#E08D12"></td>
+              <td data-label="الشركة"><span class="sub-company-name">سماء السفر</span><br><span class="sub-company-id">co-012</span></td>
+              <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+              <td data-label="المبلغ" class="ltr"><strong>$149</strong></td>
+              <td data-label="الفوترة">شهري</td>
+              <td data-label="الحالة"><span class="admin-badge badge-pending">قيد المراجعة</span></td>
+              <td data-label="حالة الدفع"><span class="admin-badge badge-warning" style="font-size:.625rem">معلق</span></td>
+              <td data-label="التجديد التالي" class="ltr">2026-07-01</td>
+              <td data-label="آخر دفع" class="ltr">2026-06-01</td>
+              <td data-label="نهاية التجربة"><span class="admin-badge badge-neutral" style="font-size:.625rem">—</span></td>
+              <td data-label="رقم الفاتورة" class="ltr" style="font-size:.75rem;color:#6B7889">INV-2026-0601B</td>
+              <td data-label="إجراءات" style="text-align:center">
+                <div class="sub-row-menu-wrap">
+                  <button type="button" class="admin-btn admin-btn-ghost admin-btn-icon admin-btn-sm" aria-label="إجراءات sub-012" aria-haspopup="menu" aria-expanded="false" data-sub-menu-trigger="sub-012">
+                    <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-more"/></svg>
+                  </button>
+                  <div class="sub-row-menu hidden" id="menu-sub-012" role="menu">
+                    <a href="company-details.html?id=co-012" class="sub-row-menu-item"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>عرض الشركة</a>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-detail" data-sub-action-id="sub-012"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>تفاصيل الاشتراك</button>
+                    <button type="button" class="sub-row-menu-item" data-modal-open="modal-sub-invoice" data-sub-action-id="sub-012"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-file-text"/></svg>عرض الفاتورة</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="change-plan" data-sub-action-id="sub-012"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>تغيير الخطة</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="mark-paid" data-sub-action-id="sub-012"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/></svg>تعيين مدفوع (تجريبي)</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="send-reminder" data-sub-action-id="sub-012"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>إرسال تذكير</button>
+                    <button type="button" class="sub-row-menu-item" data-sub-action="download-invoice" data-sub-action-id="sub-012"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>تنزيل الفاتورة (تجريبي)</button>
+                    <div class="sub-row-menu-sep"></div>
+                    <button type="button" class="sub-row-menu-item danger" data-modal-open="modal-sub-cancel" data-sub-action-id="sub-012"><svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>إلغاء الاشتراك</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ── Skeleton loading rows (hidden — shown by JS during load) ─── -->
+            <tr class="sub-skeleton-row" hidden aria-hidden="true">
+              <td><div class="sub-skeleton-cell" style="width:1rem"></div></td>
+              <td><div class="sub-skeleton-cell" style="width:120px"></div></td>
+              <td><div class="sub-skeleton-cell" style="width:60px"></div></td>
+              <td><div class="sub-skeleton-cell" style="width:48px"></div></td>
+              <td><div class="sub-skeleton-cell" style="width:50px"></div></td>
+              <td><div class="sub-skeleton-cell" style="width:56px"></div></td>
+              <td><div class="sub-skeleton-cell" style="width:56px"></div></td>
+              <td><div class="sub-skeleton-cell" style="width:80px"></div></td>
+              <td><div class="sub-skeleton-cell" style="width:80px"></div></td>
+              <td><div class="sub-skeleton-cell" style="width:60px"></div></td>
+              <td><div class="sub-skeleton-cell" style="width:90px"></div></td>
+              <td><div class="sub-skeleton-cell" style="width:32px;margin:auto"></div></td>
+            </tr>
+
+            <!-- ── Empty state row (hidden — shown by JS when zero results match) ── -->
+            <tr id="sub-empty-state" hidden>
+              <td colspan="12">
+                <div class="sub-empty-state">
+                  <div class="sub-empty-icon">
+                    <svg width="24" height="24" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#9AA6B4" stroke-width="2" stroke-linecap="round"><use href="#icon-credit-card"/></svg>
+                  </div>
+                  <p style="font-size:.9375rem;font-weight:700;color:#262E3A;margin-bottom:.375rem">لا توجد اشتراكات تطابق المرشحات</p>
+                  <p style="font-size:.8125rem;color:#9AA6B4;margin-bottom:1rem">حاول تعديل مرشحات البحث أو إعادة ضبطها للعثور على الاشتراكات</p>
+                  <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" id="sub-empty-reset">
+                    <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-refresh"/></svg>
+                    إعادة ضبط المرشحات
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── FAQ ──────────────────────────────────────────────────────── -->
+      <section style="margin-top:2rem" aria-labelledby="sub-faq-title">
+        <h2 id="sub-faq-title" class="admin-section-title" style="margin-bottom:1rem">أسئلة شائعة حول الاشتراكات</h2>
+        <div class="admin-faq" id="sub-faq">
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="sub-faq-a1">
+              هل يتم تحصيل المدفوعات الفعلية من الشركات؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="sub-faq-a1" class="admin-faq-a">لا. هذه واجهة تجريبية أمامية فقط ولا يتم تنفيذ أي معاملة مالية حقيقية. حالات "مدفوع" و"فاشل" و"معلق" هي بيانات تجريبية تُعاد عند تحديث الصفحة.</div>
+          </div>
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="sub-faq-a2">
+              هل الفواتير المعروضة حقيقية وقابلة للتنزيل؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="sub-faq-a2" class="admin-faq-a">لا. أرقام الفواتير مثل INV-2026-0601 هي معرّفات تجريبية فقط. الملفات الفعلية غير موجودة. في بيئة الإنتاج ستحتاج إلى ربط نظام PDF لإنشاء الفواتير وتوقيعها.</div>
+          </div>
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="sub-faq-a3">
+              كيف يعمل تمديد فترة التجربة؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="sub-faq-a3" class="admin-faq-a">في هذا النموذج الأولي، يمكنك تحديد عدد أيام التمديد (1–90) من النموذج المخصص، وعند التأكيد تظهر رسالة توست تجريبية. في بيئة الإنتاج سيتم تحديث تاريخ انتهاء التجربة في قاعدة البيانات وإرسال إشعار للشركة.</div>
+          </div>
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="sub-faq-a4">
+              ماذا يحدث عند تغيير الخطة لاشتراك نشط؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="sub-faq-a4" class="admin-faq-a">في هذا النموذج الأولي يظهر إشعار توست تجريبي دون أي تغيير حقيقي. في الإنتاج ستحتاج إلى منطق تعديل الدورة الجزئية (prorated billing) إذا كانت الشركة في منتصف دورة فوترة.</div>
+          </div>
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="sub-faq-a5">
+              هل إرسال التذكيرات يرسل بريدًا إلكترونيًا حقيقيًا؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="sub-faq-a5" class="admin-faq-a">لا. زر "إرسال تذكير" يُنتج إشعار توست تجريبي فقط ولا يرسل أي بريد إلكتروني أو رسالة نصية حقيقية. لتفعيل الإشعارات الحقيقية ستحتاج إلى ربط خدمة بريد مثل SendGrid أو Postmark.</div>
+          </div>
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="sub-faq-a6">
+              كيف يتم حساب MRR وARR؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="sub-faq-a6" class="admin-faq-a">الأرقام الحالية ($1,332 MRR و$15,984 ARR) محسوبة من مجموع الاشتراكات النشطة في البيانات التجريبية فقط. في الإنتاج يجب حساب هذه القيم من قاعدة البيانات مع أخذ الدورة السنوية بعين الاعتبار (قسمة المبلغ السنوي على 12 للحصول على الحصة الشهرية).</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════ MODALS ════════════════════════════════ -->
+
+      <!-- Subscription detail modal -->
+      <div id="modal-sub-detail" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-sub-detail-title" hidden>
+        <div class="modal-box" style="max-width:560px">
+          <div class="modal-header">
+            <span id="modal-sub-detail-title" class="modal-title">تفاصيل الاشتراك</span>
+            <button type="button" class="modal-close" aria-label="إغلاق" data-modal-close="modal-sub-detail">
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+            </button>
+          </div>
+          <p class="modal-notice">بيانات تجريبية — لا توجد مدفوعات أو فواتير حقيقية في هذه النسخة</p>
+          <div class="modal-form">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem">
+              <div><span style="font-size:.75rem;font-weight:700;color:#9AA6B4;display:block;margin-bottom:.25rem">الشركة</span><strong id="msd-company">نخيل السفر</strong></div>
+              <div><span style="font-size:.75rem;font-weight:700;color:#9AA6B4;display:block;margin-bottom:.25rem">الخطة</span><span id="msd-plan"><span class="plan-pill plan-pro">Pro</span></span></div>
+              <div><span style="font-size:.75rem;font-weight:700;color:#9AA6B4;display:block;margin-bottom:.25rem">المبلغ الشهري</span><strong id="msd-amount" style="direction:ltr;display:inline-block">$149</strong></div>
+              <div><span style="font-size:.75rem;font-weight:700;color:#9AA6B4;display:block;margin-bottom:.25rem">دورة الفوترة</span><span id="msd-billing">شهري</span></div>
+              <div><span style="font-size:.75rem;font-weight:700;color:#9AA6B4;display:block;margin-bottom:.25rem">التجديد التالي</span><span id="msd-renewal" style="direction:ltr;display:inline-block">2026-07-01</span></div>
+              <div><span style="font-size:.75rem;font-weight:700;color:#9AA6B4;display:block;margin-bottom:.25rem">حالة الدفع</span><span id="msd-payment"><span class="admin-badge badge-active">مدفوع</span></span></div>
+              <div><span style="font-size:.75rem;font-weight:700;color:#9AA6B4;display:block;margin-bottom:.25rem">آخر دفع</span><span id="msd-last-payment" style="direction:ltr;display:inline-block">2026-06-01</span></div>
+              <div><span style="font-size:.75nm;font-weight:700;color:#9AA6B4;display:block;margin-bottom:.25rem">رقم الفاتورة</span><span id="msd-invoice" style="direction:ltr;display:inline-block;font-size:.8125rem;color:#6B7889">INV-2026-0601</span></div>
+            </div>
+            <div style="margin-top:1rem;padding:.875rem;background:#F9FAFB;border-radius:.625rem;border:1px solid var(--admin-border)">
+              <p style="font-size:.75rem;font-weight:700;color:#9AA6B4;margin-bottom:.375rem">ملاحظات إدارية</p>
+              <p id="msd-notes" style="font-size:.875rem;color:#3A4453;line-height:1.6">عميل منتظم — سداد في الموعد دائمًا</p>
+            </div>
+            <div class="modal-actions" style="justify-content:space-between">
+              <button type="button" class="admin-btn admin-btn-danger admin-btn-sm" data-modal-close="modal-sub-detail" data-modal-open="modal-sub-cancel">إلغاء الاشتراك</button>
+              <button type="button" class="admin-btn admin-btn-secondary" data-modal-close="modal-sub-detail">إغلاق</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice modal -->
+      <div id="modal-sub-invoice" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-sub-invoice-title" hidden>
+        <div class="modal-box" style="max-width:520px">
+          <div class="modal-header">
+            <span id="modal-sub-invoice-title" class="modal-title">فاتورة تجريبية</span>
+            <button type="button" class="modal-close" aria-label="إغلاق" data-modal-close="modal-sub-invoice">
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+            </button>
+          </div>
+          <p class="modal-notice">هذه فاتورة تجريبية — لا توجد مدفوعات حقيقية / لا يمكن تنزيل ملف PDF حقيقي</p>
+          <div class="modal-form">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;padding:.875rem;background:#F9FAFB;border-radius:.75rem;border:1px solid var(--admin-border);margin-bottom:1rem">
+              <div>
+                <p style="font-size:.75rem;color:#9AA6B4;margin-bottom:.25rem">رقم الفاتورة</p>
+                <strong style="direction:ltr;display:block;font-size:.9375rem">INV-2026-0601</strong>
+              </div>
+              <span class="admin-badge badge-active">مدفوع (تجريبي)</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
+              <div><p style="font-size:.75rem;color:#9AA6B4;margin-bottom:.125rem">الشركة</p><strong>نخيل السفر</strong></div>
+              <div><p style="font-size:.75rem;color:#9AA6B4;margin-bottom:.125rem">تاريخ الإصدار</p><span style="direction:ltr;display:inline-block">2026-06-01</span></div>
+            </div>
+            <table style="width:100%;border-collapse:collapse;font-size:.8125rem;margin-bottom:1rem">
+              <thead><tr style="border-bottom:2px solid var(--admin-border);background:#F9FAFB"><th style="padding:.5rem .75rem;text-align:start;color:#9AA6B4;font-size:.6875rem">البند</th><th style="padding:.5rem .75rem;text-align:start;color:#9AA6B4;font-size:.6875rem">الكمية</th><th style="padding:.5rem .75rem;text-align:start;color:#9AA6B4;font-size:.6875rem;direction:ltr">المبلغ</th></tr></thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #F0F2F5"><td style="padding:.625rem .75rem">اشتراك Pro — يونيو 2026</td><td style="padding:.625rem .75rem">1</td><td style="padding:.625rem .75rem;direction:ltr">$149.00</td></tr>
+                <tr style="border-bottom:1px solid #F0F2F5"><td style="padding:.625rem .75rem;color:#9AA6B4" colspan="2">ضريبة القيمة المضافة (15%)</td><td style="padding:.625rem .75rem;direction:ltr">$22.35</td></tr>
+                <tr style="background:#F9FAFB"><td style="padding:.625rem .75rem;font-weight:800" colspan="2">الإجمالي</td><td style="padding:.625rem .75rem;font-weight:800;direction:ltr;color:#161C26">$171.35</td></tr>
+              </tbody>
+            </table>
+            <div class="modal-actions">
+              <button type="button" class="admin-btn admin-btn-secondary" data-modal-close="modal-sub-invoice">إغلاق</button>
+              <button type="button" class="admin-btn admin-btn-secondary" data-sub-action="send-invoice-email">
+                <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-mail"/></svg>
+                إرسال بالبريد (تجريبي)
+              </button>
+              <button type="button" class="admin-btn admin-btn-primary" data-sub-action="download-invoice-modal">
+                <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-download"/></svg>
+                تنزيل PDF (تجريبي)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Extend trial modal -->
+      <div id="modal-sub-extend-trial" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-sub-extend-trial-title" hidden>
+        <div class="modal-box" style="max-width:440px">
+          <div class="modal-header">
+            <span id="modal-sub-extend-trial-title" class="modal-title">تمديد فترة التجربة</span>
+            <button type="button" class="modal-close" aria-label="إغلاق" data-modal-close="modal-sub-extend-trial">
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+            </button>
+          </div>
+          <p class="modal-notice">إجراء تجريبي — لا يتم تعديل فترة تجربة حقيقية في هذه النسخة</p>
+          <div class="modal-form">
+            <div class="admin-field">
+              <label class="admin-label" for="sub-ext-company">الشركة</label>
+              <input type="text" id="sub-ext-company" class="admin-input" value="مسافر للسياحة" disabled style="background:#F9FAFB;color:#6B7889">
+            </div>
+            <div class="admin-field" style="margin-top:1rem">
+              <label class="admin-label" for="sub-ext-current">نهاية التجربة الحالية</label>
+              <input type="text" id="sub-ext-current" class="admin-input" value="2026-06-19" disabled style="background:#F9FAFB;color:#6B7889;direction:ltr">
+            </div>
+            <div class="admin-field" style="margin-top:1rem">
+              <label class="admin-label" for="sub-ext-days">عدد أيام التمديد<span class="req" aria-hidden="true">*</span></label>
+              <input type="number" id="sub-ext-days" class="admin-input" placeholder="1 — 90 يومًا" min="1" max="90" step="1" aria-required="true" dir="ltr">
+              <span id="sub-ext-days-err" class="admin-field-error" hidden>يجب أن يكون بين 1 و90 يومًا</span>
+            </div>
+            <div class="admin-field" style="margin-top:1rem">
+              <label class="admin-label" for="sub-ext-reason">سبب التمديد</label>
+              <textarea id="sub-ext-reason" class="admin-textarea" rows="2" placeholder="سبب اختياري…"></textarea>
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="admin-btn admin-btn-secondary" data-modal-close="modal-sub-extend-trial">إلغاء</button>
+              <button type="button" class="admin-btn admin-btn-primary" id="btn-confirm-sub-extend-trial">
+                <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-clock"/></svg>
+                تأكيد التمديد (تجريبي)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cancel subscription confirm modal -->
+      <div id="modal-sub-cancel" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-sub-cancel-title" hidden>
+        <div class="modal-box" style="max-width:440px">
+          <div class="modal-header">
+            <span id="modal-sub-cancel-title" class="modal-title">إلغاء الاشتراك</span>
+            <button type="button" class="modal-close" aria-label="إغلاق" data-modal-close="modal-sub-cancel">
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+            </button>
+          </div>
+          <div class="modal-confirm-body">
+            <div class="modal-confirm-icon" style="background:#FEF2F2">
+              <svg width="24" height="24" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D64545" stroke-width="2.5" stroke-linecap="round"><use href="#icon-alert-triangle"/></svg>
+            </div>
+            <p style="font-size:1rem;font-weight:700;color:#161C26;margin-bottom:.625rem">إلغاء الاشتراك تجريبيًا</p>
+            <p style="font-size:.875rem;color:#4B5563;line-height:1.7;margin-bottom:1rem">هذا إجراء تجريبي — <strong>لا يتم إيقاف أي اشتراك حقيقي</strong>. في الإنتاج سيتم إيقاف الوصول عند نهاية الدورة الحالية.</p>
+            <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:.625rem;padding:.875rem;text-align:start;margin-bottom:1.25rem">
+              <p style="font-size:.8125rem;font-weight:700;color:#B91C1C;margin-bottom:.25rem">
+                <svg width="13" height="13" aria-hidden="true" style="vertical-align:-.15em;margin-inline-end:.25rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-info"/></svg>
+                حالة تجريبية
+              </p>
+              <p style="font-size:.8125rem;color:#B91C1C;line-height:1.6">لا يتم إلغاء اشتراك حقيقي / لا تتوقف الخدمة / لا يُرسل إشعار للشركة. الحالة تُعاد عند تحديث الصفحة.</p>
+            </div>
+            <div style="display:flex;gap:.625rem;justify-content:center;flex-wrap:wrap">
+              <button type="button" class="admin-btn admin-btn-secondary" data-modal-close="modal-sub-cancel">إلغاء</button>
+              <button type="button" class="admin-btn admin-btn-danger" id="btn-confirm-sub-cancel">
+                <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-pause"/></svg>
+                تأكيد الإلغاء (تجريبي)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bulk cancel confirm modal -->
+      <div id="modal-sub-bulk-cancel" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-sub-bulk-cancel-title" hidden>
+        <div class="modal-box" style="max-width:420px">
+          <div class="modal-header">
+            <span id="modal-sub-bulk-cancel-title" class="modal-title">إلغاء الاشتراكات المحددة</span>
+            <button type="button" class="modal-close" aria-label="إغلاق" data-modal-close="modal-sub-bulk-cancel">
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+            </button>
+          </div>
+          <div class="modal-confirm-body">
+            <div class="modal-confirm-icon" style="background:#FEF2F2">
+              <svg width="24" height="24" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D64545" stroke-width="2.5" stroke-linecap="round"><use href="#icon-alert-triangle"/></svg>
+            </div>
+            <p style="font-size:1rem;font-weight:700;color:#161C26;margin-bottom:.625rem">إلغاء <span id="modal-bulk-cancel-count">0</span> اشتراك محدد</p>
+            <p style="font-size:.875rem;color:#4B5563;line-height:1.7;margin-bottom:1.25rem">إجراء تجريبي — لا يتم إيقاف اشتراكات حقيقية في هذه النسخة.</p>
+            <div style="display:flex;gap:.625rem;justify-content:center">
+              <button type="button" class="admin-btn admin-btn-secondary" data-modal-close="modal-sub-bulk-cancel">إلغاء</button>
+              <button type="button" class="admin-btn admin-btn-danger" id="btn-confirm-sub-bulk-cancel">تأكيد الإلغاء الجماعي (تجريبي)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="admin-footer" role="contentinfo">
+      <span>© <span data-year>2026</span> رحلاتي — جميع الحقوق محفوظة</span>
+      <span class="admin-footer-honesty">بيانات تجريبية / واجهة أمامية فقط / لا توجد مدفوعات أو فواتير حقيقية في هذه النسخة</span>
+    </footer>
+  </div>
+
+  <div id="toast-root" aria-live="polite" aria-atomic="false" aria-label="الإشعارات" style="position:fixed;bottom:1.25rem;inset-inline-end:1.25rem;z-index:var(--z-toast,1080);display:flex;flex-direction:column;gap:.5rem;max-width:360px;pointer-events:none"></div>
+
+  <script src="../src/js/ui.js" defer></script>
+  <script src="../src/js/main.js" defer></script>
+  <script src="../src/js/admin.js" defer></script>
+</body>
+</html>

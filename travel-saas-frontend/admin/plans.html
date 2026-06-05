@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth" data-page="admin-plans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>الخطط والباقات — رحلاتي (تجريبي)</title>
+  <meta name="description" content="إدارة خطط الاشتراك وباقات المنصة — بيانات تجريبية / واجهة أمامية فقط / لا يتم تعديل أسعار أو خطط حقيقية.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#E08D12">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/tailwind.css">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"لوحة الإدارة","item":"https://rihlaty.example.com/admin/"},{"@type":"ListItem","position":2,"name":"الخطط والباقات","item":"https://rihlaty.example.com/admin/plans.html"}]}
+  </script>
+
+  <style>
+    /* ── admin/plans.html — admin shell + page-scoped styles ── */
+
+    /* ── Design tokens ────────────────────────────────────────────────────── */
+    :root {
+      --admin-sidebar-w:        268px;
+      --admin-topbar-h:          64px;
+      --admin-sidebar-bg:       #161C26;
+      --admin-sidebar-text:     #9AA6B4;
+      --admin-sidebar-active:   #E08D12;
+      --admin-sidebar-active-bg:rgba(224,141,18,.12);
+      --admin-sidebar-hover-bg: rgba(255,255,255,.055);
+      --admin-body-bg:          #F0F2F5;
+      --admin-card-bg:          #ffffff;
+      --admin-border:           #E2E6ED;
+      --admin-shadow-card: 0 1px 3px rgba(22,28,38,.07),0 1px 2px rgba(22,28,38,.05);
+      --admin-shadow-pop:  0 8px 24px rgba(22,28,38,.12),0 2px 8px rgba(22,28,38,.08);
+      --z-dd:          1000;
+      --z-overlay:     1030;
+      --z-drawer:      1040;
+      --z-modal-ov:    1050;
+      --z-modal:       1060;
+      --z-toast:       1080;
+    }
+
+    /* ── Skip link ─────────────────────────────────────────────────────── */
+    .admin-skip {
+      position: absolute;
+      inset-inline-start: -999px; top: .5rem;
+      background: var(--admin-sidebar-active); color: #fff;
+      padding: .5rem 1.25rem; border-radius: 0 .5rem .5rem 0;
+      font-weight: 700; font-size: .875rem; z-index: 9999;
+      text-decoration: none; transition: inset-inline-start .15s;
+    }
+    .admin-skip:focus { inset-inline-start: 0; }
+
+    body { background: var(--admin-body-bg); font-family: Cairo, system-ui, sans-serif; }
+    body.admin-sidebar-open { overflow: hidden; }
+
+    /* ── Sidebar ────────────────────────────────────────────────────────── */
+    .admin-sidebar {
+      position: fixed; top: 0; bottom: 0; inset-inline-start: 0;
+      width: var(--admin-sidebar-w);
+      background: var(--admin-sidebar-bg);
+      display: flex; flex-direction: column;
+      overflow-y: auto; overflow-x: hidden;
+      z-index: var(--z-drawer);
+      transition: transform .28s cubic-bezier(.4,0,.2,1);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(224,141,18,.25) transparent;
+    }
+    .admin-sidebar:not(.is-open) { transform: translateX(100%); }
+    html[dir="ltr"] .admin-sidebar:not(.is-open) { transform: translateX(-100%); }
+    @media (min-width: 1024px) {
+      .admin-sidebar,
+      html[dir="ltr"] .admin-sidebar { transform: translateX(0) !important; transition: none !important; z-index: 10; }
+    }
+
+    .admin-scrim {
+      position: fixed; inset: 0;
+      background: rgba(10,12,18,.62);
+      backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+      z-index: var(--z-overlay);
+      opacity: 0; pointer-events: none; transition: opacity .25s;
+    }
+    .admin-scrim.is-active { opacity: 1; pointer-events: auto; }
+    @media (prefers-reduced-motion: reduce) { .admin-scrim { transition: none; } }
+
+    .admin-main { display: flex; flex-direction: column; min-height: 100dvh; }
+    @media (min-width: 1024px) { .admin-main { margin-inline-start: var(--admin-sidebar-w); } }
+
+    /* ── Topbar ─────────────────────────────────────────────────────────── */
+    .admin-topbar {
+      position: sticky; top: 0;
+      height: var(--admin-topbar-h);
+      background: #fff; border-bottom: 1px solid var(--admin-border);
+      display: flex; align-items: center; gap: .625rem;
+      padding: 0 1.25rem; z-index: var(--z-dd);
+      box-shadow: 0 1px 3px rgba(22,28,38,.06);
+    }
+
+    /* ── Sidebar brand ───────────────────────────────────────────────────── */
+    .admin-brand {
+      display: flex; align-items: center; gap: .75rem;
+      padding: 1.125rem 1rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.07); flex-shrink: 0;
+    }
+    .admin-brand-icon {
+      width: 2.375rem; height: 2.375rem;
+      background: linear-gradient(135deg, #E08D12 0%, #C26C0B 100%);
+      border-radius: .625rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; box-shadow: 0 2px 8px rgba(224,141,18,.35);
+    }
+    .admin-brand-text { display: flex; flex-direction: column; min-width: 0; }
+    .admin-brand-title { font-size: .9375rem; font-weight: 800; color: #fff; line-height: 1.2; }
+    .admin-brand-sub { font-size: .6875rem; color: rgba(154,166,180,.75); font-weight: 500; letter-spacing: .015em; direction: ltr; text-align: right; margin-top: .0625rem; }
+
+    /* ── Sidebar nav ─────────────────────────────────────────────────────── */
+    .admin-nav { flex: 1; padding: .625rem .75rem .5rem; display: flex; flex-direction: column; gap: .0625rem; }
+    .admin-nav-section { font-size: .6rem; font-weight: 700; color: rgba(154,166,180,.45); letter-spacing: .1em; padding: .875rem .625rem .3125rem; text-transform: uppercase; }
+    .admin-nav-item {
+      display: flex; align-items: center; gap: .625rem;
+      padding: .5625rem .75rem; border-radius: .5rem;
+      color: var(--admin-sidebar-text); font-size: .875rem; font-weight: 500;
+      text-decoration: none; cursor: pointer; background: transparent; border: none;
+      width: 100%; text-align: start;
+      transition: background .14s, color .14s; position: relative;
+    }
+    .admin-nav-item:hover { background: var(--admin-sidebar-hover-bg); color: #fff; }
+    .admin-nav-item.is-active { background: var(--admin-sidebar-active-bg); color: var(--admin-sidebar-active); font-weight: 600; }
+    .admin-nav-item.is-active::before { content: ''; position: absolute; inset-inline-start: 0; top: 20%; bottom: 20%; width: 3px; border-radius: 0 2px 2px 0; background: var(--admin-sidebar-active); }
+    .admin-nav-icon { width: 1.0625rem; height: 1.0625rem; flex-shrink: 0; opacity: .75; }
+    .admin-nav-item.is-active .admin-nav-icon,
+    .admin-nav-item:hover .admin-nav-icon { opacity: 1; }
+    .admin-nav-badge { margin-inline-start: auto; font-size: .625rem; font-weight: 700; padding: .125rem .4375rem; border-radius: 9999px; background: rgba(224,141,18,.18); color: var(--admin-sidebar-active); line-height: 1.4; }
+    .admin-nav-soon { margin-inline-start: auto; font-size: .625rem; color: rgba(154,166,180,.4); font-weight: 500; }
+
+    .admin-sidebar-footer { padding: .625rem .75rem .875rem; border-top: 1px solid rgba(255,255,255,.07); flex-shrink: 0; }
+    .admin-sidebar-footer-label { font-size: .6rem; color: rgba(154,166,180,.35); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: .5rem .625rem .25rem; }
+
+    .admin-content { flex: 1; padding: 1.5rem 1.75rem; }
+    @media (max-width: 767px) { .admin-content { padding: 1.125rem 1rem; } }
+
+    /* ── Topbar button ───────────────────────────────────────────────────── */
+    .admin-tb-btn {
+      position: relative;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 2.5rem; height: 2.5rem; min-width: 2.5rem;
+      border-radius: .5rem; color: #6B7889;
+      background: transparent; border: 1px solid transparent;
+      cursor: pointer; flex-shrink: 0;
+      transition: background .12s, color .12s, border-color .12s;
+    }
+    .admin-tb-btn:hover { background: #F4F5F7; border-color: #DEE3EA; color: #262E3A; }
+    .admin-tb-btn[aria-expanded="true"] { background: #EEF1F5; border-color: #DEE3EA; color: #262E3A; }
+    .admin-tb-badge { position: absolute; top: .25rem; inset-inline-end: .25rem; width: .9375rem; height: .9375rem; background: #D64545; color: #fff; font-size: .5625rem; font-weight: 800; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid #fff; }
+
+    /* ── Topbar dropdown ─────────────────────────────────────────────────── */
+    .admin-dd { position: absolute; inset-inline-end: 0; top: calc(100% + .5rem); background: #fff; border: 1px solid var(--admin-border); border-radius: .875rem; box-shadow: var(--admin-shadow-pop); z-index: var(--z-dd); overflow: hidden; }
+    .admin-dd.hidden { display: none; }
+    .admin-dd-head { display: flex; align-items: center; justify-content: space-between; padding: .875rem 1.125rem; border-bottom: 1px solid var(--admin-border); }
+    .admin-dd-title { font-size: .9375rem; font-weight: 700; color: #161C26; }
+    .admin-dd-item { display: flex; align-items: flex-start; gap: .75rem; padding: .8125rem 1.125rem; cursor: pointer; border-bottom: 1px solid #F7F8FA; transition: background .1s; text-decoration: none; width: 100%; text-align: start; background: transparent; border-left: none; border-right: none; border-top: none; font-family: inherit; color: #262E3A; }
+    .admin-dd-item:last-child { border-bottom: none; }
+    .admin-dd-item:hover { background: #F9FAFB; }
+    .admin-dd-item-icon { width: 2.125rem; height: 2.125rem; border-radius: .5rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .admin-dd-item-text { display: flex; flex-direction: column; gap: .125rem; }
+    .admin-dd-item-label { font-size: .8125rem; font-weight: 600; color: #262E3A; }
+    .admin-dd-item-time { font-size: .75rem; color: #9AA6B4; }
+    .dd-animate { animation: dd-pop .15s cubic-bezier(.4,0,.2,1); }
+    @keyframes dd-pop { from { opacity: 0; transform: translateY(-.375rem) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .dd-animate { animation: none; } }
+
+    /* ── Breadcrumb ──────────────────────────────────────────────────────── */
+    .admin-breadcrumb { display: flex; align-items: center; gap: .375rem; font-size: .8125rem; color: #9AA6B4; margin-bottom: 1.125rem; flex-wrap: wrap; }
+    .admin-breadcrumb a { color: #6B7889; text-decoration: none; transition: color .12s; }
+    .admin-breadcrumb a:hover { color: #262E3A; }
+    .admin-breadcrumb-sep { color: #C5CDD7; }
+    .admin-breadcrumb [aria-current] { color: #262E3A; font-weight: 600; }
+
+    /* ── Page header ─────────────────────────────────────────────────────── */
+    .admin-page-header { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem; padding-bottom: 1.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--admin-border); }
+    .admin-page-title { font-size: 1.5rem; font-weight: 800; color: #161C26; line-height: 1.2; }
+    .admin-page-desc { font-size: .875rem; color: #6B7889; margin-top: .25rem; }
+    .admin-page-actions { display: flex; align-items: center; gap: .625rem; flex-wrap: wrap; }
+    @media (max-width: 639px) { .admin-page-title { font-size: 1.25rem; } }
+
+    .admin-honesty { display: inline-flex; align-items: center; gap: .4375rem; padding: .375rem .75rem; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: .5rem; font-size: .75rem; color: #92400E; white-space: nowrap; }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────── */
+    .admin-btn { display: inline-flex; align-items: center; gap: .4375rem; padding: .5625rem 1.125rem; border-radius: .5rem; font-size: .875rem; font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid transparent; transition: background .15s, box-shadow .15s, border-color .15s; white-space: nowrap; font-family: inherit; }
+    .admin-btn-primary { background: var(--admin-sidebar-active); color: #fff; }
+    .admin-btn-primary:hover { background: #C26C0B; box-shadow: 0 4px 12px rgba(224,141,18,.3); }
+    .admin-btn-secondary { background: #fff; color: #3A4453; border-color: var(--admin-border); }
+    .admin-btn-secondary:hover { background: #F7F8FA; border-color: #C5CDD7; }
+    .admin-btn-ghost { background: transparent; color: #6B7889; }
+    .admin-btn-ghost:hover { background: #F4F5F7; color: #262E3A; }
+    .admin-btn-danger { background: #D64545; color: #fff; }
+    .admin-btn-danger:hover { background: #B91C1C; }
+    .admin-btn-warn { background: #FEF3C7; color: #92400E; border-color: #FDE68A; }
+    .admin-btn-warn:hover { background: #FDE68A; }
+    .admin-btn-sm { padding: .375rem .75rem; font-size: .8125rem; }
+    .admin-btn-icon { width: 2.25rem; height: 2.25rem; padding: 0; justify-content: center; }
+
+    /* ── Cards ───────────────────────────────────────────────────────────── */
+    .admin-card { background: var(--admin-card-bg); border: 1px solid var(--admin-border); border-radius: .875rem; box-shadow: var(--admin-shadow-card); }
+    .admin-card-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--admin-border); gap: .5rem; flex-wrap: wrap; }
+    .admin-card-title { font-size: .9375rem; font-weight: 700; color: #161C26; }
+    .admin-card-body { padding: 1.25rem; }
+
+    /* ── Badges ──────────────────────────────────────────────────────────── */
+    .admin-badge { display: inline-flex; align-items: center; gap: .3rem; font-size: .6875rem; font-weight: 700; padding: .1875rem .5rem; border-radius: 9999px; line-height: 1.4; white-space: nowrap; }
+    .badge-active  { background: #DCFCE7; color: #15803D; }
+    .badge-trial   { background: #FEF3C7; color: #92400E; }
+    .badge-warning { background: #FFFBEB; color: #D97706; }
+    .badge-pending { background: #EFF6FF; color: #1E40AF; }
+    .badge-error   { background: #FEF2F2; color: #B91C1C; }
+    .badge-neutral { background: #F3F4F6; color: #6B7280; }
+    .badge-disabled { background: #F3F4F6; color: #9CA3AF; }
+
+    /* ── Plan pills ──────────────────────────────────────────────────────── */
+    .plan-pill { display: inline-flex; align-items: center; font-size: .6875rem; font-weight: 700; padding: .25rem .625rem; border-radius: 9999px; }
+    .plan-starter    { background: #F3F4F6; color: #374151; }
+    .plan-growth     { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+    .plan-pro        { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+    .plan-enterprise { background: #1E1B2E; color: #F4BE52; border: 1px solid #F4BE52; }
+
+    /* ── Section title ───────────────────────────────────────────────────── */
+    .admin-section-title { font-size: 1rem; font-weight: 700; color: #161C26; }
+
+    /* ── Modal ───────────────────────────────────────────────────────────── */
+    .modal { position: fixed; inset: 0; background: rgba(10,12,18,.52); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: var(--z-modal-ov); display: flex; align-items: flex-end; justify-content: center; padding: 1rem; }
+    @media (min-width: 640px) { .modal { align-items: center; } }
+    .modal[hidden] { display: none; }
+    .modal-box { background: #fff; border-radius: 1.125rem; box-shadow: var(--admin-shadow-pop); width: 100%; max-width: 540px; max-height: 92vh; overflow-y: auto; animation: modal-in .22s cubic-bezier(.4,0,.2,1); }
+    @keyframes modal-in { from { opacity: 0; transform: translateY(1.25rem) scale(.98); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .modal-box { animation: none; } }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem 1rem; border-bottom: 1px solid var(--admin-border); }
+    .modal-title { font-size: 1.0625rem; font-weight: 700; color: #161C26; }
+    .modal-close { width: 2rem; height: 2rem; border-radius: .5rem; display: flex; align-items: center; justify-content: center; color: #9AA6B4; background: transparent; border: none; cursor: pointer; transition: background .12s, color .12s; }
+    .modal-close:hover { background: #F4F5F7; color: #262E3A; }
+    .modal-form { padding: 1.25rem 1.5rem; }
+    .modal-notice { font-size: .8rem; color: #9AA6B4; background: #F8F9FA; padding: .5rem 1.5rem; border-bottom: 1px solid var(--admin-border); border-inline-start: .25rem solid #F4BE52; margin: 0; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: .625rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--admin-border); flex-wrap: wrap; }
+    .modal-confirm-body { padding: 1.5rem; text-align: center; }
+    .modal-confirm-icon { width: 3.5rem; height: 3.5rem; margin: 0 auto 1rem; background: #FEF2F2; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+    /* ── Form fields ─────────────────────────────────────────────────────── */
+    .admin-field { display: flex; flex-direction: column; gap: .375rem; }
+    .admin-field + .admin-field { margin-top: 1rem; }
+    .admin-label { font-size: .8125rem; font-weight: 600; color: #3A4453; }
+    .admin-input, .admin-textarea, .admin-select { padding: .5625rem .875rem; border: 1px solid var(--admin-border); border-radius: .5rem; font-size: .875rem; color: #262E3A; background: #fff; width: 100%; font-family: inherit; transition: border-color .15s, box-shadow .15s; }
+    .admin-input:focus, .admin-textarea:focus, .admin-select:focus { outline: none; border-color: var(--admin-sidebar-active); box-shadow: 0 0 0 3px rgba(224,141,18,.12); }
+    .admin-input[aria-invalid="true"] { border-color: #D64545; }
+    .admin-field-error { font-size: .75rem; color: #D64545; }
+    .admin-textarea { min-height: 5rem; resize: vertical; }
+    .req { color: #DC2626; margin-inline-start: .125rem; }
+
+    /* ── FAQ ─────────────────────────────────────────────────────────────── */
+    .admin-faq { display: flex; flex-direction: column; gap: .5rem; }
+    .admin-faq-item { background: var(--admin-card-bg); border: 1px solid var(--admin-border); border-radius: .75rem; overflow: hidden; }
+    .admin-faq-q { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: .9375rem 1.125rem; text-align: start; font-size: .875rem; font-weight: 600; color: #262E3A; background: transparent; border: none; cursor: pointer; gap: .75rem; font-family: inherit; transition: background .12s; }
+    .admin-faq-q:hover { background: #F9FAFB; }
+    .admin-faq-q[aria-expanded="true"] { color: var(--admin-sidebar-active); }
+    .admin-faq-q[aria-expanded="true"] svg { transform: rotate(180deg); }
+    .admin-faq-q svg { flex-shrink: 0; transition: transform .2s; color: #9AA6B4; }
+    .admin-faq-a { display: none; padding: 0 1.125rem 1rem; font-size: .875rem; color: #4B5563; line-height: 1.75; }
+    .admin-faq-q[aria-expanded="true"] + .admin-faq-a { display: block; }
+
+    /* ── Footer ──────────────────────────────────────────────────────────── */
+    .admin-footer { display: flex; align-items: center; justify-content: space-between; padding: .875rem 1.75rem; border-top: 1px solid var(--admin-border); background: #fff; flex-wrap: wrap; gap: .5rem; font-size: .75rem; color: #9AA6B4; }
+    .admin-footer-honesty { font-size: .6875rem; color: #C5CDD7; }
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    /* ── PLANS page-scoped styles ──────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════════════════ */
+
+    /* ── Monthly/Yearly toggle ───────────────────────────────────────────── */
+    .pl-toggle-wrap {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: #F0F2F5; border-radius: 9999px; padding: .3125rem;
+    }
+    .pl-toggle-btn {
+      padding: .4375rem 1.125rem; border-radius: 9999px;
+      font-size: .875rem; font-weight: 600; border: none; cursor: pointer;
+      background: transparent; color: #6B7889; font-family: inherit;
+      transition: background .15s, color .15s, box-shadow .15s;
+    }
+    .pl-toggle-btn.is-active {
+      background: #fff; color: #161C26;
+      box-shadow: 0 1px 4px rgba(22,28,38,.12);
+    }
+    .pl-yearly-badge {
+      font-size: .625rem; font-weight: 800;
+      background: #DCFCE7; color: #15803D;
+      padding: .125rem .4375rem; border-radius: 9999px;
+      vertical-align: middle; margin-inline-start: .25rem;
+    }
+
+    /* ── Plan cards grid ─────────────────────────────────────────────────── */
+    .pl-cards-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;
+    }
+    @media (max-width: 767px) { .pl-cards-grid { grid-template-columns: 1fr; } }
+    @media (min-width: 1200px) { .pl-cards-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .pl-card {
+      background: #fff; border: 2px solid var(--admin-border);
+      border-radius: 1rem; display: flex; flex-direction: column;
+      box-shadow: var(--admin-shadow-card); position: relative;
+      transition: border-color .2s, box-shadow .2s;
+      overflow: hidden;
+    }
+    .pl-card:hover { box-shadow: var(--admin-shadow-pop); }
+    .pl-card.is-popular {
+      border-color: #E08D12;
+      box-shadow: 0 0 0 1px #E08D12, var(--admin-shadow-card);
+    }
+    .pl-card.is-enterprise { border-color: #F4BE52; background: #1E1B2E; }
+    .pl-card.is-enterprise * { color-scheme: dark; }
+
+    .pl-card-header { padding: 1.375rem 1.375rem .875rem; }
+    .pl-popular-tag {
+      display: inline-flex; align-items: center; gap: .25rem;
+      font-size: .625rem; font-weight: 800;
+      background: linear-gradient(90deg, #E08D12, #C26C0B);
+      color: #fff; padding: .25rem .625rem; border-radius: 9999px;
+      letter-spacing: .03em; margin-bottom: .625rem;
+    }
+    .pl-plan-name { font-size: 1.125rem; font-weight: 800; color: #161C26; margin-bottom: .25rem; }
+    .pl-card.is-enterprise .pl-plan-name { color: #F4BE52; }
+    .pl-plan-desc { font-size: .8125rem; color: #6B7889; line-height: 1.55; margin-bottom: 1rem; }
+    .pl-card.is-enterprise .pl-plan-desc { color: rgba(154,166,180,.8); }
+
+    .pl-price-wrap { display: flex; align-items: baseline; gap: .375rem; margin-bottom: .25rem; }
+    .pl-price { font-size: 2.25rem; font-weight: 900; color: #161C26; line-height: 1; direction: ltr; }
+    .pl-card.is-enterprise .pl-price { color: #F4BE52; }
+    .pl-price-currency { font-size: 1rem; font-weight: 700; color: #6B7889; }
+    .pl-card.is-enterprise .pl-price-currency { color: rgba(244,190,82,.7); }
+    .pl-price-period { font-size: .8125rem; color: #9AA6B4; margin-inline-start: .25rem; }
+    .pl-price-note { font-size: .75rem; color: #9AA6B4; margin-bottom: .875rem; }
+    .pl-card.is-enterprise .pl-price-note { color: rgba(154,166,180,.7); }
+
+    .pl-card-companies {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .8125rem; color: #6B7889;
+      padding: .625rem 1.375rem; border-top: 1px solid var(--admin-border);
+      border-bottom: 1px solid var(--admin-border);
+    }
+    .pl-card.is-enterprise .pl-card-companies { border-color: rgba(244,190,82,.15); color: rgba(154,166,180,.7); }
+    .pl-companies-count { font-weight: 800; font-size: 1.25rem; color: #E08D12; }
+    .pl-card.is-enterprise .pl-companies-count { color: #F4BE52; }
+
+    .pl-features { list-style: none; padding: 1rem 1.375rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
+    .pl-feature { display: flex; align-items: flex-start; gap: .5rem; font-size: .8125rem; color: #3A4453; line-height: 1.5; }
+    .pl-card.is-enterprise .pl-feature { color: rgba(154,166,180,.85); }
+    .pl-feature-icon { flex-shrink: 0; width: 1.125rem; height: 1.125rem; margin-top: .0625rem; }
+    .pl-feature-icon.ok  { color: #15803D; }
+    .pl-feature-icon.no  { color: #D1D5DB; }
+    .pl-feature-icon.placeholder { color: #9AA6B4; }
+    .pl-feature-val { font-weight: 700; color: #161C26; }
+    .pl-card.is-enterprise .pl-feature-val { color: #F4BE52; }
+
+    .pl-card-actions {
+      padding: 1rem 1.375rem 1.375rem;
+      display: flex; flex-wrap: wrap; gap: .5rem;
+      border-top: 1px solid var(--admin-border);
+    }
+    .pl-card.is-enterprise .pl-card-actions { border-color: rgba(244,190,82,.15); }
+
+    /* ── Comparison table ────────────────────────────────────────────────── */
+    .pl-comparison-wrap { overflow-x: auto; }
+    .pl-comparison {
+      width: 100%; border-collapse: collapse; font-size: .875rem;
+      min-width: 600px;
+    }
+    .pl-comparison thead tr { border-bottom: 2px solid var(--admin-border); }
+    .pl-comparison th {
+      padding: .875rem 1rem; text-align: start;
+      font-size: .8125rem; font-weight: 700; color: #6B7889;
+      background: #F9FAFB; white-space: nowrap;
+    }
+    .pl-comparison th.pl-th-plan { text-align: center; font-size: .8125rem; font-weight: 800; }
+    .pl-comparison td {
+      padding: .875rem 1rem; border-bottom: 1px solid #F0F2F5;
+      color: #262E3A; vertical-align: middle;
+    }
+    .pl-comparison td.pl-td-center { text-align: center; font-weight: 600; }
+    .pl-comparison tr:last-child td { border-bottom: none; }
+    .pl-comparison tbody tr:hover td { background: #FAFBFC; }
+    .pl-feature-name { font-size: .875rem; font-weight: 600; color: #3A4453; }
+    .pl-feature-sub  { font-size: .75rem; color: #9AA6B4; margin-top: .0625rem; }
+    .pl-check { color: #15803D; font-size: 1rem; }
+    .pl-cross { color: #D1D5DB; font-size: 1rem; }
+    .pl-placeholder-tag { font-size: .625rem; background: #F3F4F6; color: #9AA6B4; padding: .125rem .375rem; border-radius: .25rem; margin-inline-start: .25rem; }
+
+    /* ── Companies-on-plan table ─────────────────────────────────────────── */
+    .pl-companies-table { width: 100%; border-collapse: collapse; font-size: .8125rem; }
+    .pl-companies-table th { padding: .625rem .875rem; text-align: start; font-size: .6875rem; font-weight: 700; color: #9AA6B4; border-bottom: 1px solid var(--admin-border); background: #F9FAFB; }
+    .pl-companies-table td { padding: .75rem .875rem; border-bottom: 1px solid #F7F8FA; color: #262E3A; vertical-align: middle; }
+    .pl-companies-table tbody tr:last-child td { border-bottom: none; }
+    .pl-companies-table tbody tr:hover td { background: #FAFBFC; }
+    @media (max-width: 640px) {
+      .pl-companies-table thead { display: none; }
+      .pl-companies-table tbody tr { display: block; border: 1px solid var(--admin-border); border-radius: .75rem; margin-bottom: .75rem; padding: .5rem .75rem; background: #fff; }
+      .pl-companies-table td { display: flex; justify-content: space-between; align-items: center; padding: .5rem .25rem; border-bottom: 1px solid #F7F8FA; }
+      .pl-companies-table td:last-child { border-bottom: none; }
+      .pl-companies-table td::before { content: attr(data-label); font-weight: 700; color: #6B7889; font-size: .6875rem; flex-shrink: 0; margin-inline-end: .5rem; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Skip navigation -->
+  <a href="#main-content" class="admin-skip">تخطى إلى المحتوى الرئيسي</a>
+
+  <!-- ── Sidebar ───────────────────────────────────────────────────────── -->
+  <aside id="admin-sidebar" class="admin-sidebar" role="navigation" aria-label="قائمة إدارة المنصة">
+    <div class="admin-brand">
+      <div class="admin-brand-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="admin-brand-text">
+        <span class="admin-brand-title">رحلاتي</span>
+        <span class="admin-brand-sub">مالك المنصة · Owner Admin</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav" aria-label="روابط الإدارة الرئيسية">
+      <span class="admin-nav-section">الإدارة الرئيسية</span>
+      <ul role="list" style="display:contents">
+        <li><a href="index.html" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-grid"/></svg>الرئيسية</a></li>
+        <li><a href="companies.html" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-building"/></svg>الشركات<span class="admin-nav-badge">38</span></a></li>
+        <li>
+          <a href="plans.html" class="admin-nav-item is-active" aria-current="page">
+            <svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-layers"/></svg>
+            الخطط
+          </a>
+        </li>
+        <li><a href="subscriptions.html" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-credit-card"/></svg>الاشتراكات</a></li>
+      </ul>
+
+      <span class="admin-nav-section" style="margin-top:.5rem">التحليل والمحتوى</span>
+      <ul role="list" style="display:contents">
+        <li><a href="analytics.html" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-bar-chart"/></svg>التحليلات</a></li>
+        <li><a href="content.html" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-file-text"/></svg>المحتوى</a></li>
+        <li><a href="analytics.html#integrations" class="admin-nav-item"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-plug"/></svg>مراقبة التكاملات</a></li>
+        <li><a href="#" class="admin-nav-item" data-coming-soon aria-label="الإعدادات — قريباً"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-settings"/></svg>الإعدادات<span class="admin-nav-soon">قريباً</span></a></li>
+      </ul>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      <div class="admin-sidebar-footer-label">روابط سريعة</div>
+      <a href="../pages/index.html" class="admin-nav-item" style="font-size:.8125rem"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-globe"/></svg>العودة للموقع</a>
+      <a href="../dashboard/index.html" class="admin-nav-item" style="font-size:.8125rem"><svg class="admin-nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-server"/></svg>لوحة الشركات</a>
+    </div>
+  </aside>
+
+  <div id="admin-scrim" class="admin-scrim" hidden aria-hidden="true"></div>
+
+  <!-- ── Main ──────────────────────────────────────────────────────────── -->
+  <div class="admin-main">
+    <header class="admin-topbar" role="banner" aria-label="شريط الإدارة العلوي">
+      <button id="btn-admin-menu" type="button" class="admin-tb-btn lg:hidden" aria-label="فتح قائمة التنقل" aria-expanded="false" aria-controls="admin-sidebar" style="min-width:2.75rem;min-height:2.75rem">
+        <svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-menu"/></svg>
+      </button>
+      <div class="hidden lg:flex items-center gap-2 flex-shrink-0">
+        <span style="font-size:.8125rem;font-weight:800;color:#161C26">مالك المنصة</span>
+        <span style="width:1px;height:1.125rem;background:#DEE3EA"></span>
+        <span style="font-size:.75rem;color:#9AA6B4;direction:ltr">Owner Admin</span>
+      </div>
+      <div style="position:relative;flex:1;max-width:240px" class="hidden sm:block">
+        <svg style="position:absolute;inset-inline-start:.75rem;top:50%;transform:translateY(-50%);pointer-events:none;color:#9AA6B4;width:1rem;height:1rem" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-search"/></svg>
+        <input type="search" style="width:100%;padding:.5rem .875rem .5rem 2.25rem;border:1px solid var(--admin-border);border-radius:.5rem;font-size:.875rem;color:#262E3A;background:#F9FAFB;font-family:inherit" placeholder="بحث سريع…" aria-label="بحث سريع">
+      </div>
+      <div style="flex:1"></div>
+      <div style="position:relative">
+        <button id="btn-notifications" type="button" class="admin-tb-btn" aria-label="الإشعارات" aria-haspopup="menu" aria-expanded="false" aria-controls="dd-notifications">
+          <svg width="18" height="18" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-bell"/></svg>
+          <span class="admin-tb-badge" aria-hidden="true">3</span>
+        </button>
+        <div id="dd-notifications" class="admin-dd hidden" role="menu" style="min-width:300px">
+          <div class="admin-dd-head"><span class="admin-dd-title">الإشعارات</span><span class="admin-badge badge-pending">3 جديدة</span></div>
+          <div style="padding:.625rem 1.125rem;border-top:1px solid var(--admin-border)"><button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" style="width:100%;justify-content:center">عرض الكل</button></div>
+        </div>
+      </div>
+      <div style="position:relative">
+        <button id="btn-user-menu" type="button" class="admin-tb-btn" aria-label="قائمة المستخدم" aria-haspopup="menu" aria-expanded="false" aria-controls="dd-user-menu" style="width:auto;padding-inline:.625rem;gap:.5rem">
+          <span style="width:2rem;height:2rem;border-radius:.5rem;background:linear-gradient(135deg,#E08D12,#C26C0B);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0" aria-hidden="true">أ</span>
+          <span class="hidden sm:block" style="font-size:.8125rem;font-weight:600;color:#262E3A">أحمد الإداري</span>
+          <svg class="hidden sm:block" width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+        </button>
+        <div id="dd-user-menu" class="admin-dd hidden" role="menu" style="min-width:220px">
+          <div class="admin-dd-head" style="flex-direction:column;align-items:flex-start;gap:.375rem">
+            <span style="font-size:.9375rem;font-weight:700;color:#161C26">أحمد الإداري</span>
+            <span style="font-size:.75rem;color:#9AA6B4;direction:ltr">admin@rihlaty.example.com</span>
+          </div>
+          <div style="padding:.625rem 1.125rem;border-top:1px solid var(--admin-border)">
+            <button type="button" class="admin-btn admin-btn-sm" role="menuitem" style="width:100%;justify-content:center;background:#FEF2F2;color:#D64545;border-color:#FEE2E2">
+              <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-logout"/></svg>
+              تسجيل الخروج (تجريبي)
+            </button>
+          </div>
+        </div>
+      </div>
+      <div style="position:relative">
+        <button id="btn-quick-action" type="button" class="admin-tb-btn" aria-label="إجراءات سريعة" aria-haspopup="menu" aria-expanded="false" aria-controls="dd-quick-action" style="background:var(--admin-sidebar-active);color:#fff;border-color:var(--admin-sidebar-active);width:auto;padding-inline:.75rem;gap:.375rem;box-shadow:0 2px 8px rgba(224,141,18,.3)">
+          <svg width="15" height="15" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-plus"/></svg>
+          <span class="hidden sm:inline" style="font-size:.8125rem;font-weight:700">إجراء سريع</span>
+        </button>
+        <div id="dd-quick-action" class="admin-dd hidden" role="menu" style="min-width:210px">
+          <div class="admin-dd-head"><span class="admin-dd-title">إجراءات سريعة</span></div>
+          <div style="padding:.3125rem">
+            <button type="button" class="admin-dd-item" role="menuitem" data-modal-open="modal-plans-create">
+              <span class="admin-dd-item-icon" style="background:#FEF3C7" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round"><use href="#icon-plus"/></svg></span>
+              <div class="admin-dd-item-text"><span class="admin-dd-item-label">إنشاء خطة تجريبية</span></div>
+            </button>
+            <a href="companies.html" class="admin-dd-item" role="menuitem">
+              <span class="admin-dd-item-icon" style="background:#EEF1F5" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7889" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg></span>
+              <div class="admin-dd-item-text"><span class="admin-dd-item-label">إدارة الشركات</span></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="admin-content" role="main" tabindex="-1">
+
+      <nav class="admin-breadcrumb" aria-label="مسار التنقل">
+        <a href="index.html">لوحة الإدارة</a>
+        <span class="admin-breadcrumb-sep" aria-hidden="true">/</span>
+        <span aria-current="page">الخطط والباقات</span>
+      </nav>
+
+      <!-- ════════════════════ PLANS CONTENT (T023) ════════════════════ -->
+
+      <!-- ── Page header ─────────────────────────────────────────────── -->
+      <div class="admin-page-header">
+        <div>
+          <h1 class="admin-page-title">الخطط والباقات</h1>
+          <p class="admin-page-desc">
+            إدارة خطط الاشتراك وحدود الاستخدام لشركات المنصة
+            <span class="admin-honesty" style="margin-inline-start:.5rem">
+              <svg width="12" height="12" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-info"/></svg>
+              لا يتم إنشاء أو تعديل خطط حقيقية في هذه النسخة
+            </span>
+          </p>
+        </div>
+        <div class="admin-page-actions">
+          <div class="pl-toggle-wrap" id="pl-billing-toggle" role="group" aria-label="دورة الفوترة">
+            <button type="button" class="pl-toggle-btn is-active" id="btn-billing-monthly" data-billing="monthly" aria-pressed="true">شهري</button>
+            <button type="button" class="pl-toggle-btn" id="btn-billing-yearly" data-billing="yearly" aria-pressed="false">سنوي<span class="pl-yearly-badge">وفر 17%</span></button>
+          </div>
+          <button type="button" class="admin-btn admin-btn-primary" data-modal-open="modal-plans-create">
+            <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-plus"/></svg>
+            إنشاء خطة تجريبية
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Plan cards ───────────────────────────────────────────────── -->
+      <div class="pl-cards-grid" id="pl-cards-grid">
+
+        <!-- Starter -->
+        <div class="pl-card" data-plan-id="plan-starter">
+          <div class="pl-card-header">
+            <div class="pl-plan-name">Starter</div>
+            <p class="pl-plan-desc">الباقة المثالية للوكالات الناشئة والمشاريع الصغيرة التي تبدأ رحلتها في السياحة الرقمية</p>
+            <div class="pl-price-wrap">
+              <span class="pl-price" data-price-monthly="29" data-price-yearly="290">29</span>
+              <span class="pl-price-currency">$</span>
+              <span class="pl-price-period">/شهر</span>
+            </div>
+            <p class="pl-price-note"><span data-monthly-note>29$ × 12 شهرًا</span><span data-yearly-note hidden>يتم الفوترة سنويًا (290$)</span></p>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem">
+              <span class="admin-badge badge-active">نشط</span>
+              <span class="admin-badge badge-neutral" style="font-size:.6rem">للوكالات الصغيرة</span>
+            </div>
+          </div>
+          <div class="pl-card-companies">
+            <span class="pl-companies-count">2</span>
+            <span>شركة نشطة على هذه الخطة</span>
+          </div>
+          <ul class="pl-features" aria-label="مميزات خطة Starter">
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">20</span> عرض سياحي</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">10</span> كوبون خصم</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">2</span> مستخدمي الفريق</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">100</span> طلب حجز/شهر</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">200</span> عميل</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">2</span> تكاملات</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>تحليلات <span class="pl-feature-val">أساسية</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>دعم <span class="pl-feature-val">قياسي</span></span></li>
+            <li class="pl-feature" style="opacity:.55"><svg class="pl-feature-icon no" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>توصيات ذكاء اصطناعي <span class="pl-placeholder-tag">قريبًا</span></span></li>
+            <li class="pl-feature" style="opacity:.55"><svg class="pl-feature-icon no" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>نطاق مخصص <span class="pl-placeholder-tag">قريبًا</span></span></li>
+          </ul>
+          <div class="pl-card-actions">
+            <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" data-modal-open="modal-plans-edit" data-plan-edit="plan-starter">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              تعديل
+            </button>
+            <button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" data-plan-duplicate="plan-starter">تكرار</button>
+            <button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" data-plan-view-companies="plan-starter" style="margin-inline-start:auto">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>
+              الشركات
+            </button>
+            <button type="button" class="admin-btn admin-btn-warn admin-btn-sm" data-modal-open="modal-plans-disable" data-plan-disable="plan-starter">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>
+              تعطيل
+            </button>
+          </div>
+        </div>
+
+        <!-- Growth (popular) -->
+        <div class="pl-card is-popular" data-plan-id="plan-growth">
+          <div class="pl-card-header">
+            <div class="pl-popular-tag">
+              <svg width="10" height="10" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-award"/></svg>
+              الأكثر شيوعًا
+            </div>
+            <div class="pl-plan-name">Growth</div>
+            <p class="pl-plan-desc">للوكالات في مرحلة النمو التي تحتاج إلى أدوات تسويقية متقدمة وتكاملات أكثر لتوسيع نشاطها</p>
+            <div class="pl-price-wrap">
+              <span class="pl-price" data-price-monthly="79" data-price-yearly="790">79</span>
+              <span class="pl-price-currency">$</span>
+              <span class="pl-price-period">/شهر</span>
+            </div>
+            <p class="pl-price-note"><span data-monthly-note>79$ × 12 شهرًا</span><span data-yearly-note hidden>يتم الفوترة سنويًا (790$)</span></p>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem">
+              <span class="admin-badge badge-active">نشط</span>
+              <span class="admin-badge badge-neutral" style="font-size:.6rem">للوكالات المتنامية</span>
+            </div>
+          </div>
+          <div class="pl-card-companies">
+            <span class="pl-companies-count">3</span>
+            <span>شركة نشطة على هذه الخطة</span>
+          </div>
+          <ul class="pl-features" aria-label="مميزات خطة Growth">
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">50</span> عرض سياحي</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">25</span> كوبون خصم</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">5</span> مستخدمي الفريق</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">250</span> طلب حجز/شهر</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">500</span> عميل</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">4</span> تكاملات</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>تحليلات <span class="pl-feature-val">متقدمة</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>دعم <span class="pl-feature-val">ذو أولوية</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>مراجعة قائمة السحب</span></li>
+            <li class="pl-feature" style="opacity:.55"><svg class="pl-feature-icon no" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>نطاق مخصص <span class="pl-placeholder-tag">قريبًا</span></span></li>
+          </ul>
+          <div class="pl-card-actions">
+            <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" data-modal-open="modal-plans-edit" data-plan-edit="plan-growth">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              تعديل
+            </button>
+            <button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" data-plan-duplicate="plan-growth">تكرار</button>
+            <button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" data-plan-view-companies="plan-growth" style="margin-inline-start:auto">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>
+              الشركات
+            </button>
+            <button type="button" class="admin-btn admin-btn-warn admin-btn-sm" data-modal-open="modal-plans-disable" data-plan-disable="plan-growth">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>
+              تعطيل
+            </button>
+          </div>
+        </div>
+
+        <!-- Pro -->
+        <div class="pl-card" data-plan-id="plan-pro">
+          <div class="pl-card-header">
+            <div class="pl-plan-name">Pro</div>
+            <p class="pl-plan-desc">الباقة الاحترافية الكاملة للوكالات الراسخة التي تدير عمليات سياحية واسعة النطاق</p>
+            <div class="pl-price-wrap">
+              <span class="pl-price" data-price-monthly="149" data-price-yearly="1490">149</span>
+              <span class="pl-price-currency">$</span>
+              <span class="pl-price-period">/شهر</span>
+            </div>
+            <p class="pl-price-note"><span data-monthly-note>149$ × 12 شهرًا</span><span data-yearly-note hidden>يتم الفوترة سنويًا (1,490$)</span></p>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem">
+              <span class="admin-badge badge-active">نشط</span>
+              <span class="admin-badge badge-pending" style="font-size:.6rem">للمحترفين</span>
+            </div>
+          </div>
+          <div class="pl-card-companies">
+            <span class="pl-companies-count">5</span>
+            <span>شركة نشطة على هذه الخطة</span>
+          </div>
+          <ul class="pl-features" aria-label="مميزات خطة Pro">
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">100</span> عرض سياحي</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">50</span> كوبون خصم</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">10</span> مستخدمي الفريق</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">500</span> طلب حجز/شهر</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">1,000</span> عميل</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">8</span> تكاملات</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>تحليلات <span class="pl-feature-val">كاملة</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>دعم <span class="pl-feature-val">ذو أولوية</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>وصول API <span class="pl-placeholder-tag">قريبًا</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>مراجعة قائمة السحب</span></li>
+          </ul>
+          <div class="pl-card-actions">
+            <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" data-modal-open="modal-plans-edit" data-plan-edit="plan-pro">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              تعديل
+            </button>
+            <button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" data-plan-duplicate="plan-pro">تكرار</button>
+            <button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" data-plan-view-companies="plan-pro" style="margin-inline-start:auto">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>
+              الشركات
+            </button>
+            <button type="button" class="admin-btn admin-btn-warn admin-btn-sm" data-modal-open="modal-plans-disable" data-plan-disable="plan-pro">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>
+              تعطيل
+            </button>
+          </div>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="pl-card is-enterprise" data-plan-id="plan-enterprise">
+          <div class="pl-card-header">
+            <div class="pl-plan-name">Enterprise</div>
+            <p class="pl-plan-desc">باقة المؤسسات الكبرى مع إمكانيات لا محدودة ودعم مخصص لأضخم الوكالات السياحية</p>
+            <div class="pl-price-wrap">
+              <span class="pl-price" data-price-monthly="349" data-price-yearly="3490">349</span>
+              <span class="pl-price-currency">$</span>
+              <span class="pl-price-period">/شهر</span>
+            </div>
+            <p class="pl-price-note"><span data-monthly-note>349$ × 12 شهرًا</span><span data-yearly-note hidden>يتم الفوترة سنويًا (3,490$)</span></p>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem">
+              <span class="admin-badge" style="background:rgba(21,128,61,.25);color:#6EE7A8">نشط</span>
+              <span class="admin-badge" style="background:rgba(244,190,82,.15);color:#F4BE52;font-size:.6rem">للمؤسسات الكبرى</span>
+            </div>
+          </div>
+          <div class="pl-card-companies">
+            <span class="pl-companies-count">2</span>
+            <span>شركة نشطة على هذه الخطة</span>
+          </div>
+          <ul class="pl-features" aria-label="مميزات خطة Enterprise">
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#6EE7A8" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span><span class="pl-feature-val">غير محدود</span> — عروض وكوبونات</span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#6EE7A8" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>مستخدمو الفريق <span class="pl-feature-val">غير محدود</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#6EE7A8" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>تكاملات <span class="pl-feature-val">غير محدودة</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#6EE7A8" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>تحليلات <span class="pl-feature-val">كاملة + مخصصة</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#6EE7A8" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>دعم <span class="pl-feature-val">مخصص ومحدد</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#6EE7A8" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>توصيات ذكاء اصطناعي <span class="pl-placeholder-tag" style="background:rgba(244,190,82,.15);color:#F4BE52">قريبًا</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#6EE7A8" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>نطاق مخصص + White-label <span class="pl-placeholder-tag" style="background:rgba(244,190,82,.15);color:#F4BE52">قريبًا</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#6EE7A8" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>وصول API كامل <span class="pl-placeholder-tag" style="background:rgba(244,190,82,.15);color:#F4BE52">قريبًا</span></span></li>
+            <li class="pl-feature"><svg class="pl-feature-icon ok" width="17" height="17" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#6EE7A8" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg><span>تأهيل ذو أولوية</span></li>
+          </ul>
+          <div class="pl-card-actions" style="border-top-color:rgba(244,190,82,.15)">
+            <button type="button" class="admin-btn admin-btn-sm" style="background:rgba(244,190,82,.12);color:#F4BE52;border-color:rgba(244,190,82,.3)" data-modal-open="modal-plans-edit" data-plan-edit="plan-enterprise">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              تعديل
+            </button>
+            <button type="button" class="admin-btn admin-btn-sm" style="background:transparent;color:rgba(154,166,180,.7);border:none" data-plan-duplicate="plan-enterprise">تكرار</button>
+            <button type="button" class="admin-btn admin-btn-sm" style="background:transparent;color:rgba(154,166,180,.7);border:none;margin-inline-start:auto" data-plan-view-companies="plan-enterprise">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>
+              الشركات
+            </button>
+            <button type="button" class="admin-btn admin-btn-sm" style="background:rgba(214,69,69,.12);color:#FCA5A5;border-color:rgba(214,69,69,.25)" data-modal-open="modal-plans-disable" data-plan-disable="plan-enterprise">
+              <svg width="13" height="13" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-pause"/></svg>
+              تعطيل
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /pl-cards-grid -->
+
+      <!-- ── Companies on plan ─────────────────────────────────────────── -->
+      <div class="admin-card" style="margin-top:2rem" id="pl-companies-section">
+        <div class="admin-card-header">
+          <span class="admin-card-title">
+            <svg width="16" height="16" aria-hidden="true" style="vertical-align:-.2em;margin-inline-end:.375rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-building"/></svg>
+            الشركات حسب الخطة
+          </span>
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+            <label for="pl-plan-filter-select" style="font-size:.8125rem;font-weight:600;color:#6B7889">عرض خطة:</label>
+            <select id="pl-plan-filter-select" class="admin-select" style="width:auto;min-width:140px;padding:.375rem .75rem" aria-label="تصفية الشركات حسب الخطة">
+              <option value="all">كل الخطط</option>
+              <option value="plan-starter">Starter</option>
+              <option value="plan-growth" selected>Growth</option>
+              <option value="plan-pro">Pro</option>
+              <option value="plan-enterprise">Enterprise</option>
+            </select>
+            <a href="companies.html" class="admin-btn admin-btn-secondary admin-btn-sm" id="pl-view-all-companies">
+              <svg width="12" height="12" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-eye"/></svg>
+              عرض الكل
+            </a>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="pl-companies-table" aria-label="قائمة الشركات حسب الخطة" id="pl-companies-table">
+            <thead>
+              <tr>
+                <th>الشركة</th>
+                <th>الخطة</th>
+                <th>الحالة</th>
+                <th>تجديد الاشتراك</th>
+                <th>الاستخدام</th>
+                <th>إجراء</th>
+              </tr>
+            </thead>
+            <tbody id="pl-companies-tbody">
+              <tr data-plan-row="plan-starter" hidden>
+                <td data-label="الشركة"><strong>نخيل السفر للسياحة</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-001</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-starter">Starter</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2026-08-15</span></td>
+                <td data-label="الاستخدام">18/20 عروض</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-001" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+              <tr data-plan-row="plan-starter" hidden>
+                <td data-label="الشركة"><strong>السفر الذهبي</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-005</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-starter">Starter</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-trial">تجربة</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2026-07-03</span></td>
+                <td data-label="الاستخدام">5/20 عروض</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-005" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+              <tr data-plan-row="plan-growth">
+                <td data-label="الشركة"><strong>شعلة العروض السياحية</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-002</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-growth">Growth</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2026-09-01</span></td>
+                <td data-label="الاستخدام">43/50 عروض</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-002" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+              <tr data-plan-row="plan-growth">
+                <td data-label="الشركة"><strong>مسافر الوطن</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-007</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-growth">Growth</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2026-07-22</span></td>
+                <td data-label="الاستخدام">29/50 عروض</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-007" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+              <tr data-plan-row="plan-growth">
+                <td data-label="الشركة"><strong>الرياض للسفر والسياحة</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-010</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-growth">Growth</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-warning">تحذير</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2026-06-28</span></td>
+                <td data-label="الاستخدام" style="color:#D97706">48/50 عروض</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-010" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+              <tr data-plan-row="plan-pro" hidden>
+                <td data-label="الشركة"><strong>وكالة الدوحة السياحية</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-003</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2026-10-10</span></td>
+                <td data-label="الاستخدام">74/100 عروض</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-003" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+              <tr data-plan-row="plan-pro" hidden>
+                <td data-label="الشركة"><strong>مجموعة الخليج للسياحة</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-006</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2026-11-15</span></td>
+                <td data-label="الاستخدام">62/100 عروض</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-006" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+              <tr data-plan-row="plan-pro" hidden>
+                <td data-label="الشركة"><strong>بلد العجائب للرحلات</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-008</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2026-08-02</span></td>
+                <td data-label="الاستخدام">91/100 عروض</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-008" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+              <tr data-plan-row="plan-pro" hidden>
+                <td data-label="الشركة"><strong>رحلة أحلام للسياحة</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-009</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-trial">تجربة</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2026-07-01</span></td>
+                <td data-label="الاستخدام">12/100 عروض</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-009" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+              <tr data-plan-row="plan-pro" hidden>
+                <td data-label="الشركة"><strong>السياحة الحديثة</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-011</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-pro">Pro</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2026-09-20</span></td>
+                <td data-label="الاستخدام">55/100 عروض</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-011" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+              <tr data-plan-row="plan-enterprise" hidden>
+                <td data-label="الشركة"><strong>المجموعة الدولية للسياحة</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-004</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-enterprise">Enterprise</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2027-01-01</span></td>
+                <td data-label="الاستخدام">غير محدود</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-004" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+              <tr data-plan-row="plan-enterprise" hidden>
+                <td data-label="الشركة"><strong>نخيل المجموعة الكبرى</strong><br><span style="font-size:.75rem;color:#9AA6B4">co-012</span></td>
+                <td data-label="الخطة"><span class="plan-pill plan-enterprise">Enterprise</span></td>
+                <td data-label="الحالة"><span class="admin-badge badge-active">نشط</span></td>
+                <td data-label="تجديد الاشتراك"><span style="direction:ltr;display:inline-block">2027-03-15</span></td>
+                <td data-label="الاستخدام">غير محدود</td>
+                <td data-label="إجراء"><a href="company-details.html?id=co-012" class="admin-btn admin-btn-ghost admin-btn-sm">التفاصيل</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:.75rem 1.25rem;border-top:1px solid var(--admin-border);font-size:.8125rem;color:#9AA6B4">
+          <svg width="12" height="12" aria-hidden="true" style="vertical-align:-.1em;margin-inline-end:.25rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-info"/></svg>
+          بيانات تجريبية · لا تعكس حالة اشتراك حقيقي
+        </div>
+      </div>
+
+      <!-- ── Comparison table ──────────────────────────────────────────── -->
+      <div class="admin-card" style="margin-top:2rem">
+        <div class="admin-card-header">
+          <span class="admin-card-title">
+            <svg width="16" height="16" aria-hidden="true" style="vertical-align:-.2em;margin-inline-end:.375rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-layers"/></svg>
+            مقارنة الخطط
+          </span>
+          <span class="admin-badge badge-neutral">15 ميزة</span>
+        </div>
+        <div class="admin-card-body" style="padding:0">
+          <div class="pl-comparison-wrap">
+            <table class="pl-comparison" aria-label="جدول مقارنة خطط الاشتراك">
+              <thead>
+                <tr>
+                  <th style="min-width:200px">الميزة</th>
+                  <th class="pl-th-plan"><span class="plan-pill plan-starter">Starter</span></th>
+                  <th class="pl-th-plan"><span class="plan-pill plan-growth">Growth</span></th>
+                  <th class="pl-th-plan"><span class="plan-pill plan-pro">Pro</span></th>
+                  <th class="pl-th-plan"><span class="plan-pill plan-enterprise">Enterprise</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="pl-feature-name">العروض السياحية</div></td>
+                  <td class="pl-td-center">20 عرض</td>
+                  <td class="pl-td-center">50 عرض</td>
+                  <td class="pl-td-center">100 عرض</td>
+                  <td class="pl-td-center" style="color:#E08D12;font-weight:800">غير محدود</td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">الكوبونات</div></td>
+                  <td class="pl-td-center">10 كوبونات</td>
+                  <td class="pl-td-center">25 كوبون</td>
+                  <td class="pl-td-center">50 كوبون</td>
+                  <td class="pl-td-center" style="color:#E08D12;font-weight:800">غير محدود</td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">مستخدمو الفريق</div></td>
+                  <td class="pl-td-center">2 مستخدمين</td>
+                  <td class="pl-td-center">5 مستخدمين</td>
+                  <td class="pl-td-center">10 مستخدمين</td>
+                  <td class="pl-td-center" style="color:#E08D12;font-weight:800">غير محدود</td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">طلبات الحجز</div><div class="pl-feature-sub">شهريًا</div></td>
+                  <td class="pl-td-center">100 / شهر</td>
+                  <td class="pl-td-center">250 / شهر</td>
+                  <td class="pl-td-center">500 / شهر</td>
+                  <td class="pl-td-center" style="color:#E08D12;font-weight:800">غير محدود</td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">قاعدة العملاء</div></td>
+                  <td class="pl-td-center">200 عميل</td>
+                  <td class="pl-td-center">500 عميل</td>
+                  <td class="pl-td-center">1,000 عميل</td>
+                  <td class="pl-td-center" style="color:#E08D12;font-weight:800">غير محدود</td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">التكاملات</div></td>
+                  <td class="pl-td-center">2 تكاملات</td>
+                  <td class="pl-td-center">4 تكاملات</td>
+                  <td class="pl-td-center">8 تكاملات</td>
+                  <td class="pl-td-center" style="color:#E08D12;font-weight:800">غير محدود</td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">مستوى التحليلات</div></td>
+                  <td class="pl-td-center">أساسي</td>
+                  <td class="pl-td-center">متقدم</td>
+                  <td class="pl-td-center">كامل</td>
+                  <td class="pl-td-center" style="color:#E08D12;font-weight:800">كامل + مخصص</td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">صفحات المحتوى</div></td>
+                  <td class="pl-td-center">10 صفحات</td>
+                  <td class="pl-td-center">15 صفحة</td>
+                  <td class="pl-td-center">20 صفحة</td>
+                  <td class="pl-td-center" style="color:#E08D12;font-weight:800">غير محدود</td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">مراجعة قائمة السحب</div></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><svg class="pl-check" width="18" height="18" aria-label="متاح" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg></td>
+                  <td class="pl-td-center"><svg class="pl-check" width="18" height="18" aria-label="متاح" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg></td>
+                  <td class="pl-td-center"><svg class="pl-check" width="18" height="18" aria-label="متاح" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg></td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">مستوى الدعم</div></td>
+                  <td class="pl-td-center">قياسي</td>
+                  <td class="pl-td-center">ذو أولوية</td>
+                  <td class="pl-td-center">ذو أولوية</td>
+                  <td class="pl-td-center" style="color:#E08D12;font-weight:800">مخصص ومحدد</td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">وصول API</div><div class="pl-feature-sub"><span class="pl-placeholder-tag">قريبًا</span></div></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><svg class="pl-check" width="18" height="18" aria-label="متاح" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg></td>
+                  <td class="pl-td-center"><svg class="pl-check" width="18" height="18" aria-label="متاح" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg></td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">نطاق مخصص</div><div class="pl-feature-sub"><span class="pl-placeholder-tag">قريبًا</span></div></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><svg class="pl-check" width="18" height="18" aria-label="متاح" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg></td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">White-label كامل</div><div class="pl-feature-sub"><span class="pl-placeholder-tag">قريبًا</span></div></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><svg class="pl-check" width="18" height="18" aria-label="متاح" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg></td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">توصيات ذكاء اصطناعي</div><div class="pl-feature-sub"><span class="pl-placeholder-tag">قريبًا</span></div></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><svg class="pl-check" width="18" height="18" aria-label="متاح" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg></td>
+                </tr>
+                <tr>
+                  <td><div class="pl-feature-name">تأهيل ذو أولوية</div></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><span class="pl-cross" aria-label="غير متاح">—</span></td>
+                  <td class="pl-td-center"><svg class="pl-check" width="18" height="18" aria-label="متاح" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FAQ ──────────────────────────────────────────────────────── -->
+      <section style="margin-top:2rem" aria-labelledby="pl-faq-title">
+        <h2 id="pl-faq-title" class="admin-section-title" style="margin-bottom:1rem">أسئلة شائعة حول الخطط</h2>
+        <div class="admin-faq" id="pl-faq">
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="pl-faq-a1">
+              هل يتم تغيير الأسعار الفعلية للعملاء عند تعديل خطة؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="pl-faq-a1" class="admin-faq-a">لا. هذه واجهة تجريبية أمامية فقط ولا يتم تنفيذ أي تغيير حقيقي على الأسعار أو الخطط. الأرقام الظاهرة هي بيانات تجريبية. عند الربط بنظام اشتراكات حقيقي ستحتاج إلى تأكيد التغيير من خلال بوابة الدفع المعتمدة.</div>
+          </div>
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="pl-faq-a2">
+              ماذا يحدث للشركات الحالية عند تعطيل خطة؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="pl-faq-a2" class="admin-faq-a">في هذا النموذج الأولي، تعطيل الخطة لا يؤثر على الشركات المشتركة فيها. في بيئة الإنتاج الحقيقية، تعطيل الخطة يمنع الاشتراكات الجديدة فقط بينما تظل الاشتراكات الحالية سارية حتى تاريخ تجديدها.</div>
+          </div>
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="pl-faq-a3">
+              هل يمكن إضافة باقة Enterprise مخصصة لشركة معينة؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="pl-faq-a3" class="admin-faq-a">في هذا النموذج الأولي يمكنك إنشاء خطة مخصصة عبر زر "إنشاء خطة تجريبية" ولكن ذلك لا يُحفظ فعليًا. مستقبلًا ستتمكن من ربط خطة مخصصة بشركة محددة من خلال واجهة إدارة العقود.</div>
+          </div>
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="pl-faq-a4">
+              متى سيتم تفعيل نظام الدفع الحقيقي؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="pl-faq-a4" class="admin-faq-a">هذه النسخة واجهة أمامية فقط ولا توجد مدفوعات فعلية. لتفعيل الدفع الحقيقي ستحتاج إلى ربط API بوابة دفع مثل Moyasar أو Stripe وتفعيل Webhook للتجديد التلقائي. بيانات الأسعار الحالية قابلة للاستخدام مباشرة كمرجع لعقود الخدمة.</div>
+          </div>
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="pl-faq-a5">
+              كيف يتم ربط حدود الاستخدام بالباك إند؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="pl-faq-a5" class="admin-faq-a">البيانات الحالية في ملف <code>admin-plans.json</code> مُصممة لتكون مرجعًا مباشرًا لكيانات قاعدة البيانات. كل خطة لها <code>id</code> فريد يمكن استخدامه كمفتاح في جدول الاشتراكات. الحقول مثل <code>dealsLimit</code> و<code>teamUsers</code> جاهزة للتحقق على مستوى API.</div>
+          </div>
+          <div class="admin-faq-item">
+            <button type="button" class="admin-faq-q" aria-expanded="false" aria-controls="pl-faq-a6">
+              ما الفرق بين "تعطيل" الخطة و"حذفها"؟
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-chevron-down"/></svg>
+            </button>
+            <div id="pl-faq-a6" class="admin-faq-a">التعطيل يجعل الخطة غير متاحة للاشتراك الجديد مع الحفاظ على المشتركين الحاليين. الحذف الكامل غير متاح في هذا النموذج حمايةً من فقدان البيانات. في بيئة الإنتاج لا يُنصح بحذف أي خطة عليها مشتركون نشطون بل نقل المشتركين أولًا.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════ MODALS ════════════════════════════════ -->
+
+      <!-- Create plan modal -->
+      <div id="modal-plans-create" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-plans-create-title" hidden>
+        <div class="modal-box" style="max-width:580px">
+          <div class="modal-header">
+            <span id="modal-plans-create-title" class="modal-title">إنشاء خطة تجريبية</span>
+            <button type="button" class="modal-close" aria-label="إغلاق" data-modal-close="modal-plans-create">
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+            </button>
+          </div>
+          <p class="modal-notice">إجراء تجريبي — لا يتم إنشاء خطة حقيقية ولا تغيير أسعار فعلية في هذه النسخة</p>
+          <div class="modal-form">
+            <div class="admin-field">
+              <label class="admin-label" for="mpc-name">اسم الخطة<span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="mpc-name" class="admin-input" placeholder="مثال: Business" autocomplete="off" aria-required="true">
+              <span id="mpc-name-err" class="admin-field-error" hidden></span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
+              <div class="admin-field">
+                <label class="admin-label" for="mpc-price-monthly">السعر الشهري ($)<span class="req" aria-hidden="true">*</span></label>
+                <input type="number" id="mpc-price-monthly" class="admin-input" placeholder="0" min="0" step="1" aria-required="true" dir="ltr">
+                <span id="mpc-price-monthly-err" class="admin-field-error" hidden></span>
+              </div>
+              <div class="admin-field">
+                <label class="admin-label" for="mpc-price-yearly">السعر السنوي ($)<span class="req" aria-hidden="true">*</span></label>
+                <input type="number" id="mpc-price-yearly" class="admin-input" placeholder="0" min="0" step="1" aria-required="true" dir="ltr">
+                <span id="mpc-price-yearly-err" class="admin-field-error" hidden></span>
+              </div>
+            </div>
+            <div class="admin-field" style="margin-top:1rem">
+              <label class="admin-label" for="mpc-description">وصف الخطة</label>
+              <textarea id="mpc-description" class="admin-textarea" placeholder="وصف مختصر للخطة وجمهورها المستهدف…" rows="2"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
+              <div class="admin-field">
+                <label class="admin-label" for="mpc-deals">حد العروض</label>
+                <input type="number" id="mpc-deals" class="admin-input" placeholder="-1 = غير محدود" min="-1" step="1" dir="ltr">
+              </div>
+              <div class="admin-field">
+                <label class="admin-label" for="mpc-users">مستخدمو الفريق</label>
+                <input type="number" id="mpc-users" class="admin-input" placeholder="-1 = غير محدود" min="-1" step="1" dir="ltr">
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
+              <div class="admin-field">
+                <label class="admin-label" for="mpc-support">مستوى الدعم<span class="req" aria-hidden="true">*</span></label>
+                <select id="mpc-support" class="admin-select" aria-required="true">
+                  <option value="">اختر…</option>
+                  <option value="standard">قياسي</option>
+                  <option value="priority">ذو أولوية</option>
+                  <option value="dedicated">مخصص</option>
+                </select>
+                <span id="mpc-support-err" class="admin-field-error" hidden></span>
+              </div>
+              <div class="admin-field">
+                <label class="admin-label" for="mpc-status">حالة الخطة<span class="req" aria-hidden="true">*</span></label>
+                <select id="mpc-status" class="admin-select" aria-required="true">
+                  <option value="">اختر…</option>
+                  <option value="active">نشط</option>
+                  <option value="disabled">معطل</option>
+                  <option value="draft">مسودة</option>
+                </select>
+                <span id="mpc-status-err" class="admin-field-error" hidden></span>
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="admin-btn admin-btn-secondary" data-modal-close="modal-plans-create">إلغاء</button>
+              <button type="button" class="admin-btn admin-btn-primary" id="btn-confirm-plans-create">
+                <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-plus"/></svg>
+                إنشاء خطة تجريبية
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit plan modal -->
+      <div id="modal-plans-edit" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-plans-edit-title" hidden>
+        <div class="modal-box" style="max-width:580px">
+          <div class="modal-header">
+            <span id="modal-plans-edit-title" class="modal-title">تعديل الخطة</span>
+            <button type="button" class="modal-close" aria-label="إغلاق" data-modal-close="modal-plans-edit">
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+            </button>
+          </div>
+          <p class="modal-notice">إجراء تجريبي — لا يتم تعديل خطط أو أسعار حقيقية في هذه النسخة</p>
+          <div class="modal-form">
+            <div class="admin-field">
+              <label class="admin-label" for="mpe-name">اسم الخطة<span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="mpe-name" class="admin-input" placeholder="اسم الخطة" autocomplete="off" aria-required="true">
+              <span id="mpe-name-err" class="admin-field-error" hidden></span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
+              <div class="admin-field">
+                <label class="admin-label" for="mpe-price-monthly">السعر الشهري ($)<span class="req" aria-hidden="true">*</span></label>
+                <input type="number" id="mpe-price-monthly" class="admin-input" min="0" step="1" aria-required="true" dir="ltr">
+                <span id="mpe-price-monthly-err" class="admin-field-error" hidden></span>
+              </div>
+              <div class="admin-field">
+                <label class="admin-label" for="mpe-price-yearly">السعر السنوي ($)<span class="req" aria-hidden="true">*</span></label>
+                <input type="number" id="mpe-price-yearly" class="admin-input" min="0" step="1" aria-required="true" dir="ltr">
+                <span id="mpe-price-yearly-err" class="admin-field-error" hidden></span>
+              </div>
+            </div>
+            <div class="admin-field" style="margin-top:1rem">
+              <label class="admin-label" for="mpe-description">وصف الخطة</label>
+              <textarea id="mpe-description" class="admin-textarea" rows="2"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
+              <div class="admin-field">
+                <label class="admin-label" for="mpe-support">مستوى الدعم<span class="req" aria-hidden="true">*</span></label>
+                <select id="mpe-support" class="admin-select" aria-required="true">
+                  <option value="">اختر…</option>
+                  <option value="standard">قياسي</option>
+                  <option value="priority">ذو أولوية</option>
+                  <option value="dedicated">مخصص</option>
+                </select>
+                <span id="mpe-support-err" class="admin-field-error" hidden></span>
+              </div>
+              <div class="admin-field">
+                <label class="admin-label" for="mpe-status">حالة الخطة<span class="req" aria-hidden="true">*</span></label>
+                <select id="mpe-status" class="admin-select" aria-required="true">
+                  <option value="">اختر…</option>
+                  <option value="active" selected>نشط</option>
+                  <option value="disabled">معطل</option>
+                  <option value="draft">مسودة</option>
+                </select>
+                <span id="mpe-status-err" class="admin-field-error" hidden></span>
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="admin-btn admin-btn-secondary" data-modal-close="modal-plans-edit">إلغاء</button>
+              <button type="button" class="admin-btn admin-btn-primary" id="btn-confirm-plans-edit">
+                <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-check-circle"/></svg>
+                حفظ التعديلات (تجريبي)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disable plan confirm modal -->
+      <div id="modal-plans-disable" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-plans-disable-title" hidden>
+        <div class="modal-box" style="max-width:440px">
+          <div class="modal-header">
+            <span id="modal-plans-disable-title" class="modal-title">تعطيل الخطة</span>
+            <button type="button" class="modal-close" aria-label="إغلاق" data-modal-close="modal-plans-disable">
+              <svg width="16" height="16" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-close"/></svg>
+            </button>
+          </div>
+          <div class="modal-confirm-body">
+            <div class="modal-confirm-icon" style="background:#FEF3C7">
+              <svg width="24" height="24" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"><use href="#icon-alert-triangle"/></svg>
+            </div>
+            <p style="font-size:1rem;font-weight:700;color:#161C26;margin-bottom:.625rem">تعطيل الخطة تجريبيًا</p>
+            <p style="font-size:.875rem;color:#4B5563;line-height:1.7;margin-bottom:1rem">سيتم تعطيل ظهور الخطة للاشتراكات الجديدة. <strong>لن تتأثر الشركات المشتركة حاليًا على هذه الخطة في هذا النموذج الأولي.</strong></p>
+            <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:.625rem;padding:.875rem;text-align:start;margin-bottom:1.25rem">
+              <p style="font-size:.8125rem;font-weight:700;color:#92400E;margin-bottom:.25rem">
+                <svg width="13" height="13" aria-hidden="true" style="vertical-align:-.15em;margin-inline-end:.25rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-info"/></svg>
+                إجراء تجريبي
+              </p>
+              <p style="font-size:.8125rem;color:#92400E;line-height:1.6">لا يتم تنفيذ تغيير حقيقي في هذه النسخة. الحالة التجريبية ستُعاد عند تحديث الصفحة.</p>
+            </div>
+            <div style="display:flex;gap:.625rem;justify-content:center;flex-wrap:wrap">
+              <button type="button" class="admin-btn admin-btn-secondary" data-modal-close="modal-plans-disable">إلغاء</button>
+              <button type="button" class="admin-btn admin-btn-warn" id="btn-confirm-plans-disable">
+                <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><use href="#icon-pause"/></svg>
+                تأكيد التعطيل (تجريبي)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="admin-footer" role="contentinfo">
+      <span>© <span data-year>2026</span> رحلاتي — جميع الحقوق محفوظة</span>
+      <span class="admin-footer-honesty">بيانات تجريبية / واجهة أمامية فقط / لا يتم تعديل خطط أو أسعار حقيقية في هذه النسخة</span>
+    </footer>
+  </div>
+
+  <div id="toast-root" aria-live="polite" aria-atomic="false" aria-label="الإشعارات" style="position:fixed;bottom:1.25rem;inset-inline-end:1.25rem;z-index:var(--z-toast,1080);display:flex;flex-direction:column;gap:.5rem;max-width:360px;pointer-events:none"></div>
+
+  <script src="../src/js/ui.js" defer></script>
+  <script src="../src/js/main.js" defer></script>
+  <script src="../src/js/admin.js" defer></script>
+</body>
+</html>

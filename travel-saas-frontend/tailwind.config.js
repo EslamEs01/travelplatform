@@ -4,6 +4,7 @@ module.exports = {
     './pages/**/*.html',
     './partials/**/*.html',
     './dashboard/**/*.html',
+    './admin/**/*.html',
     './src/js/**/*.js',
   ],
   theme: {
