@@ -14,7 +14,10 @@
     "color-function-notation": "modern",
     "value-keyword-case": ["lower", { "camelCaseSvgKeywords": true }],
     "declaration-empty-line-before": "never",
-    "rule-empty-line-before": ["always", { "except": ["first-nested"], "ignore": ["after-comment"] }],
+    "rule-empty-line-before": [
+      "always",
+      { "except": ["first-nested"], "ignore": ["after-comment"] }
+    ],
     "comment-empty-line-before": null,
     "custom-property-empty-line-before": "never"
   }

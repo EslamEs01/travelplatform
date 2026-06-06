@@ -1,0 +1,435 @@
+{
+  "kpis": [
+    {
+      "key": "totalCompanies",
+      "label": "إجمالي الشركات",
+      "value": 12,
+      "delta": "+2",
+      "trend": "up",
+      "icon": "building"
+    },
+    {
+      "key": "activeCompanies",
+      "label": "الشركات النشطة",
+      "value": 9,
+      "delta": "+1",
+      "trend": "up",
+      "icon": "check-circle"
+    },
+    {
+      "key": "trialCompanies",
+      "label": "شركات تجريبية",
+      "value": 1,
+      "delta": null,
+      "trend": "neutral",
+      "icon": "clock"
+    },
+    {
+      "key": "suspendedCompanies",
+      "label": "شركات موقوفة (تجريبي)",
+      "value": 1,
+      "delta": null,
+      "trend": "warn",
+      "icon": "pause"
+    },
+    {
+      "key": "activeSubscriptions",
+      "label": "الاشتراكات النشطة",
+      "value": 8,
+      "delta": "+1",
+      "trend": "up",
+      "icon": "layers"
+    },
+    {
+      "key": "bookingRequests",
+      "label": "طلبات الحجز (تجريبي)",
+      "value": 5951,
+      "delta": "+8%",
+      "trend": "up",
+      "icon": "calendar"
+    },
+    {
+      "key": "totalDeals",
+      "label": "إجمالي العروض",
+      "value": 861,
+      "delta": "+34",
+      "trend": "up",
+      "icon": "tag"
+    },
+    {
+      "key": "totalCoupons",
+      "label": "إجمالي الكوبونات",
+      "value": 373,
+      "delta": "+18",
+      "trend": "up",
+      "icon": "ticket"
+    },
+    {
+      "key": "mrrEstimate",
+      "label": "الإيرادات الشهرية التقديرية",
+      "value": 1332,
+      "delta": "+149",
+      "trend": "up",
+      "icon": "dollar-sign",
+      "prefix": "$"
+    },
+    {
+      "key": "integrationIssues",
+      "label": "مشاكل التكاملات",
+      "value": 3,
+      "delta": "+1",
+      "trend": "warn",
+      "icon": "plug"
+    },
+    {
+      "key": "contentPending",
+      "label": "محتوى ينتظر المراجعة",
+      "value": 4,
+      "delta": null,
+      "trend": "neutral",
+      "icon": "file-text"
+    },
+    {
+      "key": "trialsNearExpiry",
+      "label": "تجارب تقترب من الانتهاء",
+      "value": 1,
+      "delta": null,
+      "trend": "warn",
+      "icon": "alert-triangle"
+    }
+  ],
+  "activity": [
+    {
+      "type": "company-registered",
+      "icon": "user-plus",
+      "text": "سجّلت شركة جديدة في المنصة",
+      "name": "نخيل السفر",
+      "company": "co-001",
+      "time": "2026-06-05T09:12:00Z",
+      "badge": "جديد",
+      "badgeType": "info"
+    },
+    {
+      "type": "plan-upgrade",
+      "icon": "trend-up",
+      "text": "رقّت خطتها من Growth إلى Pro",
+      "name": "هلا للسياحة والسفر",
+      "company": "co-002",
+      "time": "2026-06-05T08:45:00Z",
+      "badge": "ترقية",
+      "badgeType": "success"
+    },
+    {
+      "type": "integration-fail",
+      "icon": "plug",
+      "text": "فشل تكامل Duffel API (تجريبي)",
+      "name": "رياح الشرق للسياحة",
+      "company": "co-007",
+      "time": "2026-06-05T07:30:00Z",
+      "badge": "خطأ",
+      "badgeType": "danger"
+    },
+    {
+      "type": "sub-expiring",
+      "icon": "clock",
+      "text": "اشتراكها ينتهي خلال 3 أيام",
+      "name": "النهر الذهبي للسياحة",
+      "company": "co-004",
+      "time": "2026-06-04T22:00:00Z",
+      "badge": "تنبيه",
+      "badgeType": "warning"
+    },
+    {
+      "type": "featured-deal",
+      "icon": "star",
+      "text": "تمّ تمييز عرض لها على الصفحة الرئيسية",
+      "name": "قوافل السياحة والترفيه",
+      "company": "co-009",
+      "time": "2026-06-04T18:20:00Z",
+      "badge": "محتوى",
+      "badgeType": "info"
+    },
+    {
+      "type": "pending-coupon",
+      "icon": "ticket",
+      "text": "كوبون جديد ينتظر المراجعة",
+      "name": "سماء السفر",
+      "company": "co-012",
+      "time": "2026-06-04T15:55:00Z",
+      "badge": "مراجعة",
+      "badgeType": "warning"
+    },
+    {
+      "type": "content-update",
+      "icon": "edit",
+      "text": "تحديث أقسام الصفحة الرئيسية",
+      "name": "مالك المنصة",
+      "company": null,
+      "time": "2026-06-04T14:10:00Z",
+      "badge": "محتوى",
+      "badgeType": "info"
+    },
+    {
+      "type": "trial-extended",
+      "icon": "clock",
+      "text": "تمديد الفترة التجريبية 7 أيام",
+      "name": "واحة المسافرين",
+      "company": "co-008",
+      "time": "2026-06-04T11:30:00Z",
+      "badge": "تمديد",
+      "badgeType": "success"
+    },
+    {
+      "type": "suspended",
+      "icon": "pause",
+      "text": "تعليق الاشتراك لعدم السداد (تجريبي)",
+      "name": "البراق للسياحة والترفيه",
+      "company": "co-006",
+      "time": "2026-06-04T09:00:00Z",
+      "badge": "موقوف",
+      "badgeType": "danger"
+    },
+    {
+      "type": "support-note",
+      "icon": "message",
+      "text": "ملاحظة دعم: طلب مساعدة في الإعداد",
+      "name": "الوفاء لتنظيم الرحلات",
+      "company": "co-003",
+      "time": "2026-06-03T16:45:00Z",
+      "badge": "دعم",
+      "badgeType": "info"
+    },
+    {
+      "type": "plan-upgrade",
+      "icon": "award",
+      "text": "ترقية إلى خطة Enterprise",
+      "name": "أمل السياحة والحج والعمرة",
+      "company": "co-011",
+      "time": "2026-06-03T13:20:00Z",
+      "badge": "ترقية",
+      "badgeType": "success"
+    },
+    {
+      "type": "integration-fail",
+      "icon": "alert-triangle",
+      "text": "تدهور أداء Coupon API (تجريبي)",
+      "name": "الأفق الواسع للسياحة",
+      "company": "co-010",
+      "time": "2026-06-03T11:05:00Z",
+      "badge": "تحذير",
+      "badgeType": "warning"
+    }
+  ],
+  "topCompanies": [
+    {
+      "id": "co-002",
+      "companyName": "هلا للسياحة والسفر",
+      "ownerName": "محمود مثال",
+      "plan": "Enterprise",
+      "subscriptionStatus": "Active",
+      "dealsCount": 128,
+      "bookingRequests": 842,
+      "customersCount": 510,
+      "lastActive": "2026-06-05T08:45:00Z",
+      "monthlyRevenueMock": 349
+    },
+    {
+      "id": "co-011",
+      "companyName": "أمل السياحة والحج والعمرة",
+      "ownerName": "يوسف مثال",
+      "plan": "Enterprise",
+      "subscriptionStatus": "Active",
+      "dealsCount": 95,
+      "bookingRequests": 621,
+      "customersCount": 412,
+      "lastActive": "2026-06-03T13:20:00Z",
+      "monthlyRevenueMock": 349
+    },
+    {
+      "id": "co-001",
+      "companyName": "نخيل السفر",
+      "ownerName": "أحمد مثال",
+      "plan": "Pro",
+      "subscriptionStatus": "Active",
+      "dealsCount": 87,
+      "bookingRequests": 589,
+      "customersCount": 380,
+      "lastActive": "2026-06-05T09:12:00Z",
+      "monthlyRevenueMock": 149
+    },
+    {
+      "id": "co-005",
+      "companyName": "رواق السفر والسياحة",
+      "ownerName": "نور مثال",
+      "plan": "Pro",
+      "subscriptionStatus": "Active",
+      "dealsCount": 74,
+      "bookingRequests": 521,
+      "customersCount": 298,
+      "lastActive": "2026-06-04T20:10:00Z",
+      "monthlyRevenueMock": 149
+    },
+    {
+      "id": "co-007",
+      "companyName": "رياح الشرق للسياحة",
+      "ownerName": "إبراهيم مثال",
+      "plan": "Pro",
+      "subscriptionStatus": "Active",
+      "dealsCount": 68,
+      "bookingRequests": 487,
+      "customersCount": 271,
+      "lastActive": "2026-06-05T07:30:00Z",
+      "monthlyRevenueMock": 149
+    },
+    {
+      "id": "co-009",
+      "companyName": "قوافل السياحة والترفيه",
+      "ownerName": "ريم مثال",
+      "plan": "Pro",
+      "subscriptionStatus": "Active",
+      "dealsCount": 62,
+      "bookingRequests": 445,
+      "customersCount": 243,
+      "lastActive": "2026-06-04T18:20:00Z",
+      "monthlyRevenueMock": 149
+    },
+    {
+      "id": "co-012",
+      "companyName": "سماء السفر",
+      "ownerName": "هند مثال",
+      "plan": "Pro",
+      "subscriptionStatus": "Expiring Soon",
+      "dealsCount": 42,
+      "bookingRequests": 310,
+      "customersCount": 185,
+      "lastActive": "2026-06-04T15:55:00Z",
+      "monthlyRevenueMock": 149
+    },
+    {
+      "id": "co-003",
+      "companyName": "الوفاء لتنظيم الرحلات",
+      "ownerName": "سلمى مثال",
+      "plan": "Growth",
+      "subscriptionStatus": "Active",
+      "dealsCount": 53,
+      "bookingRequests": 378,
+      "customersCount": 220,
+      "lastActive": "2026-06-03T16:45:00Z",
+      "monthlyRevenueMock": 79
+    }
+  ],
+  "subscriptionAlerts": [
+    {
+      "type": "trial-ending",
+      "title": "تجربة تنتهي قريبًا",
+      "body": "شركة 'النهر الذهبي' تنتهي تجربتها خلال 3 أيام",
+      "company": "co-004",
+      "action": "تواصل مع الشركة",
+      "severity": "warning"
+    },
+    {
+      "type": "past-due",
+      "title": "دفعة متأخرة (تجريبي)",
+      "body": "شركة 'البراق للسياحة' لم تسدد دفعة يونيو",
+      "company": "co-006",
+      "action": "مراجعة الاشتراك",
+      "severity": "danger"
+    },
+    {
+      "type": "renewal-soon",
+      "title": "تجديدات هذا الشهر",
+      "body": "5 اشتراكات تُجدّد خلال 30 يومًا",
+      "company": null,
+      "action": "عرض الاشتراكات",
+      "severity": "info"
+    },
+    {
+      "type": "plan-limit",
+      "title": "قارب من حد الخطة",
+      "body": "شركة 'نخيل السفر' استخدمت 87% من حد العروض",
+      "company": "co-001",
+      "action": "اقتراح ترقية",
+      "severity": "warning"
+    },
+    {
+      "type": "manual-review",
+      "title": "يحتاج مراجعة يدوية",
+      "body": "اشتراك 'جبال الخضراء للسياحة' يحتاج تدخلًا يدويًا",
+      "company": "co-012",
+      "action": "مراجعة الاشتراك",
+      "severity": "warning"
+    }
+  ],
+  "previews": [
+    {
+      "key": "companiesGrowth",
+      "title": "نمو الشركات",
+      "type": "bar",
+      "data": [
+        { "label": "يناير", "v": 7 },
+        { "label": "فبراير", "v": 8 },
+        { "label": "مارس", "v": 9 },
+        { "label": "أبريل", "v": 10 },
+        { "label": "مايو", "v": 11 },
+        { "label": "يونيو", "v": 12 }
+      ]
+    },
+    {
+      "key": "subscriptionsDist",
+      "title": "توزيع الاشتراكات",
+      "type": "donut",
+      "data": [
+        { "label": "Pro", "v": 38, "pct": 34, "color": "#E08D12" },
+        { "label": "Enterprise", "v": 18, "pct": 16, "color": "#161C26" },
+        { "label": "Growth", "v": 28, "pct": 25, "color": "#16A0A5" },
+        { "label": "Starter", "v": 16, "pct": 14, "color": "#9AA6B4" },
+        { "label": "تجريبي", "v": 12, "pct": 11, "color": "#DEE3EA" }
+      ]
+    },
+    {
+      "key": "topDestinations",
+      "title": "أبرز الوجهات",
+      "type": "hbar",
+      "data": [
+        { "label": "دبي", "v": 4200 },
+        { "label": "إسطنبول", "v": 3850 },
+        { "label": "المالديف", "v": 2900 },
+        { "label": "القاهرة", "v": 2400 },
+        { "label": "لندن", "v": 1980 }
+      ]
+    },
+    {
+      "key": "bookingInquiries",
+      "title": "طلبات الحجز (تجريبي)",
+      "type": "trend",
+      "data": [
+        { "label": "أسبوع 1", "v": 810 },
+        { "label": "أسبوع 2", "v": 940 },
+        { "label": "أسبوع 3", "v": 1120 },
+        { "label": "أسبوع 4", "v": 1050 },
+        { "label": "أسبوع 5", "v": 1230 },
+        { "label": "أسبوع 6", "v": 1380 }
+      ]
+    },
+    {
+      "key": "mrrTrend",
+      "title": "الإيرادات الشهرية التقديرية",
+      "type": "trend",
+      "data": [
+        { "label": "يناير", "v": 684 },
+        { "label": "فبراير", "v": 763 },
+        { "label": "مارس", "v": 842 },
+        { "label": "أبريل", "v": 991 },
+        { "label": "مايو", "v": 1183 },
+        { "label": "يونيو", "v": 1332 }
+      ]
+    }
+  ],
+  "checklist": [
+    { "id": "ck-1", "text": "مراجعة الشركات التجريبية والمتأخرة", "done": false },
+    { "id": "ck-2", "text": "تحديث خطط الأسعار وحدود الاستخدام", "done": false },
+    { "id": "ck-3", "text": "مراجعة المحتوى المميز على الصفحة الرئيسية", "done": true },
+    { "id": "ck-4", "text": "مراجعة مشاكل تكاملات Duffel و Coupon API", "done": false },
+    { "id": "ck-5", "text": "متابعة اشتراكات تقترب من الانتهاء", "done": false }
+  ]
+}

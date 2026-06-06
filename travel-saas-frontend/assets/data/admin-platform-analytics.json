@@ -1,0 +1,391 @@
+{
+  "kpis": [
+    {
+      "key": "totalVisitors",
+      "label": "إجمالي الزوار",
+      "value": 84320,
+      "delta": "+12.4%",
+      "trend": "up"
+    },
+    {
+      "key": "activeCompanies",
+      "label": "الشركات النشطة",
+      "value": 12,
+      "delta": "+2 هذا الشهر",
+      "trend": "up"
+    },
+    {
+      "key": "mrrEstimate",
+      "label": "الإيراد الشهري المقدر",
+      "value": 1332,
+      "delta": "+8.9%",
+      "trend": "up"
+    },
+    {
+      "key": "arrEstimate",
+      "label": "الإيراد السنوي المقدر",
+      "value": 15984,
+      "delta": "+8.9%",
+      "trend": "up"
+    },
+    {
+      "key": "totalDeals",
+      "label": "إجمالي العروض",
+      "value": 861,
+      "delta": "+47 هذا الشهر",
+      "trend": "up"
+    },
+    {
+      "key": "totalCoupons",
+      "label": "إجمالي الكوبونات",
+      "value": 333,
+      "delta": "+18 هذا الشهر",
+      "trend": "up"
+    },
+    {
+      "key": "bookingInquiries",
+      "label": "طلبات الحجز",
+      "value": 5603,
+      "delta": "+21.3%",
+      "trend": "up"
+    },
+    {
+      "key": "conversionRate",
+      "label": "معدل التحويل",
+      "value": "6.65%",
+      "delta": "-0.3%",
+      "trend": "down"
+    },
+    {
+      "key": "avgRevenuePerCompany",
+      "label": "متوسط الإيراد لكل شركة",
+      "value": 111,
+      "delta": "+5.2%",
+      "trend": "up"
+    },
+    {
+      "key": "trialConversionRate",
+      "label": "معدل تحويل التجربة",
+      "value": "42%",
+      "delta": "+4%",
+      "trend": "up"
+    },
+    {
+      "key": "integrationIssues",
+      "label": "مشكلات التكاملات",
+      "value": 3,
+      "delta": "+1 هذا الأسبوع",
+      "trend": "up"
+    },
+    {
+      "key": "contentPublished",
+      "label": "المحتوى المنشور",
+      "value": 52,
+      "delta": "+6 هذا الشهر",
+      "trend": "up"
+    }
+  ],
+  "series": {
+    "companiesGrowth": [
+      { "label": "يناير", "value": 6 },
+      { "label": "فبراير", "value": 7 },
+      { "label": "مارس", "value": 8 },
+      { "label": "أبريل", "value": 9 },
+      { "label": "مايو", "value": 11 },
+      { "label": "يونيو", "value": 12 }
+    ],
+    "subscriptionDistribution": [
+      { "label": "Starter", "value": 2, "pct": 16.7 },
+      { "label": "Growth", "value": 3, "pct": 25.0 },
+      { "label": "Pro", "value": 5, "pct": 41.7 },
+      { "label": "Enterprise", "value": 2, "pct": 16.7 }
+    ],
+    "topDestinations": [
+      { "destination": "dest-dubai", "label": "دبي", "value": 54 },
+      { "destination": "dest-istanbul", "label": "إسطنبول", "value": 38 },
+      { "destination": "dest-maldives", "label": "المالديف", "value": 24 },
+      { "destination": "dest-paris", "label": "باريس", "value": 19 },
+      { "destination": "dest-london", "label": "لندن", "value": 16 },
+      { "destination": "dest-bali", "label": "بالي", "value": 14 }
+    ],
+    "topCouponCategories": [
+      { "label": "طيران", "value": 98 },
+      { "label": "فنادق", "value": 87 },
+      { "label": "باقات سياحية", "value": 62 },
+      { "label": "أنشطة", "value": 51 },
+      { "label": "عمرة وحج", "value": 35 }
+    ],
+    "bookingInquiriesOverTime": [
+      { "label": "الأسبوع 1", "value": 820 },
+      { "label": "الأسبوع 2", "value": 914 },
+      { "label": "الأسبوع 3", "value": 1042 },
+      { "label": "الأسبوع 4", "value": 986 },
+      { "label": "الأسبوع 5", "value": 1108 },
+      { "label": "الأسبوع 6", "value": 733 }
+    ],
+    "revenueEstimate": [
+      { "label": "يناير", "value": 748 },
+      { "label": "فبراير", "value": 827 },
+      { "label": "مارس", "value": 986 },
+      { "label": "أبريل", "value": 1054 },
+      { "label": "مايو", "value": 1224 },
+      { "label": "يونيو", "value": 1332 }
+    ],
+    "trialToPaid": [
+      { "label": "تجربة", "value": 100 },
+      { "label": "مدفوع", "value": 42 }
+    ],
+    "integrationHealthTrend": [
+      { "label": "يناير", "healthy": 8, "issues": 0 },
+      { "label": "فبراير", "healthy": 7, "issues": 1 },
+      { "label": "مارس", "healthy": 8, "issues": 0 },
+      { "label": "أبريل", "healthy": 7, "issues": 1 },
+      { "label": "مايو", "healthy": 6, "issues": 2 },
+      { "label": "يونيو", "healthy": 5, "issues": 3 }
+    ]
+  },
+  "tables": {
+    "topCompanies": [
+      {
+        "company": "co-011",
+        "companyName": "أمل السياحة والحج والعمرة",
+        "plan": "Enterprise",
+        "bookingRequests": 2100,
+        "dealsCount": 189,
+        "mrrContribution": 349
+      },
+      {
+        "company": "co-002",
+        "companyName": "هلا للسياحة والسفر",
+        "plan": "Enterprise",
+        "bookingRequests": 1840,
+        "dealsCount": 214,
+        "mrrContribution": 349
+      },
+      {
+        "company": "co-001",
+        "companyName": "نخيل السفر",
+        "plan": "Pro",
+        "bookingRequests": 412,
+        "dealsCount": 87,
+        "mrrContribution": 149
+      },
+      {
+        "company": "co-005",
+        "companyName": "رواق السفر والسياحة",
+        "plan": "Pro",
+        "bookingRequests": 358,
+        "dealsCount": 76,
+        "mrrContribution": 149
+      },
+      {
+        "company": "co-007",
+        "companyName": "رياح الشرق للسياحة",
+        "plan": "Pro",
+        "bookingRequests": 290,
+        "dealsCount": 62,
+        "mrrContribution": 149
+      }
+    ],
+    "topDestinations": [
+      {
+        "destination": "dest-dubai",
+        "label": "دبي",
+        "dealsCount": 54,
+        "relatedArticles": 3,
+        "avgPriceFrom": 3200
+      },
+      {
+        "destination": "dest-istanbul",
+        "label": "إسطنبول",
+        "dealsCount": 38,
+        "relatedArticles": 2,
+        "avgPriceFrom": 2450
+      },
+      {
+        "destination": "dest-maldives",
+        "label": "المالديف",
+        "dealsCount": 24,
+        "relatedArticles": 1,
+        "avgPriceFrom": 8500
+      },
+      {
+        "destination": "dest-paris",
+        "label": "باريس",
+        "dealsCount": 19,
+        "relatedArticles": 1,
+        "avgPriceFrom": 4200
+      },
+      {
+        "destination": "dest-london",
+        "label": "لندن",
+        "dealsCount": 16,
+        "relatedArticles": 1,
+        "avgPriceFrom": 3800
+      }
+    ],
+    "topDeals": [
+      {
+        "deal": "deal-003",
+        "title": "باقة دبي الفاخرة 5 ليالٍ",
+        "destination": "دبي",
+        "clicks": 4210,
+        "inquiries": 312,
+        "company": "co-001"
+      },
+      {
+        "deal": "deal-009",
+        "title": "باقة عمرة 2026 شاملة",
+        "destination": "مكة المكرمة",
+        "clicks": 3890,
+        "inquiries": 287,
+        "company": "co-011"
+      },
+      {
+        "deal": "deal-002",
+        "title": "رحلة إلى إسطنبول 5 ليالٍ",
+        "destination": "إسطنبول",
+        "clicks": 3240,
+        "inquiries": 241,
+        "company": "co-003"
+      },
+      {
+        "deal": "deal-006",
+        "title": "جنة المالديف 7 ليالٍ",
+        "destination": "المالديف",
+        "clicks": 2760,
+        "inquiries": 198,
+        "company": "co-006"
+      },
+      {
+        "deal": "deal-007",
+        "title": "باريس رومانسية 6 ليالٍ",
+        "destination": "باريس",
+        "clicks": 2140,
+        "inquiries": 167,
+        "company": "co-007"
+      }
+    ],
+    "integrationErrors": [
+      {
+        "integration": "duffel-api",
+        "integrationName": "Duffel API",
+        "company": "co-002",
+        "issue": "انقطاع كامل في الخدمة",
+        "severity": "critical",
+        "since": "2026-06-05T07:15:00Z"
+      },
+      {
+        "integration": "duffel-api",
+        "integrationName": "Duffel API",
+        "company": "co-011",
+        "issue": "فشل كل محاولات الاتصال",
+        "severity": "critical",
+        "since": "2026-06-05T07:15:00Z"
+      },
+      {
+        "integration": "scraping-review-queue",
+        "integrationName": "Scraping Review Queue",
+        "company": "co-009",
+        "issue": "تراكم 47 عرضاً بانتظار المراجعة",
+        "severity": "warning",
+        "since": "2026-06-04T08:00:00Z"
+      },
+      {
+        "integration": "coupon-api",
+        "integrationName": "Coupon API",
+        "company": "co-003",
+        "issue": "بطء في التحقق من الكوبونات",
+        "severity": "warning",
+        "since": "2026-06-05T06:00:00Z"
+      },
+      {
+        "integration": "scraping-review-queue",
+        "integrationName": "Scraping Review Queue",
+        "company": "co-011",
+        "issue": "فشل استخراج بيانات عروض العمرة",
+        "severity": "warning",
+        "since": "2026-06-04T14:00:00Z"
+      }
+    ],
+    "highRiskSubscriptions": [
+      {
+        "subscription": "sub-006",
+        "company": "co-006",
+        "companyName": "أجنحة للسفر والأعمال",
+        "plan": "Growth",
+        "status": "Past Due",
+        "amount": 79,
+        "daysOverdue": 5
+      },
+      {
+        "subscription": "sub-009",
+        "company": "co-009",
+        "companyName": "قوافل السياحة والترفيه",
+        "plan": "Pro",
+        "status": "Expiring Soon",
+        "amount": 149,
+        "daysUntilExpiry": 7
+      },
+      {
+        "subscription": "sub-012",
+        "company": "co-012",
+        "companyName": "سماء السفر",
+        "plan": "Pro",
+        "status": "Manual Review",
+        "amount": 149,
+        "daysOverdue": 0
+      },
+      {
+        "subscription": "sub-004",
+        "company": "co-004",
+        "companyName": "مسافر للسياحة",
+        "plan": "Starter",
+        "status": "Trial",
+        "amount": 0,
+        "trialDaysLeft": 14
+      },
+      {
+        "subscription": "sub-003",
+        "company": "co-003",
+        "companyName": "الوفاء لتنظيم الرحلات",
+        "plan": "Growth",
+        "status": "Active — Near Limits",
+        "amount": 79,
+        "daysOverdue": 0
+      }
+    ]
+  },
+  "recommendations": [
+    {
+      "title": "معالجة انقطاع Duffel API فوراً",
+      "body": "Duffel API معطّل منذ الساعة 7:15 صباحاً ويؤثر على 4 شركات بما فيها عملاء Enterprise. كل دقيقة تأخير تعني خسارة في طلبات الحجز وضرراً بالثقة.",
+      "action": "تواصل مع فريق Duffel وأبلغ الشركات المتضررة",
+      "priority": "high"
+    },
+    {
+      "title": "تحويل عميل التجربة المجانية (مسافر للسياحة)",
+      "body": "الشركة في اليوم 15 من التجربة المجانية وتنتهي خلال 14 يومًا. نشاط جيد ومستوى استخدام معقول. فرصة تحويل مرتفعة إذا تم التواصل المبكر.",
+      "action": "أرسل عرض ترقية مخصص الآن",
+      "priority": "high"
+    },
+    {
+      "title": "تجديد اشتراك قوافل السياحة قبل الانتهاء",
+      "body": "الاشتراك ينتهي خلال 7 أيام ولم يُجدَّد بعد. الشركة نشطة وتضيف عروضاً حديثًا — انقطاع الخدمة قد يدفعها للمنافسين.",
+      "action": "تواصل هاتفياً مع المالك وأرسل رابط التجديد",
+      "priority": "high"
+    },
+    {
+      "title": "مراجعة قائمة الانتظار في Scraping Review Queue",
+      "body": "47 عرضاً معلقاً منذ أكثر من 24 ساعة لشركة قوافل السياحة. تراكم المراجعات يؤثر على تجربة المستخدم وسرعة نشر العروض.",
+      "action": "راجع قائمة الانتظار وسرّع معالجة العروض المعلقة",
+      "priority": "medium"
+    },
+    {
+      "title": "ترقية الشركات المقتربة من حدود الاستخدام",
+      "body": "ثلاث شركات (نخيل السفر، الوفاء، رواق) تجاوزت 75% من حدود استخدامها. تقديم عروض ترقية استباقية يزيد الإيراد ويمنع الإحباط.",
+      "action": "أرسل عروض ترقية مخصصة للشركات الثلاث",
+      "priority": "medium"
+    }
+  ]
+}

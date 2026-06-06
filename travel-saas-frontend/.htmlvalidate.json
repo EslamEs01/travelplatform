@@ -20,7 +20,8 @@
     "element-permitted-content": "off",
     "script-type": "off",
     "deprecated": "warn",
-    "void-style": ["error", { "style": "omit" }],
+    "doctype-style": ["error", { "style": "lowercase" }],
+    "void-style": ["error", { "style": "selfclose" }],
     "close-order": "error",
     "no-dup-attr": "error",
     "no-dup-id": "error",
@@ -29,7 +30,8 @@
     "no-unknown-elements": "warn",
     "attribute-allowed-values": "off",
     "no-redundant-role": "off",
-    "unique-landmark": "off"
+    "unique-landmark": "off",
+    "form-dup-name": ["error", { "shared": ["radio", "checkbox"] }]
   },
   "elements": ["html5"]
 }

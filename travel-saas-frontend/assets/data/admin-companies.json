@@ -1,0 +1,667 @@
+[
+  {
+    "id": "co-001",
+    "companyName": "نخيل السفر",
+    "ownerName": "محمد العمري",
+    "ownerEmail": "m.alomri@nakhiltravel.sa",
+    "phone": "+966501234567",
+    "country": "المملكة العربية السعودية",
+    "city": "الرياض",
+    "website": "https://nakhiltravel.sa",
+    "plan": "Pro",
+    "subscriptionStatus": "Active",
+    "companyStatus": "Active",
+    "dealsCount": 87,
+    "couponsCount": 41,
+    "bookingRequests": 412,
+    "customersCount": 876,
+    "integrationsEnabled": [
+      "travelpayouts",
+      "booking-affiliate",
+      "email-notifications",
+      "whatsapp"
+    ],
+    "lastActive": "2026-06-04T18:32:00Z",
+    "trialEndsAt": null,
+    "monthlyRevenueMock": 149,
+    "usageLimits": {
+      "deals": { "used": 87, "limit": 100 },
+      "coupons": { "used": 41, "limit": 50 },
+      "teamUsers": { "used": 7, "limit": 10 },
+      "integrations": { "used": 4, "limit": 8 },
+      "bookingInquiries": { "used": 412, "limit": 500 },
+      "customers": { "used": 876, "limit": 1000 },
+      "storage": { "used": 3.8, "limit": 10, "unit": "GB" },
+      "contentPages": { "used": 16, "limit": 20 }
+    },
+    "recentActivity": [
+      {
+        "type": "deal_created",
+        "text": "أضاف عرضاً جديداً: باقة دبي الفاخرة 5 ليالٍ",
+        "ref": "deal-003",
+        "time": "2026-06-04T14:10:00Z"
+      },
+      {
+        "type": "coupon_updated",
+        "text": "حدّث كوبون: خصم 30% على العروض الفاخرة",
+        "ref": "coupon-luxury-30",
+        "time": "2026-06-03T09:45:00Z"
+      },
+      {
+        "type": "integration_connected",
+        "text": "ربط تكامل WhatsApp بنجاح",
+        "ref": "whatsapp",
+        "time": "2026-06-02T11:20:00Z"
+      }
+    ],
+    "adminNotes": [
+      {
+        "text": "عميل مميز — يسأل دوريًا عن ترقية للباقة Enterprise",
+        "type": "info",
+        "author": "أحمد الإداري",
+        "followUpAt": "2026-07-01",
+        "createdAt": "2026-05-20T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "co-002",
+    "companyName": "هلا للسياحة والسفر",
+    "ownerName": "سارة القحطاني",
+    "ownerEmail": "sara@hala-tourism.ae",
+    "phone": "+97150987654",
+    "country": "الإمارات العربية المتحدة",
+    "city": "دبي",
+    "website": "https://hala-tourism.ae",
+    "plan": "Enterprise",
+    "subscriptionStatus": "Active",
+    "companyStatus": "Active",
+    "dealsCount": 214,
+    "couponsCount": 98,
+    "bookingRequests": 1840,
+    "customersCount": 4200,
+    "integrationsEnabled": [
+      "travelpayouts",
+      "booking-affiliate",
+      "coupon-api",
+      "email-notifications",
+      "whatsapp",
+      "amadeus-api",
+      "duffel-api",
+      "scraping-review-queue"
+    ],
+    "lastActive": "2026-06-05T08:15:00Z",
+    "trialEndsAt": null,
+    "monthlyRevenueMock": 349,
+    "usageLimits": {
+      "deals": { "used": 214, "limit": -1 },
+      "coupons": { "used": 98, "limit": -1 },
+      "teamUsers": { "used": 18, "limit": -1 },
+      "integrations": { "used": 8, "limit": -1 },
+      "bookingInquiries": { "used": 1840, "limit": -1 },
+      "customers": { "used": 4200, "limit": -1 },
+      "storage": { "used": 28.4, "limit": -1, "unit": "GB" },
+      "contentPages": { "used": 47, "limit": -1 }
+    },
+    "recentActivity": [
+      {
+        "type": "deal_created",
+        "text": "أضاف 12 عرضاً جديداً عبر واجهة برمجة Amadeus",
+        "ref": "deal-002",
+        "time": "2026-06-05T07:00:00Z"
+      },
+      {
+        "type": "customer_milestone",
+        "text": "تجاوزت قاعدة العملاء 4000 عميل",
+        "ref": null,
+        "time": "2026-06-04T16:00:00Z"
+      },
+      {
+        "type": "analytics_export",
+        "text": "صدّرت تقرير التحليلات الشهري",
+        "ref": null,
+        "time": "2026-06-03T12:00:00Z"
+      }
+    ],
+    "adminNotes": [
+      {
+        "text": "شريك استراتيجي — تطلب دومًا دعمًا مخصصًا وأولوية في قائمة الانتظار",
+        "type": "info",
+        "author": "ليلى الإدارة",
+        "followUpAt": "2026-06-15",
+        "createdAt": "2026-04-10T09:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "co-003",
+    "companyName": "الوفاء لتنظيم الرحلات",
+    "ownerName": "خالد الزهراني",
+    "ownerEmail": "k.zahrani@wafatrips.sa",
+    "phone": "+966556789012",
+    "country": "المملكة العربية السعودية",
+    "city": "جدة",
+    "website": "https://wafatrips.sa",
+    "plan": "Growth",
+    "subscriptionStatus": "Active",
+    "companyStatus": "Active",
+    "dealsCount": 43,
+    "couponsCount": 22,
+    "bookingRequests": 218,
+    "customersCount": 461,
+    "integrationsEnabled": ["booking-affiliate", "email-notifications", "coupon-api"],
+    "lastActive": "2026-06-04T20:10:00Z",
+    "trialEndsAt": null,
+    "monthlyRevenueMock": 79,
+    "usageLimits": {
+      "deals": { "used": 43, "limit": 50 },
+      "coupons": { "used": 22, "limit": 25 },
+      "teamUsers": { "used": 4, "limit": 5 },
+      "integrations": { "used": 3, "limit": 4 },
+      "bookingInquiries": { "used": 218, "limit": 250 },
+      "customers": { "used": 461, "limit": 500 },
+      "storage": { "used": 2.1, "limit": 5, "unit": "GB" },
+      "contentPages": { "used": 12, "limit": 15 }
+    },
+    "recentActivity": [
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون رمضان: خصم 40%",
+        "ref": "coupon-ramadan-40",
+        "time": "2026-06-01T11:30:00Z"
+      },
+      {
+        "type": "deal_updated",
+        "text": "حدّث عرض إسطنبول 5 ليالٍ",
+        "ref": "deal-002",
+        "time": "2026-05-30T14:00:00Z"
+      }
+    ],
+    "adminNotes": [
+      {
+        "text": "يقترب من حد العملاء — يُنصح بعرض الترقية لباقة Pro",
+        "type": "warning",
+        "author": "أحمد الإداري",
+        "followUpAt": "2026-06-20",
+        "createdAt": "2026-06-01T08:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "co-004",
+    "companyName": "مسافر للسياحة",
+    "ownerName": "ريم الحسيني",
+    "ownerEmail": "reem@musafir-tourism.jo",
+    "phone": "+96279876543",
+    "country": "الأردن",
+    "city": "عمّان",
+    "website": "https://musafir-tourism.jo",
+    "plan": "Starter",
+    "subscriptionStatus": "Trial",
+    "companyStatus": "Trial",
+    "dealsCount": 8,
+    "couponsCount": 3,
+    "bookingRequests": 24,
+    "customersCount": 47,
+    "integrationsEnabled": ["email-notifications"],
+    "lastActive": "2026-06-03T15:45:00Z",
+    "trialEndsAt": "2026-06-19T23:59:00Z",
+    "monthlyRevenueMock": 0,
+    "usageLimits": {
+      "deals": { "used": 8, "limit": 20 },
+      "coupons": { "used": 3, "limit": 10 },
+      "teamUsers": { "used": 1, "limit": 2 },
+      "integrations": { "used": 1, "limit": 2 },
+      "bookingInquiries": { "used": 24, "limit": 100 },
+      "customers": { "used": 47, "limit": 200 },
+      "storage": { "used": 0.3, "limit": 2, "unit": "GB" },
+      "contentPages": { "used": 2, "limit": 10 }
+    },
+    "recentActivity": [
+      {
+        "type": "account_created",
+        "text": "أنشأ حساب الشركة وبدأ فترة التجربة",
+        "ref": null,
+        "time": "2026-06-05T10:00:00Z"
+      },
+      {
+        "type": "deal_created",
+        "text": "أضاف أول عرض: رحلة عمّان–إسطنبول",
+        "ref": "deal-002",
+        "time": "2026-06-04T09:00:00Z"
+      }
+    ],
+    "adminNotes": [
+      {
+        "text": "شركة ناشئة واعدة — تابع نهاية التجربة المجانية وعرض الترقية",
+        "type": "info",
+        "author": "ليلى الإدارة",
+        "followUpAt": "2026-06-18",
+        "createdAt": "2026-06-05T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "co-005",
+    "companyName": "رواق السفر والسياحة",
+    "ownerName": "عمر النعيمي",
+    "ownerEmail": "omar@riwaq-travel.qa",
+    "phone": "+97444123456",
+    "country": "قطر",
+    "city": "الدوحة",
+    "website": "https://riwaq-travel.qa",
+    "plan": "Pro",
+    "subscriptionStatus": "Active",
+    "companyStatus": "Active",
+    "dealsCount": 76,
+    "couponsCount": 34,
+    "bookingRequests": 358,
+    "customersCount": 720,
+    "integrationsEnabled": ["travelpayouts", "email-notifications", "whatsapp", "amadeus-api"],
+    "lastActive": "2026-06-05T06:50:00Z",
+    "trialEndsAt": null,
+    "monthlyRevenueMock": 149,
+    "usageLimits": {
+      "deals": { "used": 76, "limit": 100 },
+      "coupons": { "used": 34, "limit": 50 },
+      "teamUsers": { "used": 6, "limit": 10 },
+      "integrations": { "used": 4, "limit": 8 },
+      "bookingInquiries": { "used": 358, "limit": 500 },
+      "customers": { "used": 720, "limit": 1000 },
+      "storage": { "used": 4.2, "limit": 10, "unit": "GB" },
+      "contentPages": { "used": 14, "limit": 20 }
+    },
+    "recentActivity": [
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض باقة عمرة 2026",
+        "ref": "deal-009",
+        "time": "2026-06-04T10:00:00Z"
+      },
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون صيف 2026: خصم 25%",
+        "ref": "coupon-summer-25",
+        "time": "2026-06-02T08:00:00Z"
+      }
+    ],
+    "adminNotes": []
+  },
+  {
+    "id": "co-006",
+    "companyName": "أجنحة للسفر والأعمال",
+    "ownerName": "فيصل المنصوري",
+    "ownerEmail": "faisal@ajniha.bh",
+    "phone": "+97317654321",
+    "country": "البحرين",
+    "city": "المنامة",
+    "website": "https://ajniha.bh",
+    "plan": "Growth",
+    "subscriptionStatus": "Past Due mock",
+    "companyStatus": "Past Due mock",
+    "dealsCount": 31,
+    "couponsCount": 14,
+    "bookingRequests": 142,
+    "customersCount": 298,
+    "integrationsEnabled": ["booking-affiliate", "email-notifications"],
+    "lastActive": "2026-05-28T11:20:00Z",
+    "trialEndsAt": null,
+    "monthlyRevenueMock": 79,
+    "usageLimits": {
+      "deals": { "used": 31, "limit": 50 },
+      "coupons": { "used": 14, "limit": 25 },
+      "teamUsers": { "used": 3, "limit": 5 },
+      "integrations": { "used": 2, "limit": 4 },
+      "bookingInquiries": { "used": 142, "limit": 250 },
+      "customers": { "used": 298, "limit": 500 },
+      "storage": { "used": 1.4, "limit": 5, "unit": "GB" },
+      "contentPages": { "used": 8, "limit": 15 }
+    },
+    "recentActivity": [
+      {
+        "type": "payment_failed",
+        "text": "فشل سداد اشتراك يونيو 2026",
+        "ref": null,
+        "time": "2026-06-01T00:00:00Z"
+      },
+      {
+        "type": "deal_updated",
+        "text": "حدّث عرض المالديف 7 ليالٍ",
+        "ref": "deal-006",
+        "time": "2026-05-27T14:00:00Z"
+      }
+    ],
+    "adminNotes": [
+      {
+        "text": "الدفع متأخر منذ يونيو — تواصل مع المالك وأبلغ بالانقطاع إن لم يُسدَّد خلال 7 أيام",
+        "type": "warning",
+        "author": "أحمد الإداري",
+        "followUpAt": "2026-06-08",
+        "createdAt": "2026-06-01T09:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "co-007",
+    "companyName": "رياح الشرق للسياحة",
+    "ownerName": "داود العبيدي",
+    "ownerEmail": "daoud@riyah-alsharq.iq",
+    "phone": "+9647801234567",
+    "country": "العراق",
+    "city": "بغداد",
+    "website": "https://riyah-alsharq.iq",
+    "plan": "Pro",
+    "subscriptionStatus": "Active",
+    "companyStatus": "Active",
+    "dealsCount": 62,
+    "couponsCount": 28,
+    "bookingRequests": 290,
+    "customersCount": 588,
+    "integrationsEnabled": ["travelpayouts", "coupon-api", "whatsapp", "email-notifications"],
+    "lastActive": "2026-06-04T22:00:00Z",
+    "trialEndsAt": null,
+    "monthlyRevenueMock": 149,
+    "usageLimits": {
+      "deals": { "used": 62, "limit": 100 },
+      "coupons": { "used": 28, "limit": 50 },
+      "teamUsers": { "used": 5, "limit": 10 },
+      "integrations": { "used": 4, "limit": 8 },
+      "bookingInquiries": { "used": 290, "limit": 500 },
+      "customers": { "used": 588, "limit": 1000 },
+      "storage": { "used": 2.9, "limit": 10, "unit": "GB" },
+      "contentPages": { "used": 11, "limit": 20 }
+    },
+    "recentActivity": [
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض رحلة باريس 6 ليالٍ",
+        "ref": "deal-007",
+        "time": "2026-06-03T16:00:00Z"
+      },
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون مستخدم جديد: خصم 50 ر.س",
+        "ref": "coupon-new-user-50",
+        "time": "2026-06-02T14:00:00Z"
+      }
+    ],
+    "adminNotes": []
+  },
+  {
+    "id": "co-008",
+    "companyName": "درب السفر",
+    "ownerName": "لمياء بن سعيد",
+    "ownerEmail": "lamia@darb-assafar.ma",
+    "phone": "+212661234567",
+    "country": "المغرب",
+    "city": "الدار البيضاء",
+    "website": "https://darb-assafar.ma",
+    "plan": "Starter",
+    "subscriptionStatus": "Active",
+    "companyStatus": "Active",
+    "dealsCount": 15,
+    "couponsCount": 6,
+    "bookingRequests": 68,
+    "customersCount": 134,
+    "integrationsEnabled": ["booking-affiliate"],
+    "lastActive": "2026-06-04T12:30:00Z",
+    "trialEndsAt": null,
+    "monthlyRevenueMock": 29,
+    "usageLimits": {
+      "deals": { "used": 15, "limit": 20 },
+      "coupons": { "used": 6, "limit": 10 },
+      "teamUsers": { "used": 2, "limit": 2 },
+      "integrations": { "used": 1, "limit": 2 },
+      "bookingInquiries": { "used": 68, "limit": 100 },
+      "customers": { "used": 134, "limit": 200 },
+      "storage": { "used": 0.9, "limit": 2, "unit": "GB" },
+      "contentPages": { "used": 6, "limit": 10 }
+    },
+    "recentActivity": [
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض رحلة لندن 5 ليالٍ",
+        "ref": "deal-008",
+        "time": "2026-06-03T10:00:00Z"
+      },
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون الشتاء: خصم 12%",
+        "ref": "coupon-winter-12",
+        "time": "2026-05-31T09:00:00Z"
+      }
+    ],
+    "adminNotes": [
+      {
+        "text": "عميلة نشطة على الباقة Starter — قد تستفيد من Growth",
+        "type": "info",
+        "author": "ليلى الإدارة",
+        "followUpAt": "2026-07-10",
+        "createdAt": "2026-05-15T08:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "co-009",
+    "companyName": "قوافل السياحة والترفيه",
+    "ownerName": "منصور الطيب",
+    "ownerEmail": "mansour@qawafil.sd",
+    "phone": "+249912345678",
+    "country": "السودان",
+    "city": "الخرطوم",
+    "website": "https://qawafil.sd",
+    "plan": "Pro",
+    "subscriptionStatus": "Expiring Soon",
+    "companyStatus": "Active",
+    "dealsCount": 54,
+    "couponsCount": 19,
+    "bookingRequests": 225,
+    "customersCount": 490,
+    "integrationsEnabled": ["email-notifications", "scraping-review-queue", "booking-affiliate"],
+    "lastActive": "2026-06-05T07:30:00Z",
+    "trialEndsAt": null,
+    "monthlyRevenueMock": 149,
+    "usageLimits": {
+      "deals": { "used": 54, "limit": 100 },
+      "coupons": { "used": 19, "limit": 50 },
+      "teamUsers": { "used": 4, "limit": 10 },
+      "integrations": { "used": 3, "limit": 8 },
+      "bookingInquiries": { "used": 225, "limit": 500 },
+      "customers": { "used": 490, "limit": 1000 },
+      "storage": { "used": 2.5, "limit": 10, "unit": "GB" },
+      "contentPages": { "used": 9, "limit": 20 }
+    },
+    "recentActivity": [
+      {
+        "type": "renewal_warning",
+        "text": "الاشتراك ينتهي خلال 7 أيام — لم يُجدَّد بعد",
+        "ref": null,
+        "time": "2026-06-05T00:00:00Z"
+      },
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض باقة بالي الاستوائية",
+        "ref": "deal-010",
+        "time": "2026-06-03T13:00:00Z"
+      }
+    ],
+    "adminNotes": [
+      {
+        "text": "الاشتراك ينتهي 12 يونيو — أرسل تذكير تجديد فوري",
+        "type": "warning",
+        "author": "أحمد الإداري",
+        "followUpAt": "2026-06-07",
+        "createdAt": "2026-06-05T09:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "co-010",
+    "companyName": "بوصلة للسياحة والسفر",
+    "ownerName": "نور الدين حداد",
+    "ownerEmail": "noureddine@bousslah.tn",
+    "phone": "+21629876543",
+    "country": "تونس",
+    "city": "تونس",
+    "website": "https://bousslah.tn",
+    "plan": "Growth",
+    "subscriptionStatus": "Active",
+    "companyStatus": "Active",
+    "dealsCount": 38,
+    "couponsCount": 18,
+    "bookingRequests": 176,
+    "customersCount": 362,
+    "integrationsEnabled": ["coupon-api", "email-notifications", "booking-affiliate"],
+    "lastActive": "2026-06-04T17:00:00Z",
+    "trialEndsAt": null,
+    "monthlyRevenueMock": 79,
+    "usageLimits": {
+      "deals": { "used": 38, "limit": 50 },
+      "coupons": { "used": 18, "limit": 25 },
+      "teamUsers": { "used": 4, "limit": 5 },
+      "integrations": { "used": 3, "limit": 4 },
+      "bookingInquiries": { "used": 176, "limit": 250 },
+      "customers": { "used": 362, "limit": 500 },
+      "storage": { "used": 1.8, "limit": 5, "unit": "GB" },
+      "contentPages": { "used": 11, "limit": 15 }
+    },
+    "recentActivity": [
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض رحلة روما 4 ليالٍ",
+        "ref": "deal-004",
+        "time": "2026-06-04T15:00:00Z"
+      },
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون الفندق: خصم 20%",
+        "ref": "coupon-hotel-20",
+        "time": "2026-06-02T11:00:00Z"
+      }
+    ],
+    "adminNotes": []
+  },
+  {
+    "id": "co-011",
+    "companyName": "أمل السياحة والحج والعمرة",
+    "ownerName": "عبد الله الغامدي",
+    "ownerEmail": "alaghamdi@amal-travel.sa",
+    "phone": "+966507890123",
+    "country": "المملكة العربية السعودية",
+    "city": "مكة المكرمة",
+    "website": "https://amal-travel.sa",
+    "plan": "Enterprise",
+    "subscriptionStatus": "Active",
+    "companyStatus": "Active",
+    "dealsCount": 189,
+    "couponsCount": 74,
+    "bookingRequests": 2100,
+    "customersCount": 5800,
+    "integrationsEnabled": [
+      "travelpayouts",
+      "booking-affiliate",
+      "coupon-api",
+      "email-notifications",
+      "whatsapp",
+      "amadeus-api",
+      "duffel-api",
+      "scraping-review-queue"
+    ],
+    "lastActive": "2026-06-05T09:00:00Z",
+    "trialEndsAt": null,
+    "monthlyRevenueMock": 349,
+    "usageLimits": {
+      "deals": { "used": 189, "limit": -1 },
+      "coupons": { "used": 74, "limit": -1 },
+      "teamUsers": { "used": 24, "limit": -1 },
+      "integrations": { "used": 8, "limit": -1 },
+      "bookingInquiries": { "used": 2100, "limit": -1 },
+      "customers": { "used": 5800, "limit": -1 },
+      "storage": { "used": 45.2, "limit": -1, "unit": "GB" },
+      "contentPages": { "used": 83, "limit": -1 }
+    },
+    "recentActivity": [
+      {
+        "type": "deal_created",
+        "text": "أضاف 20 عرض عمرة موسم 1447",
+        "ref": "deal-009",
+        "time": "2026-06-05T08:00:00Z"
+      },
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون عمرة 200 ر.س خصم",
+        "ref": "coupon-umrah-200",
+        "time": "2026-06-04T12:00:00Z"
+      },
+      {
+        "type": "customer_milestone",
+        "text": "تجاوزت قاعدة العملاء 5000 عميل",
+        "ref": null,
+        "time": "2026-06-03T10:00:00Z"
+      }
+    ],
+    "adminNotes": [
+      {
+        "text": "أكبر عميل في قطاع العمرة — يطلب SLA خاص وتقارير مخصصة شهريًا",
+        "type": "info",
+        "author": "ليلى الإدارة",
+        "followUpAt": "2026-07-01",
+        "createdAt": "2026-03-15T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "co-012",
+    "companyName": "سماء السفر",
+    "ownerName": "هبة الرشيد",
+    "ownerEmail": "heba@samaa-safar.eg",
+    "phone": "+201011234567",
+    "country": "مصر",
+    "city": "القاهرة",
+    "website": "https://samaa-safar.eg",
+    "plan": "Pro",
+    "subscriptionStatus": "Manual Review",
+    "companyStatus": "Pending Review",
+    "dealsCount": 44,
+    "couponsCount": 16,
+    "bookingRequests": 98,
+    "customersCount": 201,
+    "integrationsEnabled": ["email-notifications", "booking-affiliate"],
+    "lastActive": "2026-05-31T14:00:00Z",
+    "trialEndsAt": null,
+    "monthlyRevenueMock": 149,
+    "usageLimits": {
+      "deals": { "used": 44, "limit": 100 },
+      "coupons": { "used": 16, "limit": 50 },
+      "teamUsers": { "used": 3, "limit": 10 },
+      "integrations": { "used": 2, "limit": 8 },
+      "bookingInquiries": { "used": 98, "limit": 500 },
+      "customers": { "used": 201, "limit": 1000 },
+      "storage": { "used": 1.2, "limit": 10, "unit": "GB" },
+      "contentPages": { "used": 7, "limit": 20 }
+    },
+    "recentActivity": [
+      {
+        "type": "review_flagged",
+        "text": "تم تفعيل مراجعة يدوية بسبب نشاط غير مألوف",
+        "ref": null,
+        "time": "2026-06-01T08:00:00Z"
+      },
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض رحلة القاهرة–لندن",
+        "ref": "deal-008",
+        "time": "2026-05-29T11:00:00Z"
+      }
+    ],
+    "adminNotes": [
+      {
+        "text": "مراجعة يدوية مفعّلة بسبب ارتفاع مفاجئ في عدد الكوبونات المكررة — انتظر التحقق",
+        "type": "warning",
+        "author": "أحمد الإداري",
+        "followUpAt": "2026-06-07",
+        "createdAt": "2026-06-01T08:00:00Z"
+      }
+    ]
+  }
+]

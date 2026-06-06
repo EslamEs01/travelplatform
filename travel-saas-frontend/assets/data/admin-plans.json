@@ -1,0 +1,200 @@
+{
+  "plans": [
+    {
+      "id": "plan-starter",
+      "name": "Starter",
+      "monthlyPrice": 29,
+      "yearlyPrice": 290,
+      "description": "الباقة المثالية للوكالات الناشئة والمشاريع الصغيرة التي تبدأ رحلتها في السياحة الرقمية",
+      "targetUser": "الوكالات الصغيرة والأفراد الجدد في السوق",
+      "activeCompanies": 2,
+      "dealsLimit": 20,
+      "couponsLimit": 10,
+      "teamUsers": 2,
+      "bookingInquiries": 100,
+      "customersLimit": 200,
+      "integrationsLimit": 2,
+      "storageGB": 2,
+      "contentPages": 10,
+      "analyticsLevel": "أساسي",
+      "AIRecommendations": false,
+      "scrapingReviewQueue": false,
+      "supportLevel": "قياسي",
+      "customDomain": false,
+      "whiteLabel": false,
+      "apiAccess": false,
+      "priorityOnboarding": false,
+      "status": "Active"
+    },
+    {
+      "id": "plan-growth",
+      "name": "Growth",
+      "monthlyPrice": 79,
+      "yearlyPrice": 790,
+      "description": "للوكالات في مرحلة النمو التي تحتاج إلى أدوات تسويقية متقدمة وتكاملات أكثر لتوسيع نشاطها",
+      "targetUser": "الوكالات المتوسطة التي تسعى للتوسع وزيادة قاعدة العملاء",
+      "activeCompanies": 3,
+      "dealsLimit": 50,
+      "couponsLimit": 25,
+      "teamUsers": 5,
+      "bookingInquiries": 250,
+      "customersLimit": 500,
+      "integrationsLimit": 4,
+      "storageGB": 5,
+      "contentPages": 15,
+      "analyticsLevel": "متقدم",
+      "AIRecommendations": false,
+      "scrapingReviewQueue": true,
+      "supportLevel": "أولوية",
+      "customDomain": false,
+      "whiteLabel": false,
+      "apiAccess": false,
+      "priorityOnboarding": false,
+      "status": "Active"
+    },
+    {
+      "id": "plan-pro",
+      "name": "Pro",
+      "monthlyPrice": 149,
+      "yearlyPrice": 1490,
+      "description": "الباقة الاحترافية الكاملة للوكالات الراسخة التي تدير عمليات سياحية واسعة النطاق",
+      "targetUser": "الوكالات المحترفة التي تحتاج إلى تحليلات كاملة وتكاملات API متعددة",
+      "activeCompanies": 5,
+      "dealsLimit": 100,
+      "couponsLimit": 50,
+      "teamUsers": 10,
+      "bookingInquiries": 500,
+      "customersLimit": 1000,
+      "integrationsLimit": 8,
+      "storageGB": 10,
+      "contentPages": 20,
+      "analyticsLevel": "كامل",
+      "AIRecommendations": false,
+      "scrapingReviewQueue": true,
+      "supportLevel": "أولوية",
+      "customDomain": false,
+      "whiteLabel": false,
+      "apiAccess": true,
+      "priorityOnboarding": false,
+      "status": "Active"
+    },
+    {
+      "id": "plan-enterprise",
+      "name": "Enterprise",
+      "monthlyPrice": 349,
+      "yearlyPrice": 3490,
+      "description": "باقة المؤسسات الكبرى مع إمكانيات لا محدودة ودعم مخصص وتكاملات متقدمة لأضخم الوكالات",
+      "targetUser": "الوكالات الكبرى والمجموعات السياحية التي تحتاج إلى حلول مؤسسية مرنة",
+      "activeCompanies": 2,
+      "dealsLimit": -1,
+      "couponsLimit": -1,
+      "teamUsers": -1,
+      "bookingInquiries": -1,
+      "customersLimit": -1,
+      "integrationsLimit": -1,
+      "storageGB": -1,
+      "contentPages": -1,
+      "analyticsLevel": "كامل+مخصص",
+      "AIRecommendations": true,
+      "scrapingReviewQueue": true,
+      "supportLevel": "مخصص",
+      "customDomain": true,
+      "whiteLabel": true,
+      "apiAccess": true,
+      "priorityOnboarding": true,
+      "status": "Active"
+    }
+  ],
+  "comparison": {
+    "deals": {
+      "starter": "20 عرض",
+      "growth": "50 عرض",
+      "pro": "100 عرض",
+      "enterprise": "غير محدود"
+    },
+    "coupons": {
+      "starter": "10 كوبونات",
+      "growth": "25 كوبون",
+      "pro": "50 كوبون",
+      "enterprise": "غير محدود"
+    },
+    "teamUsers": {
+      "starter": "2 مستخدمين",
+      "growth": "5 مستخدمين",
+      "pro": "10 مستخدمين",
+      "enterprise": "غير محدود"
+    },
+    "bookingInquiries": {
+      "starter": "100 / شهر",
+      "growth": "250 / شهر",
+      "pro": "500 / شهر",
+      "enterprise": "غير محدود"
+    },
+    "customers": {
+      "starter": "200 عميل",
+      "growth": "500 عميل",
+      "pro": "1000 عميل",
+      "enterprise": "غير محدود"
+    },
+    "integrations": {
+      "starter": "2 تكاملات",
+      "growth": "4 تكاملات",
+      "pro": "8 تكاملات",
+      "enterprise": "غير محدود"
+    },
+    "analytics": {
+      "starter": "أساسي",
+      "growth": "متقدم",
+      "pro": "كامل",
+      "enterprise": "كامل+مخصص"
+    },
+    "contentPages": {
+      "starter": "10 صفحات",
+      "growth": "15 صفحة",
+      "pro": "20 صفحة",
+      "enterprise": "غير محدود"
+    },
+    "aiRecommendations": {
+      "starter": "✗",
+      "growth": "✗",
+      "pro": "✗",
+      "enterprise": "✓"
+    },
+    "scrapingReview": {
+      "starter": "✗",
+      "growth": "✓",
+      "pro": "✓",
+      "enterprise": "✓"
+    },
+    "support": {
+      "starter": "قياسي",
+      "growth": "أولوية",
+      "pro": "أولوية",
+      "enterprise": "مخصص"
+    },
+    "customDomain": {
+      "starter": "✗",
+      "growth": "✗",
+      "pro": "✗",
+      "enterprise": "✓"
+    },
+    "whiteLabel": {
+      "starter": "✗",
+      "growth": "✗",
+      "pro": "✗",
+      "enterprise": "✓"
+    },
+    "apiAccess": {
+      "starter": "✗",
+      "growth": "✗",
+      "pro": "✓",
+      "enterprise": "✓"
+    },
+    "priorityOnboarding": {
+      "starter": "✗",
+      "growth": "✗",
+      "pro": "✗",
+      "enterprise": "✓"
+    }
+  }
+}

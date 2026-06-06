@@ -1,932 +1,1900 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl" class="scroll-smooth" data-page="profile">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>الملف الشخصي – رحلاتي</title>
-  <meta name="description" content="أدر ملفك الشخصي وتفضيلات السفر وإعدادات الإشعارات في رحلاتي.">
-  <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#0E8186">
-  <meta property="og:title" content="الملف الشخصي – رحلاتي">
-  <meta property="og:description" content="إدارة بياناتك الشخصية وتفضيلات السفر وإعدادات الإشعارات.">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="ar_AR">
-  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
-  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/tailwind.css">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>الملف الشخصي – رحلاتي</title>
+    <meta
+      name="description"
+      content="أدر ملفك الشخصي وتفضيلات السفر وإعدادات الإشعارات في رحلاتي."
+    />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0E8186" />
+    <meta property="og:title" content="الملف الشخصي – رحلاتي" />
+    <meta
+      property="og:description"
+      content="إدارة بياناتك الشخصية وتفضيلات السفر وإعدادات الإشعارات."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ar_AR" />
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../assets/fonts/cairo-600.woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="../assets/css/tailwind.css" />
 
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"الرئيسية","item":"https://rihlaty.example.com"},{"@type":"ListItem","position":2,"name":"الملف الشخصي","item":"https://rihlaty.example.com/profile"}]}
-  </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "الرئيسية",
+            "item": "https://rihlaty.example.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "الملف الشخصي",
+            "item": "https://rihlaty.example.com/profile"
+          }
+        ]
+      }
+    </script>
 
-  <style>
-    /* ── profile.html page-scoped styles ────────────────────────────── */
+    <style>
+      /* ── profile.html page-scoped styles ────────────────────────────── */
 
-    /* Profile hero */
-    .profile-hero {
-      background: linear-gradient(145deg, #042B2E 0%, #0A4A4D 45%, #0E8186 100%);
-      padding: 2.5rem 0 0; position: relative; overflow: hidden;
-    }
-    .profile-hero::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse 60% 80% at 80% 30%, rgba(56,188,192,0.18) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero-inner { position: relative; z-index: 1; }
+      /* Profile hero */
+      .profile-hero {
+        background: linear-gradient(145deg, #042b2e 0%, #0a4a4d 45%, #0e8186 100%);
+        padding: 2.5rem 0 0;
+        position: relative;
+        overflow: hidden;
+      }
+      .profile-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 60% 80% at 80% 30%,
+          rgba(56, 188, 192, 0.18) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .hero-inner {
+        position: relative;
+        z-index: 1;
+      }
 
-    /* Breadcrumb */
-    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
-    .breadcrumb a { font-size: 0.8125rem; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 150ms; }
-    .breadcrumb a:hover { color: white; }
-    .breadcrumb-sep { color: rgba(255,255,255,0.3); font-size: 0.75rem; }
-    .breadcrumb-current { font-size: 0.8125rem; color: rgba(255,255,255,0.85); font-weight: 500; }
+      /* Breadcrumb */
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.25rem;
+      }
+      .breadcrumb a {
+        font-size: 0.8125rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        transition: color 150ms;
+      }
+      .breadcrumb a:hover {
+        color: white;
+      }
+      .breadcrumb-sep {
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 0.75rem;
+      }
+      .breadcrumb-current {
+        font-size: 0.8125rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 500;
+      }
 
-    /* Profile identity */
-    .profile-avatar {
-      width: 5.5rem; height: 5.5rem; border-radius: 50%;
-      background: rgba(255,255,255,0.15); border: 3px solid rgba(255,255,255,0.35);
-      overflow: hidden; flex: none;
-    }
-    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      /* Profile identity */
+      .profile-avatar {
+        width: 5.5rem;
+        height: 5.5rem;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        border: 3px solid rgba(255, 255, 255, 0.35);
+        overflow: hidden;
+        flex: none;
+      }
+      .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
 
-    /* Account sub-nav */
-    .account-nav {
-      background: white; border-bottom: 2px solid #EEF1F5;
-      position: sticky; top: 64px; z-index: 100;
-      overflow-x: auto; scrollbar-width: none;
-    }
-    .account-nav::-webkit-scrollbar { display: none; }
-    .account-nav-inner {
-      display: flex; max-width: 1280px; margin: 0 auto;
-      padding: 0 1rem; gap: 0;
-    }
-    .account-nav-link {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.875rem 1rem; font-size: 0.875rem; font-weight: 600;
-      color: #6B7585; white-space: nowrap; text-decoration: none;
-      border-bottom: 3px solid transparent; margin-bottom: -2px;
-      transition: color 150ms, border-color 150ms; min-height: 44px;
-    }
-    .account-nav-link:hover { color: #0E8186; }
-    .account-nav-link.active { color: #0E8186; border-bottom-color: #0E8186; }
-    .account-nav-link svg { width: 0.9375rem; height: 0.9375rem; flex: none; }
+      /* Account sub-nav */
+      .account-nav {
+        background: white;
+        border-bottom: 2px solid #eef1f5;
+        position: sticky;
+        top: 64px;
+        z-index: 100;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .account-nav::-webkit-scrollbar {
+        display: none;
+      }
+      .account-nav-inner {
+        display: flex;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        gap: 0;
+      }
+      .account-nav-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.875rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #6b7585;
+        white-space: nowrap;
+        text-decoration: none;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+        transition:
+          color 150ms,
+          border-color 150ms;
+        min-height: 44px;
+      }
+      .account-nav-link:hover {
+        color: #0e8186;
+      }
+      .account-nav-link.active {
+        color: #0e8186;
+        border-bottom-color: #0e8186;
+      }
+      .account-nav-link svg {
+        width: 0.9375rem;
+        height: 0.9375rem;
+        flex: none;
+      }
 
-    /* Page layout */
-    .profile-layout {
-      display: grid; grid-template-columns: 1fr;
-      gap: 1.5rem; padding: 2rem 0;
-    }
-    @media (min-width: 1024px) {
-      .profile-layout { grid-template-columns: 280px 1fr; gap: 2rem; }
-    }
+      /* Page layout */
+      .profile-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 2rem 0;
+      }
+      @media (min-width: 1024px) {
+        .profile-layout {
+          grid-template-columns: 280px 1fr;
+          gap: 2rem;
+        }
+      }
 
-    /* Sidebar */
-    .profile-sidebar { display: flex; flex-direction: column; gap: 1rem; }
+      /* Sidebar */
+      .profile-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
 
-    /* Content sections */
-    .profile-section {
-      background: white; border-radius: 1.25rem;
-      border: 1.5px solid #EEF1F5;
-      box-shadow: 0 2px 8px rgba(38,46,58,0.06);
-      overflow: hidden;
-    }
-    .section-header {
-      padding: 1.25rem 1.5rem; border-bottom: 1px solid #F0F2F5;
-      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-    }
-    .section-header-icon {
-      width: 2.25rem; height: 2.25rem; border-radius: 0.625rem;
-      background: #EBF9FA; display: flex; align-items: center; justify-content: center;
-      color: #0E8186; flex: none;
-    }
-    .section-header-icon svg { width: 1.125rem; height: 1.125rem; }
-    .section-title { font-size: 1rem; font-weight: 700; color: #1A2230; }
-    .section-body { padding: 1.5rem; }
+      /* Content sections */
+      .profile-section {
+        background: white;
+        border-radius: 1.25rem;
+        border: 1.5px solid #eef1f5;
+        box-shadow: 0 2px 8px rgba(38, 46, 58, 0.06);
+        overflow: hidden;
+      }
+      .section-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #f0f2f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      .section-header-icon {
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 0.625rem;
+        background: #ebf9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0e8186;
+        flex: none;
+      }
+      .section-header-icon svg {
+        width: 1.125rem;
+        height: 1.125rem;
+      }
+      .section-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1a2230;
+      }
+      .section-body {
+        padding: 1.5rem;
+      }
 
-    /* Form grid */
-    .form-grid-2 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-    @media (min-width: 640px) { .form-grid-2 { grid-template-columns: repeat(2, 1fr); } }
-    .form-grid-3 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-    @media (min-width: 640px) { .form-grid-3 { grid-template-columns: repeat(3, 1fr); } }
+      /* Form grid */
+      .form-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      @media (min-width: 640px) {
+        .form-grid-2 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .form-grid-3 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      @media (min-width: 640px) {
+        .form-grid-3 {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
 
-    /* Toggle switch */
-    .toggle-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.875rem 0; border-bottom: 1px solid #F4F6F9;
-      gap: 1rem;
-    }
-    .toggle-row:last-child { border-bottom: none; }
-    .toggle-info { flex: 1; min-width: 0; }
-    .toggle-label { font-size: 0.9375rem; font-weight: 600; color: #1A2230; display: block; }
-    .toggle-hint { font-size: 0.8125rem; color: #9AA6B4; margin-top: 0.1rem; display: block; }
+      /* Toggle switch */
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.875rem 0;
+        border-bottom: 1px solid #f4f6f9;
+        gap: 1rem;
+      }
+      .toggle-row:last-child {
+        border-bottom: none;
+      }
+      .toggle-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .toggle-label {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: #1a2230;
+        display: block;
+      }
+      .toggle-hint {
+        font-size: 0.8125rem;
+        color: #9aa6b4;
+        margin-top: 0.1rem;
+        display: block;
+      }
 
-    /* Custom toggle switch */
-    .toggle-wrap { position: relative; flex: none; }
-    .toggle-input {
-      position: absolute; opacity: 0; width: 0; height: 0;
-    }
-    .toggle-track {
-      display: block; width: 2.75rem; height: 1.5rem;
-      background: #DEE3EA; border-radius: 9999px;
-      cursor: pointer; transition: background 200ms;
-      position: relative;
-    }
-    .toggle-track::after {
-      content: ''; position: absolute; top: 0.1875rem; inset-inline-start: 0.1875rem;
-      width: 1.125rem; height: 1.125rem; border-radius: 50%;
-      background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-      transition: inset-inline-start 200ms;
-    }
-    .toggle-input:checked + .toggle-track { background: #0E8186; }
-    .toggle-input:checked + .toggle-track::after { inset-inline-start: calc(100% - 1.3125rem); }
-    .toggle-input:focus + .toggle-track { outline: 2px solid #0E8186; outline-offset: 2px; }
+      /* Custom toggle switch */
+      .toggle-wrap {
+        position: relative;
+        flex: none;
+      }
+      .toggle-input {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .toggle-track {
+        display: block;
+        width: 2.75rem;
+        height: 1.5rem;
+        background: #dee3ea;
+        border-radius: 9999px;
+        cursor: pointer;
+        transition: background 200ms;
+        position: relative;
+      }
+      .toggle-track::after {
+        content: '';
+        position: absolute;
+        top: 0.1875rem;
+        inset-inline-start: 0.1875rem;
+        width: 1.125rem;
+        height: 1.125rem;
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        transition: inset-inline-start 200ms;
+      }
+      .toggle-input:checked + .toggle-track {
+        background: #0e8186;
+      }
+      .toggle-input:checked + .toggle-track::after {
+        inset-inline-start: calc(100% - 1.3125rem);
+      }
+      .toggle-input:focus + .toggle-track {
+        outline: 2px solid #0e8186;
+        outline-offset: 2px;
+      }
 
-    /* Inline info */
-    .inline-msg-info {
-      background: #EBF9FA; border: 1.5px solid #B2E8EA; border-radius: 0.875rem;
-      padding: 0.875rem 1rem; font-size: 0.8125rem; color: #0A5A5D; line-height: 1.6;
-      display: flex; align-items: flex-start; gap: 0.625rem;
-    }
-    .inline-msg-info svg { width: 1rem; height: 1rem; flex: none; color: #0E8186; margin-top: 0.1rem; }
-    .inline-msg-info strong { color: #0E686C; }
+      /* Inline info */
+      .inline-msg-info {
+        background: #ebf9fa;
+        border: 1.5px solid #b2e8ea;
+        border-radius: 0.875rem;
+        padding: 0.875rem 1rem;
+        font-size: 0.8125rem;
+        color: #0a5a5d;
+        line-height: 1.6;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.625rem;
+      }
+      .inline-msg-info svg {
+        width: 1rem;
+        height: 1rem;
+        flex: none;
+        color: #0e8186;
+        margin-top: 0.1rem;
+      }
+      .inline-msg-info strong {
+        color: #0e686c;
+      }
 
-    /* Password field */
-    .field-pw-wrap { position: relative; }
-    .field-pw-wrap .field-input { padding-inline-end: 3rem; }
-    .pw-toggle {
-      position: absolute; top: 50%; right: 0.625rem; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer; color: #9AA6B4;
-      padding: 0.375rem; border-radius: 0.375rem; transition: color 150ms; display: flex; align-items: center;
-    }
-    html[dir="rtl"] .pw-toggle { right: auto; left: 0.625rem; }
-    .pw-toggle:hover { color: #0E8186; }
-    .pw-toggle svg { width: 1.125rem; height: 1.125rem; }
+      /* Password field */
+      .field-pw-wrap {
+        position: relative;
+      }
+      .field-pw-wrap .field-input {
+        padding-inline-end: 3rem;
+      }
+      .pw-toggle {
+        position: absolute;
+        top: 50%;
+        right: 0.625rem;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #9aa6b4;
+        padding: 0.375rem;
+        border-radius: 0.375rem;
+        transition: color 150ms;
+        display: flex;
+        align-items: center;
+      }
+      html[dir='rtl'] .pw-toggle {
+        right: auto;
+        left: 0.625rem;
+      }
+      .pw-toggle:hover {
+        color: #0e8186;
+      }
+      .pw-toggle svg {
+        width: 1.125rem;
+        height: 1.125rem;
+      }
 
-    /* Session item */
-    .session-item {
-      display: flex; align-items: center; gap: 1rem;
-      padding: 0.875rem; background: #F8F9FB;
-      border-radius: 0.75rem; border: 1px solid #EEF1F5;
-      margin-bottom: 0.625rem;
-    }
-    .session-item:last-child { margin-bottom: 0; }
-    .session-icon {
-      width: 2.5rem; height: 2.5rem; border-radius: 0.625rem;
-      background: #EBF9FA; display: flex; align-items: center; justify-content: center;
-      color: #0E8186; flex: none;
-    }
-    .session-icon svg { width: 1.125rem; height: 1.125rem; }
-    .session-current { font-size: 0.6875rem; background: rgba(14,129,134,0.12); color: #0E686C; padding: 0.1rem 0.4rem; border-radius: 9999px; font-weight: 700; }
+      /* Session item */
+      .session-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.875rem;
+        background: #f8f9fb;
+        border-radius: 0.75rem;
+        border: 1px solid #eef1f5;
+        margin-bottom: 0.625rem;
+      }
+      .session-item:last-child {
+        margin-bottom: 0;
+      }
+      .session-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.625rem;
+        background: #ebf9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0e8186;
+        flex: none;
+      }
+      .session-icon svg {
+        width: 1.125rem;
+        height: 1.125rem;
+      }
+      .session-current {
+        font-size: 0.6875rem;
+        background: rgba(14, 129, 134, 0.12);
+        color: #0e686c;
+        padding: 0.1rem 0.4rem;
+        border-radius: 9999px;
+        font-weight: 700;
+      }
 
-    /* Interest chips */
-    .interest-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .interest-chip {
-      display: inline-flex; align-items: center; gap: 0.375rem;
-      padding: 0.375rem 0.75rem; border-radius: 9999px;
-      border: 1.5px solid #DEE3EA; background: white;
-      font-size: 0.8125rem; font-weight: 500; color: #4D5969;
-      cursor: pointer; transition: all 150ms;
-    }
-    .interest-chip input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
-    .interest-chip:has(input:checked) { border-color: #0E8186; background: #EBF9FA; color: #0E686C; }
-    .interest-chip:hover { border-color: #0E8186; }
+      /* Interest chips */
+      .interest-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .interest-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: 9999px;
+        border: 1.5px solid #dee3ea;
+        background: white;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: #4d5969;
+        cursor: pointer;
+        transition: all 150ms;
+      }
+      .interest-chip input[type='checkbox'] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .interest-chip:has(input:checked) {
+        border-color: #0e8186;
+        background: #ebf9fa;
+        color: #0e686c;
+      }
+      .interest-chip:hover {
+        border-color: #0e8186;
+      }
 
-    /* Benefits card */
-    .benefits-card {
-      background: linear-gradient(135deg, #042B2E 0%, #0E5C60 100%);
-      border-radius: 1.25rem; padding: 1.5rem; color: white;
-    }
-    .benefit-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.5rem 0; }
-    .benefit-check { width: 1.25rem; height: 1.25rem; border-radius: 50%; background: rgba(56,188,192,0.3); display: flex; align-items: center; justify-content: center; flex: none; }
-    .benefit-check svg { width: 0.75rem; height: 0.75rem; color: #56D9DC; }
+      /* Benefits card */
+      .benefits-card {
+        background: linear-gradient(135deg, #042b2e 0%, #0e5c60 100%);
+        border-radius: 1.25rem;
+        padding: 1.5rem;
+        color: white;
+      }
+      .benefit-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.5rem 0;
+      }
+      .benefit-check {
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 50%;
+        background: rgba(56, 188, 192, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+      }
+      .benefit-check svg {
+        width: 0.75rem;
+        height: 0.75rem;
+        color: #56d9dc;
+      }
 
-    /* Quick links in sidebar */
-    .quick-link-item {
-      display: flex; align-items: center; gap: 0.75rem;
-      padding: 0.75rem 1rem; border-radius: 0.75rem;
-      text-decoration: none; color: #3A4453; font-size: 0.9rem; font-weight: 500;
-      transition: background 150ms, color 150ms; background: #F8F9FB;
-    }
-    .quick-link-item:hover { background: #EBF9FA; color: #0E8186; }
-    .quick-link-item svg { width: 1rem; height: 1rem; flex: none; color: #9AA6B4; }
-    .quick-link-item:hover svg { color: #0E8186; }
+      /* Quick links in sidebar */
+      .quick-link-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        text-decoration: none;
+        color: #3a4453;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition:
+          background 150ms,
+          color 150ms;
+        background: #f8f9fb;
+      }
+      .quick-link-item:hover {
+        background: #ebf9fa;
+        color: #0e8186;
+      }
+      .quick-link-item svg {
+        width: 1rem;
+        height: 1rem;
+        flex: none;
+        color: #9aa6b4;
+      }
+      .quick-link-item:hover svg {
+        color: #0e8186;
+      }
 
-    /* 2FA placeholder */
-    .tfa-card {
-      background: #F8F9FB; border: 1.5px dashed #DEE3EA;
-      border-radius: 0.875rem; padding: 1.25rem;
-      display: flex; align-items: center; gap: 1rem;
-    }
-    .tfa-icon { width: 2.75rem; height: 2.75rem; border-radius: 0.75rem; background: #EEF1F5; display: flex; align-items: center; justify-content: center; color: #9AA6B4; flex: none; }
-    .tfa-icon svg { width: 1.375rem; height: 1.375rem; }
-  </style>
-</head>
-<body>
+      /* 2FA placeholder */
+      .tfa-card {
+        background: #f8f9fb;
+        border: 1.5px dashed #dee3ea;
+        border-radius: 0.875rem;
+        padding: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .tfa-icon {
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 0.75rem;
+        background: #eef1f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #9aa6b4;
+        flex: none;
+      }
+      .tfa-icon svg {
+        width: 1.375rem;
+        height: 1.375rem;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">انتقل إلى المحتوى الرئيسي</a>
+    <div id="toast-root" aria-live="assertive" aria-atomic="true" role="status"></div>
 
-  <a href="#main" class="skip-link">انتقل إلى المحتوى الرئيسي</a>
-  <div id="toast-root" aria-live="assertive" aria-atomic="true" role="status"></div>
-
-  <!-- ═══ HEADER (inlined from partials/header.html) ════════════════════ -->
-  <header class="site-header" role="banner">
-    <div class="header-inner max-w-7xl mx-auto px-4 md:px-6 flex items-center h-16 gap-4">
-      <a href="index.html" class="brand flex items-center gap-2 me-auto no-underline" aria-label="رحلاتي – الصفحة الرئيسية">
-        <span class="brand-mark" aria-hidden="true">
-          <svg width="34" height="34" viewBox="0 0 32 32" fill="none">
-            <rect width="32" height="32" rx="9" fill="#0E8186"/>
-            <path d="M16 7C11.029 7 7 11.029 7 16s4.029 9 9 9 9-4.029 9-9-4.029-9-9-9z" fill="#38BCC0" opacity="0.35"/>
-            <path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/>
-            <circle cx="16" cy="14" r="3" fill="#0E8186"/>
-          </svg>
-        </span>
-        <span class="brand-name text-xl font-bold text-lagoon-700 tracking-tight">رحلاتي</span>
-      </a>
-      <nav class="hidden lg:flex items-center gap-1" aria-label="التنقل الرئيسي">
-        <a href="index.html" class="nav-link">الرئيسية</a>
-        <a href="deals.html" class="nav-link">عروض السفر</a>
-        <a href="compare.html" class="nav-link">مقارنة الأسعار</a>
-        <a href="coupons.html" class="nav-link">كوبونات</a>
-        <a href="destinations.html" class="nav-link">الوجهات</a>
-        <a href="blog.html" class="nav-link">المدونة</a>
-      </nav>
-      <a href="saved-deals.html" class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-lagoon-700 hover:text-lagoon-800 rounded-lg hover:bg-lagoon-50 transition-colors">
-        <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>
-        <span>حسابي</span>
-      </a>
-      <a href="login.html" class="hidden md:flex btn btn-primary btn-sm">تسجيل الدخول</a>
-      <button type="button" class="btn btn-ghost btn-icon lg:hidden" aria-label="فتح القائمة" aria-expanded="false" aria-controls="main-nav" data-drawer-open="main-nav">
-        <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-menu"/></svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- Mobile Drawer -->
-  <div class="drawer drawer-start" id="main-nav-drawer" data-drawer="main-nav" role="dialog" aria-modal="true" aria-label="قائمة التنقل" hidden>
-    <div class="drawer-overlay" data-drawer-close aria-hidden="true"></div>
-    <nav class="drawer-panel" aria-label="التنقل الرئيسي">
-      <div class="flex items-center justify-between p-4 border-b border-ink-100">
-        <a href="index.html" class="brand flex items-center gap-2 no-underline">
-          <span class="brand-mark" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="9" fill="#0E8186"/><path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/><circle cx="16" cy="14" r="3" fill="#0E8186"/></svg></span>
-          <span class="text-lg font-bold text-lagoon-700">رحلاتي</span>
+    <!-- ═══ HEADER (inlined from partials/header.html) ════════════════════ -->
+    <header class="site-header" role="banner">
+      <div class="header-inner max-w-7xl mx-auto px-4 md:px-6 flex items-center h-16 gap-4">
+        <a
+          href="index.html"
+          class="brand flex items-center gap-2 me-auto no-underline"
+          aria-label="رحلاتي – الصفحة الرئيسية"
+        >
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none">
+              <rect width="32" height="32" rx="9" fill="#0E8186" />
+              <path
+                d="M16 7C11.029 7 7 11.029 7 16s4.029 9 9 9 9-4.029 9-9-4.029-9-9-9z"
+                fill="#38BCC0"
+                opacity="0.35"
+              />
+              <path
+                d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z"
+                fill="white"
+              />
+              <circle cx="16" cy="14" r="3" fill="#0E8186" />
+            </svg>
+          </span>
+          <span class="brand-name text-xl font-bold text-lagoon-700 tracking-tight">رحلاتي</span>
         </a>
-        <button type="button" class="btn btn-ghost btn-icon" aria-label="إغلاق القائمة" data-drawer-close>
-          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-close"/></svg>
+        <nav class="hidden lg:flex items-center gap-1" aria-label="التنقل الرئيسي">
+          <a href="index.html" class="nav-link">الرئيسية</a>
+          <a href="deals.html" class="nav-link">عروض السفر</a>
+          <a href="compare.html" class="nav-link">مقارنة الأسعار</a>
+          <a href="coupons.html" class="nav-link">كوبونات</a>
+          <a href="destinations.html" class="nav-link">الوجهات</a>
+          <a href="blog.html" class="nav-link">المدونة</a>
+        </nav>
+        <a
+          href="saved-deals.html"
+          class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-lagoon-700 hover:text-lagoon-800 rounded-lg hover:bg-lagoon-50 transition-colors"
+        >
+          <svg class="w-4 h-4" aria-hidden="true">
+            <use href="../assets/icons/sprite.svg#icon-star" />
+          </svg>
+          <span>حسابي</span>
+        </a>
+        <a href="login.html" class="hidden md:flex btn btn-primary btn-sm">تسجيل الدخول</a>
+        <button
+          type="button"
+          class="btn btn-ghost btn-icon lg:hidden"
+          aria-label="فتح القائمة"
+          aria-expanded="false"
+          aria-controls="main-nav"
+          data-drawer-open="main-nav"
+        >
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-menu" /></svg>
         </button>
       </div>
-      <ul class="drawer-nav flex-1 p-4 space-y-1" role="list">
-        <li><a href="index.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plane"/></svg>الرئيسية</a></li>
-        <li><a href="deals.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>عروض السفر</a></li>
-        <li><a href="compare.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search"/></svg>مقارنة الأسعار</a></li>
-        <li><a href="coupons.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>كوبونات الخصم</a></li>
-        <li><a href="destinations.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg>الوجهات</a></li>
-        <li><a href="blog.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>المدونة</a></li>
-      </ul>
-      <div class="p-4 border-t border-ink-100 space-y-3">
-        <a href="login.html" class="btn btn-primary w-full justify-center">تسجيل الدخول</a>
-        <a href="register.html" class="btn btn-outline w-full justify-center">إنشاء حساب جديد</a>
-        <div class="flex gap-2">
-          <a href="saved-deals.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs"><svg class="w-3.5 h-3.5 me-1" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>المحفوظات</a>
-          <a href="price-alerts.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs"><svg class="w-3.5 h-3.5 me-1" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>التنبيهات</a>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div
+      class="drawer drawer-start"
+      id="main-nav-drawer"
+      data-drawer="main-nav"
+      role="dialog"
+      aria-modal="true"
+      aria-label="قائمة التنقل"
+      hidden
+    >
+      <div class="drawer-overlay" data-drawer-close aria-hidden="true"></div>
+      <nav class="drawer-panel" aria-label="التنقل الرئيسي">
+        <div class="flex items-center justify-between p-4 border-b border-ink-100">
+          <a href="index.html" class="brand flex items-center gap-2 no-underline">
+            <span class="brand-mark" aria-hidden="true"
+              ><svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+                <rect width="32" height="32" rx="9" fill="#0E8186" />
+                <path
+                  d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z"
+                  fill="white"
+                />
+                <circle cx="16" cy="14" r="3" fill="#0E8186" /></svg
+            ></span>
+            <span class="text-lg font-bold text-lagoon-700">رحلاتي</span>
+          </a>
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon"
+            aria-label="إغلاق القائمة"
+            data-drawer-close
+          >
+            <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-close" /></svg>
+          </button>
         </div>
-      </div>
-    </nav>
-  </div>
-
-  <!-- ═══ MAIN ════════════════════════════════════════════════════════════ -->
-  <main id="main">
-
-    <!-- ── Profile Hero ──────────────────────────────────────────────── -->
-    <div class="profile-hero">
-      <div class="hero-inner max-w-7xl mx-auto px-4 md:px-6">
-
-        <nav class="breadcrumb" aria-label="مسار التنقل">
-          <a href="index.html">الرئيسية</a>
-          <span class="breadcrumb-sep" aria-hidden="true">›</span>
-          <span class="breadcrumb-current" aria-current="page">الملف الشخصي</span>
-        </nav>
-
-        <!-- Identity row -->
-        <div class="flex flex-col sm:flex-row sm:items-end gap-5 pb-6">
-          <div class="profile-avatar">
-            <img src="../assets/images/avatar.svg" alt="صورة المستخدم التجريبي" width="88" height="88" loading="eager">
+        <ul class="drawer-nav flex-1 p-4 space-y-1" role="list">
+          <li>
+            <a href="index.html" class="drawer-nav-link"
+              ><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plane" /></svg
+              >الرئيسية</a
+            >
+          </li>
+          <li>
+            <a href="deals.html" class="drawer-nav-link"
+              ><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star" /></svg>عروض
+              السفر</a
+            >
+          </li>
+          <li>
+            <a href="compare.html" class="drawer-nav-link"
+              ><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search" /></svg
+              >مقارنة الأسعار</a
+            >
+          </li>
+          <li>
+            <a href="coupons.html" class="drawer-nav-link"
+              ><svg aria-hidden="true">
+                <use href="../assets/icons/sprite.svg#icon-shield-check" /></svg
+              >كوبونات الخصم</a
+            >
+          </li>
+          <li>
+            <a href="destinations.html" class="drawer-nav-link"
+              ><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location" /></svg
+              >الوجهات</a
+            >
+          </li>
+          <li>
+            <a href="blog.html" class="drawer-nav-link"
+              ><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info" /></svg
+              >المدونة</a
+            >
+          </li>
+        </ul>
+        <div class="p-4 border-t border-ink-100 space-y-3">
+          <a href="login.html" class="btn btn-primary w-full justify-center">تسجيل الدخول</a>
+          <a href="register.html" class="btn btn-outline w-full justify-center">إنشاء حساب جديد</a>
+          <div class="flex gap-2">
+            <a href="saved-deals.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs"
+              ><svg class="w-3.5 h-3.5 me-1" aria-hidden="true">
+                <use href="../assets/icons/sprite.svg#icon-star" /></svg
+              >المحفوظات</a
+            >
+            <a href="price-alerts.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs"
+              ><svg class="w-3.5 h-3.5 me-1" aria-hidden="true">
+                <use href="../assets/icons/sprite.svg#icon-info" /></svg
+              >التنبيهات</a
+            >
           </div>
-          <div class="flex-1">
-            <div class="flex flex-wrap items-center gap-2.5 mb-1">
-              <h1 class="text-2xl font-extrabold text-white leading-tight">الملف الشخصي</h1>
-              <span class="badge text-xs" style="background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);">تجربة تجريبية</span>
-            </div>
-            <p class="text-lagoon-200 text-sm font-semibold">زائر تجريبي</p>
-            <p class="text-lagoon-300 text-xs mt-0.5 flex flex-wrap items-center gap-3">
-              <span dir="ltr">visitor@example.com</span>
-              <span>·</span>
-              <span>عضو منذ يناير 2025</span>
-            </p>
-            <div class="flex flex-wrap gap-2.5 mt-3">
-              <a href="saved-deals.html" class="text-xs font-semibold text-lagoon-300 hover:text-white transition-colors">المحفوظات ←</a>
-              <a href="price-alerts.html" class="text-xs font-semibold text-lagoon-300 hover:text-white transition-colors">التنبيهات ←</a>
-              <a href="deals.html" class="text-xs font-semibold text-lagoon-300 hover:text-white transition-colors">تصفح العروض ←</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Account sub-nav -->
-      <nav class="account-nav" aria-label="التنقل داخل الحساب">
-        <div class="account-nav-inner">
-          <a href="#personal-info" class="account-nav-link active">
-            <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search"/></svg>الملف
-          </a>
-          <a href="saved-deals.html" class="account-nav-link">
-            <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>المحفوظات
-          </a>
-          <a href="price-alerts.html" class="account-nav-link">
-            <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>التنبيهات
-          </a>
-          <a href="#travel-prefs" class="account-nav-link">
-            <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg>تفضيلات السفر
-          </a>
-          <a href="#notifications" class="account-nav-link">
-            <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-phone"/></svg>الإشعارات
-          </a>
-          <a href="#security" class="account-nav-link">
-            <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>الأمان
-          </a>
         </div>
       </nav>
     </div>
 
-    <!-- ── Profile body ──────────────────────────────────────────────── -->
-    <div class="max-w-7xl mx-auto px-4 md:px-6">
-      <div class="profile-layout">
+    <!-- ═══ MAIN ════════════════════════════════════════════════════════════ -->
+    <main id="main">
+      <!-- ── Profile Hero ──────────────────────────────────────────────── -->
+      <div class="profile-hero">
+        <div class="hero-inner max-w-7xl mx-auto px-4 md:px-6">
+          <nav class="breadcrumb" aria-label="مسار التنقل">
+            <a href="index.html">الرئيسية</a>
+            <span class="breadcrumb-sep" aria-hidden="true">›</span>
+            <span class="breadcrumb-current" aria-current="page">الملف الشخصي</span>
+          </nav>
 
-        <!-- ── Sidebar ─────────────────────────────────────────────── -->
-        <aside class="profile-sidebar">
-
-          <!-- Mini identity card -->
-          <div class="profile-section">
-            <div class="section-body text-center py-5">
-              <div class="w-16 h-16 rounded-full overflow-hidden mx-auto mb-3" style="border: 2.5px solid #B2E8EA;">
-                <img src="../assets/images/avatar.svg" alt="صورة الملف" width="64" height="64">
+          <!-- Identity row -->
+          <div class="flex flex-col sm:flex-row sm:items-end gap-5 pb-6">
+            <div class="profile-avatar">
+              <img
+                src="../assets/images/avatar.svg"
+                alt="صورة المستخدم التجريبي"
+                width="88"
+                height="88"
+                loading="eager"
+              />
+            </div>
+            <div class="flex-1">
+              <div class="flex flex-wrap items-center gap-2.5 mb-1">
+                <h1 class="text-2xl font-extrabold text-white leading-tight">الملف الشخصي</h1>
+                <span
+                  class="badge text-xs"
+                  style="background: rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.9)"
+                  >تجربة تجريبية</span
+                >
               </div>
-              <p class="font-bold text-ink-800">زائر تجريبي</p>
-              <p class="text-xs text-ink-400 mt-0.5" dir="ltr">visitor@example.com</p>
-              <p class="text-xs text-ink-400">الرياض · السعودية</p>
-              <div class="mt-3 pt-3 border-t border-ink-100 flex justify-center gap-4 text-center">
-                <div>
-                  <p class="text-lg font-extrabold text-lagoon-600">6</p>
-                  <p class="text-xs text-ink-400">محفوظات</p>
-                </div>
-                <div>
-                  <p class="text-lg font-extrabold text-lagoon-600">4</p>
-                  <p class="text-xs text-ink-400">تنبيهات</p>
-                </div>
-                <div>
-                  <p class="text-lg font-extrabold text-lagoon-600">4</p>
-                  <p class="text-xs text-ink-400">وجهات</p>
-                </div>
+              <p class="text-lagoon-200 text-sm font-semibold">زائر تجريبي</p>
+              <p class="text-lagoon-300 text-xs mt-0.5 flex flex-wrap items-center gap-3">
+                <span dir="ltr">visitor@example.com</span>
+                <span>·</span>
+                <span>عضو منذ يناير 2025</span>
+              </p>
+              <div class="flex flex-wrap gap-2.5 mt-3">
+                <a
+                  href="saved-deals.html"
+                  class="text-xs font-semibold text-lagoon-300 hover:text-white transition-colors"
+                  >المحفوظات ←</a
+                >
+                <a
+                  href="price-alerts.html"
+                  class="text-xs font-semibold text-lagoon-300 hover:text-white transition-colors"
+                  >التنبيهات ←</a
+                >
+                <a
+                  href="deals.html"
+                  class="text-xs font-semibold text-lagoon-300 hover:text-white transition-colors"
+                  >تصفح العروض ←</a
+                >
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Quick links -->
-          <div class="profile-section">
-            <div class="section-body p-3 space-y-1">
-              <a href="saved-deals.html" class="quick-link-item">
-                <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>
-                المحفوظات
-              </a>
-              <a href="price-alerts.html" class="quick-link-item">
-                <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>
-                تنبيهات الأسعار
-              </a>
-              <a href="deals.html" class="quick-link-item">
-                <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plane"/></svg>
-                تصفح العروض
-              </a>
-              <a href="destinations.html" class="quick-link-item">
-                <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg>
-                الوجهات
-              </a>
-            </div>
+        <!-- Account sub-nav -->
+        <nav class="account-nav" aria-label="التنقل داخل الحساب">
+          <div class="account-nav-inner">
+            <a href="#personal-info" class="account-nav-link active">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search" /></svg
+              >الملف
+            </a>
+            <a href="saved-deals.html" class="account-nav-link">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star" /></svg
+              >المحفوظات
+            </a>
+            <a href="price-alerts.html" class="account-nav-link">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info" /></svg
+              >التنبيهات
+            </a>
+            <a href="#travel-prefs" class="account-nav-link">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location" /></svg
+              >تفضيلات السفر
+            </a>
+            <a href="#notifications" class="account-nav-link">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-phone" /></svg
+              >الإشعارات
+            </a>
+            <a href="#security" class="account-nav-link">
+              <svg aria-hidden="true">
+                <use href="../assets/icons/sprite.svg#icon-shield-check" /></svg
+              >الأمان
+            </a>
           </div>
+        </nav>
+      </div>
 
-          <!-- Benefits card -->
-          <div class="benefits-card">
-            <p class="text-xs font-semibold text-lagoon-300 uppercase tracking-widest mb-3">مزايا العضوية</p>
-            <div class="benefit-item">
-              <span class="benefit-check"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check-circle"/></svg></span>
-              <span class="text-sm text-white/85">حفظ العروض والكوبونات</span>
-            </div>
-            <div class="benefit-item">
-              <span class="benefit-check"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check-circle"/></svg></span>
-              <span class="text-sm text-white/85">تنبيهات الأسعار</span>
-            </div>
-            <div class="benefit-item">
-              <span class="benefit-check"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check-circle"/></svg></span>
-              <span class="text-sm text-white/85">توصيات مخصصة (لاحقاً)</span>
-            </div>
-            <div class="benefit-item">
-              <span class="benefit-check"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check-circle"/></svg></span>
-              <span class="text-sm text-white/85">تسريع طلبات الحجز (لاحقاً)</span>
-            </div>
-          </div>
-
-        </aside>
-
-        <!-- ── Main content ────────────────────────────────────────── -->
-        <div class="space-y-5">
-
-          <!-- ── Privacy note ──────────────────────────────────────── -->
-          <div class="inline-msg-info" role="note">
-            <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>
-            <p><strong>واجهة أمامية فقط</strong> — لا يتم حفظ أي بيانات على خادم. التعديلات مؤقتة تُعاد عند تحديث الصفحة. الصفحة قابلة للربط بنظام حسابات حقيقي لاحقاً.</p>
-          </div>
-
-          <!-- ══════ Section: Personal Info ══════════════════════════ -->
-          <section class="profile-section" id="personal-info" aria-labelledby="personal-info-title">
-            <div class="section-header">
-              <div class="flex items-center gap-3">
-                <div class="section-header-icon"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search"/></svg></div>
-                <div>
-                  <h2 class="section-title" id="personal-info-title">البيانات الشخصية</h2>
-                  <p class="text-xs text-ink-400 mt-0.5">معلومات حسابك الأساسية</p>
+      <!-- ── Profile body ──────────────────────────────────────────────── -->
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="profile-layout">
+          <!-- ── Sidebar ─────────────────────────────────────────────── -->
+          <aside class="profile-sidebar">
+            <!-- Mini identity card -->
+            <div class="profile-section">
+              <div class="section-body text-center py-5">
+                <div
+                  class="w-16 h-16 rounded-full overflow-hidden mx-auto mb-3"
+                  style="border: 2.5px solid #b2e8ea"
+                >
+                  <img src="../assets/images/avatar.svg" alt="صورة الملف" width="64" height="64" />
+                </div>
+                <p class="font-bold text-ink-800">زائر تجريبي</p>
+                <p class="text-xs text-ink-400 mt-0.5" dir="ltr">visitor@example.com</p>
+                <p class="text-xs text-ink-400">الرياض · السعودية</p>
+                <div
+                  class="mt-3 pt-3 border-t border-ink-100 flex justify-center gap-4 text-center"
+                >
+                  <div>
+                    <p class="text-lg font-extrabold text-lagoon-600">6</p>
+                    <p class="text-xs text-ink-400">محفوظات</p>
+                  </div>
+                  <div>
+                    <p class="text-lg font-extrabold text-lagoon-600">4</p>
+                    <p class="text-xs text-ink-400">تنبيهات</p>
+                  </div>
+                  <div>
+                    <p class="text-lg font-extrabold text-lagoon-600">4</p>
+                    <p class="text-xs text-ink-400">وجهات</p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="section-body">
-              <form id="personal-info-form" data-validate data-frontend-form
-                data-success-toast="تم حفظ البيانات الشخصية (واجهة أمامية فقط)"
-                novalidate aria-label="نموذج البيانات الشخصية">
-                <div class="form-grid-2">
-                  <div class="field sm:col-span-2">
-                    <label for="profile-name" class="field-label">الاسم الكامل</label>
-                    <input type="text" id="profile-name" name="profile-name" class="field-input" value="زائر تجريبي" required autocomplete="name">
-                    <span class="field-error" role="alert"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-alert-triangle"/></svg> مطلوب</span>
-                  </div>
-                  <div class="field">
-                    <label for="profile-email" class="field-label">البريد الإلكتروني</label>
-                    <input type="email" id="profile-email" name="profile-email" class="field-input" value="visitor@example.com" dir="ltr" required autocomplete="email">
-                    <span class="field-error" role="alert"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-alert-triangle"/></svg> بريد إلكتروني صحيح مطلوب</span>
-                  </div>
-                  <div class="field">
-                    <label for="profile-phone" class="field-label">رقم الجوال</label>
-                    <input type="tel" id="profile-phone" name="profile-phone" class="field-input" value="+966 50 000 0000" dir="ltr" autocomplete="tel">
-                  </div>
-                  <div class="field">
-                    <label for="profile-country" class="field-label">الدولة</label>
-                    <select id="profile-country" name="profile-country" class="field-select">
-                      <option value="السعودية" selected>السعودية</option>
-                      <option value="الإمارات">الإمارات</option>
-                      <option value="الكويت">الكويت</option>
-                      <option value="قطر">قطر</option>
-                      <option value="البحرين">البحرين</option>
-                      <option value="عمان">عمان</option>
-                      <option value="مصر">مصر</option>
-                      <option value="الأردن">الأردن</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="profile-city" class="field-label">المدينة</label>
-                    <input type="text" id="profile-city" name="profile-city" class="field-input" value="الرياض" autocomplete="address-level2">
-                  </div>
-                  <div class="field">
-                    <label for="profile-lang" class="field-label">اللغة المفضلة</label>
-                    <select id="profile-lang" name="profile-lang" class="field-select">
-                      <option value="ar" selected>العربية</option>
-                      <option value="en">English</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="profile-currency" class="field-label">العملة المفضلة</label>
-                    <select id="profile-currency" name="profile-currency" class="field-select">
-                      <option value="ر.س" selected>ريال سعودي (ر.س)</option>
-                      <option value="د.إ">درهم إماراتي (د.إ)</option>
-                      <option value="USD">دولار أمريكي (USD)</option>
-                      <option value="EUR">يورو (EUR)</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="flex flex-wrap gap-3 mt-5">
-                  <button type="submit" class="btn btn-primary gap-2">
-                    <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
-                    حفظ التغييرات
-                  </button>
-                </div>
-                <div data-frontend-success hidden class="inline-msg-info mt-3" aria-live="polite">
-                  <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check-circle"/></svg>
-                  <strong>تم الحفظ (تجريبي)</strong> — لا تخزين حقيقي في هذه النسخة.
-                </div>
-              </form>
-            </div>
-          </section>
 
-          <!-- ══════ Section: Travel Preferences ════════════════════ -->
-          <section class="profile-section" id="travel-prefs" aria-labelledby="travel-prefs-title">
-            <div class="section-header">
-              <div class="flex items-center gap-3">
-                <div class="section-header-icon"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg></div>
-                <div>
-                  <h2 class="section-title" id="travel-prefs-title">تفضيلات السفر</h2>
-                  <p class="text-xs text-ink-400 mt-0.5">يتم استخدامها لاحقاً لتخصيص التوصيات</p>
-                </div>
+            <!-- Quick links -->
+            <div class="profile-section">
+              <div class="section-body p-3 space-y-1">
+                <a href="saved-deals.html" class="quick-link-item">
+                  <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star" /></svg>
+                  المحفوظات
+                </a>
+                <a href="price-alerts.html" class="quick-link-item">
+                  <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info" /></svg>
+                  تنبيهات الأسعار
+                </a>
+                <a href="deals.html" class="quick-link-item">
+                  <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plane" /></svg>
+                  تصفح العروض
+                </a>
+                <a href="destinations.html" class="quick-link-item">
+                  <svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-location" />
+                  </svg>
+                  الوجهات
+                </a>
               </div>
             </div>
-            <div class="section-body">
-              <form id="travel-prefs-form" data-validate data-frontend-form
-                data-success-toast="تم حفظ تفضيلات السفر (واجهة أمامية فقط)"
-                novalidate aria-label="نموذج تفضيلات السفر">
 
-                <!-- Preferred destinations -->
-                <div class="field mb-4">
-                  <label class="field-label mb-2">الوجهات المفضلة (من المحفوظات)</label>
-                  <div class="flex flex-wrap gap-2">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-lagoon-50 text-lagoon-700 border border-lagoon-200">
-                      <svg class="w-3.5 h-3.5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg>
-                      دبي
-                    </span>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-lagoon-50 text-lagoon-700 border border-lagoon-200">
-                      <svg class="w-3.5 h-3.5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg>
-                      إسطنبول
-                    </span>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-lagoon-50 text-lagoon-700 border border-lagoon-200">
-                      <svg class="w-3.5 h-3.5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg>
-                      باريس
-                    </span>
-                  </div>
-                </div>
-
-                <!-- Travel interests -->
-                <div class="field mb-4">
-                  <label class="field-label mb-2">اهتمامات السفر</label>
-                  <div class="interest-chips" role="group" aria-label="اختر اهتمامات السفر">
-                    <label class="interest-chip"><input type="checkbox" name="interests" value="عائلات" checked> عائلات 👨‍👩‍👧‍👦</label>
-                    <label class="interest-chip"><input type="checkbox" name="interests" value="شهر عسل"> شهر عسل 💑</label>
-                    <label class="interest-chip"><input type="checkbox" name="interests" value="اقتصادي"> اقتصادي 💰</label>
-                    <label class="interest-chip"><input type="checkbox" name="interests" value="فاخر" checked> فاخر ✨</label>
-                    <label class="interest-chip"><input type="checkbox" name="interests" value="شواطئ" checked> شواطئ 🏖️</label>
-                    <label class="interest-chip"><input type="checkbox" name="interests" value="تسوق"> تسوق 🛍️</label>
-                    <label class="interest-chip"><input type="checkbox" name="interests" value="عمرة"> عمرة 🕌</label>
-                  </div>
-                </div>
-
-                <div class="form-grid-3">
-                  <div class="field">
-                    <label for="pref-budget" class="field-label">نطاق الميزانية</label>
-                    <select id="pref-budget" name="pref-budget" class="field-select">
-                      <option value="low">أقل من 2,000 ر.س</option>
-                      <option value="mid">2,000 – 5,000 ر.س</option>
-                      <option value="premium" selected>3,000 – 8,000 ر.س</option>
-                      <option value="high">5,000 – 15,000 ر.س</option>
-                      <option value="luxury">أكثر من 15,000 ر.س</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="pref-stars" class="field-label">تصنيف الفندق المفضل</label>
-                    <select id="pref-stars" name="pref-stars" class="field-select">
-                      <option value="3">3 نجوم</option>
-                      <option value="4" selected>4 نجوم</option>
-                      <option value="5">5 نجوم</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="pref-season" class="field-label">موسم السفر المفضل</label>
-                    <select id="pref-season" name="pref-season" class="field-select">
-                      <option value="spring">ربيع</option>
-                      <option value="summer">صيف</option>
-                      <option value="autumn-winter" selected>خريف / شتاء</option>
-                      <option value="any">أي موسم</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="pref-travelers" class="field-label">عدد المسافرين الافتراضي</label>
-                    <select id="pref-travelers" name="pref-travelers" class="field-select">
-                      <option value="1">مسافر واحد</option>
-                      <option value="2" selected>مسافران</option>
-                      <option value="3">3 مسافرين</option>
-                      <option value="4">4 مسافرين</option>
-                      <option value="5">5 أو أكثر</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="pref-airport" class="field-label">مطار/مدينة المغادرة</label>
-                    <input type="text" id="pref-airport" name="pref-airport" class="field-input" value="الرياض (RUH)" dir="ltr">
-                  </div>
-                </div>
-
-                <div class="flex flex-wrap gap-3 mt-5">
-                  <button type="submit" class="btn btn-primary gap-2">
-                    <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
-                    حفظ التفضيلات
-                  </button>
-                </div>
-                <div data-frontend-success hidden class="inline-msg-info mt-3" aria-live="polite">
-                  <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check-circle"/></svg>
-                  <strong>تم الحفظ (تجريبي)</strong> — لا تخزين حقيقي في هذه النسخة.
-                </div>
-              </form>
-            </div>
-          </section>
-
-          <!-- ══════ Section: Notification Settings ═════════════════ -->
-          <section class="profile-section" id="notifications" aria-labelledby="notifications-title">
-            <div class="section-header">
-              <div class="flex items-center gap-3">
-                <div class="section-header-icon"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-phone"/></svg></div>
-                <div>
-                  <h2 class="section-title" id="notifications-title">إعدادات الإشعارات</h2>
-                  <p class="text-xs text-ink-400 mt-0.5">التغييرات تجريبية — لا إرسال حقيقي في هذه النسخة</p>
-                </div>
+            <!-- Benefits card -->
+            <div class="benefits-card">
+              <p class="text-xs font-semibold text-lagoon-300 uppercase tracking-widest mb-3">
+                مزايا العضوية
+              </p>
+              <div class="benefit-item">
+                <span class="benefit-check"
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-check-circle" /></svg
+                ></span>
+                <span class="text-sm text-white/85">حفظ العروض والكوبونات</span>
+              </div>
+              <div class="benefit-item">
+                <span class="benefit-check"
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-check-circle" /></svg
+                ></span>
+                <span class="text-sm text-white/85">تنبيهات الأسعار</span>
+              </div>
+              <div class="benefit-item">
+                <span class="benefit-check"
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-check-circle" /></svg
+                ></span>
+                <span class="text-sm text-white/85">توصيات مخصصة (لاحقاً)</span>
+              </div>
+              <div class="benefit-item">
+                <span class="benefit-check"
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-check-circle" /></svg
+                ></span>
+                <span class="text-sm text-white/85">تسريع طلبات الحجز (لاحقاً)</span>
               </div>
             </div>
-            <div class="section-body">
+          </aside>
 
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-label">تنبيهات الأسعار بالبريد</span>
-                  <span class="toggle-hint">إشعار عند انخفاض سعر وجهة محفوظة</span>
-                </div>
-                <label class="toggle-wrap" aria-label="تنبيهات الأسعار بالبريد">
-                  <input type="checkbox" class="toggle-input" id="notif-email" name="notif-email" role="switch" aria-checked="true" data-notify-toggle="تنبيهات الأسعار بالبريد" checked>
-                  <span class="toggle-track" aria-hidden="true"></span>
-                </label>
-              </div>
-
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-label">تذكير الكوبونات</span>
-                  <span class="toggle-hint">تنبيه قبل انتهاء صلاحية كوبون محفوظ</span>
-                </div>
-                <label class="toggle-wrap" aria-label="تذكير الكوبونات">
-                  <input type="checkbox" class="toggle-input" id="notif-coupons" name="notif-coupons" role="switch" aria-checked="true" data-notify-toggle="تذكير الكوبونات" checked>
-                  <span class="toggle-track" aria-hidden="true"></span>
-                </label>
-              </div>
-
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-label">تنبيهات هبوط السعر</span>
-                  <span class="toggle-hint">إشعار عند انخفاض ملحوظ في أسعار الوجهات المتابَعة</span>
-                </div>
-                <label class="toggle-wrap" aria-label="تنبيهات هبوط السعر">
-                  <input type="checkbox" class="toggle-input" id="notif-pricedrop" name="notif-pricedrop" role="switch" aria-checked="true" data-notify-toggle="تنبيهات هبوط السعر" checked>
-                  <span class="toggle-track" aria-hidden="true"></span>
-                </label>
-              </div>
-
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-label">تذكير انتهاء العروض المحفوظة</span>
-                  <span class="toggle-hint">تنبيه قبل انتهاء صلاحية عرض محفوظ</span>
-                </div>
-                <label class="toggle-wrap" aria-label="تذكير انتهاء العروض المحفوظة">
-                  <input type="checkbox" class="toggle-input" id="notif-expiry" name="notif-expiry" role="switch" aria-checked="false" data-notify-toggle="تذكير انتهاء العروض المحفوظة">
-                  <span class="toggle-track" aria-hidden="true"></span>
-                </label>
-              </div>
-
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-label">واتساب <span class="text-xs text-ink-400">(قريباً)</span></span>
-                  <span class="toggle-hint">إشعارات عبر واتساب — placeholder قابل للربط لاحقاً</span>
-                </div>
-                <label class="toggle-wrap" aria-label="واتساب">
-                  <input type="checkbox" class="toggle-input" id="notif-whatsapp" name="notif-whatsapp" role="switch" aria-checked="false" data-notify-toggle="واتساب (قريباً)" disabled>
-                  <span class="toggle-track" aria-hidden="true" style="opacity:0.4;cursor:not-allowed;"></span>
-                </label>
-              </div>
-
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-label">النشرة البريدية</span>
-                  <span class="toggle-hint">أفضل العروض والوجهات أسبوعياً</span>
-                </div>
-                <label class="toggle-wrap" aria-label="النشرة البريدية">
-                  <input type="checkbox" class="toggle-input" id="notif-newsletter" name="notif-newsletter" role="switch" aria-checked="true" data-notify-toggle="النشرة البريدية" checked>
-                  <span class="toggle-track" aria-hidden="true"></span>
-                </label>
-              </div>
-
-              <div class="toggle-row">
-                <div class="toggle-info">
-                  <span class="toggle-label">الملخص الأسبوعي</span>
-                  <span class="toggle-hint">ملخص بأبرز التنبيهات والمحفوظات</span>
-                </div>
-                <label class="toggle-wrap" aria-label="الملخص الأسبوعي">
-                  <input type="checkbox" class="toggle-input" id="notif-digest" name="notif-digest" role="switch" aria-checked="false" data-notify-toggle="الملخص الأسبوعي">
-                  <span class="toggle-track" aria-hidden="true"></span>
-                </label>
-              </div>
-
+          <!-- ── Main content ────────────────────────────────────────── -->
+          <div class="space-y-5">
+            <!-- ── Privacy note ──────────────────────────────────────── -->
+            <div class="inline-msg-info" role="note">
+              <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info" /></svg>
+              <p>
+                <strong>واجهة أمامية فقط</strong> — لا يتم حفظ أي بيانات على خادم. التعديلات مؤقتة
+                تُعاد عند تحديث الصفحة. الصفحة قابلة للربط بنظام حسابات حقيقي لاحقاً.
+              </p>
             </div>
-          </section>
 
-          <!-- ══════ Section: Security ═══════════════════════════════ -->
-          <section class="profile-section" id="security" aria-labelledby="security-title">
-            <div class="section-header">
-              <div class="flex items-center gap-3">
-                <div class="section-header-icon"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg></div>
-                <div>
-                  <h2 class="section-title" id="security-title">الأمان</h2>
-                  <p class="text-xs text-ink-400 mt-0.5">كلمة المرور، التحقق الثنائي، والجلسات</p>
+            <!-- ══════ Section: Personal Info ══════════════════════════ -->
+            <section
+              class="profile-section"
+              id="personal-info"
+              aria-labelledby="personal-info-title"
+            >
+              <div class="section-header">
+                <div class="flex items-center gap-3">
+                  <div class="section-header-icon">
+                    <svg aria-hidden="true">
+                      <use href="../assets/icons/sprite.svg#icon-search" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 class="section-title" id="personal-info-title">البيانات الشخصية</h2>
+                    <p class="text-xs text-ink-400 mt-0.5">معلومات حسابك الأساسية</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="section-body space-y-6">
-
-              <!-- Change password -->
-              <div>
-                <h3 class="text-base font-bold text-ink-700 mb-3">تغيير كلمة المرور</h3>
-
-                <div class="inline-msg-info mb-4" role="note">
-                  <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>
-                  <p><strong>لا يتم تغيير أي كلمة مرور حقيقية</strong> في هذه النسخة التجريبية.</p>
-                </div>
-
-                <form id="change-password-form" data-validate novalidate aria-label="نموذج تغيير كلمة المرور">
-                  <div class="form-grid-3 mb-4">
-                    <div class="field">
-                      <label for="current-password" class="field-label">كلمة المرور الحالية</label>
-                      <div class="field-pw-wrap">
-                        <input type="password" id="current-password" name="current-password" class="field-input" dir="ltr" placeholder="••••••••" required aria-required="true" autocomplete="current-password">
-                        <button type="button" class="pw-toggle" data-toggle-pw="#current-password" aria-label="إظهار كلمة المرور الحالية" aria-pressed="false">
-                          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>
-                        </button>
-                      </div>
-                      <span class="field-error" role="alert"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-alert-triangle"/></svg> مطلوب</span>
+              <div class="section-body">
+                <form
+                  id="personal-info-form"
+                  data-validate
+                  data-frontend-form
+                  data-success-toast="تم حفظ البيانات الشخصية (واجهة أمامية فقط)"
+                  novalidate
+                  aria-label="نموذج البيانات الشخصية"
+                >
+                  <div class="form-grid-2">
+                    <div class="field sm:col-span-2">
+                      <label for="profile-name" class="field-label">الاسم الكامل</label>
+                      <input
+                        type="text"
+                        id="profile-name"
+                        name="profile-name"
+                        class="field-input"
+                        value="زائر تجريبي"
+                        required
+                        autocomplete="name"
+                      />
+                      <span class="field-error" role="alert"
+                        ><svg aria-hidden="true">
+                          <use href="../assets/icons/sprite.svg#icon-alert-triangle" />
+                        </svg>
+                        مطلوب</span
+                      >
                     </div>
                     <div class="field">
-                      <label for="new-password" class="field-label">كلمة المرور الجديدة</label>
-                      <div class="field-pw-wrap">
-                        <input type="password" id="new-password" name="new-password" class="field-input" dir="ltr" placeholder="••••••••" required minlength="8" aria-required="true" autocomplete="new-password">
-                        <button type="button" class="pw-toggle" data-toggle-pw="#new-password" aria-label="إظهار كلمة المرور الجديدة" aria-pressed="false">
-                          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>
-                        </button>
-                      </div>
-                      <span class="field-error" role="alert"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-alert-triangle"/></svg> 8 أحرف على الأقل</span>
+                      <label for="profile-email" class="field-label">البريد الإلكتروني</label>
+                      <input
+                        type="email"
+                        id="profile-email"
+                        name="profile-email"
+                        class="field-input"
+                        value="visitor@example.com"
+                        dir="ltr"
+                        required
+                        autocomplete="email"
+                      />
+                      <span class="field-error" role="alert"
+                        ><svg aria-hidden="true">
+                          <use href="../assets/icons/sprite.svg#icon-alert-triangle" />
+                        </svg>
+                        بريد إلكتروني صحيح مطلوب</span
+                      >
                     </div>
                     <div class="field">
-                      <label for="confirm-password" class="field-label">تأكيد كلمة المرور</label>
-                      <div class="field-pw-wrap">
-                        <input type="password" id="confirm-password" name="confirm-password" class="field-input" dir="ltr" placeholder="••••••••" required aria-required="true" autocomplete="new-password">
-                        <button type="button" class="pw-toggle" data-toggle-pw="#confirm-password" aria-label="إظهار تأكيد كلمة المرور" aria-pressed="false">
-                          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>
-                        </button>
-                      </div>
-                      <span class="field-error" role="alert"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-alert-triangle"/></svg> كلمتا المرور غير متطابقتان</span>
+                      <label for="profile-phone" class="field-label">رقم الجوال</label>
+                      <input
+                        type="tel"
+                        id="profile-phone"
+                        name="profile-phone"
+                        class="field-input"
+                        value="+966 50 000 0000"
+                        dir="ltr"
+                        autocomplete="tel"
+                      />
+                    </div>
+                    <div class="field">
+                      <label for="profile-country" class="field-label">الدولة</label>
+                      <select id="profile-country" name="profile-country" class="field-select">
+                        <option value="السعودية" selected>السعودية</option>
+                        <option value="الإمارات">الإمارات</option>
+                        <option value="الكويت">الكويت</option>
+                        <option value="قطر">قطر</option>
+                        <option value="البحرين">البحرين</option>
+                        <option value="عمان">عمان</option>
+                        <option value="مصر">مصر</option>
+                        <option value="الأردن">الأردن</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="profile-city" class="field-label">المدينة</label>
+                      <input
+                        type="text"
+                        id="profile-city"
+                        name="profile-city"
+                        class="field-input"
+                        value="الرياض"
+                        autocomplete="address-level2"
+                      />
+                    </div>
+                    <div class="field">
+                      <label for="profile-lang" class="field-label">اللغة المفضلة</label>
+                      <select id="profile-lang" name="profile-lang" class="field-select">
+                        <option value="ar" selected>العربية</option>
+                        <option value="en">English</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="profile-currency" class="field-label">العملة المفضلة</label>
+                      <select id="profile-currency" name="profile-currency" class="field-select">
+                        <option value="ر.س" selected>ريال سعودي (ر.س)</option>
+                        <option value="د.إ">درهم إماراتي (د.إ)</option>
+                        <option value="USD">دولار أمريكي (USD)</option>
+                        <option value="EUR">يورو (EUR)</option>
+                      </select>
                     </div>
                   </div>
-                  <button type="submit" class="btn btn-primary btn-sm gap-2">
-                    <svg class="w-3.5 h-3.5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
-                    تحديث كلمة المرور
-                  </button>
+                  <div class="flex flex-wrap gap-3 mt-5">
+                    <button type="submit" class="btn btn-primary gap-2">
+                      <svg class="w-4 h-4" aria-hidden="true">
+                        <use href="../assets/icons/sprite.svg#icon-shield-check" />
+                      </svg>
+                      حفظ التغييرات
+                    </button>
+                  </div>
+                  <div data-frontend-success hidden class="inline-msg-info mt-3" aria-live="polite">
+                    <svg aria-hidden="true">
+                      <use href="../assets/icons/sprite.svg#icon-check-circle" />
+                    </svg>
+                    <strong>تم الحفظ (تجريبي)</strong> — لا تخزين حقيقي في هذه النسخة.
+                  </div>
                 </form>
               </div>
+            </section>
 
-              <!-- 2FA placeholder -->
-              <div>
-                <h3 class="text-base font-bold text-ink-700 mb-3">التحقق الثنائي (2FA)</h3>
-                <div class="tfa-card">
-                  <div class="tfa-icon">
-                    <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
+            <!-- ══════ Section: Travel Preferences ════════════════════ -->
+            <section class="profile-section" id="travel-prefs" aria-labelledby="travel-prefs-title">
+              <div class="section-header">
+                <div class="flex items-center gap-3">
+                  <div class="section-header-icon">
+                    <svg aria-hidden="true">
+                      <use href="../assets/icons/sprite.svg#icon-location" />
+                    </svg>
                   </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="font-semibold text-ink-700 text-sm">التحقق الثنائي غير مفعّل</p>
-                    <p class="text-xs text-ink-400 mt-0.5">ميزة مستقبلية — placeholder قابل للربط بـ TOTP أو SMS لاحقاً</p>
-                  </div>
-                  <button type="button" class="btn btn-ghost btn-sm flex-none" data-toast="التحقق الثنائي: ميزة مستقبلية — غير متاحة في هذه النسخة" data-toast-type="info" style="white-space:nowrap;">تفعيل (قريباً)</button>
-                </div>
-              </div>
-
-              <!-- Active sessions -->
-              <div>
-                <h3 class="text-base font-bold text-ink-700 mb-3">الجلسات النشطة <span class="text-xs font-normal text-ink-400">(تجريبية)</span></h3>
-                <div>
-                  <div class="session-item">
-                    <div class="session-icon">
-                      <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search"/></svg>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="font-semibold text-sm text-ink-800 flex flex-wrap items-center gap-2">
-                        Chrome – ويندوز 11
-                        <span class="session-current">الجلسة الحالية</span>
-                      </p>
-                      <p class="text-xs text-ink-400 mt-0.5">الرياض، السعودية · 2 يونيو 2026</p>
-                    </div>
-                  </div>
-                  <div class="session-item">
-                    <div class="session-icon">
-                      <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-phone"/></svg>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="font-semibold text-sm text-ink-800">Safari – iPhone 15</p>
-                      <p class="text-xs text-ink-400 mt-0.5">الرياض، السعودية · 30 مايو 2026</p>
-                    </div>
-                    <button type="button" class="btn btn-ghost btn-sm text-red-500 flex-none" data-toast="تم إنهاء الجلسة (تجريبي)" data-toast-type="info">إنهاء</button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Logout -->
-              <div class="pt-4 border-t border-ink-100">
-                <div class="flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <p class="font-semibold text-ink-700 text-sm">تسجيل الخروج</p>
-                    <p class="text-xs text-ink-400 mt-0.5">لا جلسة حقيقية في هذه النسخة — الخروج سيعيد توجيهك للرئيسية</p>
+                    <h2 class="section-title" id="travel-prefs-title">تفضيلات السفر</h2>
+                    <p class="text-xs text-ink-400 mt-0.5">يتم استخدامها لاحقاً لتخصيص التوصيات</p>
                   </div>
-                  <button type="button" id="logout-btn" class="btn btn-danger btn-sm gap-2">
-                    <svg class="w-3.5 h-3.5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-close"/></svg>
-                    تسجيل الخروج
-                  </button>
                 </div>
               </div>
+              <div class="section-body">
+                <form
+                  id="travel-prefs-form"
+                  data-validate
+                  data-frontend-form
+                  data-success-toast="تم حفظ تفضيلات السفر (واجهة أمامية فقط)"
+                  novalidate
+                  aria-label="نموذج تفضيلات السفر"
+                >
+                  <!-- Preferred destinations -->
+                  <div class="field mb-4">
+                    <label class="field-label mb-2">الوجهات المفضلة (من المحفوظات)</label>
+                    <div class="flex flex-wrap gap-2">
+                      <span
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-lagoon-50 text-lagoon-700 border border-lagoon-200"
+                      >
+                        <svg class="w-3.5 h-3.5" aria-hidden="true">
+                          <use href="../assets/icons/sprite.svg#icon-location" />
+                        </svg>
+                        دبي
+                      </span>
+                      <span
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-lagoon-50 text-lagoon-700 border border-lagoon-200"
+                      >
+                        <svg class="w-3.5 h-3.5" aria-hidden="true">
+                          <use href="../assets/icons/sprite.svg#icon-location" />
+                        </svg>
+                        إسطنبول
+                      </span>
+                      <span
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-lagoon-50 text-lagoon-700 border border-lagoon-200"
+                      >
+                        <svg class="w-3.5 h-3.5" aria-hidden="true">
+                          <use href="../assets/icons/sprite.svg#icon-location" />
+                        </svg>
+                        باريس
+                      </span>
+                    </div>
+                  </div>
 
-            </div>
-          </section>
+                  <!-- Travel interests -->
+                  <div class="field mb-4">
+                    <label class="field-label mb-2">اهتمامات السفر</label>
+                    <div class="interest-chips" role="group" aria-label="اختر اهتمامات السفر">
+                      <label class="interest-chip"
+                        ><input type="checkbox" name="interests" value="عائلات" checked /> عائلات
+                        👨‍👩‍👧‍👦</label
+                      >
+                      <label class="interest-chip"
+                        ><input type="checkbox" name="interests" value="شهر عسل" /> شهر عسل
+                        💑</label
+                      >
+                      <label class="interest-chip"
+                        ><input type="checkbox" name="interests" value="اقتصادي" /> اقتصادي
+                        💰</label
+                      >
+                      <label class="interest-chip"
+                        ><input type="checkbox" name="interests" value="فاخر" checked /> فاخر
+                        ✨</label
+                      >
+                      <label class="interest-chip"
+                        ><input type="checkbox" name="interests" value="شواطئ" checked /> شواطئ
+                        🏖️</label
+                      >
+                      <label class="interest-chip"
+                        ><input type="checkbox" name="interests" value="تسوق" /> تسوق 🛍️</label
+                      >
+                      <label class="interest-chip"
+                        ><input type="checkbox" name="interests" value="عمرة" /> عمرة 🕌</label
+                      >
+                    </div>
+                  </div>
 
+                  <div class="form-grid-3">
+                    <div class="field">
+                      <label for="pref-budget" class="field-label">نطاق الميزانية</label>
+                      <select id="pref-budget" name="pref-budget" class="field-select">
+                        <option value="low">أقل من 2,000 ر.س</option>
+                        <option value="mid">2,000 – 5,000 ر.س</option>
+                        <option value="premium" selected>3,000 – 8,000 ر.س</option>
+                        <option value="high">5,000 – 15,000 ر.س</option>
+                        <option value="luxury">أكثر من 15,000 ر.س</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="pref-stars" class="field-label">تصنيف الفندق المفضل</label>
+                      <select id="pref-stars" name="pref-stars" class="field-select">
+                        <option value="3">3 نجوم</option>
+                        <option value="4" selected>4 نجوم</option>
+                        <option value="5">5 نجوم</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="pref-season" class="field-label">موسم السفر المفضل</label>
+                      <select id="pref-season" name="pref-season" class="field-select">
+                        <option value="spring">ربيع</option>
+                        <option value="summer">صيف</option>
+                        <option value="autumn-winter" selected>خريف / شتاء</option>
+                        <option value="any">أي موسم</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="pref-travelers" class="field-label"
+                        >عدد المسافرين الافتراضي</label
+                      >
+                      <select id="pref-travelers" name="pref-travelers" class="field-select">
+                        <option value="1">مسافر واحد</option>
+                        <option value="2" selected>مسافران</option>
+                        <option value="3">3 مسافرين</option>
+                        <option value="4">4 مسافرين</option>
+                        <option value="5">5 أو أكثر</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="pref-airport" class="field-label">مطار/مدينة المغادرة</label>
+                      <input
+                        type="text"
+                        id="pref-airport"
+                        name="pref-airport"
+                        class="field-input"
+                        value="الرياض (RUH)"
+                        dir="ltr"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="flex flex-wrap gap-3 mt-5">
+                    <button type="submit" class="btn btn-primary gap-2">
+                      <svg class="w-4 h-4" aria-hidden="true">
+                        <use href="../assets/icons/sprite.svg#icon-shield-check" />
+                      </svg>
+                      حفظ التفضيلات
+                    </button>
+                  </div>
+                  <div data-frontend-success hidden class="inline-msg-info mt-3" aria-live="polite">
+                    <svg aria-hidden="true">
+                      <use href="../assets/icons/sprite.svg#icon-check-circle" />
+                    </svg>
+                    <strong>تم الحفظ (تجريبي)</strong> — لا تخزين حقيقي في هذه النسخة.
+                  </div>
+                </form>
+              </div>
+            </section>
+
+            <!-- ══════ Section: Notification Settings ═════════════════ -->
+            <section
+              class="profile-section"
+              id="notifications"
+              aria-labelledby="notifications-title"
+            >
+              <div class="section-header">
+                <div class="flex items-center gap-3">
+                  <div class="section-header-icon">
+                    <svg aria-hidden="true">
+                      <use href="../assets/icons/sprite.svg#icon-phone" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 class="section-title" id="notifications-title">إعدادات الإشعارات</h2>
+                    <p class="text-xs text-ink-400 mt-0.5">
+                      التغييرات تجريبية — لا إرسال حقيقي في هذه النسخة
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="section-body">
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-label">تنبيهات الأسعار بالبريد</span>
+                    <span class="toggle-hint">إشعار عند انخفاض سعر وجهة محفوظة</span>
+                  </div>
+                  <label class="toggle-wrap" aria-label="تنبيهات الأسعار بالبريد">
+                    <input
+                      type="checkbox"
+                      class="toggle-input"
+                      id="notif-email"
+                      name="notif-email"
+                      role="switch"
+                      aria-checked="true"
+                      data-notify-toggle="تنبيهات الأسعار بالبريد"
+                      checked
+                    />
+                    <span class="toggle-track" aria-hidden="true"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-label">تذكير الكوبونات</span>
+                    <span class="toggle-hint">تنبيه قبل انتهاء صلاحية كوبون محفوظ</span>
+                  </div>
+                  <label class="toggle-wrap" aria-label="تذكير الكوبونات">
+                    <input
+                      type="checkbox"
+                      class="toggle-input"
+                      id="notif-coupons"
+                      name="notif-coupons"
+                      role="switch"
+                      aria-checked="true"
+                      data-notify-toggle="تذكير الكوبونات"
+                      checked
+                    />
+                    <span class="toggle-track" aria-hidden="true"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-label">تنبيهات هبوط السعر</span>
+                    <span class="toggle-hint"
+                      >إشعار عند انخفاض ملحوظ في أسعار الوجهات المتابَعة</span
+                    >
+                  </div>
+                  <label class="toggle-wrap" aria-label="تنبيهات هبوط السعر">
+                    <input
+                      type="checkbox"
+                      class="toggle-input"
+                      id="notif-pricedrop"
+                      name="notif-pricedrop"
+                      role="switch"
+                      aria-checked="true"
+                      data-notify-toggle="تنبيهات هبوط السعر"
+                      checked
+                    />
+                    <span class="toggle-track" aria-hidden="true"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-label">تذكير انتهاء العروض المحفوظة</span>
+                    <span class="toggle-hint">تنبيه قبل انتهاء صلاحية عرض محفوظ</span>
+                  </div>
+                  <label class="toggle-wrap" aria-label="تذكير انتهاء العروض المحفوظة">
+                    <input
+                      type="checkbox"
+                      class="toggle-input"
+                      id="notif-expiry"
+                      name="notif-expiry"
+                      role="switch"
+                      aria-checked="false"
+                      data-notify-toggle="تذكير انتهاء العروض المحفوظة"
+                    />
+                    <span class="toggle-track" aria-hidden="true"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-label"
+                      >واتساب <span class="text-xs text-ink-400">(قريباً)</span></span
+                    >
+                    <span class="toggle-hint"
+                      >إشعارات عبر واتساب — placeholder قابل للربط لاحقاً</span
+                    >
+                  </div>
+                  <label class="toggle-wrap" aria-label="واتساب">
+                    <input
+                      type="checkbox"
+                      class="toggle-input"
+                      id="notif-whatsapp"
+                      name="notif-whatsapp"
+                      role="switch"
+                      aria-checked="false"
+                      data-notify-toggle="واتساب (قريباً)"
+                      disabled
+                    />
+                    <span
+                      class="toggle-track"
+                      aria-hidden="true"
+                      style="opacity: 0.4; cursor: not-allowed"
+                    ></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-label">النشرة البريدية</span>
+                    <span class="toggle-hint">أفضل العروض والوجهات أسبوعياً</span>
+                  </div>
+                  <label class="toggle-wrap" aria-label="النشرة البريدية">
+                    <input
+                      type="checkbox"
+                      class="toggle-input"
+                      id="notif-newsletter"
+                      name="notif-newsletter"
+                      role="switch"
+                      aria-checked="true"
+                      data-notify-toggle="النشرة البريدية"
+                      checked
+                    />
+                    <span class="toggle-track" aria-hidden="true"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <span class="toggle-label">الملخص الأسبوعي</span>
+                    <span class="toggle-hint">ملخص بأبرز التنبيهات والمحفوظات</span>
+                  </div>
+                  <label class="toggle-wrap" aria-label="الملخص الأسبوعي">
+                    <input
+                      type="checkbox"
+                      class="toggle-input"
+                      id="notif-digest"
+                      name="notif-digest"
+                      role="switch"
+                      aria-checked="false"
+                      data-notify-toggle="الملخص الأسبوعي"
+                    />
+                    <span class="toggle-track" aria-hidden="true"></span>
+                  </label>
+                </div>
+              </div>
+            </section>
+
+            <!-- ══════ Section: Security ═══════════════════════════════ -->
+            <section class="profile-section" id="security" aria-labelledby="security-title">
+              <div class="section-header">
+                <div class="flex items-center gap-3">
+                  <div class="section-header-icon">
+                    <svg aria-hidden="true">
+                      <use href="../assets/icons/sprite.svg#icon-shield-check" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 class="section-title" id="security-title">الأمان</h2>
+                    <p class="text-xs text-ink-400 mt-0.5">كلمة المرور، التحقق الثنائي، والجلسات</p>
+                  </div>
+                </div>
+              </div>
+              <div class="section-body space-y-6">
+                <!-- Change password -->
+                <div>
+                  <h3 class="text-base font-bold text-ink-700 mb-3">تغيير كلمة المرور</h3>
+
+                  <div class="inline-msg-info mb-4" role="note">
+                    <svg aria-hidden="true">
+                      <use href="../assets/icons/sprite.svg#icon-info" />
+                    </svg>
+                    <p>
+                      <strong>لا يتم تغيير أي كلمة مرور حقيقية</strong> في هذه النسخة التجريبية.
+                    </p>
+                  </div>
+
+                  <form
+                    id="change-password-form"
+                    data-validate
+                    novalidate
+                    aria-label="نموذج تغيير كلمة المرور"
+                  >
+                    <div class="form-grid-3 mb-4">
+                      <div class="field">
+                        <label for="current-password" class="field-label"
+                          >كلمة المرور الحالية</label
+                        >
+                        <div class="field-pw-wrap">
+                          <input
+                            type="password"
+                            id="current-password"
+                            name="current-password"
+                            class="field-input"
+                            dir="ltr"
+                            placeholder="••••••••"
+                            required
+                            aria-required="true"
+                            autocomplete="current-password"
+                          />
+                          <button
+                            type="button"
+                            class="pw-toggle"
+                            data-toggle-pw="#current-password"
+                            aria-label="إظهار كلمة المرور الحالية"
+                            aria-pressed="false"
+                          >
+                            <svg aria-hidden="true">
+                              <use href="../assets/icons/sprite.svg#icon-info" />
+                            </svg>
+                          </button>
+                        </div>
+                        <span class="field-error" role="alert"
+                          ><svg aria-hidden="true">
+                            <use href="../assets/icons/sprite.svg#icon-alert-triangle" />
+                          </svg>
+                          مطلوب</span
+                        >
+                      </div>
+                      <div class="field">
+                        <label for="new-password" class="field-label">كلمة المرور الجديدة</label>
+                        <div class="field-pw-wrap">
+                          <input
+                            type="password"
+                            id="new-password"
+                            name="new-password"
+                            class="field-input"
+                            dir="ltr"
+                            placeholder="••••••••"
+                            required
+                            minlength="8"
+                            aria-required="true"
+                            autocomplete="new-password"
+                          />
+                          <button
+                            type="button"
+                            class="pw-toggle"
+                            data-toggle-pw="#new-password"
+                            aria-label="إظهار كلمة المرور الجديدة"
+                            aria-pressed="false"
+                          >
+                            <svg aria-hidden="true">
+                              <use href="../assets/icons/sprite.svg#icon-info" />
+                            </svg>
+                          </button>
+                        </div>
+                        <span class="field-error" role="alert"
+                          ><svg aria-hidden="true">
+                            <use href="../assets/icons/sprite.svg#icon-alert-triangle" />
+                          </svg>
+                          8 أحرف على الأقل</span
+                        >
+                      </div>
+                      <div class="field">
+                        <label for="confirm-password" class="field-label">تأكيد كلمة المرور</label>
+                        <div class="field-pw-wrap">
+                          <input
+                            type="password"
+                            id="confirm-password"
+                            name="confirm-password"
+                            class="field-input"
+                            dir="ltr"
+                            placeholder="••••••••"
+                            required
+                            aria-required="true"
+                            autocomplete="new-password"
+                          />
+                          <button
+                            type="button"
+                            class="pw-toggle"
+                            data-toggle-pw="#confirm-password"
+                            aria-label="إظهار تأكيد كلمة المرور"
+                            aria-pressed="false"
+                          >
+                            <svg aria-hidden="true">
+                              <use href="../assets/icons/sprite.svg#icon-info" />
+                            </svg>
+                          </button>
+                        </div>
+                        <span class="field-error" role="alert"
+                          ><svg aria-hidden="true">
+                            <use href="../assets/icons/sprite.svg#icon-alert-triangle" />
+                          </svg>
+                          كلمتا المرور غير متطابقتان</span
+                        >
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm gap-2">
+                      <svg class="w-3.5 h-3.5" aria-hidden="true">
+                        <use href="../assets/icons/sprite.svg#icon-shield-check" />
+                      </svg>
+                      تحديث كلمة المرور
+                    </button>
+                  </form>
+                </div>
+
+                <!-- 2FA placeholder -->
+                <div>
+                  <h3 class="text-base font-bold text-ink-700 mb-3">التحقق الثنائي (2FA)</h3>
+                  <div class="tfa-card">
+                    <div class="tfa-icon">
+                      <svg aria-hidden="true">
+                        <use href="../assets/icons/sprite.svg#icon-shield-check" />
+                      </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <p class="font-semibold text-ink-700 text-sm">التحقق الثنائي غير مفعّل</p>
+                      <p class="text-xs text-ink-400 mt-0.5">
+                        ميزة مستقبلية — placeholder قابل للربط بـ TOTP أو SMS لاحقاً
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-sm flex-none"
+                      data-toast="التحقق الثنائي: ميزة مستقبلية — غير متاحة في هذه النسخة"
+                      data-toast-type="info"
+                      style="white-space: nowrap"
+                    >
+                      تفعيل (قريباً)
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Active sessions -->
+                <div>
+                  <h3 class="text-base font-bold text-ink-700 mb-3">
+                    الجلسات النشطة <span class="text-xs font-normal text-ink-400">(تجريبية)</span>
+                  </h3>
+                  <div>
+                    <div class="session-item">
+                      <div class="session-icon">
+                        <svg aria-hidden="true">
+                          <use href="../assets/icons/sprite.svg#icon-search" />
+                        </svg>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p
+                          class="font-semibold text-sm text-ink-800 flex flex-wrap items-center gap-2"
+                        >
+                          Chrome – ويندوز 11
+                          <span class="session-current">الجلسة الحالية</span>
+                        </p>
+                        <p class="text-xs text-ink-400 mt-0.5">الرياض، السعودية · 2 يونيو 2026</p>
+                      </div>
+                    </div>
+                    <div class="session-item">
+                      <div class="session-icon">
+                        <svg aria-hidden="true">
+                          <use href="../assets/icons/sprite.svg#icon-phone" />
+                        </svg>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p class="font-semibold text-sm text-ink-800">Safari – iPhone 15</p>
+                        <p class="text-xs text-ink-400 mt-0.5">الرياض، السعودية · 30 مايو 2026</p>
+                      </div>
+                      <button
+                        type="button"
+                        class="btn btn-ghost btn-sm text-red-500 flex-none"
+                        data-toast="تم إنهاء الجلسة (تجريبي)"
+                        data-toast-type="info"
+                      >
+                        إنهاء
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Logout -->
+                <div class="pt-4 border-t border-ink-100">
+                  <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                      <p class="font-semibold text-ink-700 text-sm">تسجيل الخروج</p>
+                      <p class="text-xs text-ink-400 mt-0.5">
+                        لا جلسة حقيقية في هذه النسخة — الخروج سيعيد توجيهك للرئيسية
+                      </p>
+                    </div>
+                    <button type="button" id="logout-btn" class="btn btn-danger btn-sm gap-2">
+                      <svg class="w-3.5 h-3.5" aria-hidden="true">
+                        <use href="../assets/icons/sprite.svg#icon-close" />
+                      </svg>
+                      تسجيل الخروج
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <!-- / main content -->
         </div>
-        <!-- / main content -->
-
       </div>
-    </div>
+    </main>
 
-  </main>
-
-  <!-- ═══ FOOTER (inlined from partials/footer.html) ════════════════════ -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="trust-row">
-      <div class="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 py-10">
-        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg></div><div><p class="trust-title">عروض موثقة</p><p class="trust-sub">كل عرض تم التحقق منه يدوياً</p></div></div>
-        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg></div><div><p class="trust-title">حجز آمن</p><p class="trust-sub">بياناتك محمية بالكامل</p></div></div>
-        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-star"/></svg></div><div><p class="trust-title">شركاء معتمدون</p><p class="trust-sub">أكثر من 50 مصدراً موثوقاً</p></div></div>
-        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-phone"/></svg></div><div><p class="trust-title">دعم 24/7</p><p class="trust-sub">فريقنا دائماً في خدمتك</p></div></div>
-      </div>
-    </div>
-    <div class="footer-body">
-      <div class="max-w-7xl mx-auto px-4 md:px-6 py-12">
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-          <div class="col-span-2 md:col-span-2">
-            <a href="index.html" class="inline-flex items-center gap-2 mb-4 no-underline">
-              <svg width="36" height="36" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#38BCC0"/><path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/><circle cx="16" cy="14" r="3" fill="#0E8186"/></svg>
-              <span class="text-xl font-bold text-white">رحلاتي</span>
-            </a>
-            <p class="text-sm text-lagoon-300 leading-relaxed mb-5">منصة متخصصة في مقارنة وعرض أفضل عروض السفر من مصادر موثوقة ومعتمدة.</p>
-            <div class="flex gap-3" role="list" aria-label="وسائل التواصل الاجتماعي">
-              <a href="#" class="social-btn" aria-label="صفحة فيسبوك" data-coming-soon role="listitem"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-facebook"/></svg></a>
-              <a href="#" class="social-btn" aria-label="حساب تويتر" data-coming-soon role="listitem"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-twitter"/></svg></a>
-              <a href="#" class="social-btn" aria-label="حساب انستجرام" data-coming-soon role="listitem"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-instagram"/></svg></a>
-              <a href="#" class="social-btn" aria-label="قناة يوتيوب" data-coming-soon role="listitem"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-youtube"/></svg></a>
+    <!-- ═══ FOOTER (inlined from partials/footer.html) ════════════════════ -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="trust-row">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 py-10">
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">
+              <svg><use href="../assets/icons/sprite.svg#icon-shield-check" /></svg>
+            </div>
+            <div>
+              <p class="trust-title">عروض موثقة</p>
+              <p class="trust-sub">كل عرض تم التحقق منه يدوياً</p>
             </div>
           </div>
-          <div>
-            <h3 class="footer-heading">المنصة</h3>
-            <ul class="footer-nav" role="list">
-              <li><a href="#" class="footer-link" data-coming-soon>عن رحلاتي</a></li>
-              <li><a href="index.html#how-it-works" class="footer-link">كيف تعمل</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>شركاؤنا</a></li>
-              <li><a href="blog.html" class="footer-link">المدونة</a></li>
-              <li><a href="login.html" class="footer-link">تسجيل الدخول</a></li>
-              <li><a href="register.html" class="footer-link">إنشاء حساب</a></li>
-              <li><a href="saved-deals.html" class="footer-link">المحفوظات</a></li>
-              <li><a href="price-alerts.html" class="footer-link">تنبيهات الأسعار</a></li>
-            </ul>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">
+              <svg><use href="../assets/icons/sprite.svg#icon-shield-check" /></svg>
+            </div>
+            <div>
+              <p class="trust-title">حجز آمن</p>
+              <p class="trust-sub">بياناتك محمية بالكامل</p>
+            </div>
           </div>
-          <div>
-            <h3 class="footer-heading">استكشف</h3>
-            <ul class="footer-nav" role="list">
-              <li><a href="deals.html" class="footer-link">العروض المميزة</a></li>
-              <li><a href="destinations.html" class="footer-link">الوجهات</a></li>
-              <li><a href="coupons.html" class="footer-link">كوبونات الخصم</a></li>
-              <li><a href="compare.html" class="footer-link">مقارنة الأسعار</a></li>
-            </ul>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">
+              <svg><use href="../assets/icons/sprite.svg#icon-star" /></svg>
+            </div>
+            <div>
+              <p class="trust-title">شركاء معتمدون</p>
+              <p class="trust-sub">أكثر من 50 مصدراً موثوقاً</p>
+            </div>
           </div>
-          <div>
-            <h3 class="footer-heading">الدعم</h3>
-            <ul class="footer-nav" role="list">
-              <li><a href="index.html#faq" class="footer-link">الأسئلة الشائعة</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>تواصل معنا</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>الشروط والأحكام</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>سياسة الخصوصية</a></li>
-            </ul>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">
+              <svg><use href="../assets/icons/sprite.svg#icon-phone" /></svg>
+            </div>
+            <div>
+              <p class="trust-title">دعم 24/7</p>
+              <p class="trust-sub">فريقنا دائماً في خدمتك</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="max-w-7xl mx-auto px-4 md:px-6 flex flex-wrap items-center justify-between gap-4 py-5">
-        <p class="text-sm text-lagoon-400">© <span data-year></span> رحلاتي. جميع الحقوق محفوظة.</p>
-        <p class="text-xs text-lagoon-500">واجهة أمامية تجريبية — لا حسابات أو تخزين حقيقي</p>
+      <div class="footer-body">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-12">
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+            <div class="col-span-2 md:col-span-2">
+              <a href="index.html" class="inline-flex items-center gap-2 mb-4 no-underline">
+                <svg width="36" height="36" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                  <rect width="32" height="32" rx="9" fill="#38BCC0" />
+                  <path
+                    d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z"
+                    fill="white"
+                  />
+                  <circle cx="16" cy="14" r="3" fill="#0E8186" />
+                </svg>
+                <span class="text-xl font-bold text-white">رحلاتي</span>
+              </a>
+              <p class="text-sm text-lagoon-300 leading-relaxed mb-5">
+                منصة متخصصة في مقارنة وعرض أفضل عروض السفر من مصادر موثوقة ومعتمدة.
+              </p>
+              <div class="flex gap-3" role="list" aria-label="وسائل التواصل الاجتماعي">
+                <a
+                  href="#"
+                  class="social-btn"
+                  aria-label="صفحة فيسبوك"
+                  data-coming-soon
+                  role="listitem"
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-facebook" /></svg
+                ></a>
+                <a
+                  href="#"
+                  class="social-btn"
+                  aria-label="حساب تويتر"
+                  data-coming-soon
+                  role="listitem"
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-twitter" /></svg
+                ></a>
+                <a
+                  href="#"
+                  class="social-btn"
+                  aria-label="حساب انستجرام"
+                  data-coming-soon
+                  role="listitem"
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-instagram" /></svg
+                ></a>
+                <a
+                  href="#"
+                  class="social-btn"
+                  aria-label="قناة يوتيوب"
+                  data-coming-soon
+                  role="listitem"
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-youtube" /></svg
+                ></a>
+              </div>
+            </div>
+            <div>
+              <h3 class="footer-heading">المنصة</h3>
+              <ul class="footer-nav" role="list">
+                <li><a href="#" class="footer-link" data-coming-soon>عن رحلاتي</a></li>
+                <li><a href="index.html#how-it-works" class="footer-link">كيف تعمل</a></li>
+                <li><a href="#" class="footer-link" data-coming-soon>شركاؤنا</a></li>
+                <li><a href="blog.html" class="footer-link">المدونة</a></li>
+                <li><a href="login.html" class="footer-link">تسجيل الدخول</a></li>
+                <li><a href="register.html" class="footer-link">إنشاء حساب</a></li>
+                <li><a href="saved-deals.html" class="footer-link">المحفوظات</a></li>
+                <li><a href="price-alerts.html" class="footer-link">تنبيهات الأسعار</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="footer-heading">استكشف</h3>
+              <ul class="footer-nav" role="list">
+                <li><a href="deals.html" class="footer-link">العروض المميزة</a></li>
+                <li><a href="destinations.html" class="footer-link">الوجهات</a></li>
+                <li><a href="coupons.html" class="footer-link">كوبونات الخصم</a></li>
+                <li><a href="compare.html" class="footer-link">مقارنة الأسعار</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="footer-heading">الدعم</h3>
+              <ul class="footer-nav" role="list">
+                <li><a href="index.html#faq" class="footer-link">الأسئلة الشائعة</a></li>
+                <li><a href="#" class="footer-link" data-coming-soon>تواصل معنا</a></li>
+                <li><a href="#" class="footer-link" data-coming-soon>الشروط والأحكام</a></li>
+                <li><a href="#" class="footer-link" data-coming-soon>سياسة الخصوصية</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </footer>
+      <div class="footer-bottom">
+        <div
+          class="max-w-7xl mx-auto px-4 md:px-6 flex flex-wrap items-center justify-between gap-4 py-5"
+        >
+          <p class="text-sm text-lagoon-400">
+            © <span data-year></span> رحلاتي. جميع الحقوق محفوظة.
+          </p>
+          <p class="text-xs text-lagoon-500">واجهة أمامية تجريبية — لا حسابات أو تخزين حقيقي</p>
+        </div>
+      </div>
+    </footer>
 
-  <style>
-    .site-footer{background:#042B2E;color:#D0F4F4}.trust-row{background:#0E686C}.trust-item{display:flex;align-items:flex-start;gap:1rem}.trust-icon{flex:none;width:2.75rem;height:2.75rem;background:rgba(255,255,255,0.12);border-radius:0.75rem;display:flex;align-items:center;justify-content:center;color:white}.trust-icon svg{width:1.375rem;height:1.375rem}.trust-title{font-size:0.9375rem;font-weight:700;color:white;margin-bottom:0.15rem}.trust-sub{font-size:0.8125rem;color:#A4E9EA}.footer-body{border-bottom:1px solid rgba(255,255,255,0.08)}.footer-heading{font-size:0.875rem;font-weight:700;color:#6FD7D9;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:1rem}.footer-nav{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.5rem}.footer-link{font-size:0.9rem;color:#9AA6B4;text-decoration:none;transition:color 150ms}.footer-link:hover{color:#38BCC0}.social-btn{display:flex;align-items:center;justify-content:center;width:2.25rem;height:2.25rem;background:rgba(255,255,255,0.08);border-radius:0.5rem;color:#9AA6B4;transition:background 150ms,color 150ms;text-decoration:none}.social-btn svg{width:1.125rem;height:1.125rem}.social-btn:hover{background:#0E8186;color:white}.footer-bottom{border-top:1px solid rgba(255,255,255,0.06);background:#042B2E}.nav-link{display:inline-flex;align-items:center;padding:0.5rem 0.75rem;font-size:0.9rem;font-weight:500;color:#4D5969;border-radius:0.5rem;text-decoration:none;transition:color 150ms,background 150ms}.nav-link:hover{color:#0E8186;background:#ECFBFB}.drawer-nav-link{display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;font-size:1rem;font-weight:500;color:#3A4453;border-radius:0.75rem;text-decoration:none;transition:color 150ms,background 150ms}.drawer-nav-link svg{width:1.25rem;height:1.25rem;flex:none;color:#9AA6B4}.drawer-nav-link:hover{color:#0E8186;background:#ECFBFB}.site-header{position:sticky;top:0;z-index:1020;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(222,227,234,0.6);box-shadow:0 1px 3px rgb(38 46 58/0.06)}
-  </style>
+    <style>
+      .site-footer {
+        background: #042b2e;
+        color: #d0f4f4;
+      }
+      .trust-row {
+        background: #0e686c;
+      }
+      .trust-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .trust-icon {
+        flex: none;
+        width: 2.75rem;
+        height: 2.75rem;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+      .trust-icon svg {
+        width: 1.375rem;
+        height: 1.375rem;
+      }
+      .trust-title {
+        font-size: 0.9375rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.15rem;
+      }
+      .trust-sub {
+        font-size: 0.8125rem;
+        color: #a4e9ea;
+      }
+      .footer-body {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .footer-heading {
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: #6fd7d9;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 1rem;
+      }
+      .footer-nav {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .footer-link {
+        font-size: 0.9rem;
+        color: #9aa6b4;
+        text-decoration: none;
+        transition: color 150ms;
+      }
+      .footer-link:hover {
+        color: #38bcc0;
+      }
+      .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 0.5rem;
+        color: #9aa6b4;
+        transition:
+          background 150ms,
+          color 150ms;
+        text-decoration: none;
+      }
+      .social-btn svg {
+        width: 1.125rem;
+        height: 1.125rem;
+      }
+      .social-btn:hover {
+        background: #0e8186;
+        color: white;
+      }
+      .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        background: #042b2e;
+      }
+      .nav-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #4d5969;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        transition:
+          color 150ms,
+          background 150ms;
+      }
+      .nav-link:hover {
+        color: #0e8186;
+        background: #ecfbfb;
+      }
+      .drawer-nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #3a4453;
+        border-radius: 0.75rem;
+        text-decoration: none;
+        transition:
+          color 150ms,
+          background 150ms;
+      }
+      .drawer-nav-link svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        flex: none;
+        color: #9aa6b4;
+      }
+      .drawer-nav-link:hover {
+        color: #0e8186;
+        background: #ecfbfb;
+      }
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(222, 227, 234, 0.6);
+        box-shadow: 0 1px 3px rgb(38 46 58/0.06);
+      }
+    </style>
 
-  <!-- Scripts -->
-  <script src="../src/js/ui.js" defer></script>
-  <script src="../src/js/main.js" defer></script>
-  <script src="../src/js/member.js" defer></script>
-
-</body>
+    <!-- Scripts -->
+    <script src="../src/js/ui.js" defer></script>
+    <script src="../src/js/main.js" defer></script>
+    <script src="../src/js/member.js" defer></script>
+  </body>
 </html>

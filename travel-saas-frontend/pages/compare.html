@@ -1,822 +1,1740 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl" class="scroll-smooth" data-page="compare">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>مقارنة عروض السفر – رحلاتي | قارن من مصادر متعددة في مكان واحد</title>
-  <meta name="description" content="قارن عروض السفر من مصادر موثوقة متعددة (Partner, Affiliate, Manual Deal, API Ready) جنباً إلى جنب واختر الأنسب لك. مثال توضيحي — الأسعار تقديرية.">
-  <meta name="theme-color" content="#0E8186">
-  <meta name="robots" content="index, follow">
-  <meta property="og:title" content="مقارنة عروض السفر – رحلاتي">
-  <meta property="og:description" content="قارن عروض السفر من مصادر متعددة في مكان واحد — Partner, Affiliate, Manual Deal, API Ready.">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="ar_AR">
-  <meta property="og:site_name" content="رحلاتي">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="مقارنة عروض السفر – رحلاتي">
-  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
-  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/tailwind.css">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>مقارنة عروض السفر – رحلاتي | قارن من مصادر متعددة في مكان واحد</title>
+    <meta
+      name="description"
+      content="قارن عروض السفر من مصادر موثوقة متعددة (Partner, Affiliate, Manual Deal, API Ready) جنباً إلى جنب واختر الأنسب لك. مثال توضيحي — الأسعار تقديرية."
+    />
+    <meta name="theme-color" content="#0E8186" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content="مقارنة عروض السفر – رحلاتي" />
+    <meta
+      property="og:description"
+      content="قارن عروض السفر من مصادر متعددة في مكان واحد — Partner, Affiliate, Manual Deal, API Ready."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ar_AR" />
+    <meta property="og:site_name" content="رحلاتي" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="مقارنة عروض السفر – رحلاتي" />
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../assets/fonts/cairo-600.woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="../assets/css/tailwind.css" />
 
-  <!-- Structured data: BreadcrumbList -->
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"الرئيسية","item":"https://rihlaty.example.com"},{"@type":"ListItem","position":2,"name":"مقارنة الأسعار","item":"https://rihlaty.example.com/compare"}]}
-  </script>
-
-  <!-- Structured data: ItemList (default comparison offers, illustrative) -->
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"ItemList","name":"مقارنة عروض السفر","description":"مقارنة توضيحية لعروض من مصادر متعددة — الأسعار تقديرية وليست حقيقية.","numberOfItems":4,"itemListElement":[{"@type":"ListItem","position":1,"name":"سكاي ترافيل – شريك معتمد"},{"@type":"ListItem","position":2,"name":"بوكينج كو – أفلييت"},{"@type":"ListItem","position":3,"name":"رحلاتي ديلز – إدخال يدوي"},{"@type":"ListItem","position":4,"name":"ترافيل API – جاهز للدمج"}]}
-  </script>
-
-  <!-- Inline compare-catalog (no-network swap for JS) -->
-  <script type="application/json" id="compare-catalog">
-  {
-    "default": {
-      "tripLabel": "إسطنبول – 5 ليالٍ لشخصين",
-      "destination": "إسطنبول",
-      "offers": [
-        {"id":"deal-002","provider":"سكاي ترافيل – شريك معتمد","source":"Partner","priceFrom":2450,"currency":"ر.س","rating":4.8,"inclusions":["فطور","نقل","مرشد"],"cta":{"label":"عرض التفاصيل","kind":"details"}},
-        {"id":"deal-002","provider":"بوكينج كو – أفلييت","source":"Affiliate","priceFrom":2680,"currency":"ر.س","rating":4.6,"inclusions":["فطور","نقل"],"cta":{"label":"قارن العرض","kind":"details"}},
-        {"id":"deal-002","provider":"رحلاتي ديلز – إدخال يدوي","source":"Manual Deal","priceFrom":2320,"currency":"ر.س","rating":4.5,"inclusions":["فطور"],"cta":{"label":"قارن العرض","kind":"details"}},
-        {"id":"deal-002","provider":"ترافيل API – جاهز للدمج","source":"API Ready","priceFrom":2550,"currency":"ر.س","rating":4.7,"inclusions":["فطور","نقل","تأمين"],"cta":{"label":"قارن العرض","kind":"details"}}
-      ]
-    },
-    "إسطنبول": {
-      "tripLabel": "إسطنبول – 5 ليالٍ لشخصين",
-      "destination": "إسطنبول",
-      "offers": [
-        {"id":"deal-002","provider":"سكاي ترافيل – شريك معتمد","source":"Partner","priceFrom":2450,"currency":"ر.س","rating":4.8,"inclusions":["فطور","نقل","مرشد"],"cta":{"label":"عرض التفاصيل","kind":"details"}},
-        {"id":"deal-002","provider":"بوكينج كو – أفلييت","source":"Affiliate","priceFrom":2680,"currency":"ر.س","rating":4.6,"inclusions":["فطور","نقل"],"cta":{"label":"قارن العرض","kind":"details"}},
-        {"id":"deal-002","provider":"رحلاتي ديلز – إدخال يدوي","source":"Manual Deal","priceFrom":2320,"currency":"ر.س","rating":4.5,"inclusions":["فطور"],"cta":{"label":"قارن العرض","kind":"details"}},
-        {"id":"deal-002","provider":"ترافيل API – جاهز للدمج","source":"API Ready","priceFrom":2550,"currency":"ر.س","rating":4.7,"inclusions":["فطور","نقل","تأمين"],"cta":{"label":"قارن العرض","kind":"details"}}
-      ]
-    },
-    "دبي": {
-      "tripLabel": "دبي الفاخرة – 4 ليالٍ لشخصين",
-      "destination": "دبي",
-      "offers": [
-        {"id":"deal-003","provider":"سكاي ترافيل – شريك معتمد","source":"Partner","priceFrom":3200,"currency":"ر.س","rating":4.9,"inclusions":["فطور","نقل","سفاري"],"cta":{"label":"عرض التفاصيل","kind":"details"}},
-        {"id":"deal-003","provider":"إكسبيديا أفلييت","source":"Affiliate","priceFrom":3450,"currency":"ر.س","rating":4.7,"inclusions":["فطور","نقل"],"cta":{"label":"قارن العرض","kind":"details"}},
-        {"id":"deal-003","provider":"رحلاتي ديلز – إدخال يدوي","source":"Manual Deal","priceFrom":3050,"currency":"ر.س","rating":4.5,"inclusions":["فطور"],"cta":{"label":"قارن العرض","kind":"details"}},
-        {"id":"deal-003","provider":"آمادئوس API – جاهز","source":"API Ready","priceFrom":3300,"currency":"ر.س","rating":4.8,"inclusions":["فطور","نقل","تأمين","سفاري"],"cta":{"label":"قارن العرض","kind":"details"}}
-      ]
-    },
-    "الرياض": {
-      "tripLabel": "الرياض الحديثة – 3 ليالٍ لشخصين",
-      "destination": "الرياض",
-      "offers": [
-        {"id":"deal-009","provider":"سكاي ترافيل – شريك معتمد","source":"Partner","priceFrom":1400,"currency":"ر.س","rating":4.7,"inclusions":["فطور","نقل"],"cta":{"label":"عرض التفاصيل","kind":"details"}},
-        {"id":"deal-009","provider":"نون ترافيل – أفلييت","source":"Affiliate","priceFrom":1550,"currency":"ر.س","rating":4.5,"inclusions":["فطور"],"cta":{"label":"قارن العرض","kind":"details"}},
-        {"id":"deal-009","provider":"رحلاتي ديلز – إدخال يدوي","source":"Manual Deal","priceFrom":1350,"currency":"ر.س","rating":4.4,"inclusions":[],"cta":{"label":"قارن العرض","kind":"details"}},
-        {"id":"deal-009","provider":"سفريات API – جاهز","source":"API Ready","priceFrom":1480,"currency":"ر.س","rating":4.6,"inclusions":["فطور","نقل"],"cta":{"label":"قارن العرض","kind":"details"}}
-      ]
-    },
-    "شرم الشيخ": {
-      "tripLabel": "شرم الشيخ – 4 ليالٍ لشخصين",
-      "destination": "شرم الشيخ",
-      "offers": [
-        {"id":"deal-001","provider":"سكاي ترافيل – شريك معتمد","source":"Partner","priceFrom":1950,"currency":"ر.س","rating":4.7,"inclusions":["فطور","نقل","غطس"],"cta":{"label":"عرض التفاصيل","kind":"details"}},
-        {"id":"deal-001","provider":"بوكينج كو – أفلييت","source":"Affiliate","priceFrom":2100,"currency":"ر.س","rating":4.5,"inclusions":["فطور","نقل"],"cta":{"label":"قارن العرض","kind":"details"}},
-        {"id":"deal-001","provider":"رحلاتي ديلز – إدخال يدوي","source":"Manual Deal","priceFrom":1850,"currency":"ر.س","rating":4.4,"inclusions":["فطور"],"cta":{"label":"قارن العرض","kind":"details"}},
-        {"id":"deal-001","provider":"تريفلبايوتس – جاهز","source":"API Ready","priceFrom":2000,"currency":"ر.س","rating":4.6,"inclusions":["فطور","نقل","غطس"],"cta":{"label":"قارن العرض","kind":"details"}}
-      ]
-    }
-  }
-  </script>
-
-  <style>
-    /* ── compare.html page-scoped styles ────────────────────────────── */
-
-    /* Hero */
-    .compare-hero {
-      background: linear-gradient(135deg, #0E8186 0%, #042B2E 60%);
-      padding: 3rem 0 9rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .compare-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 15% 50%, rgba(56,188,192,0.15) 0%, transparent 50%),
-        radial-gradient(circle at 85% 20%, rgba(255,255,255,0.05) 0%, transparent 40%);
-      pointer-events: none;
-    }
-    /* Wave curve at bottom */
-    .compare-hero::after {
-      content: '';
-      position: absolute;
-      bottom: -2px; left: 0; right: 0;
-      height: 5rem;
-      background: #F3F4F6;
-      clip-path: ellipse(55% 100% at 50% 100%);
-    }
-    .compare-hero-inner { position: relative; z-index: 1; }
-
-    /* Breadcrumb */
-    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-    .breadcrumb a { font-size: 0.875rem; color: rgba(255,255,255,0.65); text-decoration: none; transition: color 150ms; }
-    .breadcrumb a:hover { color: white; }
-    .breadcrumb-sep { color: rgba(255,255,255,0.3); font-size: 0.75rem; }
-    .breadcrumb-current { font-size: 0.875rem; color: rgba(255,255,255,0.9); font-weight: 500; }
-
-    /* Trip context echo banner */
-    .trip-context-banner {
-      display: flex; align-items: center; gap: 0.75rem;
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 1rem;
-      padding: 0.875rem 1.25rem;
-      color: white;
-      font-size: 0.9375rem;
-      font-weight: 500;
-      margin-top: 1.25rem;
-    }
-    .trip-context-banner svg { flex: none; width: 1.125rem; height: 1.125rem; opacity: 0.8; }
-
-    /* Card pulled up from hero */
-    .compare-card-wrap {
-      max-width: 80rem;
-      margin: 0 auto;
-      padding: 0 1rem;
-      margin-top: -5rem;
-      position: relative;
-      z-index: 10;
-    }
-    @media (min-width: 768px) { .compare-card-wrap { padding: 0 1.5rem; } }
-
-    /* Filter panel */
-    .compare-filter-panel {
-      background: white;
-      border-radius: 1.25rem 1.25rem 0 0;
-      box-shadow: 0 -2px 0 0 rgba(14,129,134,0.08), 0 4px 24px rgba(14,129,134,0.10);
-      border: 1px solid rgba(14,129,134,0.08);
-      border-bottom: none;
-      padding: 1.25rem 1.5rem;
-    }
-    .filter-select {
-      appearance: none;
-      background: #F8FAFA url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230E8186' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat left 0.75rem center;
-      border: 1.5px solid #DEE3EA;
-      border-radius: 0.75rem;
-      padding: 0.5rem 1rem 0.5rem 2.5rem;
-      font-size: 0.875rem; color: #3A4453;
-      cursor: pointer; min-width: 9rem;
-      transition: border-color 150ms, box-shadow 150ms;
-    }
-    .filter-select:focus { outline: none; border-color: #16A0A5; box-shadow: 0 0 0 3px rgba(22,160,165,0.15); }
-
-    /* Offers panel (the actual comparison) */
-    .offers-panel {
-      background: white;
-      border-radius: 0 0 1.25rem 1.25rem;
-      box-shadow: 0 8px 32px rgba(14,129,134,0.08);
-      border: 1px solid rgba(14,129,134,0.08);
-      border-top: none;
-      overflow: hidden;
-    }
-
-    /* Compare offer card */
-    .compare-offer-card {
-      border-bottom: 1px solid #F0F2F5;
-      padding: 1.5rem;
-      transition: background 150ms;
-      position: relative;
-    }
-    .compare-offer-card:last-child { border-bottom: none; }
-    .compare-offer-card:hover { background: #F8FFFE; }
-    @media (min-width: 768px) {
-      .compare-offer-card {
-        display: grid;
-        grid-template-columns: 1fr auto auto;
-        align-items: center;
-        gap: 1.5rem;
+    <!-- Structured data: BreadcrumbList -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "الرئيسية",
+            "item": "https://rihlaty.example.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "مقارنة الأسعار",
+            "item": "https://rihlaty.example.com/compare"
+          }
+        ]
       }
-    }
+    </script>
 
-    /* Best price ribbon */
-    .best-badge {
-      position: absolute;
-      top: 0; inset-inline-end: 0;
-      background: linear-gradient(135deg, #0E8186, #16A0A5);
-      color: white;
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 0.25rem 0.75rem;
-      border-radius: 0 0 0 0.75rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
+    <!-- Structured data: ItemList (default comparison offers, illustrative) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "مقارنة عروض السفر",
+        "description": "مقارنة توضيحية لعروض من مصادر متعددة — الأسعار تقديرية وليست حقيقية.",
+        "numberOfItems": 4,
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "سكاي ترافيل – شريك معتمد" },
+          { "@type": "ListItem", "position": 2, "name": "بوكينج كو – أفلييت" },
+          { "@type": "ListItem", "position": 3, "name": "رحلاتي ديلز – إدخال يدوي" },
+          { "@type": "ListItem", "position": 4, "name": "ترافيل API – جاهز للدمج" }
+        ]
+      }
+    </script>
 
-    /* Inclusion pills */
-    .inclusion-pill {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      background: #ECFBFB; color: #0E8186;
-      font-size: 0.75rem; font-weight: 600;
-      padding: 0.2rem 0.6rem;
-      border-radius: 99px;
-      border: 1px solid #B2E8EA;
-    }
-    .inclusion-pill svg { width: 0.75rem; height: 0.75rem; flex: none; }
+    <!-- Inline compare-catalog (no-network swap for JS) -->
+    <script type="application/json" id="compare-catalog">
+      {
+        "default": {
+          "tripLabel": "إسطنبول – 5 ليالٍ لشخصين",
+          "destination": "إسطنبول",
+          "offers": [
+            {
+              "id": "deal-002",
+              "provider": "سكاي ترافيل – شريك معتمد",
+              "source": "Partner",
+              "priceFrom": 2450,
+              "currency": "ر.س",
+              "rating": 4.8,
+              "inclusions": ["فطور", "نقل", "مرشد"],
+              "cta": { "label": "عرض التفاصيل", "kind": "details" }
+            },
+            {
+              "id": "deal-002",
+              "provider": "بوكينج كو – أفلييت",
+              "source": "Affiliate",
+              "priceFrom": 2680,
+              "currency": "ر.س",
+              "rating": 4.6,
+              "inclusions": ["فطور", "نقل"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            },
+            {
+              "id": "deal-002",
+              "provider": "رحلاتي ديلز – إدخال يدوي",
+              "source": "Manual Deal",
+              "priceFrom": 2320,
+              "currency": "ر.س",
+              "rating": 4.5,
+              "inclusions": ["فطور"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            },
+            {
+              "id": "deal-002",
+              "provider": "ترافيل API – جاهز للدمج",
+              "source": "API Ready",
+              "priceFrom": 2550,
+              "currency": "ر.س",
+              "rating": 4.7,
+              "inclusions": ["فطور", "نقل", "تأمين"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            }
+          ]
+        },
+        "إسطنبول": {
+          "tripLabel": "إسطنبول – 5 ليالٍ لشخصين",
+          "destination": "إسطنبول",
+          "offers": [
+            {
+              "id": "deal-002",
+              "provider": "سكاي ترافيل – شريك معتمد",
+              "source": "Partner",
+              "priceFrom": 2450,
+              "currency": "ر.س",
+              "rating": 4.8,
+              "inclusions": ["فطور", "نقل", "مرشد"],
+              "cta": { "label": "عرض التفاصيل", "kind": "details" }
+            },
+            {
+              "id": "deal-002",
+              "provider": "بوكينج كو – أفلييت",
+              "source": "Affiliate",
+              "priceFrom": 2680,
+              "currency": "ر.س",
+              "rating": 4.6,
+              "inclusions": ["فطور", "نقل"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            },
+            {
+              "id": "deal-002",
+              "provider": "رحلاتي ديلز – إدخال يدوي",
+              "source": "Manual Deal",
+              "priceFrom": 2320,
+              "currency": "ر.س",
+              "rating": 4.5,
+              "inclusions": ["فطور"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            },
+            {
+              "id": "deal-002",
+              "provider": "ترافيل API – جاهز للدمج",
+              "source": "API Ready",
+              "priceFrom": 2550,
+              "currency": "ر.س",
+              "rating": 4.7,
+              "inclusions": ["فطور", "نقل", "تأمين"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            }
+          ]
+        },
+        "دبي": {
+          "tripLabel": "دبي الفاخرة – 4 ليالٍ لشخصين",
+          "destination": "دبي",
+          "offers": [
+            {
+              "id": "deal-003",
+              "provider": "سكاي ترافيل – شريك معتمد",
+              "source": "Partner",
+              "priceFrom": 3200,
+              "currency": "ر.س",
+              "rating": 4.9,
+              "inclusions": ["فطور", "نقل", "سفاري"],
+              "cta": { "label": "عرض التفاصيل", "kind": "details" }
+            },
+            {
+              "id": "deal-003",
+              "provider": "إكسبيديا أفلييت",
+              "source": "Affiliate",
+              "priceFrom": 3450,
+              "currency": "ر.س",
+              "rating": 4.7,
+              "inclusions": ["فطور", "نقل"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            },
+            {
+              "id": "deal-003",
+              "provider": "رحلاتي ديلز – إدخال يدوي",
+              "source": "Manual Deal",
+              "priceFrom": 3050,
+              "currency": "ر.س",
+              "rating": 4.5,
+              "inclusions": ["فطور"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            },
+            {
+              "id": "deal-003",
+              "provider": "آمادئوس API – جاهز",
+              "source": "API Ready",
+              "priceFrom": 3300,
+              "currency": "ر.س",
+              "rating": 4.8,
+              "inclusions": ["فطور", "نقل", "تأمين", "سفاري"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            }
+          ]
+        },
+        "الرياض": {
+          "tripLabel": "الرياض الحديثة – 3 ليالٍ لشخصين",
+          "destination": "الرياض",
+          "offers": [
+            {
+              "id": "deal-009",
+              "provider": "سكاي ترافيل – شريك معتمد",
+              "source": "Partner",
+              "priceFrom": 1400,
+              "currency": "ر.س",
+              "rating": 4.7,
+              "inclusions": ["فطور", "نقل"],
+              "cta": { "label": "عرض التفاصيل", "kind": "details" }
+            },
+            {
+              "id": "deal-009",
+              "provider": "نون ترافيل – أفلييت",
+              "source": "Affiliate",
+              "priceFrom": 1550,
+              "currency": "ر.س",
+              "rating": 4.5,
+              "inclusions": ["فطور"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            },
+            {
+              "id": "deal-009",
+              "provider": "رحلاتي ديلز – إدخال يدوي",
+              "source": "Manual Deal",
+              "priceFrom": 1350,
+              "currency": "ر.س",
+              "rating": 4.4,
+              "inclusions": [],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            },
+            {
+              "id": "deal-009",
+              "provider": "سفريات API – جاهز",
+              "source": "API Ready",
+              "priceFrom": 1480,
+              "currency": "ر.س",
+              "rating": 4.6,
+              "inclusions": ["فطور", "نقل"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            }
+          ]
+        },
+        "شرم الشيخ": {
+          "tripLabel": "شرم الشيخ – 4 ليالٍ لشخصين",
+          "destination": "شرم الشيخ",
+          "offers": [
+            {
+              "id": "deal-001",
+              "provider": "سكاي ترافيل – شريك معتمد",
+              "source": "Partner",
+              "priceFrom": 1950,
+              "currency": "ر.س",
+              "rating": 4.7,
+              "inclusions": ["فطور", "نقل", "غطس"],
+              "cta": { "label": "عرض التفاصيل", "kind": "details" }
+            },
+            {
+              "id": "deal-001",
+              "provider": "بوكينج كو – أفلييت",
+              "source": "Affiliate",
+              "priceFrom": 2100,
+              "currency": "ر.س",
+              "rating": 4.5,
+              "inclusions": ["فطور", "نقل"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            },
+            {
+              "id": "deal-001",
+              "provider": "رحلاتي ديلز – إدخال يدوي",
+              "source": "Manual Deal",
+              "priceFrom": 1850,
+              "currency": "ر.س",
+              "rating": 4.4,
+              "inclusions": ["فطور"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            },
+            {
+              "id": "deal-001",
+              "provider": "تريفلبايوتس – جاهز",
+              "source": "API Ready",
+              "priceFrom": 2000,
+              "currency": "ر.س",
+              "rating": 4.6,
+              "inclusions": ["فطور", "نقل", "غطس"],
+              "cta": { "label": "قارن العرض", "kind": "details" }
+            }
+          ]
+        }
+      }
+    </script>
 
-    /* Price block */
-    .offer-price { text-align: start; }
-    @media (min-width: 768px) { .offer-price { text-align: end; } }
-    .offer-price-from { font-size: 0.75rem; color: #9AA6B4; }
-    .offer-price-amount { font-size: 1.75rem; font-weight: 800; color: #0E8186; line-height: 1; }
-    .offer-price-currency { font-size: 0.875rem; color: #6B7684; }
+    <style>
+      /* ── compare.html page-scoped styles ────────────────────────────── */
 
-    /* Stars */
-    .stars-sm { color: #F4BE52; font-size: 0.875rem; }
+      /* Hero */
+      .compare-hero {
+        background: linear-gradient(135deg, #0e8186 0%, #042b2e 60%);
+        padding: 3rem 0 9rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .compare-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(circle at 15% 50%, rgba(56, 188, 192, 0.15) 0%, transparent 50%),
+          radial-gradient(circle at 85% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+        pointer-events: none;
+      }
+      /* Wave curve at bottom */
+      .compare-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 5rem;
+        background: #f3f4f6;
+        clip-path: ellipse(55% 100% at 50% 100%);
+      }
+      .compare-hero-inner {
+        position: relative;
+        z-index: 1;
+      }
 
-    /* Empty state */
-    .empty-state-box {
-      text-align: center; padding: 4rem 2rem;
-      background: #F8FAFA;
-    }
+      /* Breadcrumb */
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .breadcrumb a {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.65);
+        text-decoration: none;
+        transition: color 150ms;
+      }
+      .breadcrumb a:hover {
+        color: white;
+      }
+      .breadcrumb-sep {
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 0.75rem;
+      }
+      .breadcrumb-current {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+      }
 
-    /* Result bar */
-    .result-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-    .result-count-text { font-size: 0.875rem; color: #6B7684; }
-    .result-count-num { font-weight: 700; color: #0E8186; }
+      /* Trip context echo banner */
+      .trip-context-banner {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 1rem;
+        padding: 0.875rem 1.25rem;
+        color: white;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        margin-top: 1.25rem;
+      }
+      .trip-context-banner svg {
+        flex: none;
+        width: 1.125rem;
+        height: 1.125rem;
+        opacity: 0.8;
+      }
 
-    /* How it works steps */
-    .how-step {
-      display: flex; align-items: flex-start; gap: 1rem;
-    }
-    .how-step-num {
-      flex: none;
-      width: 2.5rem; height: 2.5rem;
-      background: linear-gradient(135deg, #0E8186, #16A0A5);
-      color: white;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 1rem;
-    }
-    .how-step-title { font-size: 1rem; font-weight: 700; color: #1E2835; margin-bottom: 0.25rem; }
-    .how-step-desc { font-size: 0.875rem; color: #6B7684; line-height: 1.6; }
+      /* Card pulled up from hero */
+      .compare-card-wrap {
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 0 1rem;
+        margin-top: -5rem;
+        position: relative;
+        z-index: 10;
+      }
+      @media (min-width: 768px) {
+        .compare-card-wrap {
+          padding: 0 1.5rem;
+        }
+      }
 
-    /* FAQ */
-    .compare-faq details { border-bottom: 1px solid #F0F2F5; }
-    .compare-faq details:last-child { border-bottom: none; }
-    .compare-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0; font-size: 0.9375rem; font-weight: 600; color: #1E2835; cursor: pointer; list-style: none; }
-    .compare-faq summary::-webkit-details-marker { display: none; }
-    .compare-faq summary::after { content: '+'; flex: none; font-size: 1.25rem; font-weight: 400; color: #16A0A5; }
-    .compare-faq details[open] summary::after { content: '−'; }
-    .compare-faq details p { padding-bottom: 1rem; color: #4D5969; line-height: 1.75; font-size: 0.9rem; }
+      /* Filter panel */
+      .compare-filter-panel {
+        background: white;
+        border-radius: 1.25rem 1.25rem 0 0;
+        box-shadow:
+          0 -2px 0 0 rgba(14, 129, 134, 0.08),
+          0 4px 24px rgba(14, 129, 134, 0.1);
+        border: 1px solid rgba(14, 129, 134, 0.08);
+        border-bottom: none;
+        padding: 1.25rem 1.5rem;
+      }
+      .filter-select {
+        appearance: none;
+        background: #f8fafa
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230E8186' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+          no-repeat left 0.75rem center;
+        border: 1.5px solid #dee3ea;
+        border-radius: 0.75rem;
+        padding: 0.5rem 1rem 0.5rem 2.5rem;
+        font-size: 0.875rem;
+        color: #3a4453;
+        cursor: pointer;
+        min-width: 9rem;
+        transition:
+          border-color 150ms,
+          box-shadow 150ms;
+      }
+      .filter-select:focus {
+        outline: none;
+        border-color: #16a0a5;
+        box-shadow: 0 0 0 3px rgba(22, 160, 165, 0.15);
+      }
 
-    /* Disclaimer note */
-    .mock-note {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 0.75rem;
-      padding: 0.75rem 1rem;
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.7);
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-    .mock-note svg { flex: none; width: 1rem; height: 1rem; }
-  </style>
-</head>
+      /* Offers panel (the actual comparison) */
+      .offers-panel {
+        background: white;
+        border-radius: 0 0 1.25rem 1.25rem;
+        box-shadow: 0 8px 32px rgba(14, 129, 134, 0.08);
+        border: 1px solid rgba(14, 129, 134, 0.08);
+        border-top: none;
+        overflow: hidden;
+      }
 
-<body class="bg-gray-100 font-cairo antialiased">
+      /* Compare offer card */
+      .compare-offer-card {
+        border-bottom: 1px solid #f0f2f5;
+        padding: 1.5rem;
+        transition: background 150ms;
+        position: relative;
+      }
+      .compare-offer-card:last-child {
+        border-bottom: none;
+      }
+      .compare-offer-card:hover {
+        background: #f8fffe;
+      }
+      @media (min-width: 768px) {
+        .compare-offer-card {
+          display: grid;
+          grid-template-columns: 1fr auto auto;
+          align-items: center;
+          gap: 1.5rem;
+        }
+      }
 
-  <!-- Skip link -->
-  <a href="#main" class="skip-link">انتقل إلى المحتوى الرئيسي</a>
+      /* Best price ribbon */
+      .best-badge {
+        position: absolute;
+        top: 0;
+        inset-inline-end: 0;
+        background: linear-gradient(135deg, #0e8186, #16a0a5);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0 0 0 0.75rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
 
-  <!-- Toast root -->
-  <div id="toast-root" aria-live="assertive" aria-atomic="true" role="status"></div>
+      /* Inclusion pills */
+      .inclusion-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: #ecfbfb;
+        color: #0e8186;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 99px;
+        border: 1px solid #b2e8ea;
+      }
+      .inclusion-pill svg {
+        width: 0.75rem;
+        height: 0.75rem;
+        flex: none;
+      }
 
-  <!-- ═══ HEADER ════════════════════════════════════════════════════════════ -->
-  <header class="site-header" role="banner">
-    <div class="header-inner max-w-7xl mx-auto px-4 md:px-6 flex items-center h-16 gap-4">
-      <a href="index.html" class="brand flex items-center gap-2 me-auto no-underline" aria-label="رحلاتي – الصفحة الرئيسية">
-        <span class="brand-mark" aria-hidden="true">
-          <svg width="34" height="34" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="9" fill="#0E8186"/><path d="M16 7C11.029 7 7 11.029 7 16s4.029 9 9 9 9-4.029 9-9-4.029-9-9-9z" fill="#38BCC0" opacity="0.35"/><path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/><circle cx="16" cy="14" r="3" fill="#0E8186"/></svg>
-        </span>
-        <span class="brand-name text-xl font-bold text-lagoon-700 tracking-tight">رحلاتي</span>
-      </a>
-      <nav class="hidden lg:flex items-center gap-1" aria-label="التنقل الرئيسي">
-        <a href="index.html" class="nav-link">الرئيسية</a>
-        <a href="deals.html" class="nav-link">عروض السفر</a>
-        <a href="compare.html" class="nav-link nav-link-active" aria-current="page">مقارنة الأسعار</a>
-        <a href="coupons.html" class="nav-link">كوبونات</a>
-        <a href="destinations.html" class="nav-link">وجهات</a>
-        <a href="blog.html" class="nav-link">الدليل</a>
-      </nav>
-      <button type="button" class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-ink-500 hover:text-ink-700 rounded-lg hover:bg-ink-100 transition-colors" aria-label="تغيير اللغة (غير متاح)" aria-disabled="true" tabindex="-1">
-        <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-globe"/></svg>
-        <span>EN</span>
-      </button>
-      <a href="saved-deals.html" class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-ink-600 hover:text-lagoon-700 rounded-lg hover:bg-ink-100 transition-colors" aria-label="المحفوظات وحسابي">
-        <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>
-        <span>حسابي</span>
-      </a>
-      <a href="login.html" class="hidden md:flex btn btn-primary btn-sm">تسجيل الدخول</a>
-      <button type="button" class="btn btn-ghost btn-icon lg:hidden" aria-label="فتح القائمة" aria-expanded="false" aria-controls="main-nav" data-drawer-open="main-nav">
-        <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-menu"/></svg>
-      </button>
-    </div>
-  </header>
+      /* Price block */
+      .offer-price {
+        text-align: start;
+      }
+      @media (min-width: 768px) {
+        .offer-price {
+          text-align: end;
+        }
+      }
+      .offer-price-from {
+        font-size: 0.75rem;
+        color: #9aa6b4;
+      }
+      .offer-price-amount {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #0e8186;
+        line-height: 1;
+      }
+      .offer-price-currency {
+        font-size: 0.875rem;
+        color: #6b7684;
+      }
 
-  <!-- ═══ Mobile Drawer ═══════════════════════════════════════════════════ -->
-  <div class="drawer drawer-start" id="main-nav-drawer" data-drawer="main-nav" role="dialog" aria-modal="true" aria-label="قائمة التنقل" hidden>
-    <div class="drawer-overlay" data-drawer-close aria-hidden="true"></div>
-    <nav class="drawer-panel" aria-label="التنقل الرئيسي">
-      <div class="flex items-center justify-between p-4 border-b border-ink-100">
-        <a href="index.html" class="brand flex items-center gap-2 no-underline">
-          <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0E8186"/><path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/><circle cx="16" cy="14" r="3" fill="#0E8186"/></svg>
-          <span class="text-lg font-bold text-lagoon-700">رحلاتي</span>
+      /* Stars */
+      .stars-sm {
+        color: #f4be52;
+        font-size: 0.875rem;
+      }
+
+      /* Empty state */
+      .empty-state-box {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: #f8fafa;
+      }
+
+      /* Result bar */
+      .result-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .result-count-text {
+        font-size: 0.875rem;
+        color: #6b7684;
+      }
+      .result-count-num {
+        font-weight: 700;
+        color: #0e8186;
+      }
+
+      /* How it works steps */
+      .how-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .how-step-num {
+        flex: none;
+        width: 2.5rem;
+        height: 2.5rem;
+        background: linear-gradient(135deg, #0e8186, #16a0a5);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1rem;
+      }
+      .how-step-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1e2835;
+        margin-bottom: 0.25rem;
+      }
+      .how-step-desc {
+        font-size: 0.875rem;
+        color: #6b7684;
+        line-height: 1.6;
+      }
+
+      /* FAQ */
+      .compare-faq details {
+        border-bottom: 1px solid #f0f2f5;
+      }
+      .compare-faq details:last-child {
+        border-bottom: none;
+      }
+      .compare-faq summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 0;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: #1e2835;
+        cursor: pointer;
+        list-style: none;
+      }
+      .compare-faq summary::-webkit-details-marker {
+        display: none;
+      }
+      .compare-faq summary::after {
+        content: '+';
+        flex: none;
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: #16a0a5;
+      }
+      .compare-faq details[open] summary::after {
+        content: '−';
+      }
+      .compare-faq details p {
+        padding-bottom: 1rem;
+        color: #4d5969;
+        line-height: 1.75;
+        font-size: 0.9rem;
+      }
+
+      /* Disclaimer note */
+      .mock-note {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .mock-note svg {
+        flex: none;
+        width: 1rem;
+        height: 1rem;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 font-cairo antialiased">
+    <!-- Skip link -->
+    <a href="#main" class="skip-link">انتقل إلى المحتوى الرئيسي</a>
+
+    <!-- Toast root -->
+    <div id="toast-root" aria-live="assertive" aria-atomic="true" role="status"></div>
+
+    <!-- ═══ HEADER ════════════════════════════════════════════════════════════ -->
+    <header class="site-header" role="banner">
+      <div class="header-inner max-w-7xl mx-auto px-4 md:px-6 flex items-center h-16 gap-4">
+        <a
+          href="index.html"
+          class="brand flex items-center gap-2 me-auto no-underline"
+          aria-label="رحلاتي – الصفحة الرئيسية"
+        >
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none">
+              <rect width="32" height="32" rx="9" fill="#0E8186" />
+              <path
+                d="M16 7C11.029 7 7 11.029 7 16s4.029 9 9 9 9-4.029 9-9-4.029-9-9-9z"
+                fill="#38BCC0"
+                opacity="0.35"
+              />
+              <path
+                d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z"
+                fill="white"
+              />
+              <circle cx="16" cy="14" r="3" fill="#0E8186" />
+            </svg>
+          </span>
+          <span class="brand-name text-xl font-bold text-lagoon-700 tracking-tight">رحلاتي</span>
         </a>
-        <button type="button" class="btn btn-ghost btn-icon" aria-label="إغلاق القائمة" data-drawer-close>
-          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-close"/></svg>
+        <nav class="hidden lg:flex items-center gap-1" aria-label="التنقل الرئيسي">
+          <a href="index.html" class="nav-link">الرئيسية</a>
+          <a href="deals.html" class="nav-link">عروض السفر</a>
+          <a href="compare.html" class="nav-link nav-link-active" aria-current="page"
+            >مقارنة الأسعار</a
+          >
+          <a href="coupons.html" class="nav-link">كوبونات</a>
+          <a href="destinations.html" class="nav-link">وجهات</a>
+          <a href="blog.html" class="nav-link">الدليل</a>
+        </nav>
+        <button
+          type="button"
+          class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-ink-500 hover:text-ink-700 rounded-lg hover:bg-ink-100 transition-colors"
+          aria-label="تغيير اللغة (غير متاح)"
+          aria-disabled="true"
+          tabindex="-1"
+        >
+          <svg class="w-4 h-4" aria-hidden="true">
+            <use href="../assets/icons/sprite.svg#icon-globe" />
+          </svg>
+          <span>EN</span>
+        </button>
+        <a
+          href="saved-deals.html"
+          class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-ink-600 hover:text-lagoon-700 rounded-lg hover:bg-ink-100 transition-colors"
+          aria-label="المحفوظات وحسابي"
+        >
+          <svg class="w-4 h-4" aria-hidden="true">
+            <use href="../assets/icons/sprite.svg#icon-star" />
+          </svg>
+          <span>حسابي</span>
+        </a>
+        <a href="login.html" class="hidden md:flex btn btn-primary btn-sm">تسجيل الدخول</a>
+        <button
+          type="button"
+          class="btn btn-ghost btn-icon lg:hidden"
+          aria-label="فتح القائمة"
+          aria-expanded="false"
+          aria-controls="main-nav"
+          data-drawer-open="main-nav"
+        >
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-menu" /></svg>
         </button>
       </div>
-      <ul class="drawer-nav flex-1 p-4 space-y-1" role="list">
-        <li><a href="index.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plane"/></svg>الرئيسية</a></li>
-        <li><a href="deals.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>عروض السفر</a></li>
-        <li><a href="compare.html" class="drawer-nav-link drawer-nav-link-active" aria-current="page"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search"/></svg>مقارنة الأسعار</a></li>
-        <li><a href="coupons.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>كوبونات الخصم</a></li>
-        <li><a href="destinations.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg>الوجهات</a></li>
-        <li><a href="blog.html" class="drawer-nav-link"><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>دليل السفر</a></li>
-      </ul>
-      <div class="p-4 border-t border-ink-100 space-y-3">
-        <a href="login.html" class="btn btn-primary w-full justify-center">تسجيل الدخول</a>
-        <a href="register.html" class="btn btn-outline w-full justify-center">إنشاء حساب جديد</a>
-        <div class="flex gap-2">
-          <a href="saved-deals.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs"><svg class="w-3.5 h-3.5 me-1" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>المحفوظات</a>
-          <a href="price-alerts.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs"><svg class="w-3.5 h-3.5 me-1" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>التنبيهات</a>
+    </header>
+
+    <!-- ═══ Mobile Drawer ═══════════════════════════════════════════════════ -->
+    <div
+      class="drawer drawer-start"
+      id="main-nav-drawer"
+      data-drawer="main-nav"
+      role="dialog"
+      aria-modal="true"
+      aria-label="قائمة التنقل"
+      hidden
+    >
+      <div class="drawer-overlay" data-drawer-close aria-hidden="true"></div>
+      <nav class="drawer-panel" aria-label="التنقل الرئيسي">
+        <div class="flex items-center justify-between p-4 border-b border-ink-100">
+          <a href="index.html" class="brand flex items-center gap-2 no-underline">
+            <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <rect width="32" height="32" rx="9" fill="#0E8186" />
+              <path
+                d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z"
+                fill="white"
+              />
+              <circle cx="16" cy="14" r="3" fill="#0E8186" />
+            </svg>
+            <span class="text-lg font-bold text-lagoon-700">رحلاتي</span>
+          </a>
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon"
+            aria-label="إغلاق القائمة"
+            data-drawer-close
+          >
+            <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-close" /></svg>
+          </button>
         </div>
-      </div>
-    </nav>
-  </div>
-
-  <style>
-    .site-header { position: sticky; top: 0; z-index: 1020; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(222,227,234,0.6); box-shadow: 0 1px 3px rgb(38 46 58 / 0.06); }
-    .nav-link { display: inline-flex; align-items: center; padding: 0.5rem 0.75rem; font-size: 0.9rem; font-weight: 500; color: #4D5969; border-radius: 0.5rem; text-decoration: none; transition: color 150ms, background 150ms; }
-    .nav-link:hover { color: #0E8186; background: #ECFBFB; }
-    .nav-link-active { color: #0E8186; font-weight: 600; }
-    .drawer-nav-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; font-size: 1rem; font-weight: 500; color: #3A4453; border-radius: 0.75rem; text-decoration: none; transition: color 150ms, background 150ms; }
-    .drawer-nav-link svg { width: 1.25rem; height: 1.25rem; flex: none; color: #9AA6B4; }
-    .drawer-nav-link:hover, .drawer-nav-link-active { color: #0E8186; background: #ECFBFB; }
-    .drawer-nav-link:hover svg, .drawer-nav-link-active svg { color: #0E8186; }
-    .drawer-nav-link-active { font-weight: 600; }
-  </style>
-
-  <!-- ═══ MAIN ══════════════════════════════════════════════════════════════ -->
-  <main id="main" tabindex="-1">
-
-    <!-- ── Compare hero ────────────────────────────────────────────────────── -->
-    <div class="compare-hero">
-      <div class="compare-hero-inner max-w-7xl mx-auto px-4 md:px-6">
-
-        <!-- Breadcrumb -->
-        <nav class="breadcrumb mb-4" aria-label="مسار التنقل">
-          <a href="index.html">الرئيسية</a>
-          <span class="breadcrumb-sep" aria-hidden="true">›</span>
-          <span class="breadcrumb-current" aria-current="page">مقارنة الأسعار</span>
-        </nav>
-
-        <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight">
-          قارن العروض من مصادر موثوقة
-        </h1>
-        <p class="text-lagoon-200 text-base md:text-lg max-w-2xl leading-relaxed mb-4">
-          نجمّع عروض السفر من أكثر من 50 مصدراً ونعرضها لك جنباً إلى جنب — قارن الأسعار والمميزات واختر الأفضل.
-        </p>
-
-        <!-- Mock disclaimer -->
-        <div class="mock-note inline-flex max-w-lg">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          الأسعار المعروضة تقديرية وللأغراض التوضيحية فقط — المنصة في طور الإطلاق.
+        <ul class="drawer-nav flex-1 p-4 space-y-1" role="list">
+          <li>
+            <a href="index.html" class="drawer-nav-link"
+              ><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plane" /></svg
+              >الرئيسية</a
+            >
+          </li>
+          <li>
+            <a href="deals.html" class="drawer-nav-link"
+              ><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star" /></svg>عروض
+              السفر</a
+            >
+          </li>
+          <li>
+            <a
+              href="compare.html"
+              class="drawer-nav-link drawer-nav-link-active"
+              aria-current="page"
+              ><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search" /></svg
+              >مقارنة الأسعار</a
+            >
+          </li>
+          <li>
+            <a href="coupons.html" class="drawer-nav-link"
+              ><svg aria-hidden="true">
+                <use href="../assets/icons/sprite.svg#icon-shield-check" /></svg
+              >كوبونات الخصم</a
+            >
+          </li>
+          <li>
+            <a href="destinations.html" class="drawer-nav-link"
+              ><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location" /></svg
+              >الوجهات</a
+            >
+          </li>
+          <li>
+            <a href="blog.html" class="drawer-nav-link"
+              ><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info" /></svg>دليل
+              السفر</a
+            >
+          </li>
+        </ul>
+        <div class="p-4 border-t border-ink-100 space-y-3">
+          <a href="login.html" class="btn btn-primary w-full justify-center">تسجيل الدخول</a>
+          <a href="register.html" class="btn btn-outline w-full justify-center">إنشاء حساب جديد</a>
+          <div class="flex gap-2">
+            <a href="saved-deals.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs"
+              ><svg class="w-3.5 h-3.5 me-1" aria-hidden="true">
+                <use href="../assets/icons/sprite.svg#icon-star" /></svg
+              >المحفوظات</a
+            >
+            <a href="price-alerts.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs"
+              ><svg class="w-3.5 h-3.5 me-1" aria-hidden="true">
+                <use href="../assets/icons/sprite.svg#icon-info" /></svg
+              >التنبيهات</a
+            >
+          </div>
         </div>
-
-        <!-- Trip context echo (hidden by default, shown by JS when ?destination= present) -->
-        <div class="trip-context-banner mt-4" data-trip-context hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span>إسطنبول – 5 ليالٍ لشخصين</span>
-        </div>
-
-      </div>
+      </nav>
     </div>
 
-    <!-- ── Compare panel (filter + offers) ─────────────────────────────────── -->
-    <div class="compare-card-wrap mb-12">
+    <style>
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(222, 227, 234, 0.6);
+        box-shadow: 0 1px 3px rgb(38 46 58 / 0.06);
+      }
+      .nav-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #4d5969;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        transition:
+          color 150ms,
+          background 150ms;
+      }
+      .nav-link:hover {
+        color: #0e8186;
+        background: #ecfbfb;
+      }
+      .nav-link-active {
+        color: #0e8186;
+        font-weight: 600;
+      }
+      .drawer-nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #3a4453;
+        border-radius: 0.75rem;
+        text-decoration: none;
+        transition:
+          color 150ms,
+          background 150ms;
+      }
+      .drawer-nav-link svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        flex: none;
+        color: #9aa6b4;
+      }
+      .drawer-nav-link:hover,
+      .drawer-nav-link-active {
+        color: #0e8186;
+        background: #ecfbfb;
+      }
+      .drawer-nav-link:hover svg,
+      .drawer-nav-link-active svg {
+        color: #0e8186;
+      }
+      .drawer-nav-link-active {
+        font-weight: 600;
+      }
+    </style>
 
-      <!-- Filter bar (T022) -->
-      <div class="compare-filter-panel">
-        <form data-filter-form novalidate aria-label="فلترة وترتيب العروض">
-          <div class="flex flex-wrap items-end gap-4">
+    <!-- ═══ MAIN ══════════════════════════════════════════════════════════════ -->
+    <main id="main" tabindex="-1">
+      <!-- ── Compare hero ────────────────────────────────────────────────────── -->
+      <div class="compare-hero">
+        <div class="compare-hero-inner max-w-7xl mx-auto px-4 md:px-6">
+          <!-- Breadcrumb -->
+          <nav class="breadcrumb mb-4" aria-label="مسار التنقل">
+            <a href="index.html">الرئيسية</a>
+            <span class="breadcrumb-sep" aria-hidden="true">›</span>
+            <span class="breadcrumb-current" aria-current="page">مقارنة الأسعار</span>
+          </nav>
 
-            <!-- Source filter -->
-            <div>
-              <p class="text-xs font-semibold text-ink-400 mb-1.5" id="lbl-cf-source">المصدر</p>
-              <select class="filter-select" name="source" aria-labelledby="lbl-cf-source">
-                <option value="">جميع المصادر</option>
-                <option value="Partner">Partner</option>
-                <option value="Affiliate">Affiliate</option>
-                <option value="Manual Deal">Manual Deal</option>
-                <option value="API Ready">API Ready</option>
-              </select>
-            </div>
+          <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight">
+            قارن العروض من مصادر موثوقة
+          </h1>
+          <p class="text-lagoon-200 text-base md:text-lg max-w-2xl leading-relaxed mb-4">
+            نجمّع عروض السفر من أكثر من 50 مصدراً ونعرضها لك جنباً إلى جنب — قارن الأسعار والمميزات
+            واختر الأفضل.
+          </p>
 
-            <!-- Sort -->
-            <div>
-              <p class="text-xs font-semibold text-ink-400 mb-1.5" id="lbl-cf-sort">الترتيب</p>
-              <select class="filter-select" data-sort aria-labelledby="lbl-cf-sort">
-                <option value="price-asc">السعر (الأقل أولاً)</option>
-                <option value="price-desc">السعر (الأعلى أولاً)</option>
-                <option value="rating-desc">التقييم (الأعلى أولاً)</option>
-              </select>
-            </div>
-
-            <!-- Spacer + result count + reset -->
-            <div class="flex-1 flex items-end justify-between gap-4 flex-wrap">
-              <p class="text-sm text-ink-500" aria-live="polite" data-result-count>
-                عرض <span class="font-bold text-lagoon-600">4</span> عروض مقارنة
-              </p>
-              <button type="button" class="btn btn-ghost btn-sm gap-1.5" data-filter-reset aria-label="إعادة تعيين الفلاتر">
-                <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-close"/></svg>
-                إعادة تعيين
-              </button>
-            </div>
-
-          </div>
-        </form>
-      </div>
-
-      <!-- Offers list (T021 - static default: إسطنبول) -->
-      <div class="offers-panel">
-
-        <!-- Offers grid (re-rendered by JS; static = no-JS baseline) -->
-        <div id="offers-container" data-offers-grid role="list" aria-label="عروض المقارنة">
-
-          <!-- Offer 1: Best price (Manual Deal) -->
-          <article class="compare-offer-card" role="listitem"
-                   data-card data-source="Manual Deal" data-price="2320" data-rating="4.5">
-            <div class="best-badge">الأقل سعراً</div>
-            <div>
-              <div class="flex flex-wrap items-center gap-2 mb-2">
-                <h2 class="text-base font-bold text-ink-800">رحلاتي ديلز – إدخال يدوي</h2>
-                <span class="badge badge-source-manual">Manual Deal</span>
-              </div>
-              <p class="text-sm text-ink-400 mb-2">
-                <span class="stars-sm" aria-hidden="true">★★★★☆</span>
-                <span class="font-semibold text-ink-600 ms-1">4.5</span>
-              </p>
-              <div class="flex flex-wrap gap-1.5">
-                <span class="inclusion-pill">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                  فطور
-                </span>
-              </div>
-            </div>
-            <div class="offer-price mt-4 md:mt-0">
-              <p class="offer-price-from">ابتداءً من</p>
-              <p>
-                <span class="offer-price-amount">2,320</span>
-                <span class="offer-price-currency">ر.س</span>
-              </p>
-            </div>
-            <div class="mt-4 md:mt-0">
-              <a href="deal-details.html?id=deal-002" class="btn btn-primary w-full md:w-auto justify-center">
-                قارن العرض
-              </a>
-            </div>
-          </article>
-
-          <!-- Offer 2: Partner -->
-          <article class="compare-offer-card" role="listitem"
-                   data-card data-source="Partner" data-price="2450" data-rating="4.8">
-            <div>
-              <div class="flex flex-wrap items-center gap-2 mb-2">
-                <h2 class="text-base font-bold text-ink-800">سكاي ترافيل – شريك معتمد</h2>
-                <span class="badge badge-source-partner">
-                  <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
-                  Partner
-                </span>
-              </div>
-              <p class="text-sm text-ink-400 mb-2">
-                <span class="stars-sm" aria-hidden="true">★★★★★</span>
-                <span class="font-semibold text-ink-600 ms-1">4.8</span>
-              </p>
-              <div class="flex flex-wrap gap-1.5">
-                <span class="inclusion-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>فطور</span>
-                <span class="inclusion-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>نقل</span>
-                <span class="inclusion-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>مرشد</span>
-              </div>
-            </div>
-            <div class="offer-price mt-4 md:mt-0">
-              <p class="offer-price-from">ابتداءً من</p>
-              <p><span class="offer-price-amount">2,450</span><span class="offer-price-currency"> ر.س</span></p>
-            </div>
-            <div class="mt-4 md:mt-0">
-              <a href="deal-details.html?id=deal-002" class="btn btn-primary w-full md:w-auto justify-center">
-                عرض التفاصيل
-              </a>
-            </div>
-          </article>
-
-          <!-- Offer 3: API Ready -->
-          <article class="compare-offer-card" role="listitem"
-                   data-card data-source="API Ready" data-price="2550" data-rating="4.7">
-            <div>
-              <div class="flex flex-wrap items-center gap-2 mb-2">
-                <h2 class="text-base font-bold text-ink-800">ترافيل API – جاهز للدمج</h2>
-                <span class="badge badge-source-api-ready">API Ready</span>
-              </div>
-              <p class="text-sm text-ink-400 mb-2">
-                <span class="stars-sm" aria-hidden="true">★★★★★</span>
-                <span class="font-semibold text-ink-600 ms-1">4.7</span>
-              </p>
-              <div class="flex flex-wrap gap-1.5">
-                <span class="inclusion-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>فطور</span>
-                <span class="inclusion-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>نقل</span>
-                <span class="inclusion-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>تأمين</span>
-              </div>
-            </div>
-            <div class="offer-price mt-4 md:mt-0">
-              <p class="offer-price-from">ابتداءً من</p>
-              <p><span class="offer-price-amount">2,550</span><span class="offer-price-currency"> ر.س</span></p>
-            </div>
-            <div class="mt-4 md:mt-0">
-              <a href="deal-details.html?id=deal-002" class="btn btn-primary w-full md:w-auto justify-center">
-                قارن العرض
-              </a>
-            </div>
-          </article>
-
-          <!-- Offer 4: Affiliate -->
-          <article class="compare-offer-card" role="listitem"
-                   data-card data-source="Affiliate" data-price="2680" data-rating="4.6">
-            <div>
-              <div class="flex flex-wrap items-center gap-2 mb-2">
-                <h2 class="text-base font-bold text-ink-800">بوكينج كو – أفلييت</h2>
-                <span class="badge badge-source-affiliate">Affiliate</span>
-              </div>
-              <p class="text-sm text-ink-400 mb-2">
-                <span class="stars-sm" aria-hidden="true">★★★★★</span>
-                <span class="font-semibold text-ink-600 ms-1">4.6</span>
-              </p>
-              <div class="flex flex-wrap gap-1.5">
-                <span class="inclusion-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>فطور</span>
-                <span class="inclusion-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>نقل</span>
-              </div>
-            </div>
-            <div class="offer-price mt-4 md:mt-0">
-              <p class="offer-price-from">ابتداءً من</p>
-              <p><span class="offer-price-amount">2,680</span><span class="offer-price-currency"> ر.س</span></p>
-            </div>
-            <div class="mt-4 md:mt-0">
-              <a href="deal-details.html?id=deal-002" class="btn btn-primary w-full md:w-auto justify-center">
-                قارن العرض
-              </a>
-            </div>
-          </article>
-
-        </div>
-
-        <!-- Empty state -->
-        <div class="empty-state-box" data-empty-state hidden>
-          <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-ink-100 text-ink-400 mb-4" aria-hidden="true">
-            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </div>
-          <h3 class="text-base font-bold text-ink-700 mb-2">لا توجد عروض مطابقة</h3>
-          <p class="text-ink-400 text-sm mb-4 max-w-xs mx-auto">جرّب تغيير الفلتر أو إعادة التعيين.</p>
-          <button type="button" class="btn btn-primary btn-sm" data-filter-reset>إعادة تعيين</button>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ── How comparison works (T024) ─────────────────────────────────────── -->
-    <section aria-labelledby="how-compare-heading" class="bg-white py-14 md:py-20 mb-0">
-      <div class="max-w-4xl mx-auto px-4 md:px-6">
-
-        <div class="text-center mb-10">
-          <span class="section-eyebrow">شفافية تامة</span>
-          <h2 id="how-compare-heading" class="section-title">كيف تعمل المقارنة؟</h2>
-          <p class="text-ink-400 text-sm mt-2 max-w-xl mx-auto">نجمّع العروض من مصادر مختلفة ونصنّفها أمامك بشكل واضح حتى تتخذ قرارك بثقة تامة.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-
-          <div class="how-step">
-            <div class="how-step-num" aria-hidden="true">1</div>
-            <div>
-              <p class="how-step-title">أدخل وجهتك</p>
-              <p class="how-step-desc">اكتب الوجهة التي تحلم بها في خانة البحث على الصفحة الرئيسية أو تصفّح العروض المتاحة.</p>
-            </div>
+          <!-- Mock disclaimer -->
+          <div class="mock-note inline-flex max-w-lg">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            الأسعار المعروضة تقديرية وللأغراض التوضيحية فقط — المنصة في طور الإطلاق.
           </div>
 
-          <div class="how-step">
-            <div class="how-step-num" aria-hidden="true">2</div>
-            <div>
-              <p class="how-step-title">نجمع العروض لك</p>
-              <p class="how-step-desc">تستقطب المنصة عروض الشركاء المعتمدين وشبكات الأفلييت والإدخالات اليدوية وتعرضها في مكان واحد.</p>
-            </div>
-          </div>
-
-          <div class="how-step">
-            <div class="how-step-num" aria-hidden="true">3</div>
-            <div>
-              <p class="how-step-title">قارن واختر بثقة</p>
-              <p class="how-step-desc">فلتر حسب المصدر وفرّز حسب السعر أو التقييم، ثم انتقل مباشرة لتفاصيل العرض الذي يناسبك.</p>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Source legend -->
-        <div class="border border-ink-100 rounded-2xl p-6">
-          <h3 class="text-sm font-bold text-ink-600 mb-4 uppercase tracking-wide">دليل مصادر العروض</h3>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="flex items-start gap-2.5">
-              <span class="badge badge-source-partner flex-none mt-0.5">Partner</span>
-              <p class="text-xs text-ink-400 leading-relaxed">شريك معتمد مباشر — أعلى مستوى من الثقة والمراجعة اليدوية.</p>
-            </div>
-            <div class="flex items-start gap-2.5">
-              <span class="badge badge-source-affiliate flex-none mt-0.5">Affiliate</span>
-              <p class="text-xs text-ink-400 leading-relaxed">شبكة أفلييت — عروض مرتبطة بمزودين خارجيين مختارين.</p>
-            </div>
-            <div class="flex items-start gap-2.5">
-              <span class="badge badge-source-manual flex-none mt-0.5">Manual Deal</span>
-              <p class="text-xs text-ink-400 leading-relaxed">إدخال يدوي من فريق رحلاتي بعد التحقق من العرض مباشرة.</p>
-            </div>
-            <div class="flex items-start gap-2.5">
-              <span class="badge badge-source-api-ready flex-none mt-0.5">API Ready</span>
-              <p class="text-xs text-ink-400 leading-relaxed">جاهز للربط التلقائي — سيُحدّث بشكل آني بعد دمج المزود.</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ── Trust band (T024) ────────────────────────────────────────────────── -->
-    <div class="bg-lagoon-700 py-10">
-      <div class="max-w-7xl mx-auto px-4 md:px-6">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div class="flex items-center gap-3 text-white">
-            <svg class="w-8 h-8 opacity-75 flex-none" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-            <div><p class="font-bold text-sm">عروض موثّقة</p><p class="text-lagoon-200 text-xs">التحقق اليدوي قبل النشر</p></div>
-          </div>
-          <div class="flex items-center gap-3 text-white">
-            <svg class="w-8 h-8 opacity-75 flex-none" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
-            <div><p class="font-bold text-sm">+50 مصدر موثوق</p><p class="text-lagoon-200 text-xs">شركاء ومزودون معتمدون</p></div>
-          </div>
-          <div class="flex items-center gap-3 text-white">
-            <svg class="w-8 h-8 opacity-75 flex-none" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-            <div><p class="font-bold text-sm">مقارنة شاملة</p><p class="text-lagoon-200 text-xs">السعر والمميزات جنباً إلى جنب</p></div>
-          </div>
-          <div class="flex items-center gap-3 text-white">
-            <svg class="w-8 h-8 opacity-75 flex-none" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-            <div><p class="font-bold text-sm">دعم 24/7</p><p class="text-lagoon-200 text-xs">فريقنا دائماً في خدمتك</p></div>
+          <!-- Trip context echo (hidden by default, shown by JS when ?destination= present) -->
+          <div class="trip-context-banner mt-4" data-trip-context hidden>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>إسطنبول – 5 ليالٍ لشخصين</span>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- ── FAQ (T024) ───────────────────────────────────────────────────────── -->
-    <section aria-labelledby="compare-faq-heading" class="bg-white py-14 md:py-20">
-      <div class="max-w-3xl mx-auto px-4 md:px-6">
+      <!-- ── Compare panel (filter + offers) ─────────────────────────────────── -->
+      <div class="compare-card-wrap mb-12">
+        <!-- Filter bar (T022) -->
+        <div class="compare-filter-panel">
+          <form data-filter-form novalidate aria-label="فلترة وترتيب العروض">
+            <div class="flex flex-wrap items-end gap-4">
+              <!-- Source filter -->
+              <div>
+                <p class="text-xs font-semibold text-ink-400 mb-1.5" id="lbl-cf-source">المصدر</p>
+                <select class="filter-select" name="source" aria-labelledby="lbl-cf-source">
+                  <option value="">جميع المصادر</option>
+                  <option value="Partner">Partner</option>
+                  <option value="Affiliate">Affiliate</option>
+                  <option value="Manual Deal">Manual Deal</option>
+                  <option value="API Ready">API Ready</option>
+                </select>
+              </div>
 
-        <div class="text-center mb-10">
-          <span class="section-eyebrow">مساعدة</span>
-          <h2 id="compare-faq-heading" class="section-title">أسئلة شائعة حول المقارنة</h2>
+              <!-- Sort -->
+              <div>
+                <p class="text-xs font-semibold text-ink-400 mb-1.5" id="lbl-cf-sort">الترتيب</p>
+                <select class="filter-select" data-sort aria-labelledby="lbl-cf-sort">
+                  <option value="price-asc">السعر (الأقل أولاً)</option>
+                  <option value="price-desc">السعر (الأعلى أولاً)</option>
+                  <option value="rating-desc">التقييم (الأعلى أولاً)</option>
+                </select>
+              </div>
+
+              <!-- Spacer + result count + reset -->
+              <div class="flex-1 flex items-end justify-between gap-4 flex-wrap">
+                <p class="text-sm text-ink-500" aria-live="polite" data-result-count>
+                  عرض <span class="font-bold text-lagoon-600">4</span> عروض مقارنة
+                </p>
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-sm gap-1.5"
+                  data-filter-reset
+                  aria-label="إعادة تعيين الفلاتر"
+                >
+                  <svg class="w-4 h-4" aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-close" />
+                  </svg>
+                  إعادة تعيين
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
 
-        <div class="compare-faq">
+        <!-- Offers list (T021 - static default: إسطنبول) -->
+        <div class="offers-panel">
+          <!-- Offers grid (re-rendered by JS; static = no-JS baseline) -->
+          <div id="offers-container" data-offers-grid role="list" aria-label="عروض المقارنة">
+            <!-- Offer 1: Best price (Manual Deal) -->
+            <article
+              class="compare-offer-card"
+              role="listitem"
+              data-card
+              data-source="Manual Deal"
+              data-price="2320"
+              data-rating="4.5"
+            >
+              <div class="best-badge">الأقل سعراً</div>
+              <div>
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <h2 class="text-base font-bold text-ink-800">رحلاتي ديلز – إدخال يدوي</h2>
+                  <span class="badge badge-source-manual">Manual Deal</span>
+                </div>
+                <p class="text-sm text-ink-400 mb-2">
+                  <span class="stars-sm" aria-hidden="true">★★★★☆</span>
+                  <span class="font-semibold text-ink-600 ms-1">4.5</span>
+                </p>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="inclusion-pill">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    فطور
+                  </span>
+                </div>
+              </div>
+              <div class="offer-price mt-4 md:mt-0">
+                <p class="offer-price-from">ابتداءً من</p>
+                <p>
+                  <span class="offer-price-amount">2,320</span>
+                  <span class="offer-price-currency">ر.س</span>
+                </p>
+              </div>
+              <div class="mt-4 md:mt-0">
+                <a
+                  href="deal-details.html?id=deal-002"
+                  class="btn btn-primary w-full md:w-auto justify-center"
+                >
+                  قارن العرض
+                </a>
+              </div>
+            </article>
 
-          <details>
-            <summary>هل الأسعار المعروضة في المقارنة حقيقية ومضمونة؟</summary>
-            <p>الأسعار المعروضة تقديرية "ابتداءً من" للأغراض التوضيحية فقط. المنصة حالياً في وضع العرض التجريبي ولا تعكس أسعاراً حقيقية. بعد دمج مزودات البيانات الفعليين، ستظهر أسعار محدّثة مع إشارة واضحة إلى مصدرها.</p>
-          </details>
+            <!-- Offer 2: Partner -->
+            <article
+              class="compare-offer-card"
+              role="listitem"
+              data-card
+              data-source="Partner"
+              data-price="2450"
+              data-rating="4.8"
+            >
+              <div>
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <h2 class="text-base font-bold text-ink-800">سكاي ترافيل – شريك معتمد</h2>
+                  <span class="badge badge-source-partner">
+                    <svg aria-hidden="true">
+                      <use href="../assets/icons/sprite.svg#icon-shield-check" />
+                    </svg>
+                    Partner
+                  </span>
+                </div>
+                <p class="text-sm text-ink-400 mb-2">
+                  <span class="stars-sm" aria-hidden="true">★★★★★</span>
+                  <span class="font-semibold text-ink-600 ms-1">4.8</span>
+                </p>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="inclusion-pill"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="20 6 9 17 4 12" /></svg
+                    >فطور</span
+                  >
+                  <span class="inclusion-pill"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="20 6 9 17 4 12" /></svg
+                    >نقل</span
+                  >
+                  <span class="inclusion-pill"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="20 6 9 17 4 12" /></svg
+                    >مرشد</span
+                  >
+                </div>
+              </div>
+              <div class="offer-price mt-4 md:mt-0">
+                <p class="offer-price-from">ابتداءً من</p>
+                <p>
+                  <span class="offer-price-amount">2,450</span
+                  ><span class="offer-price-currency"> ر.س</span>
+                </p>
+              </div>
+              <div class="mt-4 md:mt-0">
+                <a
+                  href="deal-details.html?id=deal-002"
+                  class="btn btn-primary w-full md:w-auto justify-center"
+                >
+                  عرض التفاصيل
+                </a>
+              </div>
+            </article>
 
-          <details>
-            <summary>ما الفرق بين المصادر المختلفة (Partner / Affiliate / Manual Deal / API Ready)؟</summary>
-            <p>
-              <strong>Partner</strong>: شراكة مباشرة مع أعلى مستوى تحقق. <strong>Affiliate</strong>: عبر شبكات وسيطة موثوقة. <strong>Manual Deal</strong>: أدخله فريقنا يدوياً بعد التحقق المباشر. <strong>API Ready</strong>: جاهز للربط التلقائي بمزود بيانات عند الإطلاق الرسمي. جميع المصادر موثّقة ومعروضة بشفافية تامة.
+            <!-- Offer 3: API Ready -->
+            <article
+              class="compare-offer-card"
+              role="listitem"
+              data-card
+              data-source="API Ready"
+              data-price="2550"
+              data-rating="4.7"
+            >
+              <div>
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <h2 class="text-base font-bold text-ink-800">ترافيل API – جاهز للدمج</h2>
+                  <span class="badge badge-source-api-ready">API Ready</span>
+                </div>
+                <p class="text-sm text-ink-400 mb-2">
+                  <span class="stars-sm" aria-hidden="true">★★★★★</span>
+                  <span class="font-semibold text-ink-600 ms-1">4.7</span>
+                </p>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="inclusion-pill"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="20 6 9 17 4 12" /></svg
+                    >فطور</span
+                  >
+                  <span class="inclusion-pill"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="20 6 9 17 4 12" /></svg
+                    >نقل</span
+                  >
+                  <span class="inclusion-pill"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="20 6 9 17 4 12" /></svg
+                    >تأمين</span
+                  >
+                </div>
+              </div>
+              <div class="offer-price mt-4 md:mt-0">
+                <p class="offer-price-from">ابتداءً من</p>
+                <p>
+                  <span class="offer-price-amount">2,550</span
+                  ><span class="offer-price-currency"> ر.س</span>
+                </p>
+              </div>
+              <div class="mt-4 md:mt-0">
+                <a
+                  href="deal-details.html?id=deal-002"
+                  class="btn btn-primary w-full md:w-auto justify-center"
+                >
+                  قارن العرض
+                </a>
+              </div>
+            </article>
+
+            <!-- Offer 4: Affiliate -->
+            <article
+              class="compare-offer-card"
+              role="listitem"
+              data-card
+              data-source="Affiliate"
+              data-price="2680"
+              data-rating="4.6"
+            >
+              <div>
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <h2 class="text-base font-bold text-ink-800">بوكينج كو – أفلييت</h2>
+                  <span class="badge badge-source-affiliate">Affiliate</span>
+                </div>
+                <p class="text-sm text-ink-400 mb-2">
+                  <span class="stars-sm" aria-hidden="true">★★★★★</span>
+                  <span class="font-semibold text-ink-600 ms-1">4.6</span>
+                </p>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="inclusion-pill"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="20 6 9 17 4 12" /></svg
+                    >فطور</span
+                  >
+                  <span class="inclusion-pill"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="20 6 9 17 4 12" /></svg
+                    >نقل</span
+                  >
+                </div>
+              </div>
+              <div class="offer-price mt-4 md:mt-0">
+                <p class="offer-price-from">ابتداءً من</p>
+                <p>
+                  <span class="offer-price-amount">2,680</span
+                  ><span class="offer-price-currency"> ر.س</span>
+                </p>
+              </div>
+              <div class="mt-4 md:mt-0">
+                <a
+                  href="deal-details.html?id=deal-002"
+                  class="btn btn-primary w-full md:w-auto justify-center"
+                >
+                  قارن العرض
+                </a>
+              </div>
+            </article>
+          </div>
+
+          <!-- Empty state -->
+          <div class="empty-state-box" data-empty-state hidden>
+            <div
+              class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-ink-100 text-ink-400 mb-4"
+              aria-hidden="true"
+            >
+              <svg
+                class="w-7 h-7"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-ink-700 mb-2">لا توجد عروض مطابقة</h3>
+            <p class="text-ink-400 text-sm mb-4 max-w-xs mx-auto">
+              جرّب تغيير الفلتر أو إعادة التعيين.
             </p>
-          </details>
-
-          <details>
-            <summary>كيف أختار العرض الأنسب عند مقارنة الأسعار؟</summary>
-            <p>لا تنظر فقط للسعر — انتبه أيضاً للمميزات المشمولة (فطور، نقل، تأمين)، والتقييم، ومستوى الشريك. عرض أقل سعراً قد يخلو من مميزات مهمة. استخدم فلتر الترتيب والمصدر للوصول لأفضل عرض يناسب احتياجاتك.</p>
-          </details>
-
+            <button type="button" class="btn btn-primary btn-sm" data-filter-reset>
+              إعادة تعيين
+            </button>
+          </div>
         </div>
-
-        <div class="text-center mt-10 flex flex-col sm:flex-row gap-3 justify-center">
-          <a href="deals.html" class="btn btn-primary gap-2">
-            <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>
-            تصفّح جميع العروض
-          </a>
-          <a href="coupons.html" class="btn btn-outline gap-2">
-            <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
-            كوبونات الخصم
-          </a>
-        </div>
-
       </div>
-    </section>
 
-  </main>
+      <!-- ── How comparison works (T024) ─────────────────────────────────────── -->
+      <section aria-labelledby="how-compare-heading" class="bg-white py-14 md:py-20 mb-0">
+        <div class="max-w-4xl mx-auto px-4 md:px-6">
+          <div class="text-center mb-10">
+            <span class="section-eyebrow">شفافية تامة</span>
+            <h2 id="how-compare-heading" class="section-title">كيف تعمل المقارنة؟</h2>
+            <p class="text-ink-400 text-sm mt-2 max-w-xl mx-auto">
+              نجمّع العروض من مصادر مختلفة ونصنّفها أمامك بشكل واضح حتى تتخذ قرارك بثقة تامة.
+            </p>
+          </div>
 
-  <!-- ═══ FOOTER ════════════════════════════════════════════════════════════ -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="trust-row">
-      <div class="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 py-10">
-        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg></div><div><p class="trust-title">عروض موثقة</p><p class="trust-sub">كل عرض تم التحقق منه يدوياً</p></div></div>
-        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg></div><div><p class="trust-title">حجز آمن</p><p class="trust-sub">بياناتك محمية بالكامل</p></div></div>
-        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-star"/></svg></div><div><p class="trust-title">شركاء معتمدون</p><p class="trust-sub">أكثر من 50 مصدراً موثوقاً</p></div></div>
-        <div class="trust-item"><div class="trust-icon" aria-hidden="true"><svg><use href="../assets/icons/sprite.svg#icon-phone"/></svg></div><div><p class="trust-title">دعم 24/7</p><p class="trust-sub">فريقنا دائماً في خدمتك</p></div></div>
-      </div>
-    </div>
-    <div class="footer-body">
-      <div class="max-w-7xl mx-auto px-4 md:px-6 py-12">
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-          <div class="col-span-2 md:col-span-2">
-            <a href="index.html" class="inline-flex items-center gap-2 mb-4 no-underline">
-              <svg width="36" height="36" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#38BCC0"/><path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/><circle cx="16" cy="14" r="3" fill="#0E8186"/></svg>
-              <span class="text-xl font-bold text-white">رحلاتي</span>
-            </a>
-            <p class="text-sm text-lagoon-300 leading-relaxed mb-5">منصة متخصصة في مقارنة وعرض أفضل عروض السفر من مصادر موثوقة ومعتمدة.</p>
-            <div class="flex gap-3">
-              <a href="#" class="social-btn" aria-label="فيسبوك" data-coming-soon><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-facebook"/></svg></a>
-              <a href="#" class="social-btn" aria-label="تويتر" data-coming-soon><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-twitter"/></svg></a>
-              <a href="#" class="social-btn" aria-label="انستجرام" data-coming-soon><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-instagram"/></svg></a>
-              <a href="#" class="social-btn" aria-label="يوتيوب" data-coming-soon><svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-youtube"/></svg></a>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="how-step">
+              <div class="how-step-num" aria-hidden="true">1</div>
+              <div>
+                <p class="how-step-title">أدخل وجهتك</p>
+                <p class="how-step-desc">
+                  اكتب الوجهة التي تحلم بها في خانة البحث على الصفحة الرئيسية أو تصفّح العروض
+                  المتاحة.
+                </p>
+              </div>
+            </div>
+
+            <div class="how-step">
+              <div class="how-step-num" aria-hidden="true">2</div>
+              <div>
+                <p class="how-step-title">نجمع العروض لك</p>
+                <p class="how-step-desc">
+                  تستقطب المنصة عروض الشركاء المعتمدين وشبكات الأفلييت والإدخالات اليدوية وتعرضها في
+                  مكان واحد.
+                </p>
+              </div>
+            </div>
+
+            <div class="how-step">
+              <div class="how-step-num" aria-hidden="true">3</div>
+              <div>
+                <p class="how-step-title">قارن واختر بثقة</p>
+                <p class="how-step-desc">
+                  فلتر حسب المصدر وفرّز حسب السعر أو التقييم، ثم انتقل مباشرة لتفاصيل العرض الذي
+                  يناسبك.
+                </p>
+              </div>
             </div>
           </div>
-          <div>
-            <h3 class="footer-heading">المنصة</h3>
-            <ul class="footer-nav" role="list">
-              <li><a href="#" class="footer-link" data-coming-soon>عن رحلاتي</a></li>
-              <li><a href="index.html#how-it-works" class="footer-link">كيف تعمل</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>شركاؤنا</a></li>
-              <li><a href="blog.html" class="footer-link">المدونة</a></li>
-              <li><a href="login.html" class="footer-link">تسجيل الدخول</a></li>
-              <li><a href="register.html" class="footer-link">إنشاء حساب</a></li>
-              <li><a href="saved-deals.html" class="footer-link">المحفوظات</a></li>
-              <li><a href="price-alerts.html" class="footer-link">تنبيهات الأسعار</a></li>
-            </ul>
+
+          <!-- Source legend -->
+          <div class="border border-ink-100 rounded-2xl p-6">
+            <h3 class="text-sm font-bold text-ink-600 mb-4 uppercase tracking-wide">
+              دليل مصادر العروض
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="flex items-start gap-2.5">
+                <span class="badge badge-source-partner flex-none mt-0.5">Partner</span>
+                <p class="text-xs text-ink-400 leading-relaxed">
+                  شريك معتمد مباشر — أعلى مستوى من الثقة والمراجعة اليدوية.
+                </p>
+              </div>
+              <div class="flex items-start gap-2.5">
+                <span class="badge badge-source-affiliate flex-none mt-0.5">Affiliate</span>
+                <p class="text-xs text-ink-400 leading-relaxed">
+                  شبكة أفلييت — عروض مرتبطة بمزودين خارجيين مختارين.
+                </p>
+              </div>
+              <div class="flex items-start gap-2.5">
+                <span class="badge badge-source-manual flex-none mt-0.5">Manual Deal</span>
+                <p class="text-xs text-ink-400 leading-relaxed">
+                  إدخال يدوي من فريق رحلاتي بعد التحقق من العرض مباشرة.
+                </p>
+              </div>
+              <div class="flex items-start gap-2.5">
+                <span class="badge badge-source-api-ready flex-none mt-0.5">API Ready</span>
+                <p class="text-xs text-ink-400 leading-relaxed">
+                  جاهز للربط التلقائي — سيُحدّث بشكل آني بعد دمج المزود.
+                </p>
+              </div>
+            </div>
           </div>
-          <div>
-            <h3 class="footer-heading">استكشف</h3>
-            <ul class="footer-nav" role="list">
-              <li><a href="deals.html" class="footer-link">العروض المميزة</a></li>
-              <li><a href="destinations.html" class="footer-link">الوجهات</a></li>
-              <li><a href="coupons.html" class="footer-link">كوبونات الخصم</a></li>
-              <li><a href="compare.html" class="footer-link">مقارنة الأسعار</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="footer-heading">الدعم</h3>
-            <ul class="footer-nav" role="list">
-              <li><a href="index.html#faq" class="footer-link">الأسئلة الشائعة</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>تواصل معنا</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>الشروط والأحكام</a></li>
-              <li><a href="#" class="footer-link" data-coming-soon>سياسة الخصوصية</a></li>
-            </ul>
+        </div>
+      </section>
+
+      <!-- ── Trust band (T024) ────────────────────────────────────────────────── -->
+      <div class="bg-lagoon-700 py-10">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="flex items-center gap-3 text-white">
+              <svg
+                class="w-8 h-8 opacity-75 flex-none"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <polyline points="9 12 11 14 15 10" />
+              </svg>
+              <div>
+                <p class="font-bold text-sm">عروض موثّقة</p>
+                <p class="text-lagoon-200 text-xs">التحقق اليدوي قبل النشر</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 text-white">
+              <svg
+                class="w-8 h-8 opacity-75 flex-none"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M8 12l2 2 4-4" />
+              </svg>
+              <div>
+                <p class="font-bold text-sm">+50 مصدر موثوق</p>
+                <p class="text-lagoon-200 text-xs">شركاء ومزودون معتمدون</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 text-white">
+              <svg
+                class="w-8 h-8 opacity-75 flex-none"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <path d="M8 21h8M12 17v4" />
+              </svg>
+              <div>
+                <p class="font-bold text-sm">مقارنة شاملة</p>
+                <p class="text-lagoon-200 text-xs">السعر والمميزات جنباً إلى جنب</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 text-white">
+              <svg
+                class="w-8 h-8 opacity-75 flex-none"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path
+                  d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+                />
+              </svg>
+              <div>
+                <p class="font-bold text-sm">دعم 24/7</p>
+                <p class="text-lagoon-200 text-xs">فريقنا دائماً في خدمتك</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="max-w-7xl mx-auto px-4 md:px-6 flex flex-wrap items-center justify-between gap-4 py-5">
-        <p class="text-sm text-lagoon-400">© <span data-year></span> رحلاتي. جميع الحقوق محفوظة.</p>
-        <p class="text-xs text-lagoon-500">الأسعار المعروضة تقديرية وقابلة للتغيير · هذا الموقع للأغراض التجريبية فقط</p>
+
+      <!-- ── FAQ (T024) ───────────────────────────────────────────────────────── -->
+      <section aria-labelledby="compare-faq-heading" class="bg-white py-14 md:py-20">
+        <div class="max-w-3xl mx-auto px-4 md:px-6">
+          <div class="text-center mb-10">
+            <span class="section-eyebrow">مساعدة</span>
+            <h2 id="compare-faq-heading" class="section-title">أسئلة شائعة حول المقارنة</h2>
+          </div>
+
+          <div class="compare-faq">
+            <details>
+              <summary>هل الأسعار المعروضة في المقارنة حقيقية ومضمونة؟</summary>
+              <p>
+                الأسعار المعروضة تقديرية "ابتداءً من" للأغراض التوضيحية فقط. المنصة حالياً في وضع
+                العرض التجريبي ولا تعكس أسعاراً حقيقية. بعد دمج مزودات البيانات الفعليين، ستظهر
+                أسعار محدّثة مع إشارة واضحة إلى مصدرها.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                ما الفرق بين المصادر المختلفة (Partner / Affiliate / Manual Deal / API Ready)؟
+              </summary>
+              <p>
+                <strong>Partner</strong>: شراكة مباشرة مع أعلى مستوى تحقق.
+                <strong>Affiliate</strong>: عبر شبكات وسيطة موثوقة. <strong>Manual Deal</strong>:
+                أدخله فريقنا يدوياً بعد التحقق المباشر. <strong>API Ready</strong>: جاهز للربط
+                التلقائي بمزود بيانات عند الإطلاق الرسمي. جميع المصادر موثّقة ومعروضة بشفافية تامة.
+              </p>
+            </details>
+
+            <details>
+              <summary>كيف أختار العرض الأنسب عند مقارنة الأسعار؟</summary>
+              <p>
+                لا تنظر فقط للسعر — انتبه أيضاً للمميزات المشمولة (فطور، نقل، تأمين)، والتقييم،
+                ومستوى الشريك. عرض أقل سعراً قد يخلو من مميزات مهمة. استخدم فلتر الترتيب والمصدر
+                للوصول لأفضل عرض يناسب احتياجاتك.
+              </p>
+            </details>
+          </div>
+
+          <div class="text-center mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="deals.html" class="btn btn-primary gap-2">
+              <svg class="w-4 h-4" aria-hidden="true">
+                <use href="../assets/icons/sprite.svg#icon-star" />
+              </svg>
+              تصفّح جميع العروض
+            </a>
+            <a href="coupons.html" class="btn btn-outline gap-2">
+              <svg class="w-4 h-4" aria-hidden="true">
+                <use href="../assets/icons/sprite.svg#icon-shield-check" />
+              </svg>
+              كوبونات الخصم
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ═══ FOOTER ════════════════════════════════════════════════════════════ -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="trust-row">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 py-10">
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">
+              <svg><use href="../assets/icons/sprite.svg#icon-shield-check" /></svg>
+            </div>
+            <div>
+              <p class="trust-title">عروض موثقة</p>
+              <p class="trust-sub">كل عرض تم التحقق منه يدوياً</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">
+              <svg><use href="../assets/icons/sprite.svg#icon-shield-check" /></svg>
+            </div>
+            <div>
+              <p class="trust-title">حجز آمن</p>
+              <p class="trust-sub">بياناتك محمية بالكامل</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">
+              <svg><use href="../assets/icons/sprite.svg#icon-star" /></svg>
+            </div>
+            <div>
+              <p class="trust-title">شركاء معتمدون</p>
+              <p class="trust-sub">أكثر من 50 مصدراً موثوقاً</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">
+              <svg><use href="../assets/icons/sprite.svg#icon-phone" /></svg>
+            </div>
+            <div>
+              <p class="trust-title">دعم 24/7</p>
+              <p class="trust-sub">فريقنا دائماً في خدمتك</p>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </footer>
+      <div class="footer-body">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-12">
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+            <div class="col-span-2 md:col-span-2">
+              <a href="index.html" class="inline-flex items-center gap-2 mb-4 no-underline">
+                <svg width="36" height="36" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                  <rect width="32" height="32" rx="9" fill="#38BCC0" />
+                  <path
+                    d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z"
+                    fill="white"
+                  />
+                  <circle cx="16" cy="14" r="3" fill="#0E8186" />
+                </svg>
+                <span class="text-xl font-bold text-white">رحلاتي</span>
+              </a>
+              <p class="text-sm text-lagoon-300 leading-relaxed mb-5">
+                منصة متخصصة في مقارنة وعرض أفضل عروض السفر من مصادر موثوقة ومعتمدة.
+              </p>
+              <div class="flex gap-3">
+                <a href="#" class="social-btn" aria-label="فيسبوك" data-coming-soon
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-facebook" /></svg
+                ></a>
+                <a href="#" class="social-btn" aria-label="تويتر" data-coming-soon
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-twitter" /></svg
+                ></a>
+                <a href="#" class="social-btn" aria-label="انستجرام" data-coming-soon
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-instagram" /></svg
+                ></a>
+                <a href="#" class="social-btn" aria-label="يوتيوب" data-coming-soon
+                  ><svg aria-hidden="true">
+                    <use href="../assets/icons/sprite.svg#icon-youtube" /></svg
+                ></a>
+              </div>
+            </div>
+            <div>
+              <h3 class="footer-heading">المنصة</h3>
+              <ul class="footer-nav" role="list">
+                <li><a href="#" class="footer-link" data-coming-soon>عن رحلاتي</a></li>
+                <li><a href="index.html#how-it-works" class="footer-link">كيف تعمل</a></li>
+                <li><a href="#" class="footer-link" data-coming-soon>شركاؤنا</a></li>
+                <li><a href="blog.html" class="footer-link">المدونة</a></li>
+                <li><a href="login.html" class="footer-link">تسجيل الدخول</a></li>
+                <li><a href="register.html" class="footer-link">إنشاء حساب</a></li>
+                <li><a href="saved-deals.html" class="footer-link">المحفوظات</a></li>
+                <li><a href="price-alerts.html" class="footer-link">تنبيهات الأسعار</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="footer-heading">استكشف</h3>
+              <ul class="footer-nav" role="list">
+                <li><a href="deals.html" class="footer-link">العروض المميزة</a></li>
+                <li><a href="destinations.html" class="footer-link">الوجهات</a></li>
+                <li><a href="coupons.html" class="footer-link">كوبونات الخصم</a></li>
+                <li><a href="compare.html" class="footer-link">مقارنة الأسعار</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="footer-heading">الدعم</h3>
+              <ul class="footer-nav" role="list">
+                <li><a href="index.html#faq" class="footer-link">الأسئلة الشائعة</a></li>
+                <li><a href="#" class="footer-link" data-coming-soon>تواصل معنا</a></li>
+                <li><a href="#" class="footer-link" data-coming-soon>الشروط والأحكام</a></li>
+                <li><a href="#" class="footer-link" data-coming-soon>سياسة الخصوصية</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div
+          class="max-w-7xl mx-auto px-4 md:px-6 flex flex-wrap items-center justify-between gap-4 py-5"
+        >
+          <p class="text-sm text-lagoon-400">
+            © <span data-year></span> رحلاتي. جميع الحقوق محفوظة.
+          </p>
+          <p class="text-xs text-lagoon-500">
+            الأسعار المعروضة تقديرية وقابلة للتغيير · هذا الموقع للأغراض التجريبية فقط
+          </p>
+        </div>
+      </div>
+    </footer>
 
-  <style>
-    .site-footer { background: #042B2E; color: #D0F4F4; }
-    .trust-row { background: #0E686C; }
-    .trust-item { display: flex; align-items: flex-start; gap: 1rem; }
-    .trust-icon { flex: none; width: 2.75rem; height: 2.75rem; background: rgba(255,255,255,0.12); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: white; }
-    .trust-icon svg { width: 1.375rem; height: 1.375rem; }
-    .trust-title { font-size: 0.9375rem; font-weight: 700; color: white; margin-bottom: 0.15rem; }
-    .trust-sub { font-size: 0.8125rem; color: #A4E9EA; }
-    .footer-body { border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .footer-heading { font-size: 0.875rem; font-weight: 700; color: #6FD7D9; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
-    .footer-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
-    .footer-link { font-size: 0.9rem; color: #9AA6B4; text-decoration: none; transition: color 150ms; }
-    .footer-link:hover { color: #38BCC0; }
-    .social-btn { display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; background: rgba(255,255,255,0.08); border-radius: 0.5rem; color: #9AA6B4; transition: background 150ms, color 150ms; text-decoration: none; }
-    .social-btn svg { width: 1.125rem; height: 1.125rem; }
-    .social-btn:hover { background: #0E8186; color: white; }
-    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.06); background: #042B2E; }
-    .bg-lagoon-700 { background-color: #0E8186; }
-    .text-lagoon-200 { color: #A4E9EA; }
-  </style>
+    <style>
+      .site-footer {
+        background: #042b2e;
+        color: #d0f4f4;
+      }
+      .trust-row {
+        background: #0e686c;
+      }
+      .trust-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .trust-icon {
+        flex: none;
+        width: 2.75rem;
+        height: 2.75rem;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+      .trust-icon svg {
+        width: 1.375rem;
+        height: 1.375rem;
+      }
+      .trust-title {
+        font-size: 0.9375rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.15rem;
+      }
+      .trust-sub {
+        font-size: 0.8125rem;
+        color: #a4e9ea;
+      }
+      .footer-body {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .footer-heading {
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: #6fd7d9;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 1rem;
+      }
+      .footer-nav {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .footer-link {
+        font-size: 0.9rem;
+        color: #9aa6b4;
+        text-decoration: none;
+        transition: color 150ms;
+      }
+      .footer-link:hover {
+        color: #38bcc0;
+      }
+      .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 0.5rem;
+        color: #9aa6b4;
+        transition:
+          background 150ms,
+          color 150ms;
+        text-decoration: none;
+      }
+      .social-btn svg {
+        width: 1.125rem;
+        height: 1.125rem;
+      }
+      .social-btn:hover {
+        background: #0e8186;
+        color: white;
+      }
+      .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        background: #042b2e;
+      }
+      .bg-lagoon-700 {
+        background-color: #0e8186;
+      }
+      .text-lagoon-200 {
+        color: #a4e9ea;
+      }
+    </style>
 
-  <!-- Scripts -->
-  <script src="../src/js/ui.js" defer></script>
-  <script src="../src/js/main.js" defer></script>
-  <script src="../src/js/discovery.js" defer></script>
-
-</body>
+    <!-- Scripts -->
+    <script src="../src/js/ui.js" defer></script>
+    <script src="../src/js/main.js" defer></script>
+    <script src="../src/js/discovery.js" defer></script>
+  </body>
 </html>

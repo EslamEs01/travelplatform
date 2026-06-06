@@ -39,9 +39,8 @@
   function updateCount(visible, total) {
     var el = document.querySelector('[data-result-count]');
     if (!el) return;
-    el.textContent = visible === total
-      ? 'عرض ' + total + ' نتيجة'
-      : 'عرض ' + visible + ' من ' + total + ' نتيجة';
+    el.textContent =
+      visible === total ? 'عرض ' + total + ' نتيجة' : 'عرض ' + visible + ' من ' + total + ' نتيجة';
   }
 
   /** Show or hide the empty state. */
@@ -53,8 +52,7 @@
 
   /** Normalize an Arabic string for fuzzy matching (trim + lowercase). */
   function normalize(str) {
-    return (str || '').trim().toLowerCase()
-      .replace(/[ً-ٟ]/g, ''); /* strip harakat */
+    return (str || '').trim().toLowerCase().replace(/[ً-ٟ]/g, ''); /* strip harakat */
   }
 
   /** Render star rating as text (★ chars). */
@@ -68,36 +66,49 @@
   /* ── US1 — Deals listing (deals.html) ─────────────────────────────────── */
 
   function initDeals() {
-    var cards = Array.prototype.slice.call(
-      document.querySelectorAll('[data-card]')
-    );
+    var cards = Array.prototype.slice.call(document.querySelectorAll('[data-card]'));
     if (!cards.length) return;
 
     var filterForm = document.querySelector('[data-filter-form]');
     var sortSelect = document.querySelector('[data-sort]');
-    var resetBtn   = document.querySelector('[data-filter-reset]');
-    var total      = cards.length;
+    var resetBtn = document.querySelector('[data-filter-reset]');
+    var total = cards.length;
 
     /* Restore from URL on load */
     var p = getParams();
     if (filterForm) {
-      if (p.source)   { var s = filterForm.querySelector('[name="source"]');   if (s) s.value = p.source; }
-      if (p.region)   { var r = filterForm.querySelector('[name="region"]');   if (r) r.value = p.region; }
-      if (p.priceMax) { var pm = filterForm.querySelector('[name="priceMax"]'); if (pm) pm.value = p.priceMax; }
+      if (p.source) {
+        var s = filterForm.querySelector('[name="source"]');
+        if (s) s.value = p.source;
+      }
+      if (p.region) {
+        var r = filterForm.querySelector('[name="region"]');
+        if (r) r.value = p.region;
+      }
+      if (p.priceMax) {
+        var pm = filterForm.querySelector('[name="priceMax"]');
+        if (pm) pm.value = p.priceMax;
+      }
     }
     if (sortSelect && p.sort) sortSelect.value = p.sort;
 
     function applyFiltersSort() {
-      var source   = filterForm ? (filterForm.querySelector('[name="source"]')   || {}).value || '' : '';
-      var region   = filterForm ? (filterForm.querySelector('[name="region"]')   || {}).value || '' : '';
-      var priceMax = filterForm ? (filterForm.querySelector('[name="priceMax"]') || {}).value || '' : '';
-      var sort     = sortSelect ? sortSelect.value : '';
+      var source = filterForm
+        ? (filterForm.querySelector('[name="source"]') || {}).value || ''
+        : '';
+      var region = filterForm
+        ? (filterForm.querySelector('[name="region"]') || {}).value || ''
+        : '';
+      var priceMax = filterForm
+        ? (filterForm.querySelector('[name="priceMax"]') || {}).value || ''
+        : '';
+      var sort = sortSelect ? sortSelect.value : '';
 
       /* Filter */
       var visible = cards.filter(function (card) {
         var ok = true;
-        if (source   && card.dataset.source   !== source)                           ok = false;
-        if (region   && card.dataset.region   !== region)                           ok = false;
+        if (source && card.dataset.source !== source) ok = false;
+        if (region && card.dataset.region !== region) ok = false;
         if (priceMax && parseInt(card.dataset.price, 10) > parseInt(priceMax, 10)) ok = false;
         card.hidden = !ok;
         return ok;
@@ -107,12 +118,17 @@
       if (sort && visible.length > 1) {
         var parent = cards[0].parentNode;
         visible.sort(function (a, b) {
-          if (sort === 'price-asc')    return parseInt(a.dataset.price,  10) - parseInt(b.dataset.price,  10);
-          if (sort === 'price-desc')   return parseInt(b.dataset.price,  10) - parseInt(a.dataset.price,  10);
-          if (sort === 'rating-desc')  return parseFloat(b.dataset.rating)   - parseFloat(a.dataset.rating);
+          if (sort === 'price-asc')
+            return parseInt(a.dataset.price, 10) - parseInt(b.dataset.price, 10);
+          if (sort === 'price-desc')
+            return parseInt(b.dataset.price, 10) - parseInt(a.dataset.price, 10);
+          if (sort === 'rating-desc')
+            return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
           return 0;
         });
-        visible.forEach(function (c) { parent.appendChild(c); });
+        visible.forEach(function (c) {
+          parent.appendChild(c);
+        });
       }
 
       updateCount(visible.length, total);
@@ -128,8 +144,10 @@
     /* Listeners */
     if (filterForm) {
       filterForm.addEventListener('change', applyFiltersSort);
-      filterForm.addEventListener('input',  applyFiltersSort);
-      filterForm.addEventListener('submit', function (e) { e.preventDefault(); });
+      filterForm.addEventListener('input', applyFiltersSort);
+      filterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+      });
     }
     if (sortSelect) sortSelect.addEventListener('change', applyFiltersSort);
 
@@ -149,30 +167,40 @@
     if (!catalogEl) return;
 
     var catalog;
-    try { catalog = JSON.parse(catalogEl.textContent); } catch (e) { return; }
+    try {
+      catalog = JSON.parse(catalogEl.textContent);
+    } catch (e) {
+      return;
+    }
 
     var id = getParams().id || '';
     if (!id) return; /* keep static default deal */
 
-    var deal = catalog.find(function (d) { return d.id === id; });
+    var deal = catalog.find(function (d) {
+      return d.id === id;
+    });
     if (!deal) {
       /* Show not-found panel, hide main content */
       var notFound = document.querySelector('[data-not-found]');
       var mainContent = document.querySelector('[data-deal-main]');
-      if (notFound)    notFound.hidden = false;
+      if (notFound) notFound.hidden = false;
       if (mainContent) mainContent.hidden = true;
       return;
     }
 
     /* Swap fields */
     var swap = {
-      '[data-deal-title]':       deal.title,
-      '[data-deal-location]':    deal.location,
-      '[data-deal-price]':       deal.priceFrom ? deal.priceFrom.toLocaleString('ar-SA') + ' ' + (deal.currency || '') : '',
-      '[data-deal-rating]':      deal.rating ? starsText(deal.rating) + ' (' + deal.rating + ')' : '',
-      '[data-deal-reviews]':     deal.reviewsCount ? '(' + deal.reviewsCount.toLocaleString('ar-SA') + ' تقييم)' : '',
-      '[data-deal-source]':      deal.source || '',
-      '[data-deal-terms]':       deal.terms || ''
+      '[data-deal-title]': deal.title,
+      '[data-deal-location]': deal.location,
+      '[data-deal-price]': deal.priceFrom
+        ? deal.priceFrom.toLocaleString('ar-SA') + ' ' + (deal.currency || '')
+        : '',
+      '[data-deal-rating]': deal.rating ? starsText(deal.rating) + ' (' + deal.rating + ')' : '',
+      '[data-deal-reviews]': deal.reviewsCount
+        ? '(' + deal.reviewsCount.toLocaleString('ar-SA') + ' تقييم)'
+        : '',
+      '[data-deal-source]': deal.source || '',
+      '[data-deal-terms]': deal.terms || '',
     };
 
     Object.keys(swap).forEach(function (sel) {
@@ -197,7 +225,9 @@
     var highlightsList = document.querySelector('[data-deal-highlights]');
     if (highlightsList && deal.highlights && deal.highlights.length) {
       highlightsList.innerHTML = deal.highlights
-        .map(function (h) { return '<li>' + h + '</li>'; })
+        .map(function (h) {
+          return '<li>' + h + '</li>';
+        })
         .join('');
     }
 
@@ -210,21 +240,21 @@
 
   function initCompare() {
     var contextBanner = document.querySelector('[data-trip-context]');
-    var offersGrid    = document.querySelector('[data-offers-grid]');
-    var filterForm    = document.querySelector('[data-filter-form]');
-    var sortSelect    = document.querySelector('[data-sort]');
-    var resetBtn      = document.querySelector('[data-filter-reset]');
+    var offersGrid = document.querySelector('[data-offers-grid]');
+    var filterForm = document.querySelector('[data-filter-form]');
+    var sortSelect = document.querySelector('[data-sort]');
+    var resetBtn = document.querySelector('[data-filter-reset]');
 
     /* Read trip context from URL */
-    var p           = getParams();
+    var p = getParams();
     var destination = p.destination || '';
-    var dates       = p.dates       || '';
-    var travelers   = p.travelers   || '';
+    var dates = p.dates || '';
+    var travelers = p.travelers || '';
 
     /* Echo context */
     if (contextBanner && destination) {
       var contextText = 'عروض مقارنة لـ: ' + destination;
-      if (dates)     contextText += ' • ' + dates;
+      if (dates) contextText += ' • ' + dates;
       if (travelers) contextText += ' • ' + travelers + ' مسافر';
       contextBanner.textContent = contextText;
       contextBanner.hidden = false;
@@ -235,10 +265,14 @@
     if (!catalogEl || !offersGrid) return;
 
     var catalog;
-    try { catalog = JSON.parse(catalogEl.textContent); } catch (e) { return; }
+    try {
+      catalog = JSON.parse(catalogEl.textContent);
+    } catch (e) {
+      return;
+    }
 
     /* Fuzzy-match destination to a key */
-    var destNorm   = normalize(destination);
+    var destNorm = normalize(destination);
     var matchedKey = 'default';
     if (destNorm) {
       Object.keys(catalog).forEach(function (key) {
@@ -249,23 +283,37 @@
     }
 
     /* Restore sort/source filter from URL */
-    if (filterForm && p.source)  { var sf = filterForm.querySelector('[name="source"]');  if (sf) sf.value = p.source; }
-    if (sortSelect && p.sort)    sortSelect.value = p.sort;
+    if (filterForm && p.source) {
+      var sf = filterForm.querySelector('[name="source"]');
+      if (sf) sf.value = p.source;
+    }
+    if (sortSelect && p.sort) sortSelect.value = p.sort;
 
     var currentKey = matchedKey;
 
     function renderOffers(key) {
       var set = catalog[key] || catalog['default'];
-      var source = filterForm ? (filterForm.querySelector('[name="source"]') || {}).value || '' : '';
-      var sort   = sortSelect ? sortSelect.value : '';
+      var source = filterForm
+        ? (filterForm.querySelector('[name="source"]') || {}).value || ''
+        : '';
+      var sort = sortSelect ? sortSelect.value : '';
 
       var filtered = (set.offers || []).filter(function (o) {
         return !source || o.source === source;
       });
 
-      if (sort === 'price-asc')   filtered.sort(function (a, b) { return a.priceFrom - b.priceFrom; });
-      if (sort === 'price-desc')  filtered.sort(function (a, b) { return b.priceFrom - a.priceFrom; });
-      if (sort === 'rating-desc') filtered.sort(function (a, b) { return b.rating - a.rating; });
+      if (sort === 'price-asc')
+        filtered.sort(function (a, b) {
+          return a.priceFrom - b.priceFrom;
+        });
+      if (sort === 'price-desc')
+        filtered.sort(function (a, b) {
+          return b.priceFrom - a.priceFrom;
+        });
+      if (sort === 'rating-desc')
+        filtered.sort(function (a, b) {
+          return b.rating - a.rating;
+        });
 
       /* Count */
       var countEl = document.querySelector('[data-result-count]');
@@ -275,49 +323,82 @@
       toggleEmpty(filtered.length === 0);
 
       /* Re-render cards */
-      offersGrid.innerHTML = filtered.map(function (offer, i) {
-        var priceFmt = offer.priceFrom.toLocaleString('ar-SA');
-        var stars    = starsText(offer.rating);
-        var incl     = (offer.inclusions || []).map(function (inc) {
-          return '<span class="badge badge-neutral text-xs">' + inc + '</span>';
-        }).join('');
-        var rankLabel = i === 0 ? '<span class="badge badge-success ms-2 text-xs">الأفضل سعراً</span>' : '';
-        return [
-          '<article class="compare-offer-card card" data-source="' + offer.source + '"',
-          '  data-price="' + offer.priceFrom + '" data-rating="' + offer.rating + '">',
-          '  <div class="card-body">',
-          '    <div class="flex items-start justify-between gap-3 mb-3">',
-          '      <h3 class="card-title text-base font-bold text-ink-800">' + offer.provider + '</h3>',
-          '      <span class="badge ' + badgeClass(offer.source) + ' flex-none">' + offer.source + '</span>',
-          '    </div>',
-          '    <div class="flex items-baseline gap-2 mb-2">',
-          '      <span class="text-xs text-ink-400">ابتداءً من</span>',
-          '      <strong class="text-2xl font-extrabold text-lagoon-700">' + priceFmt + '</strong>',
-          '      <span class="text-sm text-ink-400">' + offer.currency + '</span>',
-          '      ' + rankLabel,
-          '    </div>',
-          '    <p class="text-sm text-amber-500 mb-3" aria-label="التقييم: ' + offer.rating + ' من 5">' + stars + ' <span class="text-ink-500">(' + offer.rating + ')</span></p>',
-          '    <div class="flex flex-wrap gap-1.5 mb-4">' + incl + '</div>',
-          '    <a href="deal-details.html?id=' + offer.id + '" class="btn btn-primary w-full justify-center">',
-          '      ' + offer.cta.label,
-          '    </a>',
-          '  </div>',
-          '</article>'
-        ].join('\n');
-      }).join('');
+      offersGrid.innerHTML = filtered
+        .map(function (offer, i) {
+          var priceFmt = offer.priceFrom.toLocaleString('ar-SA');
+          var stars = starsText(offer.rating);
+          var incl = (offer.inclusions || [])
+            .map(function (inc) {
+              return '<span class="badge badge-neutral text-xs">' + inc + '</span>';
+            })
+            .join('');
+          var rankLabel =
+            i === 0 ? '<span class="badge badge-success ms-2 text-xs">الأفضل سعراً</span>' : '';
+          return [
+            '<article class="compare-offer-card card" data-source="' + offer.source + '"',
+            '  data-price="' + offer.priceFrom + '" data-rating="' + offer.rating + '">',
+            '  <div class="card-body">',
+            '    <div class="flex items-start justify-between gap-3 mb-3">',
+            '      <h3 class="card-title text-base font-bold text-ink-800">' +
+              offer.provider +
+              '</h3>',
+            '      <span class="badge ' +
+              badgeClass(offer.source) +
+              ' flex-none">' +
+              offer.source +
+              '</span>',
+            '    </div>',
+            '    <div class="flex items-baseline gap-2 mb-2">',
+            '      <span class="text-xs text-ink-400">ابتداءً من</span>',
+            '      <strong class="text-2xl font-extrabold text-lagoon-700">' +
+              priceFmt +
+              '</strong>',
+            '      <span class="text-sm text-ink-400">' + offer.currency + '</span>',
+            '      ' + rankLabel,
+            '    </div>',
+            '    <p class="text-sm text-amber-500 mb-3" aria-label="التقييم: ' +
+              offer.rating +
+              ' من 5">' +
+              stars +
+              ' <span class="text-ink-500">(' +
+              offer.rating +
+              ')</span></p>',
+            '    <div class="flex flex-wrap gap-1.5 mb-4">' + incl + '</div>',
+            '    <a href="deal-details.html?id=' +
+              offer.id +
+              '" class="btn btn-primary w-full justify-center">',
+            '      ' + offer.cta.label,
+            '    </a>',
+            '  </div>',
+            '</article>',
+          ].join('\n');
+        })
+        .join('');
 
       /* Sync URL */
-      setParams({ destination: destination, dates: dates, travelers: travelers,
-                  source: source, sort: sort });
+      setParams({
+        destination: destination,
+        dates: dates,
+        travelers: travelers,
+        source: source,
+        sort: sort,
+      });
     }
 
     renderOffers(currentKey);
 
     if (filterForm) {
-      filterForm.addEventListener('change', function () { renderOffers(currentKey); });
-      filterForm.addEventListener('submit', function (e) { e.preventDefault(); });
+      filterForm.addEventListener('change', function () {
+        renderOffers(currentKey);
+      });
+      filterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+      });
     }
-    if (sortSelect) sortSelect.addEventListener('change', function () { renderOffers(currentKey); });
+    if (sortSelect)
+      sortSelect.addEventListener('change', function () {
+        renderOffers(currentKey);
+      });
     if (resetBtn) {
       resetBtn.addEventListener('click', function () {
         if (filterForm) filterForm.reset();
@@ -329,10 +410,10 @@
 
   function badgeClass(source) {
     var map = {
-      'Partner':     'badge-source-partner',
-      'Affiliate':   'badge-source-affiliate',
+      Partner: 'badge-source-partner',
+      Affiliate: 'badge-source-affiliate',
       'Manual Deal': 'badge-source-manual',
-      'API Ready':   'badge-source-api-ready'
+      'API Ready': 'badge-source-api-ready',
     };
     return map[source] || 'badge-neutral';
   }
@@ -340,29 +421,37 @@
   /* ── US4 — Coupons listing (coupons.html) ──────────────────────────────── */
 
   function initCoupons() {
-    var cards = Array.prototype.slice.call(
-      document.querySelectorAll('[data-card]')
-    );
+    var cards = Array.prototype.slice.call(document.querySelectorAll('[data-card]'));
     if (!cards.length) return;
 
     var filterForm = document.querySelector('[data-filter-form]');
-    var resetBtn   = document.querySelector('[data-filter-reset]');
-    var total      = cards.length;
+    var resetBtn = document.querySelector('[data-filter-reset]');
+    var total = cards.length;
 
     /* Restore from URL */
     var p = getParams();
     if (filterForm) {
-      if (p.source)   { var s = filterForm.querySelector('[name="source"]');   if (s) s.value = p.source; }
-      if (p.category) { var c = filterForm.querySelector('[name="category"]'); if (c) c.value = p.category; }
+      if (p.source) {
+        var s = filterForm.querySelector('[name="source"]');
+        if (s) s.value = p.source;
+      }
+      if (p.category) {
+        var c = filterForm.querySelector('[name="category"]');
+        if (c) c.value = p.category;
+      }
     }
 
     function applyFilters() {
-      var source   = filterForm ? (filterForm.querySelector('[name="source"]')   || {}).value || '' : '';
-      var category = filterForm ? (filterForm.querySelector('[name="category"]') || {}).value || '' : '';
+      var source = filterForm
+        ? (filterForm.querySelector('[name="source"]') || {}).value || ''
+        : '';
+      var category = filterForm
+        ? (filterForm.querySelector('[name="category"]') || {}).value || ''
+        : '';
 
       var visible = cards.filter(function (card) {
         var ok = true;
-        if (source   && card.dataset.source   !== source)   ok = false;
+        if (source && card.dataset.source !== source) ok = false;
         if (category && card.dataset.category !== category) ok = false;
         card.hidden = !ok;
         return ok;
@@ -377,8 +466,10 @@
 
     if (filterForm) {
       filterForm.addEventListener('change', applyFilters);
-      filterForm.addEventListener('input',  applyFilters);
-      filterForm.addEventListener('submit', function (e) { e.preventDefault(); });
+      filterForm.addEventListener('input', applyFilters);
+      filterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+      });
     }
     if (resetBtn) {
       resetBtn.addEventListener('click', function () {
@@ -392,10 +483,9 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     var page = document.documentElement.dataset.page || '';
-    if (page === 'deals')        initDeals();
+    if (page === 'deals') initDeals();
     if (page === 'deal-details') initDealDetails();
-    if (page === 'compare')      initCompare();
-    if (page === 'coupons')      initCoupons();
+    if (page === 'compare') initCompare();
+    if (page === 'coupons') initCoupons();
   });
-
 })();

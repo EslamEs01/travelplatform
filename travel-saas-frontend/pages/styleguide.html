@@ -1,604 +1,1086 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>دليل التصميم – رحلاتي (مرجع داخلي)</title>
-  <meta name="description" content="مرجع داخلي لنظام التصميم: رموز الألوان، الطباعة، المسافات، والمكونات.">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#0E8186">
-  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
-  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/tailwind.css">
-</head>
-<body class="bg-ink-50 text-ink-700 antialiased">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>دليل التصميم – رحلاتي (مرجع داخلي)</title>
+    <meta
+      name="description"
+      content="مرجع داخلي لنظام التصميم: رموز الألوان، الطباعة، المسافات، والمكونات."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#0E8186" />
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../assets/fonts/cairo-600.woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="../assets/css/tailwind.css" />
+  </head>
+  <body class="bg-ink-50 text-ink-700 antialiased">
+    <!-- Inline SVG sprite -->
+    <div aria-hidden="true" style="display: none">
+      <svg xmlns="http://www.w3.org/2000/svg">
+        <symbol
+          id="icon-check-circle"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </symbol>
+        <symbol
+          id="icon-close"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </symbol>
+        <symbol
+          id="icon-info"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </symbol>
+        <symbol
+          id="icon-alert-triangle"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+          />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </symbol>
+        <symbol id="icon-star" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+          <path
+            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+          />
+        </symbol>
+        <symbol
+          id="icon-shield-check"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <polyline points="9 12 11 14 15 10" />
+        </symbol>
+        <symbol
+          id="icon-location"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </symbol>
+      </svg>
+    </div>
 
-  <!-- Inline SVG sprite -->
-  <div aria-hidden="true" style="display:none">
-    <svg xmlns="http://www.w3.org/2000/svg">
-      <symbol id="icon-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
-      <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
-      <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
-      <symbol id="icon-alert-triangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
-      <symbol id="icon-star" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></symbol>
-      <symbol id="icon-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></symbol>
-      <symbol id="icon-location" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></symbol>
-    </svg>
-  </div>
+    <!-- Skip link -->
+    <a href="#main" class="skip-link">تخطَّ إلى المحتوى</a>
 
-  <!-- Skip link -->
-  <a href="#main" class="skip-link">تخطَّ إلى المحتوى</a>
-
-  <!-- ═══ Top bar ═══════════════════════════════════════════════════════════ -->
-  <header class="sg-topbar">
-    <div class="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between h-14 gap-4">
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="flex items-center gap-2 no-underline" aria-label="الصفحة الرئيسية">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E8186"/><path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/><circle cx="16" cy="14" r="3" fill="#0E8186"/></svg>
-          <span class="text-sm font-semibold text-lagoon-700">رحلاتي</span>
-        </a>
-        <span class="text-ink-300" aria-hidden="true">/</span>
-        <span class="text-sm font-medium text-ink-600">دليل التصميم</span>
+    <!-- ═══ Top bar ═══════════════════════════════════════════════════════════ -->
+    <header class="sg-topbar">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between h-14 gap-4">
+        <div class="flex items-center gap-3">
+          <a
+            href="index.html"
+            class="flex items-center gap-2 no-underline"
+            aria-label="الصفحة الرئيسية"
+          >
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <rect width="32" height="32" rx="8" fill="#0E8186" />
+              <path
+                d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z"
+                fill="white"
+              />
+              <circle cx="16" cy="14" r="3" fill="#0E8186" />
+            </svg>
+            <span class="text-sm font-semibold text-lagoon-700">رحلاتي</span>
+          </a>
+          <span class="text-ink-300" aria-hidden="true">/</span>
+          <span class="text-sm font-medium text-ink-600">دليل التصميم</span>
+        </div>
+        <span class="badge badge-neutral text-xs">مرجع داخلي · Dev/QA Only</span>
       </div>
-      <span class="badge badge-neutral text-xs">مرجع داخلي · Dev/QA Only</span>
-    </div>
-  </header>
+    </header>
 
-  <!-- ═══ Sticky section navigation ════════════════════════════════════════ -->
-  <nav class="sg-subnav" aria-label="أقسام دليل التصميم">
-    <div class="max-w-7xl mx-auto px-4 md:px-6">
-      <ul class="sg-subnav-list">
-        <li><a href="#colors" class="sg-subnav-link">الألوان</a></li>
-        <li><a href="#typography" class="sg-subnav-link">الطباعة</a></li>
-        <li><a href="#spacing" class="sg-subnav-link">المسافات</a></li>
-        <li><a href="#radii" class="sg-subnav-link">الانحناء</a></li>
-        <li><a href="#shadows" class="sg-subnav-link">الظلال</a></li>
-        <li><a href="#gradients" class="sg-subnav-link">التدرجات</a></li>
-        <li><a href="#components" class="sg-subnav-link">المكونات</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- ═══ Main content ══════════════════════════════════════════════════════ -->
-  <main id="main" tabindex="-1">
-
-    <!-- Page hero -->
-    <div class="sg-hero">
-      <div class="max-w-7xl mx-auto px-4 md:px-6 py-12">
-        <h1 class="text-4xl font-bold text-ink-900 mb-3">نظام التصميم</h1>
-        <p class="text-ink-500 text-lg max-w-2xl">
-          المرجع الكامل لرموز التصميم المستخدمة في منصة رحلاتي.
-          كل قيمة هنا مشتقة من <code class="sg-code">tailwind.config.js</code>
-          ومضمونة AA بموجب معيار WCAG 2.1.
-        </p>
+    <!-- ═══ Sticky section navigation ════════════════════════════════════════ -->
+    <nav class="sg-subnav" aria-label="أقسام دليل التصميم">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <ul class="sg-subnav-list">
+          <li><a href="#colors" class="sg-subnav-link">الألوان</a></li>
+          <li><a href="#typography" class="sg-subnav-link">الطباعة</a></li>
+          <li><a href="#spacing" class="sg-subnav-link">المسافات</a></li>
+          <li><a href="#radii" class="sg-subnav-link">الانحناء</a></li>
+          <li><a href="#shadows" class="sg-subnav-link">الظلال</a></li>
+          <li><a href="#gradients" class="sg-subnav-link">التدرجات</a></li>
+          <li><a href="#components" class="sg-subnav-link">المكونات</a></li>
+        </ul>
       </div>
-    </div>
+    </nav>
 
-    <div class="max-w-7xl mx-auto px-4 md:px-6 py-8 space-y-20">
-
-      <!-- ─────────────────────────────────────────────────────────────────
-           § 1  COLORS
-      ──────────────────────────────────────────────────────────────────── -->
-      <section id="colors" aria-labelledby="colors-heading">
-        <h2 id="colors-heading" class="sg-section-title">الألوان <span class="sg-section-note">Colors</span></h2>
-
-        <!-- Lagoon -->
-        <h3 class="sg-sub-title">Lagoon — اللون الأساسي (Trust + Travel)</h3>
-        <div class="sg-swatch-row" role="list">
-          <div class="sg-swatch bg-lagoon-50"   role="listitem"><span class="sg-swatch-label text-ink-800">50<br><code>#ECFBFB</code></span></div>
-          <div class="sg-swatch bg-lagoon-100"  role="listitem"><span class="sg-swatch-label text-ink-800">100<br><code>#D0F4F4</code></span></div>
-          <div class="sg-swatch bg-lagoon-200"  role="listitem"><span class="sg-swatch-label text-ink-800">200<br><code>#A4E9EA</code></span></div>
-          <div class="sg-swatch bg-lagoon-300"  role="listitem"><span class="sg-swatch-label text-ink-800">300<br><code>#6FD7D9</code></span></div>
-          <div class="sg-swatch bg-lagoon-400"  role="listitem"><span class="sg-swatch-label text-ink-800">400<br><code>#38BCC0</code></span></div>
-          <div class="sg-swatch bg-lagoon-500"  role="listitem"><span class="sg-swatch-label text-white">500<br><code>#16A0A5</code></span></div>
-          <div class="sg-swatch bg-lagoon-600"  role="listitem"><span class="sg-swatch-label text-white">600<br><code>#0E8186</code><br><span class="sg-aa-badge">AA ✓</span></span></div>
-          <div class="sg-swatch bg-lagoon-700"  role="listitem"><span class="sg-swatch-label text-white">700<br><code>#0E686C</code><br><span class="sg-aa-badge">AA ✓</span></span></div>
-          <div class="sg-swatch bg-lagoon-800"  role="listitem"><span class="sg-swatch-label text-white">800<br><code>#115457</code></span></div>
-          <div class="sg-swatch bg-lagoon-900"  role="listitem"><span class="sg-swatch-label text-white">900<br><code>#11464A</code></span></div>
-          <div class="sg-swatch bg-lagoon-950"  role="listitem"><span class="sg-swatch-label text-white">950<br><code>#042B2E</code></span></div>
-        </div>
-
-        <!-- Sunset -->
-        <h3 class="sg-sub-title mt-8">Sunset — اللون المميز (Premium Highlight)</h3>
-        <div class="sg-swatch-row sg-swatch-row-5" role="list">
-          <div class="sg-swatch bg-sunset-100" role="listitem"><span class="sg-swatch-label text-ink-800">100<br><code>#FCEBC8</code></span></div>
-          <div class="sg-swatch bg-sunset-300" role="listitem"><span class="sg-swatch-label text-ink-800">300<br><code>#F4BE52</code></span></div>
-          <div class="sg-swatch bg-sunset-500" role="listitem"><span class="sg-swatch-label text-white">500<br><code>#E08D12</code></span></div>
-          <div class="sg-swatch bg-sunset-600" role="listitem"><span class="sg-swatch-label text-white">600<br><code>#C26C0B</code><br><span class="sg-aa-badge">AA ✓</span></span></div>
-          <div class="sg-swatch bg-sunset-700" role="listitem"><span class="sg-swatch-label text-white">700<br><code>#A14E0D</code><br><span class="sg-aa-badge">AA ✓</span></span></div>
-        </div>
-
-        <!-- Ink -->
-        <h3 class="sg-sub-title mt-8">Ink — الألوان المحايدة (Neutrals)</h3>
-        <div class="sg-swatch-row" role="list">
-          <div class="sg-swatch bg-ink-50"  role="listitem"><span class="sg-swatch-label text-ink-800">50<br><code>#F7F8FA</code></span></div>
-          <div class="sg-swatch bg-ink-100" role="listitem"><span class="sg-swatch-label text-ink-800">100<br><code>#EEF1F5</code></span></div>
-          <div class="sg-swatch bg-ink-200" role="listitem"><span class="sg-swatch-label text-ink-800">200<br><code>#DEE3EA</code></span></div>
-          <div class="sg-swatch bg-ink-300" role="listitem"><span class="sg-swatch-label text-ink-800">300<br><code>#C5CDD7</code></span></div>
-          <div class="sg-swatch bg-ink-400" role="listitem"><span class="sg-swatch-label text-ink-900">400<br><code>#9AA6B4</code></span></div>
-          <div class="sg-swatch bg-ink-500" role="listitem"><span class="sg-swatch-label text-white">500<br><code>#6B7889</code><br><span class="sg-aa-badge">AA ✓</span></span></div>
-          <div class="sg-swatch bg-ink-600" role="listitem"><span class="sg-swatch-label text-white">600<br><code>#4D5969</code></span></div>
-          <div class="sg-swatch bg-ink-700" role="listitem"><span class="sg-swatch-label text-white">700<br><code>#3A4453</code></span></div>
-          <div class="sg-swatch bg-ink-800" role="listitem"><span class="sg-swatch-label text-white">800<br><code>#262E3A</code></span></div>
-          <div class="sg-swatch bg-ink-900" role="listitem"><span class="sg-swatch-label text-white">900<br><code>#161C26</code></span></div>
-        </div>
-
-        <!-- Semantic -->
-        <h3 class="sg-sub-title mt-8">الألوان الدلالية (Semantic)</h3>
-        <div class="sg-swatch-row sg-swatch-row-4" role="list">
-          <div class="sg-swatch" style="background:#1F9D57" role="listitem"><span class="sg-swatch-label text-white">success<br><code>#1F9D57</code><br><span class="sg-aa-badge">AA ✓</span></span></div>
-          <div class="sg-swatch" style="background:#E0A53B" role="listitem"><span class="sg-swatch-label text-ink-900">warning<br><code>#E0A53B</code></span></div>
-          <div class="sg-swatch" style="background:#D64545" role="listitem"><span class="sg-swatch-label text-white">danger<br><code>#D64545</code><br><span class="sg-aa-badge">AA ✓</span></span></div>
-          <div class="sg-swatch" style="background:#2D74C4" role="listitem"><span class="sg-swatch-label text-white">info<br><code>#2D74C4</code><br><span class="sg-aa-badge">AA ✓</span></span></div>
-        </div>
-
-        <!-- AA pairing rules -->
-        <div class="sg-info-box mt-8">
-          <h3 class="font-semibold text-ink-800 mb-3">قواعد التباين AA</h3>
-          <ul class="space-y-2 text-sm text-ink-600">
-            <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 text-success flex-none" aria-hidden="true"><use href="#icon-check-circle"/></svg>نص الجسم: <code>ink-600/700/800</code> على خلفيات فاتحة ≥ 4.5:1</li>
-            <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 text-success flex-none" aria-hidden="true"><use href="#icon-check-circle"/></svg>أزرار ومشغّلات: <code>lagoon-600+</code> و<code>sunset-600+</code> على أبيض ≥ 4.5:1</li>
-            <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 text-success flex-none" aria-hidden="true"><use href="#icon-check-circle"/></svg>نص أبيض على: <code>lagoon-500+</code>, <code>success</code>, <code>danger</code>, <code>info</code> ≥ 4.5:1</li>
-            <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 text-success flex-none" aria-hidden="true"><use href="#icon-check-circle"/></svg>نص <code>ink-900</code> على <code>warning</code> (أصفر) ≥ 4.5:1</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- ─────────────────────────────────────────────────────────────────
-           § 2  TYPOGRAPHY
-      ──────────────────────────────────────────────────────────────────── -->
-      <section id="typography" aria-labelledby="typography-heading">
-        <h2 id="typography-heading" class="sg-section-title">الطباعة <span class="sg-section-note">Typography — Cairo (self-hosted)</span></h2>
-
-        <!-- Font scale -->
-        <div class="sg-card space-y-6">
-          <div class="sg-type-row">
-            <div class="sg-type-meta"><code>text-xs / 0.75rem</code></div>
-            <p class="text-xs text-ink-700">الرحلة تبدأ بخطوة — Travel begins with a step</p>
-          </div>
-          <div class="sg-type-row">
-            <div class="sg-type-meta"><code>text-sm / 0.875rem</code></div>
-            <p class="text-sm text-ink-700">الرحلة تبدأ بخطوة — Travel begins with a step</p>
-          </div>
-          <div class="sg-type-row">
-            <div class="sg-type-meta"><code>text-base / 1rem</code></div>
-            <p class="text-base text-ink-700">الرحلة تبدأ بخطوة — Travel begins with a step</p>
-          </div>
-          <div class="sg-type-row">
-            <div class="sg-type-meta"><code>text-lg / 1.125rem</code></div>
-            <p class="text-lg text-ink-700">الرحلة تبدأ بخطوة — Travel begins with a step</p>
-          </div>
-          <div class="sg-type-row">
-            <div class="sg-type-meta"><code>text-xl / 1.25rem</code></div>
-            <p class="text-xl text-ink-800">الرحلة تبدأ بخطوة — Travel begins with a step</p>
-          </div>
-          <div class="sg-type-row">
-            <div class="sg-type-meta"><code>text-2xl / 1.5rem</code></div>
-            <p class="text-2xl font-semibold text-ink-800">اكتشف وجهتك المثالية</p>
-          </div>
-          <div class="sg-type-row">
-            <div class="sg-type-meta"><code>text-3xl / 1.875rem</code></div>
-            <p class="text-3xl font-bold text-ink-800">اكتشف وجهتك المثالية</p>
-          </div>
-          <div class="sg-type-row">
-            <div class="sg-type-meta"><code>text-4xl / 2.25rem</code></div>
-            <p class="text-4xl font-bold text-ink-800">اكتشف وجهتك</p>
-          </div>
-          <div class="sg-type-row">
-            <div class="sg-type-meta"><code>text-5xl / 3rem</code></div>
-            <p class="text-5xl font-extrabold text-ink-900">رحلاتي</p>
-          </div>
-        </div>
-
-        <!-- Font weights -->
-        <h3 class="sg-sub-title mt-8">الأوزان (Weights)</h3>
-        <div class="sg-card grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div><p class="text-xl font-normal text-ink-700">Regular 400</p><code class="text-xs text-ink-400">font-normal</code></div>
-          <div><p class="text-xl font-medium text-ink-700">Medium 500</p><code class="text-xs text-ink-400">font-medium</code></div>
-          <div><p class="text-xl font-semibold text-ink-700">SemiBold 600</p><code class="text-xs text-ink-400">font-semibold</code></div>
-          <div><p class="text-xl font-bold text-ink-700">Bold 700</p><code class="text-xs text-ink-400">font-bold</code></div>
-        </div>
-      </section>
-
-      <!-- ─────────────────────────────────────────────────────────────────
-           § 3  SPACING & LAYOUT
-      ──────────────────────────────────────────────────────────────────── -->
-      <section id="spacing" aria-labelledby="spacing-heading">
-        <h2 id="spacing-heading" class="sg-section-title">المسافات والتخطيط <span class="sg-section-note">Spacing &amp; Layout</span></h2>
-
-        <div class="sg-card">
-          <p class="text-sm text-ink-500 mb-5">المقياس الأساسي: 4px · الحاوية: <code>max-w-7xl</code> (~1280px) · الهوامش الداخلية: <code>px-4 md:px-6</code></p>
-          <div class="space-y-3">
-            <div class="flex items-center gap-4">
-              <code class="w-16 text-xs text-ink-400 text-end flex-none">p-1 · 4px</code>
-              <div class="bg-lagoon-200 h-4" style="width:4px"></div>
-            </div>
-            <div class="flex items-center gap-4">
-              <code class="w-16 text-xs text-ink-400 text-end flex-none">p-2 · 8px</code>
-              <div class="bg-lagoon-300 h-4" style="width:8px"></div>
-            </div>
-            <div class="flex items-center gap-4">
-              <code class="w-16 text-xs text-ink-400 text-end flex-none">p-3 · 12px</code>
-              <div class="bg-lagoon-400 h-4" style="width:12px"></div>
-            </div>
-            <div class="flex items-center gap-4">
-              <code class="w-16 text-xs text-ink-400 text-end flex-none">p-4 · 16px</code>
-              <div class="bg-lagoon-500 h-4" style="width:16px"></div>
-            </div>
-            <div class="flex items-center gap-4">
-              <code class="w-16 text-xs text-ink-400 text-end flex-none">p-6 · 24px</code>
-              <div class="bg-lagoon-600 h-4" style="width:24px"></div>
-            </div>
-            <div class="flex items-center gap-4">
-              <code class="w-16 text-xs text-ink-400 text-end flex-none">p-8 · 32px</code>
-              <div class="bg-lagoon-700 h-4" style="width:32px"></div>
-            </div>
-            <div class="flex items-center gap-4">
-              <code class="w-16 text-xs text-ink-400 text-end flex-none">p-12 · 48px</code>
-              <div class="bg-lagoon-800 h-4" style="width:48px"></div>
-            </div>
-            <div class="flex items-center gap-4">
-              <code class="w-16 text-xs text-ink-400 text-end flex-none">p-16 · 64px</code>
-              <div class="bg-lagoon-900 h-4" style="width:64px"></div>
-            </div>
-            <div class="flex items-center gap-4">
-              <code class="w-16 text-xs text-ink-400 text-end flex-none">p-20 · 80px</code>
-              <div class="bg-lagoon-950 h-4" style="width:80px"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Breakpoints -->
-        <h3 class="sg-sub-title mt-8">نقاط التوقف (Breakpoints)</h3>
-        <div class="sg-card overflow-x-auto">
-          <table class="sg-table w-full">
-            <thead>
-              <tr><th>المسمى</th><th>العرض</th><th>الاستخدام</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><code>sm</code></td><td>640px</td><td>جهاز لوحي صغير</td></tr>
-              <tr><td><code>md</code></td><td>768px</td><td>جهاز لوحي</td></tr>
-              <tr><td><code>lg</code></td><td>1024px</td><td>حاسوب محمول</td></tr>
-              <tr><td><code>xl</code></td><td>1280px</td><td>شاشة كبيرة</td></tr>
-              <tr><td><code>2xl</code></td><td>1536px</td><td>شاشة عريضة جداً</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- ─────────────────────────────────────────────────────────────────
-           § 4  BORDER RADII
-      ──────────────────────────────────────────────────────────────────── -->
-      <section id="radii" aria-labelledby="radii-heading">
-        <h2 id="radii-heading" class="sg-section-title">انحناء الزوايا <span class="sg-section-note">Border Radius</span></h2>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-          <div class="sg-radius-item">
-            <div class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-sm"></div>
-            <code class="sg-radius-label">rounded-sm<br>.375rem</code>
-          </div>
-          <div class="sg-radius-item">
-            <div class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-md"></div>
-            <code class="sg-radius-label">rounded-md<br>.5rem</code>
-          </div>
-          <div class="sg-radius-item">
-            <div class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-lg"></div>
-            <code class="sg-radius-label">rounded-lg<br>.75rem · buttons</code>
-          </div>
-          <div class="sg-radius-item">
-            <div class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-xl"></div>
-            <code class="sg-radius-label">rounded-xl<br>1rem</code>
-          </div>
-          <div class="sg-radius-item">
-            <div class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-2xl"></div>
-            <code class="sg-radius-label">rounded-2xl<br>1.5rem · cards</code>
-          </div>
-          <div class="sg-radius-item">
-            <div class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-full"></div>
-            <code class="sg-radius-label">rounded-full<br>9999px · badges</code>
-          </div>
-        </div>
-      </section>
-
-      <!-- ─────────────────────────────────────────────────────────────────
-           § 5  SHADOWS
-      ──────────────────────────────────────────────────────────────────── -->
-      <section id="shadows" aria-labelledby="shadows-heading">
-        <h2 id="shadows-heading" class="sg-section-title">الظلال <span class="sg-section-note">Box Shadows</span></h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div class="sg-shadow-demo shadow-soft">
-            <code class="text-sm font-semibold text-ink-700">shadow-soft</code>
-            <p class="text-xs text-ink-400 mt-1">خلفيات خفيفة، عناصر ثانوية</p>
-          </div>
-          <div class="sg-shadow-demo shadow-card">
-            <code class="text-sm font-semibold text-ink-700">shadow-card</code>
-            <p class="text-xs text-ink-400 mt-1">بطاقات في حالة الراحة الافتراضية</p>
-          </div>
-          <div class="sg-shadow-demo shadow-pop">
-            <code class="text-sm font-semibold text-ink-700">shadow-pop</code>
-            <p class="text-xs text-ink-400 mt-1">حالة التحوّم، النوافذ المنبثقة</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ─────────────────────────────────────────────────────────────────
-           § 6  GRADIENTS
-      ──────────────────────────────────────────────────────────────────── -->
-      <section id="gradients" aria-labelledby="gradients-heading">
-        <h2 id="gradients-heading" class="sg-section-title">التدرجات <span class="sg-section-note">Gradients</span></h2>
-
-        <div class="space-y-4">
-          <div class="sg-gradient-demo" style="background:var(--gradient-brand)">
-            <code class="text-white text-sm font-semibold">--gradient-brand</code>
-            <span class="text-white/70 text-xs ms-3">#0E8186 → #38BCC0 · الشعار والعناصر الأساسية</span>
-          </div>
-          <div class="sg-gradient-demo" style="background:var(--gradient-hero)">
-            <code class="text-white text-sm font-semibold">--gradient-hero</code>
-            <span class="text-white/70 text-xs ms-3">#11464A → #0E686C · الهيرو والخلفيات الداكنة</span>
-          </div>
-          <div class="sg-gradient-demo" style="background:var(--gradient-accent)">
-            <code class="text-white text-sm font-semibold">--gradient-accent</code>
-            <span class="text-white/70 text-xs ms-3">#0E8186 → #E08D12 · أزرار الدعوة للعمل المميزة</span>
-          </div>
-        </div>
-
-        <!-- Motion tokens -->
-        <h3 class="sg-sub-title mt-8">رموز الحركة (Motion Tokens)</h3>
-        <div class="sg-card">
-          <div class="space-y-3 text-sm">
-            <div class="flex gap-4 items-center">
-              <code class="w-44 text-ink-500 flex-none">--transition-fast</code>
-              <span class="text-ink-700">150ms · تأثيرات سريعة (ألوان، تركيز)</span>
-            </div>
-            <div class="flex gap-4 items-center">
-              <code class="w-44 text-ink-500 flex-none">--transition-base</code>
-              <span class="text-ink-700">200ms · تأثيرات قياسية (أزرار، بطاقات)</span>
-            </div>
-            <div class="flex gap-4 items-center">
-              <code class="w-44 text-ink-500 flex-none">--transition-slow</code>
-              <span class="text-ink-700">300ms · تأثيرات بطيئة (درج، نوافذ)</span>
-            </div>
-          </div>
-          <p class="text-xs text-ink-400 mt-4 pt-4 border-t border-ink-100">جميع الانتقالات محمية بـ <code>prefers-reduced-motion: reduce</code></p>
-        </div>
-      </section>
-
-      <!-- ─────────────────────────────────────────────────────────────────
-           § 7  COMPONENTS (quick reference)
-      ──────────────────────────────────────────────────────────────────── -->
-      <section id="components" aria-labelledby="components-heading">
-        <h2 id="components-heading" class="sg-section-title">المكونات <span class="sg-section-note">Components — quick reference</span></h2>
-
-        <!-- Buttons -->
-        <h3 class="sg-sub-title">الأزرار (.btn)</h3>
-        <div class="sg-card">
-          <div class="flex flex-wrap gap-3 items-center">
-            <button class="btn btn-primary" type="button">أساسي</button>
-            <button class="btn btn-secondary" type="button">ثانوي</button>
-            <button class="btn btn-outline" type="button">محدد</button>
-            <button class="btn btn-ghost" type="button">شبح</button>
-            <button class="btn btn-danger" type="button">خطر</button>
-          </div>
-          <div class="flex flex-wrap gap-3 items-center mt-4">
-            <button class="btn btn-primary btn-sm" type="button">صغير</button>
-            <button class="btn btn-primary" type="button">متوسط</button>
-            <button class="btn btn-primary btn-lg" type="button">كبير</button>
-            <button class="btn btn-primary btn-icon" type="button" aria-label="أيقونة">
-              <svg aria-hidden="true"><use href="#icon-star"/></svg>
-            </button>
-            <button class="btn btn-primary" type="button" aria-busy="true" disabled>
-              <span class="spinner" aria-hidden="true"></span>
-              جاري التحميل
-            </button>
-          </div>
-        </div>
-
-        <!-- Badges -->
-        <h3 class="sg-sub-title mt-8">الشارات (.badge)</h3>
-        <div class="sg-card">
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="badge badge-neutral">محايد</span>
-            <span class="badge badge-success">نجاح</span>
-            <span class="badge badge-warning">تحذير</span>
-            <span class="badge badge-danger">خطأ</span>
-            <span class="badge badge-info">معلومة</span>
-          </div>
-          <div class="flex flex-wrap gap-2 mb-3">
-            <span class="badge badge-source-partner"><svg aria-hidden="true"><use href="#icon-shield-check"/></svg>Partner</span>
-            <span class="badge badge-source-affiliate">Affiliate</span>
-            <span class="badge badge-source-manual">Manual Deal</span>
-            <span class="badge badge-source-api-ready">API Ready</span>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <span class="badge badge-verified"><svg aria-hidden="true"><use href="#icon-check-circle"/></svg>موثّق</span>
-            <span class="badge badge-featured"><svg aria-hidden="true"><use href="#icon-star"/></svg>مميّز</span>
-          </div>
-        </div>
-
-        <!-- Card -->
-        <h3 class="sg-sub-title mt-8">البطاقات (.card)</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <article class="card" aria-label="بطاقة عينة">
-            <div class="card-badge-wrap">
-              <span class="badge badge-source-partner"><svg aria-hidden="true"><use href="#icon-shield-check"/></svg>Partner</span>
-              <span class="badge badge-featured">مميّز</span>
-            </div>
-            <img class="card-media" src="../assets/images/beach.svg" alt="عينة صورة شاطئ" loading="lazy" width="400" height="225">
-            <div class="card-body">
-              <h3 class="card-title"><a href="#components" data-coming-soon>عطلة في شرم الشيخ – 4 ليالٍ</a></h3>
-              <p class="card-meta">
-                <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
-                شرم الشيخ، مصر
-                <span aria-hidden="true">·</span>
-                <svg class="w-3.5 h-3.5" aria-hidden="true" style="color:#F4BE52"><use href="#icon-star"/></svg>
-                4.7 <span class="text-ink-400">(248)</span>
-              </p>
-              <p class="price">ابتداءً من <strong>1,950</strong> ر.س</p>
-              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>عرض التفاصيل</button>
-            </div>
-          </article>
-          <div class="sg-card flex flex-col gap-3">
-            <p class="text-sm text-ink-500 font-medium">خصائص البطاقة:</p>
-            <ul class="space-y-2 text-sm text-ink-600">
-              <li class="flex gap-2"><svg class="w-4 h-4 text-success flex-none mt-0.5" aria-hidden="true"><use href="#icon-check-circle"/></svg><code>rounded-2xl</code> + <code>overflow-hidden</code></li>
-              <li class="flex gap-2"><svg class="w-4 h-4 text-success flex-none mt-0.5" aria-hidden="true"><use href="#icon-check-circle"/></svg>رفع عند التحوّم: <code>translateY(-4px)</code></li>
-              <li class="flex gap-2"><svg class="w-4 h-4 text-success flex-none mt-0.5" aria-hidden="true"><use href="#icon-check-circle"/></svg>أبعاد الصورة: <code>aspect-ratio: 16/9</code></li>
-              <li class="flex gap-2"><svg class="w-4 h-4 text-success flex-none mt-0.5" aria-hidden="true"><use href="#icon-check-circle"/></svg>الشارات: موضوعة منطقياً <code>inset-inline-start</code></li>
-              <li class="flex gap-2"><svg class="w-4 h-4 text-success flex-none mt-0.5" aria-hidden="true"><use href="#icon-check-circle"/></svg>السعر: <code>"ابتداءً من"</code> دائماً (لا ادعاء بالسعر المباشر)</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Z-index stack -->
-        <h3 class="sg-sub-title mt-8">طبقات الإطار (Z-Index Stack)</h3>
-        <div class="sg-card overflow-x-auto">
-          <table class="sg-table w-full">
-            <thead><tr><th>الاسم</th><th>القيمة</th><th>الاستخدام</th></tr></thead>
-            <tbody>
-              <tr><td><code>z-dropdown</code></td><td>1000</td><td>القوائم المنسدلة</td></tr>
-              <tr><td><code>z-sticky</code></td><td>1020</td><td>الترويسة الثابتة</td></tr>
-              <tr><td><code>z-drawer-overlay</code></td><td>1030</td><td>طبقة تعتيم الدرج</td></tr>
-              <tr><td><code>z-drawer</code></td><td>1040</td><td>لوحة الدرج</td></tr>
-              <tr><td><code>z-modal-overlay</code></td><td>1050</td><td>طبقة تعتيم النافذة</td></tr>
-              <tr><td><code>z-modal</code></td><td>1060</td><td>لوحة النافذة المنبثقة</td></tr>
-              <tr><td><code>z-toast</code></td><td>1080</td><td>إشعارات التوست</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-      </section>
-
-      <!-- ─────────────────────────────────────────────────────────────────
-           § RTL↔LTR note
-      ──────────────────────────────────────────────────────────────────── -->
-      <section aria-label="ملاحظة RTL/LTR">
-        <div class="sg-info-box sg-info-box-tip">
-          <h3 class="font-semibold text-lagoon-800 mb-2">اختبار RTL ↔ LTR</h3>
-          <p class="text-sm text-lagoon-700">
-            لاختبار التخطيط باللغة الإنجليزية: افتح أدوات المطور → العنصر <code>&lt;html&gt;</code>
-            → غيّر <code>dir="rtl" lang="ar"</code> إلى <code>dir="ltr" lang="en"</code>.
-            يجب ألا ينكسر أي تخطيط. تم بناء النظام بالخصائص المنطقية
-            (<code>inset-inline-*</code>, <code>ms-*</code>, <code>me-*</code>) لضمان ذلك.
+    <!-- ═══ Main content ══════════════════════════════════════════════════════ -->
+    <main id="main" tabindex="-1">
+      <!-- Page hero -->
+      <div class="sg-hero">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-12">
+          <h1 class="text-4xl font-bold text-ink-900 mb-3">نظام التصميم</h1>
+          <p class="text-ink-500 text-lg max-w-2xl">
+            المرجع الكامل لرموز التصميم المستخدمة في منصة رحلاتي. كل قيمة هنا مشتقة من
+            <code class="sg-code">tailwind.config.js</code>
+            ومضمونة AA بموجب معيار WCAG 2.1.
           </p>
         </div>
-      </section>
+      </div>
 
-    </div><!-- /max-w-7xl -->
-  </main>
+      <div class="max-w-7xl mx-auto px-4 md:px-6 py-8 space-y-20">
+        <!-- ─────────────────────────────────────────────────────────────────
+           § 1  COLORS
+      ──────────────────────────────────────────────────────────────────── -->
+        <section id="colors" aria-labelledby="colors-heading">
+          <h2 id="colors-heading" class="sg-section-title">
+            الألوان <span class="sg-section-note">Colors</span>
+          </h2>
 
-  <!-- Footer (minimal) -->
-  <footer class="mt-20 border-t border-ink-200 py-6 text-center text-sm text-ink-400">
-    <p>دليل التصميم — رحلاتي · مرجع داخلي للمطورين · <a href="index.html" class="text-lagoon-600">العودة للرئيسية</a></p>
-  </footer>
+          <!-- Lagoon -->
+          <h3 class="sg-sub-title">Lagoon — اللون الأساسي (Trust + Travel)</h3>
+          <div class="sg-swatch-row" role="list">
+            <div class="sg-swatch bg-lagoon-50" role="listitem">
+              <span class="sg-swatch-label text-ink-800">50<br /><code>#ECFBFB</code></span>
+            </div>
+            <div class="sg-swatch bg-lagoon-100" role="listitem">
+              <span class="sg-swatch-label text-ink-800">100<br /><code>#D0F4F4</code></span>
+            </div>
+            <div class="sg-swatch bg-lagoon-200" role="listitem">
+              <span class="sg-swatch-label text-ink-800">200<br /><code>#A4E9EA</code></span>
+            </div>
+            <div class="sg-swatch bg-lagoon-300" role="listitem">
+              <span class="sg-swatch-label text-ink-800">300<br /><code>#6FD7D9</code></span>
+            </div>
+            <div class="sg-swatch bg-lagoon-400" role="listitem">
+              <span class="sg-swatch-label text-ink-800">400<br /><code>#38BCC0</code></span>
+            </div>
+            <div class="sg-swatch bg-lagoon-500" role="listitem">
+              <span class="sg-swatch-label text-white">500<br /><code>#16A0A5</code></span>
+            </div>
+            <div class="sg-swatch bg-lagoon-600" role="listitem">
+              <span class="sg-swatch-label text-white"
+                >600<br /><code>#0E8186</code><br /><span class="sg-aa-badge">AA ✓</span></span
+              >
+            </div>
+            <div class="sg-swatch bg-lagoon-700" role="listitem">
+              <span class="sg-swatch-label text-white"
+                >700<br /><code>#0E686C</code><br /><span class="sg-aa-badge">AA ✓</span></span
+              >
+            </div>
+            <div class="sg-swatch bg-lagoon-800" role="listitem">
+              <span class="sg-swatch-label text-white">800<br /><code>#115457</code></span>
+            </div>
+            <div class="sg-swatch bg-lagoon-900" role="listitem">
+              <span class="sg-swatch-label text-white">900<br /><code>#11464A</code></span>
+            </div>
+            <div class="sg-swatch bg-lagoon-950" role="listitem">
+              <span class="sg-swatch-label text-white">950<br /><code>#042B2E</code></span>
+            </div>
+          </div>
 
-  <!-- Toast mount -->
-  <div id="toast-root" aria-live="polite" aria-atomic="false"></div>
+          <!-- Sunset -->
+          <h3 class="sg-sub-title mt-8">Sunset — اللون المميز (Premium Highlight)</h3>
+          <div class="sg-swatch-row sg-swatch-row-5" role="list">
+            <div class="sg-swatch bg-sunset-100" role="listitem">
+              <span class="sg-swatch-label text-ink-800">100<br /><code>#FCEBC8</code></span>
+            </div>
+            <div class="sg-swatch bg-sunset-300" role="listitem">
+              <span class="sg-swatch-label text-ink-800">300<br /><code>#F4BE52</code></span>
+            </div>
+            <div class="sg-swatch bg-sunset-500" role="listitem">
+              <span class="sg-swatch-label text-white">500<br /><code>#E08D12</code></span>
+            </div>
+            <div class="sg-swatch bg-sunset-600" role="listitem">
+              <span class="sg-swatch-label text-white"
+                >600<br /><code>#C26C0B</code><br /><span class="sg-aa-badge">AA ✓</span></span
+              >
+            </div>
+            <div class="sg-swatch bg-sunset-700" role="listitem">
+              <span class="sg-swatch-label text-white"
+                >700<br /><code>#A14E0D</code><br /><span class="sg-aa-badge">AA ✓</span></span
+              >
+            </div>
+          </div>
 
-  <!-- Scripts -->
-  <script src="../src/js/ui.js" defer></script>
-  <script src="../src/js/main.js" defer></script>
+          <!-- Ink -->
+          <h3 class="sg-sub-title mt-8">Ink — الألوان المحايدة (Neutrals)</h3>
+          <div class="sg-swatch-row" role="list">
+            <div class="sg-swatch bg-ink-50" role="listitem">
+              <span class="sg-swatch-label text-ink-800">50<br /><code>#F7F8FA</code></span>
+            </div>
+            <div class="sg-swatch bg-ink-100" role="listitem">
+              <span class="sg-swatch-label text-ink-800">100<br /><code>#EEF1F5</code></span>
+            </div>
+            <div class="sg-swatch bg-ink-200" role="listitem">
+              <span class="sg-swatch-label text-ink-800">200<br /><code>#DEE3EA</code></span>
+            </div>
+            <div class="sg-swatch bg-ink-300" role="listitem">
+              <span class="sg-swatch-label text-ink-800">300<br /><code>#C5CDD7</code></span>
+            </div>
+            <div class="sg-swatch bg-ink-400" role="listitem">
+              <span class="sg-swatch-label text-ink-900">400<br /><code>#9AA6B4</code></span>
+            </div>
+            <div class="sg-swatch bg-ink-500" role="listitem">
+              <span class="sg-swatch-label text-white"
+                >500<br /><code>#6B7889</code><br /><span class="sg-aa-badge">AA ✓</span></span
+              >
+            </div>
+            <div class="sg-swatch bg-ink-600" role="listitem">
+              <span class="sg-swatch-label text-white">600<br /><code>#4D5969</code></span>
+            </div>
+            <div class="sg-swatch bg-ink-700" role="listitem">
+              <span class="sg-swatch-label text-white">700<br /><code>#3A4453</code></span>
+            </div>
+            <div class="sg-swatch bg-ink-800" role="listitem">
+              <span class="sg-swatch-label text-white">800<br /><code>#262E3A</code></span>
+            </div>
+            <div class="sg-swatch bg-ink-900" role="listitem">
+              <span class="sg-swatch-label text-white">900<br /><code>#161C26</code></span>
+            </div>
+          </div>
 
-  <!-- Page-scoped styles -->
-  <style>
-    /* ── Styleguide chrome ──────────────────────────────────────────────── */
-    .sg-topbar {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid #EEF1F5;
-    }
-    .sg-subnav {
-      position: sticky; top: 3.5rem; z-index: 40;
-      background: white;
-      border-bottom: 1px solid #EEF1F5;
-      box-shadow: 0 1px 3px rgb(38 46 58 / 0.05);
-      overflow-x: auto;
-    }
-    .sg-subnav-list {
-      display: flex; gap: 0; list-style: none; margin: 0; padding: 0;
-      min-width: max-content;
-    }
-    .sg-subnav-link {
-      display: block; padding: 0.625rem 1rem;
-      font-size: 0.875rem; font-weight: 500; color: #6B7889;
-      text-decoration: none; white-space: nowrap;
-      border-bottom: 2px solid transparent;
-      transition: color 150ms, border-color 150ms;
-    }
-    .sg-subnav-link:hover { color: #0E8186; border-bottom-color: #0E8186; }
+          <!-- Semantic -->
+          <h3 class="sg-sub-title mt-8">الألوان الدلالية (Semantic)</h3>
+          <div class="sg-swatch-row sg-swatch-row-4" role="list">
+            <div class="sg-swatch" style="background: #1f9d57" role="listitem">
+              <span class="sg-swatch-label text-white"
+                >success<br /><code>#1F9D57</code><br /><span class="sg-aa-badge">AA ✓</span></span
+              >
+            </div>
+            <div class="sg-swatch" style="background: #e0a53b" role="listitem">
+              <span class="sg-swatch-label text-ink-900">warning<br /><code>#E0A53B</code></span>
+            </div>
+            <div class="sg-swatch" style="background: #d64545" role="listitem">
+              <span class="sg-swatch-label text-white"
+                >danger<br /><code>#D64545</code><br /><span class="sg-aa-badge">AA ✓</span></span
+              >
+            </div>
+            <div class="sg-swatch" style="background: #2d74c4" role="listitem">
+              <span class="sg-swatch-label text-white"
+                >info<br /><code>#2D74C4</code><br /><span class="sg-aa-badge">AA ✓</span></span
+              >
+            </div>
+          </div>
 
-    .sg-hero { background: linear-gradient(135deg, #ECFBFB 0%, white 60%); border-bottom: 1px solid #EEF1F5; }
+          <!-- AA pairing rules -->
+          <div class="sg-info-box mt-8">
+            <h3 class="font-semibold text-ink-800 mb-3">قواعد التباين AA</h3>
+            <ul class="space-y-2 text-sm text-ink-600">
+              <li class="flex items-start gap-2">
+                <svg class="w-4 h-4 mt-0.5 text-success flex-none" aria-hidden="true">
+                  <use href="#icon-check-circle" /></svg
+                >نص الجسم: <code>ink-600/700/800</code> على خلفيات فاتحة ≥ 4.5:1
+              </li>
+              <li class="flex items-start gap-2">
+                <svg class="w-4 h-4 mt-0.5 text-success flex-none" aria-hidden="true">
+                  <use href="#icon-check-circle" /></svg
+                >أزرار ومشغّلات: <code>lagoon-600+</code> و<code>sunset-600+</code> على أبيض ≥ 4.5:1
+              </li>
+              <li class="flex items-start gap-2">
+                <svg class="w-4 h-4 mt-0.5 text-success flex-none" aria-hidden="true">
+                  <use href="#icon-check-circle" /></svg
+                >نص أبيض على: <code>lagoon-500+</code>, <code>success</code>, <code>danger</code>,
+                <code>info</code> ≥ 4.5:1
+              </li>
+              <li class="flex items-start gap-2">
+                <svg class="w-4 h-4 mt-0.5 text-success flex-none" aria-hidden="true">
+                  <use href="#icon-check-circle" /></svg
+                >نص <code>ink-900</code> على <code>warning</code> (أصفر) ≥ 4.5:1
+              </li>
+            </ul>
+          </div>
+        </section>
 
-    /* ── Section titles ─────────────────────────────────────────────────── */
-    .sg-section-title {
-      font-size: 1.625rem; font-weight: 800; color: #262E3A;
-      padding-bottom: 1rem; margin-bottom: 1.5rem;
-      border-bottom: 2px solid #EEF1F5;
-      display: flex; align-items: baseline; gap: 0.75rem;
-    }
-    .sg-section-note { font-size: 0.875rem; font-weight: 400; color: #9AA6B4; }
-    .sg-sub-title { font-size: 1rem; font-weight: 700; color: #3A4453; margin-bottom: 1rem; }
+        <!-- ─────────────────────────────────────────────────────────────────
+           § 2  TYPOGRAPHY
+      ──────────────────────────────────────────────────────────────────── -->
+        <section id="typography" aria-labelledby="typography-heading">
+          <h2 id="typography-heading" class="sg-section-title">
+            الطباعة <span class="sg-section-note">Typography — Cairo (self-hosted)</span>
+          </h2>
 
-    /* ── Color swatches ─────────────────────────────────────────────────── */
-    .sg-swatch-row { display: grid; grid-template-columns: repeat(11, 1fr); gap: 0.25rem; }
-    .sg-swatch-row-5 { grid-template-columns: repeat(5, 1fr); }
-    .sg-swatch-row-4 { grid-template-columns: repeat(4, 1fr); }
-    @media (max-width: 640px) {
-      .sg-swatch-row { grid-template-columns: repeat(6, 1fr); }
-      .sg-swatch-row-5 { grid-template-columns: repeat(3, 1fr); }
-    }
-    .sg-swatch {
-      aspect-ratio: 1; border-radius: 0.75rem; display: flex;
-      align-items: flex-end; justify-content: center; padding: 0.375rem;
-      min-height: 80px;
-    }
-    .sg-swatch-label { font-size: 0.625rem; line-height: 1.4; text-align: center; }
-    .sg-swatch-label code { font-size: 0.6rem; display: block; opacity: 0.8; }
-    .sg-aa-badge {
-      display: inline-block; margin-top: 2px;
-      background: rgba(255,255,255,0.25); border-radius: 4px;
-      padding: 0 3px; font-size: 0.55rem; font-weight: 700;
-    }
+          <!-- Font scale -->
+          <div class="sg-card space-y-6">
+            <div class="sg-type-row">
+              <div class="sg-type-meta"><code>text-xs / 0.75rem</code></div>
+              <p class="text-xs text-ink-700">الرحلة تبدأ بخطوة — Travel begins with a step</p>
+            </div>
+            <div class="sg-type-row">
+              <div class="sg-type-meta"><code>text-sm / 0.875rem</code></div>
+              <p class="text-sm text-ink-700">الرحلة تبدأ بخطوة — Travel begins with a step</p>
+            </div>
+            <div class="sg-type-row">
+              <div class="sg-type-meta"><code>text-base / 1rem</code></div>
+              <p class="text-base text-ink-700">الرحلة تبدأ بخطوة — Travel begins with a step</p>
+            </div>
+            <div class="sg-type-row">
+              <div class="sg-type-meta"><code>text-lg / 1.125rem</code></div>
+              <p class="text-lg text-ink-700">الرحلة تبدأ بخطوة — Travel begins with a step</p>
+            </div>
+            <div class="sg-type-row">
+              <div class="sg-type-meta"><code>text-xl / 1.25rem</code></div>
+              <p class="text-xl text-ink-800">الرحلة تبدأ بخطوة — Travel begins with a step</p>
+            </div>
+            <div class="sg-type-row">
+              <div class="sg-type-meta"><code>text-2xl / 1.5rem</code></div>
+              <p class="text-2xl font-semibold text-ink-800">اكتشف وجهتك المثالية</p>
+            </div>
+            <div class="sg-type-row">
+              <div class="sg-type-meta"><code>text-3xl / 1.875rem</code></div>
+              <p class="text-3xl font-bold text-ink-800">اكتشف وجهتك المثالية</p>
+            </div>
+            <div class="sg-type-row">
+              <div class="sg-type-meta"><code>text-4xl / 2.25rem</code></div>
+              <p class="text-4xl font-bold text-ink-800">اكتشف وجهتك</p>
+            </div>
+            <div class="sg-type-row">
+              <div class="sg-type-meta"><code>text-5xl / 3rem</code></div>
+              <p class="text-5xl font-extrabold text-ink-900">رحلاتي</p>
+            </div>
+          </div>
 
-    /* ── Cards & containers ─────────────────────────────────────────────── */
-    .sg-card { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px rgb(38 46 58 / 0.06); }
-    .sg-info-box { background: #F7F8FA; border-radius: 1rem; padding: 1.25rem; border: 1px solid #EEF1F5; }
-    .sg-info-box-tip { background: #ECFBFB; border-color: #A4E9EA; }
+          <!-- Font weights -->
+          <h3 class="sg-sub-title mt-8">الأوزان (Weights)</h3>
+          <div class="sg-card grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div>
+              <p class="text-xl font-normal text-ink-700">Regular 400</p>
+              <code class="text-xs text-ink-400">font-normal</code>
+            </div>
+            <div>
+              <p class="text-xl font-medium text-ink-700">Medium 500</p>
+              <code class="text-xs text-ink-400">font-medium</code>
+            </div>
+            <div>
+              <p class="text-xl font-semibold text-ink-700">SemiBold 600</p>
+              <code class="text-xs text-ink-400">font-semibold</code>
+            </div>
+            <div>
+              <p class="text-xl font-bold text-ink-700">Bold 700</p>
+              <code class="text-xs text-ink-400">font-bold</code>
+            </div>
+          </div>
+        </section>
 
-    /* ── Typography rows ────────────────────────────────────────────────── */
-    .sg-type-row { display: flex; align-items: baseline; gap: 1.5rem; padding: 0.5rem 0; border-bottom: 1px solid #EEF1F5; }
-    .sg-type-row:last-child { border-bottom: none; }
-    .sg-type-meta { width: 12rem; flex: none; }
-    .sg-type-meta code { font-size: 0.75rem; color: #9AA6B4; display: block; }
+        <!-- ─────────────────────────────────────────────────────────────────
+           § 3  SPACING & LAYOUT
+      ──────────────────────────────────────────────────────────────────── -->
+        <section id="spacing" aria-labelledby="spacing-heading">
+          <h2 id="spacing-heading" class="sg-section-title">
+            المسافات والتخطيط <span class="sg-section-note">Spacing &amp; Layout</span>
+          </h2>
 
-    /* ── Radii ──────────────────────────────────────────────────────────── */
-    .sg-radius-item { text-align: center; }
-    .sg-radius-demo { width: 100%; aspect-ratio: 1; }
-    .sg-radius-label { display: block; font-size: 0.6875rem; color: #6B7889; margin-top: 0.5rem; line-height: 1.4; }
+          <div class="sg-card">
+            <p class="text-sm text-ink-500 mb-5">
+              المقياس الأساسي: 4px · الحاوية: <code>max-w-7xl</code> (~1280px) · الهوامش الداخلية:
+              <code>px-4 md:px-6</code>
+            </p>
+            <div class="space-y-3">
+              <div class="flex items-center gap-4">
+                <code class="w-16 text-xs text-ink-400 text-end flex-none">p-1 · 4px</code>
+                <div class="bg-lagoon-200 h-4" style="width: 4px"></div>
+              </div>
+              <div class="flex items-center gap-4">
+                <code class="w-16 text-xs text-ink-400 text-end flex-none">p-2 · 8px</code>
+                <div class="bg-lagoon-300 h-4" style="width: 8px"></div>
+              </div>
+              <div class="flex items-center gap-4">
+                <code class="w-16 text-xs text-ink-400 text-end flex-none">p-3 · 12px</code>
+                <div class="bg-lagoon-400 h-4" style="width: 12px"></div>
+              </div>
+              <div class="flex items-center gap-4">
+                <code class="w-16 text-xs text-ink-400 text-end flex-none">p-4 · 16px</code>
+                <div class="bg-lagoon-500 h-4" style="width: 16px"></div>
+              </div>
+              <div class="flex items-center gap-4">
+                <code class="w-16 text-xs text-ink-400 text-end flex-none">p-6 · 24px</code>
+                <div class="bg-lagoon-600 h-4" style="width: 24px"></div>
+              </div>
+              <div class="flex items-center gap-4">
+                <code class="w-16 text-xs text-ink-400 text-end flex-none">p-8 · 32px</code>
+                <div class="bg-lagoon-700 h-4" style="width: 32px"></div>
+              </div>
+              <div class="flex items-center gap-4">
+                <code class="w-16 text-xs text-ink-400 text-end flex-none">p-12 · 48px</code>
+                <div class="bg-lagoon-800 h-4" style="width: 48px"></div>
+              </div>
+              <div class="flex items-center gap-4">
+                <code class="w-16 text-xs text-ink-400 text-end flex-none">p-16 · 64px</code>
+                <div class="bg-lagoon-900 h-4" style="width: 64px"></div>
+              </div>
+              <div class="flex items-center gap-4">
+                <code class="w-16 text-xs text-ink-400 text-end flex-none">p-20 · 80px</code>
+                <div class="bg-lagoon-950 h-4" style="width: 80px"></div>
+              </div>
+            </div>
+          </div>
 
-    /* ── Shadows ────────────────────────────────────────────────────────── */
-    .sg-shadow-demo { background: white; border-radius: 1rem; padding: 1.5rem; min-height: 100px; display: flex; flex-direction: column; justify-content: center; }
+          <!-- Breakpoints -->
+          <h3 class="sg-sub-title mt-8">نقاط التوقف (Breakpoints)</h3>
+          <div class="sg-card overflow-x-auto">
+            <table class="sg-table w-full">
+              <thead>
+                <tr>
+                  <th>المسمى</th>
+                  <th>العرض</th>
+                  <th>الاستخدام</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>sm</code></td>
+                  <td>640px</td>
+                  <td>جهاز لوحي صغير</td>
+                </tr>
+                <tr>
+                  <td><code>md</code></td>
+                  <td>768px</td>
+                  <td>جهاز لوحي</td>
+                </tr>
+                <tr>
+                  <td><code>lg</code></td>
+                  <td>1024px</td>
+                  <td>حاسوب محمول</td>
+                </tr>
+                <tr>
+                  <td><code>xl</code></td>
+                  <td>1280px</td>
+                  <td>شاشة كبيرة</td>
+                </tr>
+                <tr>
+                  <td><code>2xl</code></td>
+                  <td>1536px</td>
+                  <td>شاشة عريضة جداً</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-    /* ── Gradients ──────────────────────────────────────────────────────── */
-    .sg-gradient-demo { border-radius: 1rem; padding: 1.25rem 1.5rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; min-height: 64px; }
+        <!-- ─────────────────────────────────────────────────────────────────
+           § 4  BORDER RADII
+      ──────────────────────────────────────────────────────────────────── -->
+        <section id="radii" aria-labelledby="radii-heading">
+          <h2 id="radii-heading" class="sg-section-title">
+            انحناء الزوايا <span class="sg-section-note">Border Radius</span>
+          </h2>
 
-    /* ── Table ──────────────────────────────────────────────────────────── */
-    .sg-table { border-collapse: collapse; font-size: 0.875rem; }
-    .sg-table th { text-align: start; padding: 0.5rem 0.75rem; background: #F7F8FA; font-weight: 600; color: #3A4453; border-bottom: 2px solid #EEF1F5; }
-    .sg-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid #EEF1F5; color: #4D5969; }
-    .sg-table tr:last-child td { border-bottom: none; }
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+            <div class="sg-radius-item">
+              <div class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-sm"></div>
+              <code class="sg-radius-label">rounded-sm<br />.375rem</code>
+            </div>
+            <div class="sg-radius-item">
+              <div class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-md"></div>
+              <code class="sg-radius-label">rounded-md<br />.5rem</code>
+            </div>
+            <div class="sg-radius-item">
+              <div class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-lg"></div>
+              <code class="sg-radius-label">rounded-lg<br />.75rem · buttons</code>
+            </div>
+            <div class="sg-radius-item">
+              <div class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-xl"></div>
+              <code class="sg-radius-label">rounded-xl<br />1rem</code>
+            </div>
+            <div class="sg-radius-item">
+              <div
+                class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-2xl"
+              ></div>
+              <code class="sg-radius-label">rounded-2xl<br />1.5rem · cards</code>
+            </div>
+            <div class="sg-radius-item">
+              <div
+                class="sg-radius-demo bg-lagoon-100 border-2 border-lagoon-300 rounded-full"
+              ></div>
+              <code class="sg-radius-label">rounded-full<br />9999px · badges</code>
+            </div>
+          </div>
+        </section>
 
-    /* ── Code ───────────────────────────────────────────────────────────── */
-    .sg-code { background: #EEF1F5; border-radius: 4px; padding: 0.1em 0.4em; font-size: 0.875em; color: #0E8186; font-family: ui-monospace, 'Courier New', monospace; }
+        <!-- ─────────────────────────────────────────────────────────────────
+           § 5  SHADOWS
+      ──────────────────────────────────────────────────────────────────── -->
+        <section id="shadows" aria-labelledby="shadows-heading">
+          <h2 id="shadows-heading" class="sg-section-title">
+            الظلال <span class="sg-section-note">Box Shadows</span>
+          </h2>
 
-    /* ── Utility ────────────────────────────────────────────────────────── */
-    .w-full { width: 100%; }
-    .no-underline { text-decoration: none !important; }
-    code { font-family: ui-monospace, 'Courier New', monospace; }
-    .justify-center { justify-content: center; }
-    .text-white\/70 { color: rgba(255,255,255,0.7); }
-  </style>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div class="sg-shadow-demo shadow-soft">
+              <code class="text-sm font-semibold text-ink-700">shadow-soft</code>
+              <p class="text-xs text-ink-400 mt-1">خلفيات خفيفة، عناصر ثانوية</p>
+            </div>
+            <div class="sg-shadow-demo shadow-card">
+              <code class="text-sm font-semibold text-ink-700">shadow-card</code>
+              <p class="text-xs text-ink-400 mt-1">بطاقات في حالة الراحة الافتراضية</p>
+            </div>
+            <div class="sg-shadow-demo shadow-pop">
+              <code class="text-sm font-semibold text-ink-700">shadow-pop</code>
+              <p class="text-xs text-ink-400 mt-1">حالة التحوّم، النوافذ المنبثقة</p>
+            </div>
+          </div>
+        </section>
 
-</body>
+        <!-- ─────────────────────────────────────────────────────────────────
+           § 6  GRADIENTS
+      ──────────────────────────────────────────────────────────────────── -->
+        <section id="gradients" aria-labelledby="gradients-heading">
+          <h2 id="gradients-heading" class="sg-section-title">
+            التدرجات <span class="sg-section-note">Gradients</span>
+          </h2>
+
+          <div class="space-y-4">
+            <div class="sg-gradient-demo" style="background: var(--gradient-brand)">
+              <code class="text-white text-sm font-semibold">--gradient-brand</code>
+              <span class="text-white/70 text-xs ms-3"
+                >#0E8186 → #38BCC0 · الشعار والعناصر الأساسية</span
+              >
+            </div>
+            <div class="sg-gradient-demo" style="background: var(--gradient-hero)">
+              <code class="text-white text-sm font-semibold">--gradient-hero</code>
+              <span class="text-white/70 text-xs ms-3"
+                >#11464A → #0E686C · الهيرو والخلفيات الداكنة</span
+              >
+            </div>
+            <div class="sg-gradient-demo" style="background: var(--gradient-accent)">
+              <code class="text-white text-sm font-semibold">--gradient-accent</code>
+              <span class="text-white/70 text-xs ms-3"
+                >#0E8186 → #E08D12 · أزرار الدعوة للعمل المميزة</span
+              >
+            </div>
+          </div>
+
+          <!-- Motion tokens -->
+          <h3 class="sg-sub-title mt-8">رموز الحركة (Motion Tokens)</h3>
+          <div class="sg-card">
+            <div class="space-y-3 text-sm">
+              <div class="flex gap-4 items-center">
+                <code class="w-44 text-ink-500 flex-none">--transition-fast</code>
+                <span class="text-ink-700">150ms · تأثيرات سريعة (ألوان، تركيز)</span>
+              </div>
+              <div class="flex gap-4 items-center">
+                <code class="w-44 text-ink-500 flex-none">--transition-base</code>
+                <span class="text-ink-700">200ms · تأثيرات قياسية (أزرار، بطاقات)</span>
+              </div>
+              <div class="flex gap-4 items-center">
+                <code class="w-44 text-ink-500 flex-none">--transition-slow</code>
+                <span class="text-ink-700">300ms · تأثيرات بطيئة (درج، نوافذ)</span>
+              </div>
+            </div>
+            <p class="text-xs text-ink-400 mt-4 pt-4 border-t border-ink-100">
+              جميع الانتقالات محمية بـ <code>prefers-reduced-motion: reduce</code>
+            </p>
+          </div>
+        </section>
+
+        <!-- ─────────────────────────────────────────────────────────────────
+           § 7  COMPONENTS (quick reference)
+      ──────────────────────────────────────────────────────────────────── -->
+        <section id="components" aria-labelledby="components-heading">
+          <h2 id="components-heading" class="sg-section-title">
+            المكونات <span class="sg-section-note">Components — quick reference</span>
+          </h2>
+
+          <!-- Buttons -->
+          <h3 class="sg-sub-title">الأزرار (.btn)</h3>
+          <div class="sg-card">
+            <div class="flex flex-wrap gap-3 items-center">
+              <button class="btn btn-primary" type="button">أساسي</button>
+              <button class="btn btn-secondary" type="button">ثانوي</button>
+              <button class="btn btn-outline" type="button">محدد</button>
+              <button class="btn btn-ghost" type="button">شبح</button>
+              <button class="btn btn-danger" type="button">خطر</button>
+            </div>
+            <div class="flex flex-wrap gap-3 items-center mt-4">
+              <button class="btn btn-primary btn-sm" type="button">صغير</button>
+              <button class="btn btn-primary" type="button">متوسط</button>
+              <button class="btn btn-primary btn-lg" type="button">كبير</button>
+              <button class="btn btn-primary btn-icon" type="button" aria-label="أيقونة">
+                <svg aria-hidden="true"><use href="#icon-star" /></svg>
+              </button>
+              <button class="btn btn-primary" type="button" aria-busy="true" disabled>
+                <span class="spinner" aria-hidden="true"></span>
+                جاري التحميل
+              </button>
+            </div>
+          </div>
+
+          <!-- Badges -->
+          <h3 class="sg-sub-title mt-8">الشارات (.badge)</h3>
+          <div class="sg-card">
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="badge badge-neutral">محايد</span>
+              <span class="badge badge-success">نجاح</span>
+              <span class="badge badge-warning">تحذير</span>
+              <span class="badge badge-danger">خطأ</span>
+              <span class="badge badge-info">معلومة</span>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-3">
+              <span class="badge badge-source-partner"
+                ><svg aria-hidden="true"><use href="#icon-shield-check" /></svg>Partner</span
+              >
+              <span class="badge badge-source-affiliate">Affiliate</span>
+              <span class="badge badge-source-manual">Manual Deal</span>
+              <span class="badge badge-source-api-ready">API Ready</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="badge badge-verified"
+                ><svg aria-hidden="true"><use href="#icon-check-circle" /></svg>موثّق</span
+              >
+              <span class="badge badge-featured"
+                ><svg aria-hidden="true"><use href="#icon-star" /></svg>مميّز</span
+              >
+            </div>
+          </div>
+
+          <!-- Card -->
+          <h3 class="sg-sub-title mt-8">البطاقات (.card)</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <article class="card" aria-label="بطاقة عينة">
+              <div class="card-badge-wrap">
+                <span class="badge badge-source-partner"
+                  ><svg aria-hidden="true"><use href="#icon-shield-check" /></svg>Partner</span
+                >
+                <span class="badge badge-featured">مميّز</span>
+              </div>
+              <img
+                class="card-media"
+                src="../assets/images/beach.svg"
+                alt="عينة صورة شاطئ"
+                loading="lazy"
+                width="400"
+                height="225"
+              />
+              <div class="card-body">
+                <h3 class="card-title">
+                  <a href="#components" data-coming-soon>عطلة في شرم الشيخ – 4 ليالٍ</a>
+                </h3>
+                <p class="card-meta">
+                  <svg class="w-4 h-4 text-ink-400" aria-hidden="true">
+                    <use href="#icon-location" />
+                  </svg>
+                  شرم الشيخ، مصر
+                  <span aria-hidden="true">·</span>
+                  <svg class="w-3.5 h-3.5" aria-hidden="true" style="color: #f4be52">
+                    <use href="#icon-star" />
+                  </svg>
+                  4.7 <span class="text-ink-400">(248)</span>
+                </p>
+                <p class="price">ابتداءً من <strong>1,950</strong> ر.س</p>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm w-full justify-center"
+                  data-coming-soon
+                >
+                  عرض التفاصيل
+                </button>
+              </div>
+            </article>
+            <div class="sg-card flex flex-col gap-3">
+              <p class="text-sm text-ink-500 font-medium">خصائص البطاقة:</p>
+              <ul class="space-y-2 text-sm text-ink-600">
+                <li class="flex gap-2">
+                  <svg class="w-4 h-4 text-success flex-none mt-0.5" aria-hidden="true">
+                    <use href="#icon-check-circle" /></svg
+                  ><code>rounded-2xl</code> + <code>overflow-hidden</code>
+                </li>
+                <li class="flex gap-2">
+                  <svg class="w-4 h-4 text-success flex-none mt-0.5" aria-hidden="true">
+                    <use href="#icon-check-circle" /></svg
+                  >رفع عند التحوّم: <code>translateY(-4px)</code>
+                </li>
+                <li class="flex gap-2">
+                  <svg class="w-4 h-4 text-success flex-none mt-0.5" aria-hidden="true">
+                    <use href="#icon-check-circle" /></svg
+                  >أبعاد الصورة: <code>aspect-ratio: 16/9</code>
+                </li>
+                <li class="flex gap-2">
+                  <svg class="w-4 h-4 text-success flex-none mt-0.5" aria-hidden="true">
+                    <use href="#icon-check-circle" /></svg
+                  >الشارات: موضوعة منطقياً <code>inset-inline-start</code>
+                </li>
+                <li class="flex gap-2">
+                  <svg class="w-4 h-4 text-success flex-none mt-0.5" aria-hidden="true">
+                    <use href="#icon-check-circle" /></svg
+                  >السعر: <code>"ابتداءً من"</code> دائماً (لا ادعاء بالسعر المباشر)
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Z-index stack -->
+          <h3 class="sg-sub-title mt-8">طبقات الإطار (Z-Index Stack)</h3>
+          <div class="sg-card overflow-x-auto">
+            <table class="sg-table w-full">
+              <thead>
+                <tr>
+                  <th>الاسم</th>
+                  <th>القيمة</th>
+                  <th>الاستخدام</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>z-dropdown</code></td>
+                  <td>1000</td>
+                  <td>القوائم المنسدلة</td>
+                </tr>
+                <tr>
+                  <td><code>z-sticky</code></td>
+                  <td>1020</td>
+                  <td>الترويسة الثابتة</td>
+                </tr>
+                <tr>
+                  <td><code>z-drawer-overlay</code></td>
+                  <td>1030</td>
+                  <td>طبقة تعتيم الدرج</td>
+                </tr>
+                <tr>
+                  <td><code>z-drawer</code></td>
+                  <td>1040</td>
+                  <td>لوحة الدرج</td>
+                </tr>
+                <tr>
+                  <td><code>z-modal-overlay</code></td>
+                  <td>1050</td>
+                  <td>طبقة تعتيم النافذة</td>
+                </tr>
+                <tr>
+                  <td><code>z-modal</code></td>
+                  <td>1060</td>
+                  <td>لوحة النافذة المنبثقة</td>
+                </tr>
+                <tr>
+                  <td><code>z-toast</code></td>
+                  <td>1080</td>
+                  <td>إشعارات التوست</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ─────────────────────────────────────────────────────────────────
+           § RTL↔LTR note
+      ──────────────────────────────────────────────────────────────────── -->
+        <section aria-label="ملاحظة RTL/LTR">
+          <div class="sg-info-box sg-info-box-tip">
+            <h3 class="font-semibold text-lagoon-800 mb-2">اختبار RTL ↔ LTR</h3>
+            <p class="text-sm text-lagoon-700">
+              لاختبار التخطيط باللغة الإنجليزية: افتح أدوات المطور → العنصر
+              <code>&lt;html&gt;</code> → غيّر <code>dir="rtl" lang="ar"</code> إلى
+              <code>dir="ltr" lang="en"</code>. يجب ألا ينكسر أي تخطيط. تم بناء النظام بالخصائص
+              المنطقية (<code>inset-inline-*</code>, <code>ms-*</code>, <code>me-*</code>) لضمان
+              ذلك.
+            </p>
+          </div>
+        </section>
+      </div>
+      <!-- /max-w-7xl -->
+    </main>
+
+    <!-- Footer (minimal) -->
+    <footer class="mt-20 border-t border-ink-200 py-6 text-center text-sm text-ink-400">
+      <p>
+        دليل التصميم — رحلاتي · مرجع داخلي للمطورين ·
+        <a href="index.html" class="text-lagoon-600">العودة للرئيسية</a>
+      </p>
+    </footer>
+
+    <!-- Toast mount -->
+    <div id="toast-root" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- Scripts -->
+    <script src="../src/js/ui.js" defer></script>
+    <script src="../src/js/main.js" defer></script>
+
+    <!-- Page-scoped styles -->
+    <style>
+      /* ── Styleguide chrome ──────────────────────────────────────────────── */
+      .sg-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid #eef1f5;
+      }
+      .sg-subnav {
+        position: sticky;
+        top: 3.5rem;
+        z-index: 40;
+        background: white;
+        border-bottom: 1px solid #eef1f5;
+        box-shadow: 0 1px 3px rgb(38 46 58 / 0.05);
+        overflow-x: auto;
+      }
+      .sg-subnav-list {
+        display: flex;
+        gap: 0;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        min-width: max-content;
+      }
+      .sg-subnav-link {
+        display: block;
+        padding: 0.625rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #6b7889;
+        text-decoration: none;
+        white-space: nowrap;
+        border-bottom: 2px solid transparent;
+        transition:
+          color 150ms,
+          border-color 150ms;
+      }
+      .sg-subnav-link:hover {
+        color: #0e8186;
+        border-bottom-color: #0e8186;
+      }
+
+      .sg-hero {
+        background: linear-gradient(135deg, #ecfbfb 0%, white 60%);
+        border-bottom: 1px solid #eef1f5;
+      }
+
+      /* ── Section titles ─────────────────────────────────────────────────── */
+      .sg-section-title {
+        font-size: 1.625rem;
+        font-weight: 800;
+        color: #262e3a;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid #eef1f5;
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+      }
+      .sg-section-note {
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: #9aa6b4;
+      }
+      .sg-sub-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #3a4453;
+        margin-bottom: 1rem;
+      }
+
+      /* ── Color swatches ─────────────────────────────────────────────────── */
+      .sg-swatch-row {
+        display: grid;
+        grid-template-columns: repeat(11, 1fr);
+        gap: 0.25rem;
+      }
+      .sg-swatch-row-5 {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .sg-swatch-row-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      @media (max-width: 640px) {
+        .sg-swatch-row {
+          grid-template-columns: repeat(6, 1fr);
+        }
+        .sg-swatch-row-5 {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .sg-swatch {
+        aspect-ratio: 1;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 0.375rem;
+        min-height: 80px;
+      }
+      .sg-swatch-label {
+        font-size: 0.625rem;
+        line-height: 1.4;
+        text-align: center;
+      }
+      .sg-swatch-label code {
+        font-size: 0.6rem;
+        display: block;
+        opacity: 0.8;
+      }
+      .sg-aa-badge {
+        display: inline-block;
+        margin-top: 2px;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 4px;
+        padding: 0 3px;
+        font-size: 0.55rem;
+        font-weight: 700;
+      }
+
+      /* ── Cards & containers ─────────────────────────────────────────────── */
+      .sg-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgb(38 46 58 / 0.06);
+      }
+      .sg-info-box {
+        background: #f7f8fa;
+        border-radius: 1rem;
+        padding: 1.25rem;
+        border: 1px solid #eef1f5;
+      }
+      .sg-info-box-tip {
+        background: #ecfbfb;
+        border-color: #a4e9ea;
+      }
+
+      /* ── Typography rows ────────────────────────────────────────────────── */
+      .sg-type-row {
+        display: flex;
+        align-items: baseline;
+        gap: 1.5rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eef1f5;
+      }
+      .sg-type-row:last-child {
+        border-bottom: none;
+      }
+      .sg-type-meta {
+        width: 12rem;
+        flex: none;
+      }
+      .sg-type-meta code {
+        font-size: 0.75rem;
+        color: #9aa6b4;
+        display: block;
+      }
+
+      /* ── Radii ──────────────────────────────────────────────────────────── */
+      .sg-radius-item {
+        text-align: center;
+      }
+      .sg-radius-demo {
+        width: 100%;
+        aspect-ratio: 1;
+      }
+      .sg-radius-label {
+        display: block;
+        font-size: 0.6875rem;
+        color: #6b7889;
+        margin-top: 0.5rem;
+        line-height: 1.4;
+      }
+
+      /* ── Shadows ────────────────────────────────────────────────────────── */
+      .sg-shadow-demo {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        min-height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* ── Gradients ──────────────────────────────────────────────────────── */
+      .sg-gradient-demo {
+        border-radius: 1rem;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        min-height: 64px;
+      }
+
+      /* ── Table ──────────────────────────────────────────────────────────── */
+      .sg-table {
+        border-collapse: collapse;
+        font-size: 0.875rem;
+      }
+      .sg-table th {
+        text-align: start;
+        padding: 0.5rem 0.75rem;
+        background: #f7f8fa;
+        font-weight: 600;
+        color: #3a4453;
+        border-bottom: 2px solid #eef1f5;
+      }
+      .sg-table td {
+        padding: 0.5rem 0.75rem;
+        border-bottom: 1px solid #eef1f5;
+        color: #4d5969;
+      }
+      .sg-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* ── Code ───────────────────────────────────────────────────────────── */
+      .sg-code {
+        background: #eef1f5;
+        border-radius: 4px;
+        padding: 0.1em 0.4em;
+        font-size: 0.875em;
+        color: #0e8186;
+        font-family: ui-monospace, 'Courier New', monospace;
+      }
+
+      /* ── Utility ────────────────────────────────────────────────────────── */
+      .w-full {
+        width: 100%;
+      }
+      .no-underline {
+        text-decoration: none !important;
+      }
+      code {
+        font-family: ui-monospace, 'Courier New', monospace;
+      }
+      .justify-center {
+        justify-content: center;
+      }
+      .text-white\/70 {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    </style>
+  </body>
 </html>

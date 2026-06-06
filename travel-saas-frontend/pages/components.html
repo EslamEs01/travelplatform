@@ -1,745 +1,1289 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>عرض المكونات – رحلاتي (مرجع داخلي)</title>
-  <meta name="description" content="عرض تفاعلي لجميع مكونات وأنماط التفاعل في منصة رحلاتي.">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#0E8186">
-  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
-  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/tailwind.css">
-</head>
-<body class="bg-ink-50 text-ink-700 antialiased">
-
-  <!-- Inline SVG sprite -->
-  <div aria-hidden="true" style="display:none">
-    <svg xmlns="http://www.w3.org/2000/svg">
-      <symbol id="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
-      <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
-      <symbol id="icon-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
-      <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
-      <symbol id="icon-alert-triangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
-      <symbol id="icon-star" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></symbol>
-      <symbol id="icon-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></symbol>
-      <symbol id="icon-location" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></symbol>
-      <symbol id="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></symbol>
-      <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
-      <symbol id="icon-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></symbol>
-      <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
-    </svg>
-  </div>
-
-  <!-- Skip link -->
-  <a href="#main" class="skip-link">تخطَّ إلى المحتوى</a>
-
-  <!-- ═══ Top bar ══════════════════════════════════════════════════════════ -->
-  <header class="sg-topbar">
-    <div class="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between h-14 gap-4">
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="flex items-center gap-2 no-underline" aria-label="الصفحة الرئيسية">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E8186"/><path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/><circle cx="16" cy="14" r="3" fill="#0E8186"/></svg>
-          <span class="text-sm font-semibold text-lagoon-700">رحلاتي</span>
-        </a>
-        <span class="text-ink-300" aria-hidden="true">/</span>
-        <span class="text-sm font-medium text-ink-600">عرض المكونات</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <a href="styleguide.html" class="btn btn-outline btn-sm hidden md:flex">دليل التصميم</a>
-        <a href="index.html" class="btn btn-primary btn-sm">الرئيسية</a>
-      </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>عرض المكونات – رحلاتي (مرجع داخلي)</title>
+    <meta name="description" content="عرض تفاعلي لجميع مكونات وأنماط التفاعل في منصة رحلاتي." />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#0E8186" />
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../assets/fonts/cairo-600.woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="../assets/css/tailwind.css" />
+  </head>
+  <body class="bg-ink-50 text-ink-700 antialiased">
+    <!-- Inline SVG sprite -->
+    <div aria-hidden="true" style="display: none">
+      <svg xmlns="http://www.w3.org/2000/svg">
+        <symbol
+          id="icon-menu"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </symbol>
+        <symbol
+          id="icon-close"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </symbol>
+        <symbol
+          id="icon-check-circle"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </symbol>
+        <symbol
+          id="icon-info"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </symbol>
+        <symbol
+          id="icon-alert-triangle"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+          />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </symbol>
+        <symbol id="icon-star" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+          <path
+            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+          />
+        </symbol>
+        <symbol
+          id="icon-shield-check"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <polyline points="9 12 11 14 15 10" />
+        </symbol>
+        <symbol
+          id="icon-location"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </symbol>
+        <symbol
+          id="icon-copy"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+        </symbol>
+        <symbol
+          id="icon-search"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </symbol>
+        <symbol
+          id="icon-plane"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"
+          />
+        </symbol>
+        <symbol
+          id="icon-arrow-left"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
+        </symbol>
+      </svg>
     </div>
-  </header>
 
-  <!-- Sticky section navigation -->
-  <nav class="sg-subnav" aria-label="أقسام عرض المكونات">
-    <div class="max-w-7xl mx-auto px-4 md:px-6">
-      <ul class="sg-subnav-list">
-        <li><a href="#buttons-sec" class="sg-subnav-link">الأزرار</a></li>
-        <li><a href="#badges-sec" class="sg-subnav-link">الشارات</a></li>
-        <li><a href="#cards-sec" class="sg-subnav-link">البطاقات</a></li>
-        <li><a href="#modal-sec" class="sg-subnav-link">النافذة المنبثقة</a></li>
-        <li><a href="#drawer-sec" class="sg-subnav-link">الدرج</a></li>
-        <li><a href="#toast-sec" class="sg-subnav-link">الإشعارات</a></li>
-        <li><a href="#form-sec" class="sg-subnav-link">نموذج</a></li>
-        <li><a href="#skeleton-sec" class="sg-subnav-link">تحميل</a></li>
-        <li><a href="#empty-sec" class="sg-subnav-link">فراغ</a></li>
-        <li><a href="#msg-sec" class="sg-subnav-link">رسائل</a></li>
-        <li><a href="#copy-sec" class="sg-subnav-link">نسخ</a></li>
-      </ul>
-    </div>
-  </nav>
+    <!-- Skip link -->
+    <a href="#main" class="skip-link">تخطَّ إلى المحتوى</a>
 
-  <!-- ═══ Main ══════════════════════════════════════════════════════════════ -->
-  <main id="main" tabindex="-1">
-
-    <!-- Page hero -->
-    <div class="sg-hero">
-      <div class="max-w-7xl mx-auto px-4 md:px-6 py-10">
-        <h1 class="text-3xl font-bold text-ink-900 mb-2">عرض المكونات</h1>
-        <p class="text-ink-500">صفحة عرض تفاعلية تُظهر جميع مكونات وأنماط التفاعل.
-          كل عنصر قابل للتشغيل بلوحة المفاتيح وبدون أي نوافذ مضمّنة في المتصفح.</p>
-      </div>
-    </div>
-
-    <div class="max-w-7xl mx-auto px-4 md:px-6 py-8 space-y-16">
-
-      <!-- ─── § BUTTONS ────────────────────────────────────────────────── -->
-      <section id="buttons-sec" aria-labelledby="buttons-heading">
-        <h2 id="buttons-heading" class="sg-section-title">الأزرار <span class="sg-section-note">.btn</span></h2>
-
-        <div class="demo-card">
-          <h3 class="demo-label">الأنواع</h3>
-          <div class="demo-row">
-            <button class="btn btn-primary" type="button">أساسي</button>
-            <button class="btn btn-secondary" type="button">ثانوي</button>
-            <button class="btn btn-outline" type="button">محدد</button>
-            <button class="btn btn-ghost" type="button">شبح</button>
-            <button class="btn btn-danger" type="button">خطر</button>
-          </div>
+    <!-- ═══ Top bar ══════════════════════════════════════════════════════════ -->
+    <header class="sg-topbar">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between h-14 gap-4">
+        <div class="flex items-center gap-3">
+          <a
+            href="index.html"
+            class="flex items-center gap-2 no-underline"
+            aria-label="الصفحة الرئيسية"
+          >
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <rect width="32" height="32" rx="8" fill="#0E8186" />
+              <path
+                d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z"
+                fill="white"
+              />
+              <circle cx="16" cy="14" r="3" fill="#0E8186" />
+            </svg>
+            <span class="text-sm font-semibold text-lagoon-700">رحلاتي</span>
+          </a>
+          <span class="text-ink-300" aria-hidden="true">/</span>
+          <span class="text-sm font-medium text-ink-600">عرض المكونات</span>
         </div>
-
-        <div class="demo-card mt-4">
-          <h3 class="demo-label">الأحجام</h3>
-          <div class="demo-row items-center">
-            <button class="btn btn-primary btn-sm" type="button">صغير</button>
-            <button class="btn btn-primary" type="button">متوسط</button>
-            <button class="btn btn-primary btn-lg" type="button">كبير</button>
-          </div>
-        </div>
-
-        <div class="demo-card mt-4">
-          <h3 class="demo-label">حالات خاصة</h3>
-          <div class="demo-row items-center">
-            <button class="btn btn-primary btn-icon" type="button" aria-label="بحث">
-              <svg aria-hidden="true"><use href="#icon-search"/></svg>
-            </button>
-            <button class="btn btn-primary" type="button" aria-busy="true" disabled>
-              <span class="spinner" aria-hidden="true"></span>
-              جاري التحميل...
-            </button>
-            <button class="btn btn-primary" type="button" disabled>معطّل</button>
-            <button class="btn btn-primary" type="button">
-              <svg aria-hidden="true"><use href="#icon-plane"/></svg>
-              مع أيقونة
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ─── § BADGES ─────────────────────────────────────────────────── -->
-      <section id="badges-sec" aria-labelledby="badges-heading">
-        <h2 id="badges-heading" class="sg-section-title">الشارات <span class="sg-section-note">.badge</span></h2>
-
-        <div class="demo-card">
-          <h3 class="demo-label">الحالات</h3>
-          <div class="demo-row flex-wrap">
-            <span class="badge badge-neutral">محايد</span>
-            <span class="badge badge-success"><svg aria-hidden="true"><use href="#icon-check-circle"/></svg>نجاح</span>
-            <span class="badge badge-warning">تحذير</span>
-            <span class="badge badge-danger">خطأ</span>
-            <span class="badge badge-info"><svg aria-hidden="true"><use href="#icon-info"/></svg>معلومة</span>
-          </div>
-        </div>
-
-        <div class="demo-card mt-4">
-          <h3 class="demo-label">المصادر (Principle IX)</h3>
-          <div class="demo-row flex-wrap">
-            <span class="badge badge-source-partner"><svg aria-hidden="true"><use href="#icon-shield-check"/></svg>Partner</span>
-            <span class="badge badge-source-affiliate">Affiliate</span>
-            <span class="badge badge-source-manual">Manual Deal</span>
-            <span class="badge badge-source-api-ready">API Ready</span>
-          </div>
-        </div>
-
-        <div class="demo-card mt-4">
-          <h3 class="demo-label">خاصة</h3>
-          <div class="demo-row">
-            <span class="badge badge-verified"><svg aria-hidden="true"><use href="#icon-check-circle"/></svg>موثّق</span>
-            <span class="badge badge-featured"><svg aria-hidden="true"><use href="#icon-star"/></svg>مميّز</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- ─── § CARDS ───────────────────────────────────────────────────── -->
-      <section id="cards-sec" aria-labelledby="cards-heading">
-        <h2 id="cards-heading" class="sg-section-title">البطاقات <span class="sg-section-note">.card</span></h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-          <article class="card" aria-label="بطاقة قياسية">
-            <div class="card-badge-wrap">
-              <span class="badge badge-source-partner"><svg aria-hidden="true"><use href="#icon-shield-check"/></svg>Partner</span>
-              <span class="badge badge-featured">مميّز</span>
-            </div>
-            <img class="card-media" src="../assets/images/beach.svg" alt="شاطئ نموذجي" loading="lazy" width="400" height="225">
-            <div class="card-body">
-              <h3 class="card-title"><a href="#cards-sec" data-coming-soon>عطلة في شرم الشيخ – 4 ليالٍ</a></h3>
-              <p class="card-meta">
-                <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
-                شرم الشيخ، مصر
-                <span aria-hidden="true">·</span>
-                <svg class="w-3.5 h-3.5" aria-hidden="true" style="color:#F4BE52"><use href="#icon-star"/></svg>
-                4.7 <span class="text-ink-400">(248)</span>
-              </p>
-              <p class="price">ابتداءً من <strong>1,950</strong> ر.س</p>
-              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>عرض التفاصيل</button>
-            </div>
-          </article>
-
-          <article class="card" aria-label="بطاقة مدينة">
-            <div class="card-badge-wrap">
-              <span class="badge badge-source-affiliate">Affiliate</span>
-              <span class="badge badge-verified"><svg aria-hidden="true"><use href="#icon-check-circle"/></svg>موثّق</span>
-            </div>
-            <img class="card-media" src="../assets/images/city.svg" alt="أفق مدينة" loading="lazy" width="400" height="225">
-            <div class="card-body">
-              <h3 class="card-title"><a href="#cards-sec" data-coming-soon>رحلة إلى إسطنبول – 5 ليالٍ</a></h3>
-              <p class="card-meta">
-                <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
-                إسطنبول، تركيا
-                <span aria-hidden="true">·</span>
-                <svg class="w-3.5 h-3.5" aria-hidden="true" style="color:#F4BE52"><use href="#icon-star"/></svg>
-                4.8 <span class="text-ink-400">(391)</span>
-              </p>
-              <p class="price">ابتداءً من <strong>2,450</strong> ر.س</p>
-              <button type="button" class="btn btn-outline btn-sm w-full justify-center" data-coming-soon>اطلب الحجز</button>
-            </div>
-          </article>
-
-          <article class="card" aria-label="بطاقة طبيعية">
-            <div class="card-badge-wrap">
-              <span class="badge badge-source-manual">Manual Deal</span>
-            </div>
-            <img class="card-media" src="../assets/images/nature.svg" alt="منظر طبيعي" loading="lazy" width="400" height="225">
-            <div class="card-body">
-              <h3 class="card-title"><a href="#cards-sec" data-coming-soon>جبال الألب السويسرية – 5 ليالٍ</a></h3>
-              <p class="card-meta">
-                <svg class="w-4 h-4 text-ink-400" aria-hidden="true"><use href="#icon-location"/></svg>
-                سويسرا
-                <span aria-hidden="true">·</span>
-                <svg class="w-3.5 h-3.5" aria-hidden="true" style="color:#F4BE52"><use href="#icon-star"/></svg>
-                4.8 <span class="text-ink-400">(176)</span>
-              </p>
-              <p class="price">ابتداءً من <strong>6,950</strong> ر.س</p>
-              <button type="button" class="btn btn-primary btn-sm w-full justify-center" data-coming-soon>عرض التفاصيل</button>
-            </div>
-          </article>
-
-        </div>
-      </section>
-
-      <!-- ─── § MODAL ───────────────────────────────────────────────────── -->
-      <section id="modal-sec" aria-labelledby="modal-heading">
-        <h2 id="modal-heading" class="sg-section-title">النافذة المنبثقة <span class="sg-section-note">.modal — APG dialog</span></h2>
-
-        <div class="demo-card">
-          <h3 class="demo-label">تجربة النوافذ المنبثقة</h3>
-          <p class="text-sm text-ink-500 mb-4">افتح أي نافذة وتأكد من: انتقال التركيز داخلها، إغلاقها بـ Esc أو النقر خارجها، وعودة التركيز للزر المفتوح.</p>
-          <div class="demo-row flex-wrap">
-            <button class="btn btn-primary" type="button" data-modal-open="modal-sm">
-              نافذة صغيرة
-            </button>
-            <button class="btn btn-outline" type="button" data-modal-open="modal-md">
-              نافذة متوسطة
-            </button>
-            <button class="btn btn-secondary" type="button" data-modal-open="modal-confirm">
-              <svg aria-hidden="true"><use href="#icon-alert-triangle"/></svg>
-              نافذة تأكيد
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ─── § DRAWER ──────────────────────────────────────────────────── -->
-      <section id="drawer-sec" aria-labelledby="drawer-heading">
-        <h2 id="drawer-heading" class="sg-section-title">الدرج <span class="sg-section-note">.drawer — off-canvas</span></h2>
-
-        <div class="demo-card">
-          <h3 class="demo-label">تجربة الدرج</h3>
-          <p class="text-sm text-ink-500 mb-4">يظهر الدرج من الجانب الأيمن في RTL. يُغلق بـ Esc أو بالنقر على التعتيم أو زر الإغلاق.</p>
-          <div class="demo-row">
-            <button class="btn btn-primary" type="button" data-drawer-open="showcase-drawer">
-              <svg aria-hidden="true"><use href="#icon-menu"/></svg>
-              فتح الدرج
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ─── § TOAST ───────────────────────────────────────────────────── -->
-      <section id="toast-sec" aria-labelledby="toast-heading">
-        <h2 id="toast-heading" class="sg-section-title">الإشعارات <span class="sg-section-note">.toast — aria-live</span></h2>
-
-        <div class="demo-card">
-          <h3 class="demo-label">أنواع الإشعارات</h3>
-          <p class="text-sm text-ink-500 mb-4">تظهر الإشعارات في الزاوية السفلية وتختفي تلقائياً بعد 4 ثوانٍ. لا تسرق التركيز أبداً.</p>
-          <div class="demo-row flex-wrap">
-            <button class="btn btn-primary" type="button"
-              data-toast="تمت العملية بنجاح! يمكنك المتابعة." data-toast-type="success">
-              <svg aria-hidden="true"><use href="#icon-check-circle"/></svg>
-              إشعار نجاح
-            </button>
-            <button class="btn btn-danger" type="button"
-              data-toast="حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى." data-toast-type="error">
-              إشعار خطأ
-            </button>
-            <button class="btn btn-outline" type="button"
-              data-toast="تحذير: هذا الإجراء لا يمكن التراجع عنه." data-toast-type="warning">
-              <svg aria-hidden="true"><use href="#icon-alert-triangle"/></svg>
-              إشعار تحذير
-            </button>
-            <button class="btn btn-ghost" type="button"
-              data-toast="معلومة: هذه الصفحة قيد الإنشاء." data-toast-type="info">
-              <svg aria-hidden="true"><use href="#icon-info"/></svg>
-              إشعار معلومة
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ─── § FORM ────────────────────────────────────────────────────── -->
-      <section id="form-sec" aria-labelledby="form-heading">
-        <h2 id="form-heading" class="sg-section-title">التحقق من النموذج <span class="sg-section-note">.field — inline validation</span></h2>
-
-        <div class="demo-card max-w-2xl">
-          <h3 class="demo-label">نموذج تفاعلي</h3>
-          <p class="text-sm text-ink-500 mb-6">اضغط "إرسال" مع حقول فارغة لرؤية حالات الخطأ المضمّنة. أدخل بيانات صحيحة لرؤية حالة النجاح.</p>
-
-          <form data-validate novalidate class="space-y-5" aria-label="نموذج تجريبي">
-
-            <div class="field">
-              <label class="field-label" for="demo-name">الاسم الكامل <span aria-hidden="true" class="text-danger">*</span></label>
-              <input class="field-input" id="demo-name" name="name" type="text"
-                required minlength="3"
-                placeholder="مثال: أحمد محمد"
-                aria-describedby="demo-name-err"
-                autocomplete="name">
-              <p class="field-error" id="demo-name-err" role="alert" hidden>
-                <svg aria-hidden="true"><use href="#icon-alert-triangle"/></svg>
-                الرجاء إدخال اسمك الكامل (3 أحرف على الأقل).
-              </p>
-            </div>
-
-            <div class="field">
-              <label class="field-label" for="demo-email">البريد الإلكتروني <span aria-hidden="true" class="text-danger">*</span></label>
-              <input class="field-input" id="demo-email" name="email" type="email"
-                required
-                placeholder="example@domain.com"
-                aria-describedby="demo-email-err"
-                autocomplete="email"
-                dir="ltr">
-              <p class="field-error" id="demo-email-err" role="alert" hidden>
-                <svg aria-hidden="true"><use href="#icon-alert-triangle"/></svg>
-                الرجاء إدخال بريد إلكتروني صحيح.
-              </p>
-            </div>
-
-            <div class="field">
-              <label class="field-label" for="demo-phone">رقم الجوال (اختياري)</label>
-              <input class="field-input" id="demo-phone" name="phone" type="tel"
-                placeholder="+966 5x xxx xxxx"
-                dir="ltr">
-            </div>
-
-            <div class="field">
-              <label class="field-label" for="demo-dest">الوجهة المفضلة <span aria-hidden="true" class="text-danger">*</span></label>
-              <select class="field-select" id="demo-dest" name="destination" required aria-describedby="demo-dest-err">
-                <option value="">اختر وجهة...</option>
-                <option value="sharm">شرم الشيخ، مصر</option>
-                <option value="dubai">دبي، الإمارات</option>
-                <option value="istanbul">إسطنبول، تركيا</option>
-                <option value="paris">باريس، فرنسا</option>
-                <option value="maldives">المالديف</option>
-              </select>
-              <p class="field-error" id="demo-dest-err" role="alert" hidden>
-                <svg aria-hidden="true"><use href="#icon-alert-triangle"/></svg>
-                الرجاء اختيار وجهتك المفضلة.
-              </p>
-            </div>
-
-            <div class="field">
-              <label class="field-label" for="demo-notes">ملاحظات إضافية</label>
-              <textarea class="field-textarea" id="demo-notes" name="notes"
-                placeholder="أخبرنا بأي متطلبات خاصة..." rows="3"></textarea>
-              <p class="field-hint">اختياري. 500 حرف كحد أقصى.</p>
-            </div>
-
-            <div class="field">
-              <div class="field-check">
-                <input type="checkbox" id="demo-agree" name="agree" required aria-describedby="demo-agree-err">
-                <label class="field-check-label" for="demo-agree">أوافق على <a href="#" data-coming-soon class="text-lagoon-600 font-medium">الشروط والأحكام</a></label>
-              </div>
-              <p class="field-error" id="demo-agree-err" role="alert" hidden>
-                <svg aria-hidden="true"><use href="#icon-alert-triangle"/></svg>
-                يجب الموافقة على الشروط للمتابعة.
-              </p>
-            </div>
-
-            <div class="flex flex-wrap gap-3 pt-2">
-              <button type="submit" class="btn btn-primary btn-lg">
-                <svg aria-hidden="true"><use href="#icon-check-circle"/></svg>
-                إرسال النموذج
-              </button>
-              <button type="reset" class="btn btn-outline">إعادة تعيين</button>
-            </div>
-
-          </form>
-        </div>
-      </section>
-
-      <!-- ─── § SKELETON ────────────────────────────────────────────────── -->
-      <section id="skeleton-sec" aria-labelledby="skeleton-heading">
-        <h2 id="skeleton-heading" class="sg-section-title">حالة التحميل <span class="sg-section-note">.skeleton — shimmer animation</span></h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-          <!-- Skeleton card -->
-          <div class="card" aria-hidden="true" aria-label="جاري التحميل...">
-            <div class="skeleton skeleton-media"></div>
-            <div class="card-body space-y-3">
-              <div class="skeleton skeleton-line w-3/4"></div>
-              <div class="skeleton skeleton-line w-1/2 skeleton-line-sm"></div>
-              <div class="skeleton skeleton-line w-2/3 skeleton-line-sm"></div>
-              <div class="skeleton skeleton-line w-full" style="height:2.5rem;border-radius:.75rem"></div>
-            </div>
-          </div>
-
-          <!-- Skeleton card 2 -->
-          <div class="card" aria-hidden="true">
-            <div class="skeleton skeleton-media"></div>
-            <div class="card-body space-y-3">
-              <div class="skeleton skeleton-line"></div>
-              <div class="skeleton skeleton-line w-2/3 skeleton-line-sm"></div>
-              <div class="skeleton skeleton-line w-3/4 skeleton-line-sm"></div>
-              <div class="skeleton skeleton-line w-full" style="height:2.5rem;border-radius:.75rem"></div>
-            </div>
-          </div>
-
-          <!-- Skeleton card 3 -->
-          <div class="card" aria-hidden="true">
-            <div class="skeleton skeleton-media"></div>
-            <div class="card-body space-y-3">
-              <div class="skeleton skeleton-line w-4/5"></div>
-              <div class="skeleton skeleton-line w-1/3 skeleton-line-sm"></div>
-              <div class="skeleton skeleton-line w-1/2 skeleton-line-sm"></div>
-              <div class="skeleton skeleton-line w-full" style="height:2.5rem;border-radius:.75rem"></div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Skeleton list items -->
-        <div class="demo-card mt-6">
-          <h3 class="demo-label">عناصر قائمة</h3>
-          <div class="space-y-3 mt-3">
-            <div class="flex items-center gap-3" aria-hidden="true">
-              <div class="skeleton skeleton-avatar w-10 h-10 flex-none"></div>
-              <div class="flex-1 space-y-2">
-                <div class="skeleton skeleton-line w-1/3"></div>
-                <div class="skeleton skeleton-line w-1/2 skeleton-line-sm"></div>
-              </div>
-            </div>
-            <div class="flex items-center gap-3" aria-hidden="true">
-              <div class="skeleton skeleton-avatar w-10 h-10 flex-none"></div>
-              <div class="flex-1 space-y-2">
-                <div class="skeleton skeleton-line w-1/2"></div>
-                <div class="skeleton skeleton-line w-1/3 skeleton-line-sm"></div>
-              </div>
-            </div>
-            <div class="flex items-center gap-3" aria-hidden="true">
-              <div class="skeleton skeleton-avatar w-10 h-10 flex-none"></div>
-              <div class="flex-1 space-y-2">
-                <div class="skeleton skeleton-line w-2/5"></div>
-                <div class="skeleton skeleton-line w-3/5 skeleton-line-sm"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ─── § EMPTY STATE ─────────────────────────────────────────────── -->
-      <section id="empty-sec" aria-labelledby="empty-heading">
-        <h2 id="empty-heading" class="sg-section-title">حالة الفراغ <span class="sg-section-note">.empty-state</span></h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-          <!-- Generic empty state -->
-          <div class="demo-card">
-            <h3 class="demo-label">عام</h3>
-            <div class="empty-state">
-              <svg class="empty-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
-              <h3 class="empty-title">لا توجد عناصر بعد</h3>
-              <p class="empty-text">لم يتم إضافة أي عروض حتى الآن. تصفّح الوجهات المتاحة لإضافة عروضك المفضلة.</p>
-              <button type="button" class="btn btn-primary" data-coming-soon>تصفّح الوجهات</button>
-            </div>
-          </div>
-
-          <!-- Search empty state -->
-          <div class="demo-card">
-            <h3 class="demo-label">نتائج بحث فارغة</h3>
-            <div class="empty-state">
-              <svg class="empty-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <h3 class="empty-title">لا توجد نتائج</h3>
-              <p class="empty-text">لم يتم العثور على عروض مطابقة لـ "باريس في ديسمبر". جرّب تعديل معايير البحث.</p>
-              <button type="button" class="btn btn-outline" data-coming-soon>
-                <svg aria-hidden="true"><use href="#icon-arrow-left"/></svg>
-                بحث جديد
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- ─── § INLINE MESSAGES ─────────────────────────────────────────── -->
-      <section id="msg-sec" aria-labelledby="msg-heading">
-        <h2 id="msg-heading" class="sg-section-title">الرسائل المضمّنة <span class="sg-section-note">.inline-msg</span></h2>
-        <div class="space-y-4 max-w-2xl">
-
-          <div class="inline-msg inline-msg-info" role="status">
-            <svg class="inline-msg-icon" aria-hidden="true"><use href="#icon-info"/></svg>
-            <div>
-              <strong class="block mb-0.5">معلومة:</strong>
-              هذه الصفحة مرجع داخلي للمطورين وفريق الجودة فقط. لا تُعرض للمستخدمين العاديين.
-            </div>
-          </div>
-
-          <div class="inline-msg inline-msg-success" role="status">
-            <svg class="inline-msg-icon" aria-hidden="true"><use href="#icon-check-circle"/></svg>
-            <div>
-              <strong class="block mb-0.5">تم بنجاح!</strong>
-              تم تحديث تفضيلاتك وحفظها. ستظهر التغييرات عند إعادة تحميل الصفحة.
-            </div>
-          </div>
-
-          <div class="inline-msg inline-msg-warning" role="status">
-            <svg class="inline-msg-icon" aria-hidden="true"><use href="#icon-alert-triangle"/></svg>
-            <div>
-              <strong class="block mb-0.5">تحذير:</strong>
-              الأسعار المعروضة تقديرية وقابلة للتغيير. تأكد من السعر النهائي قبل إتمام الحجز.
-            </div>
-          </div>
-
-          <div class="inline-msg inline-msg-error" role="alert">
-            <svg class="inline-msg-icon" aria-hidden="true"><use href="#icon-alert-triangle"/></svg>
-            <div>
-              <strong class="block mb-0.5">خطأ:</strong>
-              تعذّر إكمال العملية. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- ─── § COPY TO CLIPBOARD ──────────────────────────────────────── -->
-      <section id="copy-sec" aria-labelledby="copy-heading">
-        <h2 id="copy-heading" class="sg-section-title">النسخ للحافظة <span class="sg-section-note">TUI.copyToClipboard</span></h2>
-
-        <div class="demo-card max-w-xl">
-          <h3 class="demo-label">نسخ القيم</h3>
-          <p class="text-sm text-ink-500 mb-5">كل زر نسخ يضع النص في الحافظة ويعرض إشعاراً بالنجاح — بدون أي نافذة متصفح.</p>
-
-          <div class="space-y-3">
-
-            <div class="flex items-center gap-3 p-3 bg-ink-50 rounded-xl border border-ink-200">
-              <code id="code-cmd" class="flex-1 text-sm text-ink-700 font-mono">npm run build</code>
-              <button type="button" class="btn btn-outline btn-sm flex-none" aria-label="نسخ الأمر" data-copy="npm run build">
-                <svg aria-hidden="true"><use href="#icon-copy"/></svg>
-                نسخ
-              </button>
-            </div>
-
-            <div class="flex items-center gap-3 p-3 bg-ink-50 rounded-xl border border-ink-200">
-              <code class="flex-1 text-sm text-lagoon-700 font-mono">http://localhost:3000/pages/index.html</code>
-              <button type="button" class="btn btn-outline btn-sm flex-none" aria-label="نسخ الرابط" data-copy="http://localhost:3000/pages/index.html">
-                <svg aria-hidden="true"><use href="#icon-copy"/></svg>
-                نسخ
-              </button>
-            </div>
-
-            <div class="flex items-center gap-3 p-3 bg-lagoon-950 rounded-xl">
-              <code class="flex-1 text-sm text-lagoon-200 font-mono">#0E8186</code>
-              <button type="button" class="btn btn-sm btn-outline-white flex-none" aria-label="نسخ كود اللون" data-copy="#0E8186">
-                <svg aria-hidden="true"><use href="#icon-copy"/></svg>
-                نسخ
-              </button>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-    </div><!-- /max-w-7xl -->
-  </main>
-
-  <!-- Footer -->
-  <footer class="mt-16 border-t border-ink-200 py-6 text-center text-sm text-ink-400">
-    <p>عرض المكونات — رحلاتي · مرجع داخلي · <a href="index.html" class="text-lagoon-600">الصفحة الرئيسية</a> · <a href="styleguide.html" class="text-lagoon-600">دليل التصميم</a></p>
-  </footer>
-
-  <!-- ═══ MODALS ════════════════════════════════════════════════════════════ -->
-
-  <!-- Modal: Small -->
-  <div class="modal modal-sm" data-modal="modal-sm" role="dialog" aria-modal="true" aria-labelledby="modal-sm-title" hidden>
-    <div class="modal-overlay" data-modal-close aria-hidden="true"></div>
-    <div class="modal-panel">
-      <div class="modal-header">
-        <h2 id="modal-sm-title" class="modal-title">نافذة صغيرة</h2>
-        <button class="modal-close" type="button" aria-label="إغلاق النافذة" data-modal-close>
-          <svg aria-hidden="true"><use href="#icon-close"/></svg>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p class="text-ink-600 leading-relaxed">هذه نافذة منبثقة صغيرة. يمكن إغلاقها بالضغط على Esc أو النقر خارجها أو الضغط على زر الإغلاق.</p>
-        <p class="text-sm text-ink-400 mt-3">التركيز محاصر داخل النافذة ولا يمكنه الخروج حتى الإغلاق.</p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline btn-sm" type="button" data-modal-close>إلغاء</button>
-        <button class="btn btn-primary btn-sm" type="button" data-modal-close
-          data-toast="تم الحفظ بنجاح!" data-toast-type="success">
-          حفظ
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Medium -->
-  <div class="modal" data-modal="modal-md" role="dialog" aria-modal="true" aria-labelledby="modal-md-title" hidden>
-    <div class="modal-overlay" data-modal-close aria-hidden="true"></div>
-    <div class="modal-panel">
-      <div class="modal-header">
-        <h2 id="modal-md-title" class="modal-title">تفاصيل العرض</h2>
-        <button class="modal-close" type="button" aria-label="إغلاق النافذة" data-modal-close>
-          <svg aria-hidden="true"><use href="#icon-close"/></svg>
-        </button>
-      </div>
-      <div class="modal-body space-y-4">
-        <img src="../assets/images/beach.svg" alt="شاطئ شرم الشيخ" class="w-full rounded-xl" style="aspect-ratio:16/9;object-fit:cover" loading="lazy">
-        <div class="flex flex-wrap gap-2">
-          <span class="badge badge-source-partner"><svg aria-hidden="true"><use href="#icon-shield-check"/></svg>Partner</span>
-          <span class="badge badge-featured">مميّز</span>
-          <span class="badge badge-verified"><svg aria-hidden="true"><use href="#icon-check-circle"/></svg>موثّق</span>
-        </div>
-        <div>
-          <h3 class="text-xl font-bold text-ink-800 mb-1">عطلة في شرم الشيخ – 4 ليالٍ</h3>
-          <p class="text-ink-500 text-sm flex items-center gap-1">
-            <svg class="w-4 h-4" aria-hidden="true"><use href="#icon-location"/></svg>
-            شرم الشيخ، مصر
-          </p>
-        </div>
-        <p class="text-ink-600 leading-relaxed">استمتع بعطلة رائعة في شرم الشيخ مع إطلالات خلابة على البحر الأحمر. الباقة تشمل الإقامة والإفطار ورحلات الغطس.</p>
-        <div class="flex items-baseline gap-2">
-          <span class="text-sm text-ink-500">ابتداءً من</span>
-          <span class="text-2xl font-bold text-lagoon-700">1,950</span>
-          <span class="text-sm text-ink-500">ر.س للشخص</span>
+        <div class="flex items-center gap-2">
+          <a href="styleguide.html" class="btn btn-outline btn-sm hidden md:flex">دليل التصميم</a>
+          <a href="index.html" class="btn btn-primary btn-sm">الرئيسية</a>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline btn-sm" type="button" data-modal-close>إلغاء</button>
-        <button class="btn btn-primary btn-sm" type="button" data-modal-close data-coming-soon>اطلب الحجز</button>
-      </div>
-    </div>
-  </div>
+    </header>
 
-  <!-- Modal: Confirm -->
-  <div class="modal modal-sm" data-modal="modal-confirm" role="dialog" aria-modal="true" aria-labelledby="modal-confirm-title" hidden>
-    <div class="modal-overlay" data-modal-close aria-hidden="true"></div>
-    <div class="modal-panel">
-      <div class="modal-header">
-        <h2 id="modal-confirm-title" class="modal-title">تأكيد الإجراء</h2>
-        <button class="modal-close" type="button" aria-label="إغلاق" data-modal-close>
-          <svg aria-hidden="true"><use href="#icon-close"/></svg>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="inline-msg inline-msg-warning mb-4" role="status">
-          <svg class="inline-msg-icon" aria-hidden="true"><use href="#icon-alert-triangle"/></svg>
-          <span>هذا الإجراء لا يمكن التراجع عنه. هل أنت متأكد؟</span>
-        </div>
-        <p class="text-sm text-ink-500">سيتم حذف جميع البيانات المرتبطة وقد لا يمكن استعادتها.</p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline btn-sm" type="button" data-modal-close>إلغاء</button>
-        <button class="btn btn-danger btn-sm" type="button" data-modal-close
-          data-toast="تم تنفيذ الإجراء." data-toast-type="info">
-          نعم، تأكيد
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SHOWCASE DRAWER ═══════════════════════════════════════════════ -->
-  <div class="drawer drawer-start" data-drawer="showcase-drawer" role="dialog" aria-modal="true" aria-label="درج العرض التجريبي" hidden>
-    <div class="drawer-overlay" data-drawer-close aria-hidden="true"></div>
-    <nav class="drawer-panel" aria-label="محتوى الدرج التجريبي">
-      <div class="flex items-center justify-between p-4 border-b border-ink-100">
-        <h2 class="text-lg font-bold text-ink-800">محتوى الدرج</h2>
-        <button type="button" class="btn btn-ghost btn-icon" aria-label="إغلاق الدرج" data-drawer-close>
-          <svg aria-hidden="true"><use href="#icon-close"/></svg>
-        </button>
-      </div>
-      <div class="flex-1 p-4 space-y-4">
-        <p class="text-sm text-ink-500">هذا درج تجريبي. يمكن إغلاقه بـ Esc أو النقر على التعتيم أو زر الإغلاق.</p>
-        <div class="space-y-2">
-          <button type="button" class="btn btn-outline w-full justify-center" data-drawer-close data-toast="تم اختيار الوجهة" data-toast-type="success">
-            شرم الشيخ، مصر
-          </button>
-          <button type="button" class="btn btn-outline w-full justify-center" data-drawer-close data-toast="تم اختيار الوجهة" data-toast-type="success">
-            دبي، الإمارات
-          </button>
-          <button type="button" class="btn btn-outline w-full justify-center" data-drawer-close data-toast="تم اختيار الوجهة" data-toast-type="success">
-            إسطنبول، تركيا
-          </button>
-        </div>
-        <div class="pt-4 border-t border-ink-100">
-          <p class="text-xs text-ink-400 mb-3">اختبار إدارة التركيز:</p>
-          <div class="field">
-            <label class="field-label" for="drawer-input">بحث سريع</label>
-            <input class="field-input" id="drawer-input" type="search" placeholder="ابحث عن وجهة...">
-          </div>
-        </div>
-      </div>
-      <div class="p-4 border-t border-ink-100">
-        <button type="button" class="btn btn-primary w-full justify-center" data-drawer-close>تأكيد الاختيار</button>
+    <!-- Sticky section navigation -->
+    <nav class="sg-subnav" aria-label="أقسام عرض المكونات">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <ul class="sg-subnav-list">
+          <li><a href="#buttons-sec" class="sg-subnav-link">الأزرار</a></li>
+          <li><a href="#badges-sec" class="sg-subnav-link">الشارات</a></li>
+          <li><a href="#cards-sec" class="sg-subnav-link">البطاقات</a></li>
+          <li><a href="#modal-sec" class="sg-subnav-link">النافذة المنبثقة</a></li>
+          <li><a href="#drawer-sec" class="sg-subnav-link">الدرج</a></li>
+          <li><a href="#toast-sec" class="sg-subnav-link">الإشعارات</a></li>
+          <li><a href="#form-sec" class="sg-subnav-link">نموذج</a></li>
+          <li><a href="#skeleton-sec" class="sg-subnav-link">تحميل</a></li>
+          <li><a href="#empty-sec" class="sg-subnav-link">فراغ</a></li>
+          <li><a href="#msg-sec" class="sg-subnav-link">رسائل</a></li>
+          <li><a href="#copy-sec" class="sg-subnav-link">نسخ</a></li>
+        </ul>
       </div>
     </nav>
-  </div>
 
-  <!-- Toast mount -->
-  <div id="toast-root" aria-live="polite" aria-atomic="false"></div>
+    <!-- ═══ Main ══════════════════════════════════════════════════════════════ -->
+    <main id="main" tabindex="-1">
+      <!-- Page hero -->
+      <div class="sg-hero">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-10">
+          <h1 class="text-3xl font-bold text-ink-900 mb-2">عرض المكونات</h1>
+          <p class="text-ink-500">
+            صفحة عرض تفاعلية تُظهر جميع مكونات وأنماط التفاعل. كل عنصر قابل للتشغيل بلوحة المفاتيح
+            وبدون أي نوافذ مضمّنة في المتصفح.
+          </p>
+        </div>
+      </div>
 
-  <!-- Scripts -->
-  <script src="../src/js/ui.js" defer></script>
-  <script src="../src/js/main.js" defer></script>
+      <div class="max-w-7xl mx-auto px-4 md:px-6 py-8 space-y-16">
+        <!-- ─── § BUTTONS ────────────────────────────────────────────────── -->
+        <section id="buttons-sec" aria-labelledby="buttons-heading">
+          <h2 id="buttons-heading" class="sg-section-title">
+            الأزرار <span class="sg-section-note">.btn</span>
+          </h2>
 
-  <!-- Page-scoped styles -->
-  <style>
-    /* Chrome shared with styleguide */
-    .sg-topbar { position:sticky; top:0; z-index:50; background:rgba(255,255,255,0.95); backdrop-filter:blur(8px); border-bottom:1px solid #EEF1F5; }
-    .sg-subnav { position:sticky; top:3.5rem; z-index:40; background:white; border-bottom:1px solid #EEF1F5; box-shadow:0 1px 3px rgb(38 46 58 / 0.05); overflow-x:auto; }
-    .sg-subnav-list { display:flex; gap:0; list-style:none; margin:0; padding:0; min-width:max-content; }
-    .sg-subnav-link { display:block; padding:.5rem .875rem; font-size:.875rem; font-weight:500; color:#6B7889; text-decoration:none; white-space:nowrap; border-bottom:2px solid transparent; transition:color 150ms,border-color 150ms; }
-    .sg-subnav-link:hover { color:#0E8186; border-bottom-color:#0E8186; }
-    .sg-hero { background:linear-gradient(135deg, #ECFBFB 0%, white 60%); border-bottom:1px solid #EEF1F5; }
-    .sg-section-title { font-size:1.5rem; font-weight:800; color:#262E3A; padding-bottom:1rem; margin-bottom:1.5rem; border-bottom:2px solid #EEF1F5; display:flex; align-items:baseline; gap:.75rem; }
-    .sg-section-note { font-size:.875rem; font-weight:400; color:#9AA6B4; }
+          <div class="demo-card">
+            <h3 class="demo-label">الأنواع</h3>
+            <div class="demo-row">
+              <button class="btn btn-primary" type="button">أساسي</button>
+              <button class="btn btn-secondary" type="button">ثانوي</button>
+              <button class="btn btn-outline" type="button">محدد</button>
+              <button class="btn btn-ghost" type="button">شبح</button>
+              <button class="btn btn-danger" type="button">خطر</button>
+            </div>
+          </div>
 
-    /* Demo blocks */
-    .demo-card { background:white; border-radius:1rem; padding:1.5rem; box-shadow:0 1px 3px rgb(38 46 58 / 0.06); }
-    .demo-label { font-size:.875rem; font-weight:700; color:#6B7889; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.875rem; }
-    .demo-row { display:flex; flex-wrap:wrap; gap:.75rem; align-items:flex-start; }
+          <div class="demo-card mt-4">
+            <h3 class="demo-label">الأحجام</h3>
+            <div class="demo-row items-center">
+              <button class="btn btn-primary btn-sm" type="button">صغير</button>
+              <button class="btn btn-primary" type="button">متوسط</button>
+              <button class="btn btn-primary btn-lg" type="button">كبير</button>
+            </div>
+          </div>
 
-    /* Utilities */
-    .no-underline { text-decoration:none !important; }
-    .w-full { width:100%; }
-    .justify-center { justify-content:center; }
-    .text-danger { color:#D64545; }
-    .space-y-2 > * + * { margin-top:.5rem; }
-    .space-y-3 > * + * { margin-top:.75rem; }
-    .space-y-4 > * + * { margin-top:1rem; }
-    .space-y-5 > * + * { margin-top:1.25rem; }
-    code { font-family: ui-monospace, 'Courier New', monospace; }
-  </style>
+          <div class="demo-card mt-4">
+            <h3 class="demo-label">حالات خاصة</h3>
+            <div class="demo-row items-center">
+              <button class="btn btn-primary btn-icon" type="button" aria-label="بحث">
+                <svg aria-hidden="true"><use href="#icon-search" /></svg>
+              </button>
+              <button class="btn btn-primary" type="button" aria-busy="true" disabled>
+                <span class="spinner" aria-hidden="true"></span>
+                جاري التحميل...
+              </button>
+              <button class="btn btn-primary" type="button" disabled>معطّل</button>
+              <button class="btn btn-primary" type="button">
+                <svg aria-hidden="true"><use href="#icon-plane" /></svg>
+                مع أيقونة
+              </button>
+            </div>
+          </div>
+        </section>
 
-</body>
+        <!-- ─── § BADGES ─────────────────────────────────────────────────── -->
+        <section id="badges-sec" aria-labelledby="badges-heading">
+          <h2 id="badges-heading" class="sg-section-title">
+            الشارات <span class="sg-section-note">.badge</span>
+          </h2>
+
+          <div class="demo-card">
+            <h3 class="demo-label">الحالات</h3>
+            <div class="demo-row flex-wrap">
+              <span class="badge badge-neutral">محايد</span>
+              <span class="badge badge-success"
+                ><svg aria-hidden="true"><use href="#icon-check-circle" /></svg>نجاح</span
+              >
+              <span class="badge badge-warning">تحذير</span>
+              <span class="badge badge-danger">خطأ</span>
+              <span class="badge badge-info"
+                ><svg aria-hidden="true"><use href="#icon-info" /></svg>معلومة</span
+              >
+            </div>
+          </div>
+
+          <div class="demo-card mt-4">
+            <h3 class="demo-label">المصادر (Principle IX)</h3>
+            <div class="demo-row flex-wrap">
+              <span class="badge badge-source-partner"
+                ><svg aria-hidden="true"><use href="#icon-shield-check" /></svg>Partner</span
+              >
+              <span class="badge badge-source-affiliate">Affiliate</span>
+              <span class="badge badge-source-manual">Manual Deal</span>
+              <span class="badge badge-source-api-ready">API Ready</span>
+            </div>
+          </div>
+
+          <div class="demo-card mt-4">
+            <h3 class="demo-label">خاصة</h3>
+            <div class="demo-row">
+              <span class="badge badge-verified"
+                ><svg aria-hidden="true"><use href="#icon-check-circle" /></svg>موثّق</span
+              >
+              <span class="badge badge-featured"
+                ><svg aria-hidden="true"><use href="#icon-star" /></svg>مميّز</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── § CARDS ───────────────────────────────────────────────────── -->
+        <section id="cards-sec" aria-labelledby="cards-heading">
+          <h2 id="cards-heading" class="sg-section-title">
+            البطاقات <span class="sg-section-note">.card</span>
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <article class="card" aria-label="بطاقة قياسية">
+              <div class="card-badge-wrap">
+                <span class="badge badge-source-partner"
+                  ><svg aria-hidden="true"><use href="#icon-shield-check" /></svg>Partner</span
+                >
+                <span class="badge badge-featured">مميّز</span>
+              </div>
+              <img
+                class="card-media"
+                src="../assets/images/beach.svg"
+                alt="شاطئ نموذجي"
+                loading="lazy"
+                width="400"
+                height="225"
+              />
+              <div class="card-body">
+                <h3 class="card-title">
+                  <a href="#cards-sec" data-coming-soon>عطلة في شرم الشيخ – 4 ليالٍ</a>
+                </h3>
+                <p class="card-meta">
+                  <svg class="w-4 h-4 text-ink-400" aria-hidden="true">
+                    <use href="#icon-location" />
+                  </svg>
+                  شرم الشيخ، مصر
+                  <span aria-hidden="true">·</span>
+                  <svg class="w-3.5 h-3.5" aria-hidden="true" style="color: #f4be52">
+                    <use href="#icon-star" />
+                  </svg>
+                  4.7 <span class="text-ink-400">(248)</span>
+                </p>
+                <p class="price">ابتداءً من <strong>1,950</strong> ر.س</p>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm w-full justify-center"
+                  data-coming-soon
+                >
+                  عرض التفاصيل
+                </button>
+              </div>
+            </article>
+
+            <article class="card" aria-label="بطاقة مدينة">
+              <div class="card-badge-wrap">
+                <span class="badge badge-source-affiliate">Affiliate</span>
+                <span class="badge badge-verified"
+                  ><svg aria-hidden="true"><use href="#icon-check-circle" /></svg>موثّق</span
+                >
+              </div>
+              <img
+                class="card-media"
+                src="../assets/images/city.svg"
+                alt="أفق مدينة"
+                loading="lazy"
+                width="400"
+                height="225"
+              />
+              <div class="card-body">
+                <h3 class="card-title">
+                  <a href="#cards-sec" data-coming-soon>رحلة إلى إسطنبول – 5 ليالٍ</a>
+                </h3>
+                <p class="card-meta">
+                  <svg class="w-4 h-4 text-ink-400" aria-hidden="true">
+                    <use href="#icon-location" />
+                  </svg>
+                  إسطنبول، تركيا
+                  <span aria-hidden="true">·</span>
+                  <svg class="w-3.5 h-3.5" aria-hidden="true" style="color: #f4be52">
+                    <use href="#icon-star" />
+                  </svg>
+                  4.8 <span class="text-ink-400">(391)</span>
+                </p>
+                <p class="price">ابتداءً من <strong>2,450</strong> ر.س</p>
+                <button
+                  type="button"
+                  class="btn btn-outline btn-sm w-full justify-center"
+                  data-coming-soon
+                >
+                  اطلب الحجز
+                </button>
+              </div>
+            </article>
+
+            <article class="card" aria-label="بطاقة طبيعية">
+              <div class="card-badge-wrap">
+                <span class="badge badge-source-manual">Manual Deal</span>
+              </div>
+              <img
+                class="card-media"
+                src="../assets/images/nature.svg"
+                alt="منظر طبيعي"
+                loading="lazy"
+                width="400"
+                height="225"
+              />
+              <div class="card-body">
+                <h3 class="card-title">
+                  <a href="#cards-sec" data-coming-soon>جبال الألب السويسرية – 5 ليالٍ</a>
+                </h3>
+                <p class="card-meta">
+                  <svg class="w-4 h-4 text-ink-400" aria-hidden="true">
+                    <use href="#icon-location" />
+                  </svg>
+                  سويسرا
+                  <span aria-hidden="true">·</span>
+                  <svg class="w-3.5 h-3.5" aria-hidden="true" style="color: #f4be52">
+                    <use href="#icon-star" />
+                  </svg>
+                  4.8 <span class="text-ink-400">(176)</span>
+                </p>
+                <p class="price">ابتداءً من <strong>6,950</strong> ر.س</p>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm w-full justify-center"
+                  data-coming-soon
+                >
+                  عرض التفاصيل
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- ─── § MODAL ───────────────────────────────────────────────────── -->
+        <section id="modal-sec" aria-labelledby="modal-heading">
+          <h2 id="modal-heading" class="sg-section-title">
+            النافذة المنبثقة <span class="sg-section-note">.modal — APG dialog</span>
+          </h2>
+
+          <div class="demo-card">
+            <h3 class="demo-label">تجربة النوافذ المنبثقة</h3>
+            <p class="text-sm text-ink-500 mb-4">
+              افتح أي نافذة وتأكد من: انتقال التركيز داخلها، إغلاقها بـ Esc أو النقر خارجها، وعودة
+              التركيز للزر المفتوح.
+            </p>
+            <div class="demo-row flex-wrap">
+              <button class="btn btn-primary" type="button" data-modal-open="modal-sm">
+                نافذة صغيرة
+              </button>
+              <button class="btn btn-outline" type="button" data-modal-open="modal-md">
+                نافذة متوسطة
+              </button>
+              <button class="btn btn-secondary" type="button" data-modal-open="modal-confirm">
+                <svg aria-hidden="true"><use href="#icon-alert-triangle" /></svg>
+                نافذة تأكيد
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── § DRAWER ──────────────────────────────────────────────────── -->
+        <section id="drawer-sec" aria-labelledby="drawer-heading">
+          <h2 id="drawer-heading" class="sg-section-title">
+            الدرج <span class="sg-section-note">.drawer — off-canvas</span>
+          </h2>
+
+          <div class="demo-card">
+            <h3 class="demo-label">تجربة الدرج</h3>
+            <p class="text-sm text-ink-500 mb-4">
+              يظهر الدرج من الجانب الأيمن في RTL. يُغلق بـ Esc أو بالنقر على التعتيم أو زر الإغلاق.
+            </p>
+            <div class="demo-row">
+              <button class="btn btn-primary" type="button" data-drawer-open="showcase-drawer">
+                <svg aria-hidden="true"><use href="#icon-menu" /></svg>
+                فتح الدرج
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── § TOAST ───────────────────────────────────────────────────── -->
+        <section id="toast-sec" aria-labelledby="toast-heading">
+          <h2 id="toast-heading" class="sg-section-title">
+            الإشعارات <span class="sg-section-note">.toast — aria-live</span>
+          </h2>
+
+          <div class="demo-card">
+            <h3 class="demo-label">أنواع الإشعارات</h3>
+            <p class="text-sm text-ink-500 mb-4">
+              تظهر الإشعارات في الزاوية السفلية وتختفي تلقائياً بعد 4 ثوانٍ. لا تسرق التركيز أبداً.
+            </p>
+            <div class="demo-row flex-wrap">
+              <button
+                class="btn btn-primary"
+                type="button"
+                data-toast="تمت العملية بنجاح! يمكنك المتابعة."
+                data-toast-type="success"
+              >
+                <svg aria-hidden="true"><use href="#icon-check-circle" /></svg>
+                إشعار نجاح
+              </button>
+              <button
+                class="btn btn-danger"
+                type="button"
+                data-toast="حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى."
+                data-toast-type="error"
+              >
+                إشعار خطأ
+              </button>
+              <button
+                class="btn btn-outline"
+                type="button"
+                data-toast="تحذير: هذا الإجراء لا يمكن التراجع عنه."
+                data-toast-type="warning"
+              >
+                <svg aria-hidden="true"><use href="#icon-alert-triangle" /></svg>
+                إشعار تحذير
+              </button>
+              <button
+                class="btn btn-ghost"
+                type="button"
+                data-toast="معلومة: هذه الصفحة قيد الإنشاء."
+                data-toast-type="info"
+              >
+                <svg aria-hidden="true"><use href="#icon-info" /></svg>
+                إشعار معلومة
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── § FORM ────────────────────────────────────────────────────── -->
+        <section id="form-sec" aria-labelledby="form-heading">
+          <h2 id="form-heading" class="sg-section-title">
+            التحقق من النموذج <span class="sg-section-note">.field — inline validation</span>
+          </h2>
+
+          <div class="demo-card max-w-2xl">
+            <h3 class="demo-label">نموذج تفاعلي</h3>
+            <p class="text-sm text-ink-500 mb-6">
+              اضغط "إرسال" مع حقول فارغة لرؤية حالات الخطأ المضمّنة. أدخل بيانات صحيحة لرؤية حالة
+              النجاح.
+            </p>
+
+            <form data-validate novalidate class="space-y-5" aria-label="نموذج تجريبي">
+              <div class="field">
+                <label class="field-label" for="demo-name"
+                  >الاسم الكامل <span aria-hidden="true" class="text-danger">*</span></label
+                >
+                <input
+                  class="field-input"
+                  id="demo-name"
+                  name="name"
+                  type="text"
+                  required
+                  minlength="3"
+                  placeholder="مثال: أحمد محمد"
+                  aria-describedby="demo-name-err"
+                  autocomplete="name"
+                />
+                <p class="field-error" id="demo-name-err" role="alert" hidden>
+                  <svg aria-hidden="true"><use href="#icon-alert-triangle" /></svg>
+                  الرجاء إدخال اسمك الكامل (3 أحرف على الأقل).
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="demo-email"
+                  >البريد الإلكتروني <span aria-hidden="true" class="text-danger">*</span></label
+                >
+                <input
+                  class="field-input"
+                  id="demo-email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="example@domain.com"
+                  aria-describedby="demo-email-err"
+                  autocomplete="email"
+                  dir="ltr"
+                />
+                <p class="field-error" id="demo-email-err" role="alert" hidden>
+                  <svg aria-hidden="true"><use href="#icon-alert-triangle" /></svg>
+                  الرجاء إدخال بريد إلكتروني صحيح.
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="demo-phone">رقم الجوال (اختياري)</label>
+                <input
+                  class="field-input"
+                  id="demo-phone"
+                  name="phone"
+                  type="tel"
+                  placeholder="+966 5x xxx xxxx"
+                  dir="ltr"
+                />
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="demo-dest"
+                  >الوجهة المفضلة <span aria-hidden="true" class="text-danger">*</span></label
+                >
+                <select
+                  class="field-select"
+                  id="demo-dest"
+                  name="destination"
+                  required
+                  aria-describedby="demo-dest-err"
+                >
+                  <option value="">اختر وجهة...</option>
+                  <option value="sharm">شرم الشيخ، مصر</option>
+                  <option value="dubai">دبي، الإمارات</option>
+                  <option value="istanbul">إسطنبول، تركيا</option>
+                  <option value="paris">باريس، فرنسا</option>
+                  <option value="maldives">المالديف</option>
+                </select>
+                <p class="field-error" id="demo-dest-err" role="alert" hidden>
+                  <svg aria-hidden="true"><use href="#icon-alert-triangle" /></svg>
+                  الرجاء اختيار وجهتك المفضلة.
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="demo-notes">ملاحظات إضافية</label>
+                <textarea
+                  class="field-textarea"
+                  id="demo-notes"
+                  name="notes"
+                  placeholder="أخبرنا بأي متطلبات خاصة..."
+                  rows="3"
+                ></textarea>
+                <p class="field-hint">اختياري. 500 حرف كحد أقصى.</p>
+              </div>
+
+              <div class="field">
+                <div class="field-check">
+                  <input
+                    type="checkbox"
+                    id="demo-agree"
+                    name="agree"
+                    required
+                    aria-describedby="demo-agree-err"
+                  />
+                  <label class="field-check-label" for="demo-agree"
+                    >أوافق على
+                    <a href="#" data-coming-soon class="text-lagoon-600 font-medium"
+                      >الشروط والأحكام</a
+                    ></label
+                  >
+                </div>
+                <p class="field-error" id="demo-agree-err" role="alert" hidden>
+                  <svg aria-hidden="true"><use href="#icon-alert-triangle" /></svg>
+                  يجب الموافقة على الشروط للمتابعة.
+                </p>
+              </div>
+
+              <div class="flex flex-wrap gap-3 pt-2">
+                <button type="submit" class="btn btn-primary btn-lg">
+                  <svg aria-hidden="true"><use href="#icon-check-circle" /></svg>
+                  إرسال النموذج
+                </button>
+                <button type="reset" class="btn btn-outline">إعادة تعيين</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- ─── § SKELETON ────────────────────────────────────────────────── -->
+        <section id="skeleton-sec" aria-labelledby="skeleton-heading">
+          <h2 id="skeleton-heading" class="sg-section-title">
+            حالة التحميل <span class="sg-section-note">.skeleton — shimmer animation</span>
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Skeleton card -->
+            <div class="card" aria-hidden="true" aria-label="جاري التحميل...">
+              <div class="skeleton skeleton-media"></div>
+              <div class="card-body space-y-3">
+                <div class="skeleton skeleton-line w-3/4"></div>
+                <div class="skeleton skeleton-line w-1/2 skeleton-line-sm"></div>
+                <div class="skeleton skeleton-line w-2/3 skeleton-line-sm"></div>
+                <div
+                  class="skeleton skeleton-line w-full"
+                  style="height: 2.5rem; border-radius: 0.75rem"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Skeleton card 2 -->
+            <div class="card" aria-hidden="true">
+              <div class="skeleton skeleton-media"></div>
+              <div class="card-body space-y-3">
+                <div class="skeleton skeleton-line"></div>
+                <div class="skeleton skeleton-line w-2/3 skeleton-line-sm"></div>
+                <div class="skeleton skeleton-line w-3/4 skeleton-line-sm"></div>
+                <div
+                  class="skeleton skeleton-line w-full"
+                  style="height: 2.5rem; border-radius: 0.75rem"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Skeleton card 3 -->
+            <div class="card" aria-hidden="true">
+              <div class="skeleton skeleton-media"></div>
+              <div class="card-body space-y-3">
+                <div class="skeleton skeleton-line w-4/5"></div>
+                <div class="skeleton skeleton-line w-1/3 skeleton-line-sm"></div>
+                <div class="skeleton skeleton-line w-1/2 skeleton-line-sm"></div>
+                <div
+                  class="skeleton skeleton-line w-full"
+                  style="height: 2.5rem; border-radius: 0.75rem"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skeleton list items -->
+          <div class="demo-card mt-6">
+            <h3 class="demo-label">عناصر قائمة</h3>
+            <div class="space-y-3 mt-3">
+              <div class="flex items-center gap-3" aria-hidden="true">
+                <div class="skeleton skeleton-avatar w-10 h-10 flex-none"></div>
+                <div class="flex-1 space-y-2">
+                  <div class="skeleton skeleton-line w-1/3"></div>
+                  <div class="skeleton skeleton-line w-1/2 skeleton-line-sm"></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-3" aria-hidden="true">
+                <div class="skeleton skeleton-avatar w-10 h-10 flex-none"></div>
+                <div class="flex-1 space-y-2">
+                  <div class="skeleton skeleton-line w-1/2"></div>
+                  <div class="skeleton skeleton-line w-1/3 skeleton-line-sm"></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-3" aria-hidden="true">
+                <div class="skeleton skeleton-avatar w-10 h-10 flex-none"></div>
+                <div class="flex-1 space-y-2">
+                  <div class="skeleton skeleton-line w-2/5"></div>
+                  <div class="skeleton skeleton-line w-3/5 skeleton-line-sm"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── § EMPTY STATE ─────────────────────────────────────────────── -->
+        <section id="empty-sec" aria-labelledby="empty-heading">
+          <h2 id="empty-heading" class="sg-section-title">
+            حالة الفراغ <span class="sg-section-note">.empty-state</span>
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Generic empty state -->
+            <div class="demo-card">
+              <h3 class="demo-label">عام</h3>
+              <div class="empty-state">
+                <svg
+                  class="empty-icon"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z" />
+                  <circle cx="12" cy="12" r="2" />
+                </svg>
+                <h3 class="empty-title">لا توجد عناصر بعد</h3>
+                <p class="empty-text">
+                  لم يتم إضافة أي عروض حتى الآن. تصفّح الوجهات المتاحة لإضافة عروضك المفضلة.
+                </p>
+                <button type="button" class="btn btn-primary" data-coming-soon>
+                  تصفّح الوجهات
+                </button>
+              </div>
+            </div>
+
+            <!-- Search empty state -->
+            <div class="demo-card">
+              <h3 class="demo-label">نتائج بحث فارغة</h3>
+              <div class="empty-state">
+                <svg
+                  class="empty-icon"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <h3 class="empty-title">لا توجد نتائج</h3>
+                <p class="empty-text">
+                  لم يتم العثور على عروض مطابقة لـ "باريس في ديسمبر". جرّب تعديل معايير البحث.
+                </p>
+                <button type="button" class="btn btn-outline" data-coming-soon>
+                  <svg aria-hidden="true"><use href="#icon-arrow-left" /></svg>
+                  بحث جديد
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── § INLINE MESSAGES ─────────────────────────────────────────── -->
+        <section id="msg-sec" aria-labelledby="msg-heading">
+          <h2 id="msg-heading" class="sg-section-title">
+            الرسائل المضمّنة <span class="sg-section-note">.inline-msg</span>
+          </h2>
+          <div class="space-y-4 max-w-2xl">
+            <div class="inline-msg inline-msg-info" role="status">
+              <svg class="inline-msg-icon" aria-hidden="true"><use href="#icon-info" /></svg>
+              <div>
+                <strong class="block mb-0.5">معلومة:</strong>
+                هذه الصفحة مرجع داخلي للمطورين وفريق الجودة فقط. لا تُعرض للمستخدمين العاديين.
+              </div>
+            </div>
+
+            <div class="inline-msg inline-msg-success" role="status">
+              <svg class="inline-msg-icon" aria-hidden="true">
+                <use href="#icon-check-circle" />
+              </svg>
+              <div>
+                <strong class="block mb-0.5">تم بنجاح!</strong>
+                تم تحديث تفضيلاتك وحفظها. ستظهر التغييرات عند إعادة تحميل الصفحة.
+              </div>
+            </div>
+
+            <div class="inline-msg inline-msg-warning" role="status">
+              <svg class="inline-msg-icon" aria-hidden="true">
+                <use href="#icon-alert-triangle" />
+              </svg>
+              <div>
+                <strong class="block mb-0.5">تحذير:</strong>
+                الأسعار المعروضة تقديرية وقابلة للتغيير. تأكد من السعر النهائي قبل إتمام الحجز.
+              </div>
+            </div>
+
+            <div class="inline-msg inline-msg-error" role="alert">
+              <svg class="inline-msg-icon" aria-hidden="true">
+                <use href="#icon-alert-triangle" />
+              </svg>
+              <div>
+                <strong class="block mb-0.5">خطأ:</strong>
+                تعذّر إكمال العملية. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── § COPY TO CLIPBOARD ──────────────────────────────────────── -->
+        <section id="copy-sec" aria-labelledby="copy-heading">
+          <h2 id="copy-heading" class="sg-section-title">
+            النسخ للحافظة <span class="sg-section-note">TUI.copyToClipboard</span>
+          </h2>
+
+          <div class="demo-card max-w-xl">
+            <h3 class="demo-label">نسخ القيم</h3>
+            <p class="text-sm text-ink-500 mb-5">
+              كل زر نسخ يضع النص في الحافظة ويعرض إشعاراً بالنجاح — بدون أي نافذة متصفح.
+            </p>
+
+            <div class="space-y-3">
+              <div class="flex items-center gap-3 p-3 bg-ink-50 rounded-xl border border-ink-200">
+                <code id="code-cmd" class="flex-1 text-sm text-ink-700 font-mono"
+                  >npm run build</code
+                >
+                <button
+                  type="button"
+                  class="btn btn-outline btn-sm flex-none"
+                  aria-label="نسخ الأمر"
+                  data-copy="npm run build"
+                >
+                  <svg aria-hidden="true"><use href="#icon-copy" /></svg>
+                  نسخ
+                </button>
+              </div>
+
+              <div class="flex items-center gap-3 p-3 bg-ink-50 rounded-xl border border-ink-200">
+                <code class="flex-1 text-sm text-lagoon-700 font-mono"
+                  >http://localhost:3000/pages/index.html</code
+                >
+                <button
+                  type="button"
+                  class="btn btn-outline btn-sm flex-none"
+                  aria-label="نسخ الرابط"
+                  data-copy="http://localhost:3000/pages/index.html"
+                >
+                  <svg aria-hidden="true"><use href="#icon-copy" /></svg>
+                  نسخ
+                </button>
+              </div>
+
+              <div class="flex items-center gap-3 p-3 bg-lagoon-950 rounded-xl">
+                <code class="flex-1 text-sm text-lagoon-200 font-mono">#0E8186</code>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-white flex-none"
+                  aria-label="نسخ كود اللون"
+                  data-copy="#0E8186"
+                >
+                  <svg aria-hidden="true"><use href="#icon-copy" /></svg>
+                  نسخ
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- /max-w-7xl -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 border-t border-ink-200 py-6 text-center text-sm text-ink-400">
+      <p>
+        عرض المكونات — رحلاتي · مرجع داخلي ·
+        <a href="index.html" class="text-lagoon-600">الصفحة الرئيسية</a> ·
+        <a href="styleguide.html" class="text-lagoon-600">دليل التصميم</a>
+      </p>
+    </footer>
+
+    <!-- ═══ MODALS ════════════════════════════════════════════════════════════ -->
+
+    <!-- Modal: Small -->
+    <div
+      class="modal modal-sm"
+      data-modal="modal-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-sm-title"
+      hidden
+    >
+      <div class="modal-overlay" data-modal-close aria-hidden="true"></div>
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h2 id="modal-sm-title" class="modal-title">نافذة صغيرة</h2>
+          <button class="modal-close" type="button" aria-label="إغلاق النافذة" data-modal-close>
+            <svg aria-hidden="true"><use href="#icon-close" /></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="text-ink-600 leading-relaxed">
+            هذه نافذة منبثقة صغيرة. يمكن إغلاقها بالضغط على Esc أو النقر خارجها أو الضغط على زر
+            الإغلاق.
+          </p>
+          <p class="text-sm text-ink-400 mt-3">
+            التركيز محاصر داخل النافذة ولا يمكنه الخروج حتى الإغلاق.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" type="button" data-modal-close>إلغاء</button>
+          <button
+            class="btn btn-primary btn-sm"
+            type="button"
+            data-modal-close
+            data-toast="تم الحفظ بنجاح!"
+            data-toast-type="success"
+          >
+            حفظ
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Medium -->
+    <div
+      class="modal"
+      data-modal="modal-md"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-md-title"
+      hidden
+    >
+      <div class="modal-overlay" data-modal-close aria-hidden="true"></div>
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h2 id="modal-md-title" class="modal-title">تفاصيل العرض</h2>
+          <button class="modal-close" type="button" aria-label="إغلاق النافذة" data-modal-close>
+            <svg aria-hidden="true"><use href="#icon-close" /></svg>
+          </button>
+        </div>
+        <div class="modal-body space-y-4">
+          <img
+            src="../assets/images/beach.svg"
+            alt="شاطئ شرم الشيخ"
+            class="w-full rounded-xl"
+            style="aspect-ratio: 16/9; object-fit: cover"
+            loading="lazy"
+          />
+          <div class="flex flex-wrap gap-2">
+            <span class="badge badge-source-partner"
+              ><svg aria-hidden="true"><use href="#icon-shield-check" /></svg>Partner</span
+            >
+            <span class="badge badge-featured">مميّز</span>
+            <span class="badge badge-verified"
+              ><svg aria-hidden="true"><use href="#icon-check-circle" /></svg>موثّق</span
+            >
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-ink-800 mb-1">عطلة في شرم الشيخ – 4 ليالٍ</h3>
+            <p class="text-ink-500 text-sm flex items-center gap-1">
+              <svg class="w-4 h-4" aria-hidden="true"><use href="#icon-location" /></svg>
+              شرم الشيخ، مصر
+            </p>
+          </div>
+          <p class="text-ink-600 leading-relaxed">
+            استمتع بعطلة رائعة في شرم الشيخ مع إطلالات خلابة على البحر الأحمر. الباقة تشمل الإقامة
+            والإفطار ورحلات الغطس.
+          </p>
+          <div class="flex items-baseline gap-2">
+            <span class="text-sm text-ink-500">ابتداءً من</span>
+            <span class="text-2xl font-bold text-lagoon-700">1,950</span>
+            <span class="text-sm text-ink-500">ر.س للشخص</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" type="button" data-modal-close>إلغاء</button>
+          <button class="btn btn-primary btn-sm" type="button" data-modal-close data-coming-soon>
+            اطلب الحجز
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Confirm -->
+    <div
+      class="modal modal-sm"
+      data-modal="modal-confirm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-confirm-title"
+      hidden
+    >
+      <div class="modal-overlay" data-modal-close aria-hidden="true"></div>
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h2 id="modal-confirm-title" class="modal-title">تأكيد الإجراء</h2>
+          <button class="modal-close" type="button" aria-label="إغلاق" data-modal-close>
+            <svg aria-hidden="true"><use href="#icon-close" /></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="inline-msg inline-msg-warning mb-4" role="status">
+            <svg class="inline-msg-icon" aria-hidden="true">
+              <use href="#icon-alert-triangle" />
+            </svg>
+            <span>هذا الإجراء لا يمكن التراجع عنه. هل أنت متأكد؟</span>
+          </div>
+          <p class="text-sm text-ink-500">سيتم حذف جميع البيانات المرتبطة وقد لا يمكن استعادتها.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" type="button" data-modal-close>إلغاء</button>
+          <button
+            class="btn btn-danger btn-sm"
+            type="button"
+            data-modal-close
+            data-toast="تم تنفيذ الإجراء."
+            data-toast-type="info"
+          >
+            نعم، تأكيد
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SHOWCASE DRAWER ═══════════════════════════════════════════════ -->
+    <div
+      class="drawer drawer-start"
+      data-drawer="showcase-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-label="درج العرض التجريبي"
+      hidden
+    >
+      <div class="drawer-overlay" data-drawer-close aria-hidden="true"></div>
+      <nav class="drawer-panel" aria-label="محتوى الدرج التجريبي">
+        <div class="flex items-center justify-between p-4 border-b border-ink-100">
+          <h2 class="text-lg font-bold text-ink-800">محتوى الدرج</h2>
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon"
+            aria-label="إغلاق الدرج"
+            data-drawer-close
+          >
+            <svg aria-hidden="true"><use href="#icon-close" /></svg>
+          </button>
+        </div>
+        <div class="flex-1 p-4 space-y-4">
+          <p class="text-sm text-ink-500">
+            هذا درج تجريبي. يمكن إغلاقه بـ Esc أو النقر على التعتيم أو زر الإغلاق.
+          </p>
+          <div class="space-y-2">
+            <button
+              type="button"
+              class="btn btn-outline w-full justify-center"
+              data-drawer-close
+              data-toast="تم اختيار الوجهة"
+              data-toast-type="success"
+            >
+              شرم الشيخ، مصر
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline w-full justify-center"
+              data-drawer-close
+              data-toast="تم اختيار الوجهة"
+              data-toast-type="success"
+            >
+              دبي، الإمارات
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline w-full justify-center"
+              data-drawer-close
+              data-toast="تم اختيار الوجهة"
+              data-toast-type="success"
+            >
+              إسطنبول، تركيا
+            </button>
+          </div>
+          <div class="pt-4 border-t border-ink-100">
+            <p class="text-xs text-ink-400 mb-3">اختبار إدارة التركيز:</p>
+            <div class="field">
+              <label class="field-label" for="drawer-input">بحث سريع</label>
+              <input
+                class="field-input"
+                id="drawer-input"
+                type="search"
+                placeholder="ابحث عن وجهة..."
+              />
+            </div>
+          </div>
+        </div>
+        <div class="p-4 border-t border-ink-100">
+          <button type="button" class="btn btn-primary w-full justify-center" data-drawer-close>
+            تأكيد الاختيار
+          </button>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Toast mount -->
+    <div id="toast-root" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- Scripts -->
+    <script src="../src/js/ui.js" defer></script>
+    <script src="../src/js/main.js" defer></script>
+
+    <!-- Page-scoped styles -->
+    <style>
+      /* Chrome shared with styleguide */
+      .sg-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid #eef1f5;
+      }
+      .sg-subnav {
+        position: sticky;
+        top: 3.5rem;
+        z-index: 40;
+        background: white;
+        border-bottom: 1px solid #eef1f5;
+        box-shadow: 0 1px 3px rgb(38 46 58 / 0.05);
+        overflow-x: auto;
+      }
+      .sg-subnav-list {
+        display: flex;
+        gap: 0;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        min-width: max-content;
+      }
+      .sg-subnav-link {
+        display: block;
+        padding: 0.5rem 0.875rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #6b7889;
+        text-decoration: none;
+        white-space: nowrap;
+        border-bottom: 2px solid transparent;
+        transition:
+          color 150ms,
+          border-color 150ms;
+      }
+      .sg-subnav-link:hover {
+        color: #0e8186;
+        border-bottom-color: #0e8186;
+      }
+      .sg-hero {
+        background: linear-gradient(135deg, #ecfbfb 0%, white 60%);
+        border-bottom: 1px solid #eef1f5;
+      }
+      .sg-section-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #262e3a;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid #eef1f5;
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+      }
+      .sg-section-note {
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: #9aa6b4;
+      }
+
+      /* Demo blocks */
+      .demo-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgb(38 46 58 / 0.06);
+      }
+      .demo-label {
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: #6b7889;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.875rem;
+      }
+      .demo-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }
+
+      /* Utilities */
+      .no-underline {
+        text-decoration: none !important;
+      }
+      .w-full {
+        width: 100%;
+      }
+      .justify-center {
+        justify-content: center;
+      }
+      .text-danger {
+        color: #d64545;
+      }
+      .space-y-2 > * + * {
+        margin-top: 0.5rem;
+      }
+      .space-y-3 > * + * {
+        margin-top: 0.75rem;
+      }
+      .space-y-4 > * + * {
+        margin-top: 1rem;
+      }
+      .space-y-5 > * + * {
+        margin-top: 1.25rem;
+      }
+      code {
+        font-family: ui-monospace, 'Courier New', monospace;
+      }
+    </style>
+  </body>
 </html>

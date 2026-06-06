@@ -1,0 +1,4326 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="scroll-smooth" data-page="admin-content">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>إدارة المحتوى — رحلاتي (تجريبي)</title>
+    <meta
+      name="description"
+      content="إدارة محتوى منصة رحلاتي — بيانات تجريبية / واجهة أمامية فقط / لا يوجد نشر فعلي في هذه النسخة."
+    />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#E08D12" />
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../assets/fonts/cairo-600.woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="../assets/css/tailwind.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList";,
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "لوحة الإدارة",
+            "item": "https://rihlaty.example.com/admin/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "المحتوى",
+            "item": "https://rihlaty.example.com/admin/content.html"
+          }
+        ]
+      }
+    </script>
+
+    <style> /* ── admin/content.html — admin shell + page-scoped styles ── */ /* ── Design tokens
+    ── */ :root { --admin-sidebar-w: 268px; --admin-topbar-h: 64px; --admin-sidebar-bg: #161c26;
+    --admin-sidebar-text: #9aa6b4; --admin-sidebar-active: #e08d12; --admin-sidebar-active-bg:
+    rgb(224 141 18 / 0.12); --admin-sidebar-hover-bg: rgb(255 255 255 / 0.055); --admin-body-bg:
+    #f0f2f5; --admin-card-bg: #fff; --admin-border: #e2e6ed; --admin-shadow-card: 0 1px 3px rgb(22
+    28 38 / 0.07), 0 1px 2px rgb(22 28 38 / 0.05); --admin-shadow-pop: 0 8px 24px rgb(22 28 38 /
+    0.12), 0 2px 8px rgb(22 28 38 / 0.08); --z-dd: 1000; --z-overlay: 1030; --z-drawer: 1040;
+    --z-modal-ov: 1050; --z-modal: 1060; --z-toast: 1080; } /* ── Skip link ── */ .admin-skip {
+    position: absolute; inset-inline-start: -999px; top: 0.5rem; background:
+    var(--admin-sidebar-active); color: #fff; padding: 0.5rem 1.25rem; border-radius: 0 0.5rem
+    0.5rem 0; font-weight: 700; font-size: 0.875rem; z-index: 9999; text-decoration: none;
+    transition: inset-inline-start 0.15s; } .admin-skip:focus { inset-inline-start: 0; } body {
+    background: var(--admin-body-bg); font-family: Cairo, system-ui, sans-serif; }
+    body.admin-sidebar-open { overflow: hidden; } /* ── Sidebar ── */ .admin-sidebar { position:
+    fixed; top: 0; bottom: 0; inset-inline-start: 0; width: var(--admin-sidebar-w); background:
+    var(--admin-sidebar-bg); display: flex; flex-direction: column; overflow: hidden auto; z-index:
+    var(--z-drawer); transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1); scrollbar-width:
+    thin; scrollbar-color: rgb(224 141 18 / 0.25) transparent; } .admin-sidebar:not(.is-open) {
+    transform: translateX(100%); } html[dir='ltr'] .admin-sidebar:not(.is-open) { transform:
+    translateX(-100%); } @media (min-width: 1024px) { .admin-sidebar, html[dir='ltr'] .admin-sidebar {
+    transform: translateX(0) !important; transition: none !important; z-index: 10; } } .admin-scrim
+    { position: fixed; inset: 0; background: rgb(10 12 18 / 0.62); backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px); z-index: var(--z-overlay); opacity: 0; pointer-events: none;
+    transition: opacity 0.25s; } .admin-scrim.is-active { opacity: 1; pointer-events: auto; } @media
+    (prefers-reduced-motion: reduce) { .admin-scrim { transition: none; } } .admin-main { display:
+    flex; flex-direction: column; min-height: 100dvh; } @media (min-width: 1024px) { .admin-main {
+    margin-inline-start: var(--admin-sidebar-w); } } /* ── Topbar ── */ .admin-topbar { position:
+    sticky; top: 0; height: var(--admin-topbar-h); background: #fff; border-bottom: 1px solid
+    var(--admin-border); display: flex; align-items: center; gap: 0.625rem; padding: 0 1.25rem;
+    z-index: var(--z-dd); box-shadow: 0 1px 3px rgb(22 28 38 / 0.06); } /* ── Sidebar brand ── */
+    .admin-brand { display: flex; align-items: center; gap: 0.75rem; padding: 1.125rem 1rem 1rem;
+    border-bottom: 1px solid rgb(255 255 255 / 0.07); flex-shrink: 0; } .admin-brand-icon { width:
+    2.375rem; height: 2.375rem; background: linear-gradient(135deg, #e08d12 0%, #c26c0b 100%);
+    border-radius: 0.625rem; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; box-shadow: 0 2px 8px rgb(224 141 18 / 0.35); } .admin-brand-text { display:
+    flex; flex-direction: column; min-width: 0; } .admin-brand-title { font-size: 0.9375rem;
+    font-weight: 800; color: #fff; line-height: 1.2; } .admin-brand-sub { font-size: 0.6875rem;
+    color: rgb(154 166 180 / 0.75); font-weight: 500; letter-spacing: 0.015em; direction: ltr;
+    text-align: right; margin-top: 0.0625rem; } /* ── Sidebar nav ── */ .admin-nav { flex: 1;
+    padding: 0.625rem 0.75rem 0.5rem; display: flex; flex-direction: column; gap: 0.0625rem; }
+    .admin-nav-section { font-size: 0.6rem; font-weight: 700; color: rgb(154 166 180 / 0.45);
+    letter-spacing: 0.1em; padding: 0.875rem 0.625rem 0.3125rem; text-transform: uppercase; }
+    .admin-nav-item { display: flex; align-items: center; gap: 0.625rem; padding: 0.5625rem 0.75rem;
+    border-radius: 0.5rem; color: var(--admin-sidebar-text); font-size: 0.875rem; font-weight: 500;
+    text-decoration: none; cursor: pointer; background: transparent; border: none; width: 100%;
+    text-align: start; transition: background 0.14s, color 0.14s; position: relative; }
+    .admin-nav-item:hover { background: var(--admin-sidebar-hover-bg); color: #fff; }
+    .admin-nav-item.is-active { background: var(--admin-sidebar-active-bg); color:
+    var(--admin-sidebar-active); font-weight: 600; } .admin-nav-item.is-active::before { content:
+    ''; position: absolute; inset-inline-start: 0; top: 20%; bottom: 20%; width: 3px; border-radius:
+    0 2px 2px 0; background: var(--admin-sidebar-active); } .admin-nav-icon { width: 1.0625rem;
+    height: 1.0625rem; flex-shrink: 0; opacity: 0.75; } .admin-nav-item.is-active .admin-nav-icon,
+    .admin-nav-item:hover .admin-nav-icon { opacity: 1; } .admin-nav-badge { margin-inline-start:
+    auto; font-size: 0.625rem; font-weight: 700; padding: 0.125rem 0.4375rem; border-radius: 9999px;
+    background: rgb(224 141 18 / 0.18); color: var(--admin-sidebar-active); line-height: 1.4; }
+    .admin-nav-soon { margin-inline-start: auto; font-size: 0.625rem; color: rgb(154 166 180 / 0.4);
+    font-weight: 500; } .admin-sidebar-footer { padding: 0.625rem 0.75rem 0.875rem; border-top: 1px
+    solid rgb(255 255 255 / 0.07); flex-shrink: 0; } .admin-sidebar-footer-label { font-size:
+    0.6rem; color: rgb(154 166 180 / 0.35); font-weight: 600; letter-spacing: 0.1em; text-transform:
+    uppercase; padding: 0.5rem 0.625rem 0.25rem; } .admin-content { flex: 1; padding: 1.5rem
+    1.75rem; } @media (max-width: 767px) { .admin-content { padding: 1.125rem 1rem; } } /* ── Topbar
+    button ── */ .admin-tb-btn { position: relative; display: inline-flex; align-items: center;
+    justify-content: center; width: 2.5rem; height: 2.5rem; min-width: 2.5rem; border-radius:
+    0.5rem; color: #6b7889; background: transparent; border: 1px solid transparent; cursor: pointer;
+    flex-shrink: 0; transition: background 0.12s, color 0.12s, border-color 0.12s; }
+    .admin-tb-btn:hover { background: #f4f5f7; border-color: #dee3ea; color: #262e3a; }
+    .admin-tb-btn[aria-expanded='true'] { background: #eef1f5; border-color: #dee3ea; color:
+    #262e3a; } .admin-tb-badge { position: absolute; top: 0.25rem; inset-inline-end: 0.25rem; width:
+    0.9375rem; height: 0.9375rem; background: #d64545; color: #fff; font-size: 0.5625rem;
+    font-weight: 800; border-radius: 50%; display: flex; align-items: center; justify-content:
+    center; border: 1.5px solid #fff; } /* ── Topbar dropdown ── */ .admin-dd { position: absolute;
+    inset-inline-end: 0; top: calc(100% + 0.5rem); background: #fff; border: 1px solid
+    var(--admin-border); border-radius: 0.875rem; box-shadow: var(--admin-shadow-pop); z-index:
+    var(--z-dd); overflow: hidden; } .admin-dd.hidden { display: none; } .admin-dd-head { display:
+    flex; align-items: center; justify-content: space-between; padding: 0.875rem 1.125rem;
+    border-bottom: 1px solid var(--admin-border); } .admin-dd-title { font-size: 0.9375rem;
+    font-weight: 700; color: #161c26; } .admin-dd-item { display: flex; align-items: flex-start;
+    gap: 0.75rem; padding: 0.8125rem 1.125rem; cursor: pointer; border-bottom: 1px solid #f7f8fa;
+    transition: background 0.1s; text-decoration: none; width: 100%; text-align: start; background:
+    transparent; border-left: none; border-right: none; border-top: none; font-family: inherit;
+    color: #262e3a; } .admin-dd-item:last-child { border-bottom: none; } .admin-dd-item:hover {
+    background: #f9fafb; } .admin-dd-item-icon { width: 2.125rem; height: 2.125rem; border-radius:
+    0.5rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .admin-dd-item-text { display: flex; flex-direction: column; gap: 0.125rem; }
+    .admin-dd-item-label { font-size: 0.8125rem; font-weight: 600; color: #262e3a; }
+    .admin-dd-item-time { font-size: 0.75rem; color: #9aa6b4; } .dd-animate { animation: dd-pop
+    0.15s cubic-bezier(0.4, 0, 0.2, 1); } @keyframes dd-pop { from { opacity: 0; transform:
+    translateY(-0.375rem) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .dd-animate { animation: none; } } /* ── Breadcrumb ──
+    */ .admin-breadcrumb { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem;
+    color: #9aa6b4; margin-bottom: 1.125rem; flex-wrap: wrap; } .admin-breadcrumb a { color:
+    #6b7889; text-decoration: none; transition: color 0.12s; } .admin-breadcrumb a:hover { color:
+    #262e3a; } .admin-breadcrumb-sep { color: #c5cdd7; } .admin-breadcrumb [aria-current] { color:
+    #262e3a; font-weight: 600; } /* ── Page header ── */ .admin-page-header { display: flex;
+    flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem;
+    padding-bottom: 1.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--admin-border); }
+    .admin-page-title { font-size: 1.5rem; font-weight: 800; color: #161c26; line-height: 1.2; }
+    .admin-page-desc { font-size: 0.875rem; color: #6b7889; margin-top: 0.25rem; }
+    .admin-page-actions { display: flex; align-items: center; gap: 0.625rem; flex-wrap: wrap; }
+    @media (max-width: 639px) { .admin-page-title { font-size: 1.25rem; } } .admin-honesty { display:
+    inline-flex; align-items: center; gap: 0.4375rem; padding: 0.375rem 0.75rem; background:
+    #fffbeb; border: 1px solid #fde68a; border-radius: 0.5rem; font-size: 0.75rem; color: #92400e;
+    white-space: nowrap; } /* ── Buttons ── */ .admin-btn { display: inline-flex; align-items:
+    center; gap: 0.4375rem; padding: 0.5625rem 1.125rem; border-radius: 0.5rem; font-size: 0.875rem;
+    font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid transparent;
+    transition: background 0.15s, box-shadow 0.15s, border-color 0.15s; white-space: nowrap;
+    font-family: inherit; } .admin-btn-primary { background: var(--admin-sidebar-active); color:
+    #fff; } .admin-btn-primary:hover { background: #c26c0b; box-shadow: 0 4px 12px rgb(224 141 18 /
+    0.3); } .admin-btn-secondary { background: #fff; color: #3a4453; border-color:
+    var(--admin-border); } .admin-btn-secondary:hover { background: #f7f8fa; border-color: #c5cdd7;
+    } .admin-btn-ghost { background: transparent; color: #6b7889; } .admin-btn-ghost:hover {
+    background: #f4f5f7; color: #262e3a; } .admin-btn-danger { background: #d64545; color: #fff; }
+    .admin-btn-danger:hover { background: #b91c1c; } .admin-btn-sm { padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem; } .admin-btn-icon { width: 2.25rem; height: 2.25rem; padding: 0;
+    justify-content: center; } /* ── Cards ── */ .admin-card { background: var(--admin-card-bg);
+    border: 1px solid var(--admin-border); border-radius: 0.875rem; box-shadow:
+    var(--admin-shadow-card); } .admin-card-header { display: flex; align-items: center;
+    justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid
+    var(--admin-border); gap: 0.5rem; flex-wrap: wrap; } .admin-card-title { font-size: 0.9375rem;
+    font-weight: 700; color: #161c26; } .admin-card-body { padding: 1.25rem; } /* ── Badges ── */
+    .admin-badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.6875rem;
+    font-weight: 700; padding: 0.1875rem 0.5rem; border-radius: 9999px; line-height: 1.4;
+    white-space: nowrap; } .badge-active { background: #dcfce7; color: #15803d; } .badge-draft {
+    background: #f3f4f6; color: #6b7280; } .badge-pending { background: #eff6ff; color: #1e40af; }
+    .badge-trial { background: #fef3c7; color: #92400e; } .badge-warning { background: #fffbeb;
+    color: #d97706; } .badge-error { background: #fef2f2; color: #b91c1c; } .badge-neutral {
+    background: #f3f4f6; color: #6b7280; } .badge-published { background: #dcfce7; color: #15803d; }
+    .badge-unpublished { background: #f3f4f6; color: #6b7280; } .badge-featured { background:
+    #fef3c7; color: #92400e; border: 1px solid #fde68a; } /* ── Plan pills ── */ .plan-pill {
+    display: inline-flex; align-items: center; font-size: 0.6875rem; font-weight: 700; padding:
+    0.25rem 0.625rem; border-radius: 9999px; } .plan-starter { background: #f3f4f6; color: #374151;
+    } .plan-growth { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; } .plan-pro {
+    background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; } .plan-enterprise { background:
+    #1e1b2e; color: #f4be52; border: 1px solid #f4be52; } /* ── Section heading ── */
+    .admin-section-title { font-size: 1rem; font-weight: 700; color: #161c26; }
+    .admin-section-header { display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1rem; gap: 0.75rem; flex-wrap: wrap; } /* ── Modal ── */ .modal { position:
+    fixed; inset: 0; background: rgb(10 12 18 / 0.52); backdrop-filter: blur(4px); backdrop-filter:
+    blur(4px); z-index: var(--z-modal-ov); display: flex; align-items: flex-end; justify-content:
+    center; padding: 1rem; } @media (min-width: 640px) { .modal { align-items: center; } }
+    .modal[hidden] { display: none; } .modal-box { background: #fff; border-radius: 1.125rem;
+    box-shadow: var(--admin-shadow-pop); width: 100%; max-width: 520px; max-height: 92vh;
+    overflow-y: auto; animation: modal-in 0.22s cubic-bezier(0.4, 0, 0.2, 1); } .modal-box-wide {
+    max-width: 680px; } @keyframes modal-in { from { opacity: 0; transform: translateY(1.25rem)
+    scale(0.98); } to { opacity: 1; transform: none; } } @media (prefers-reduced-motion: reduce) {
+    .modal-box { animation: none; } } .modal-header { display: flex; align-items: center;
+    justify-content: space-between; padding: 1.25rem 1.5rem 1rem; border-bottom: 1px solid
+    var(--admin-border); } .modal-title { font-size: 1.0625rem; font-weight: 700; color: #161c26; }
+    .modal-close { width: 2rem; height: 2rem; border-radius: 0.5rem; display: flex; align-items:
+    center; justify-content: center; color: #9aa6b4; background: transparent; border: none; cursor:
+    pointer; transition: background 0.12s, color 0.12s; } .modal-close:hover { background: #f4f5f7;
+    color: #262e3a; } .modal-form { padding: 1.25rem 1.5rem; } .modal-actions { display: flex;
+    justify-content: flex-end; gap: 0.625rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px
+    solid var(--admin-border); flex-wrap: wrap; } /* ── Input / Label ── */ .admin-input,
+    .admin-select, .admin-textarea { padding: 0.5625rem 0.875rem; border: 1px solid
+    var(--admin-border); border-radius: 0.5rem; font-size: 0.875rem; color: #262e3a; background:
+    #fff; font-family: inherit; transition: border-color 0.15s, box-shadow 0.15s; } .admin-textarea
+    { resize: vertical; min-height: 5rem; } .admin-input:focus, .admin-select:focus,
+    .admin-textarea:focus { outline: none; border-color: var(--admin-sidebar-active); box-shadow: 0
+    0 0 3px rgb(224 141 18 / 0.12); } .admin-label { font-size: 0.8125rem; font-weight: 600; color:
+    #3a4453; } .admin-field { display: flex; flex-direction: column; gap: 0.375rem; }
+    .admin-field-error { font-size: 0.75rem; color: #d64545; } .admin-input.has-error,
+    .admin-select.has-error { border-color: #d64545; } /* ── FAQ ── */ .admin-faq { display: flex;
+    flex-direction: column; gap: 0.5rem; } .admin-faq-item { background: var(--admin-card-bg);
+    border: 1px solid var(--admin-border); border-radius: 0.75rem; overflow: hidden; } .admin-faq-q
+    { display: flex; align-items: center; justify-content: space-between; width: 100%; padding:
+    0.9375rem 1.125rem; text-align: start; font-size: 0.875rem; font-weight: 600; color: #262e3a;
+    background: transparent; border: none; cursor: pointer; gap: 0.75rem; font-family: inherit;
+    transition: background 0.12s; } .admin-faq-q:hover { background: #f9fafb; }
+    .admin-faq-q[aria-expanded='true'] { color: var(--admin-sidebar-active); }
+    .admin-faq-q[aria-expanded='true'] svg { transform: rotate(180deg); } .admin-faq-q svg {
+    flex-shrink: 0; transition: transform 0.2s; color: #9aa6b4; } .admin-faq-a { display: none;
+    padding: 0 1.125rem 1rem; font-size: 0.875rem; color: #4b5563; line-height: 1.75; }
+    .admin-faq-q[aria-expanded='true'] + .admin-faq-a { display: block; } /* ── Footer ── */
+    .admin-footer { display: flex; align-items: center; justify-content: space-between; padding:
+    0.875rem 1.75rem; border-top: 1px solid var(--admin-border); background: #fff; flex-wrap: wrap;
+    gap: 0.5rem; font-size: 0.75rem; color: #9aa6b4; } /*
+    ══════════════════════════════════════════════════════════════════ */ /* ── CONTENT page-scoped
+    styles (.ct-*) ─────────────────────────── */ /*
+    ══════════════════════════════════════════════════════════════════ */ /* ── Stats grid (8 KPIs)
+    ── */ .ct-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+    margin-bottom: 2rem; } @media (max-width: 1199px) { .ct-stats-grid { grid-template-columns:
+    repeat(4, 1fr); } } @media (max-width: 767px) { .ct-stats-grid { grid-template-columns: repeat(2,
+    1fr); } } @media (max-width: 479px) { .ct-stats-grid { grid-template-columns: 1fr; } }
+    .ct-stat-card { background: #fff; border: 1px solid var(--admin-border); border-radius:
+    0.875rem; padding: 1rem 1.25rem; box-shadow: var(--admin-shadow-card); display: flex;
+    flex-direction: column; gap: 0.375rem; transition: box-shadow 0.15s; } .ct-stat-card:hover {
+    box-shadow: var(--admin-shadow-pop); } .ct-stat-top { display: flex; align-items: center;
+    justify-content: space-between; } .ct-stat-icon { width: 2.125rem; height: 2.125rem;
+    border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; flex-shrink:
+    0; } .ct-stat-label { font-size: 0.6875rem; font-weight: 600; color: #9aa6b4; } .ct-stat-value {
+    font-size: 1.625rem; font-weight: 900; color: #161c26; line-height: 1.1; } .ct-stat-delta {
+    font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 0.25rem; }
+    .ct-stat-delta.up { color: #15803d; } .ct-stat-delta.down { color: #d64545; }
+    .ct-stat-delta.warn { color: #d97706; } /* ── Tab bar ── */ .ct-tab-bar { display: flex; gap:
+    0.125rem; border-bottom: 2px solid var(--admin-border); margin-bottom: 1.5rem; overflow-x: auto;
+    scrollbar-width: none; } .ct-tab-bar::-webkit-scrollbar { display: none; } .ct-tab-btn {
+    display: inline-flex; align-items: center; gap: 0.4375rem; padding: 0.625rem 1.125rem;
+    font-size: 0.875rem; font-weight: 600; color: #6b7889; background: transparent; border: none;
+    border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; white-space: nowrap;
+    font-family: inherit; transition: color 0.12s, border-color 0.12s, background 0.12s;
+    border-radius: 0.375rem 0.375rem 0 0; } .ct-tab-btn:hover { color: #262e3a; background: #f9fafb;
+    } .ct-tab-btn[aria-selected='true'] { color: var(--admin-sidebar-active); border-bottom-color:
+    var(--admin-sidebar-active); background: rgb(224 141 18 / 0.04); } .ct-tab-badge { font-size:
+    0.6rem; font-weight: 800; padding: 0.1rem 0.4rem; border-radius: 9999px; background: rgb(224 141
+    18 / 0.15); color: var(--admin-sidebar-active); } /* ── Tab panels (no-JS: all visible stacked;
+    JS adds ct-tabs-ready) ── */ .ct-tabs-ready .ct-panel { display: none; } .ct-tabs-ready
+    .ct-panel.is-active { display: block; } /* ── Content table ── */ .ct-table-wrap { overflow-x:
+    auto; border-radius: 0.875rem; border: 1px solid var(--admin-border); background: #fff;
+    box-shadow: var(--admin-shadow-card); } .ct-table { width: 100%; border-collapse: collapse;
+    font-size: 0.8125rem; min-width: 640px; } .ct-table thead tr { background: #f9fafb;
+    border-bottom: 2px solid var(--admin-border); } .ct-table th { padding: 0.75rem 1rem;
+    text-align: start; font-size: 0.6875rem; font-weight: 700; color: #9aa6b4; white-space: nowrap;
+    } .ct-table td { padding: 0.8125rem 1rem; border-bottom: 1px solid #f0f2f5; vertical-align:
+    middle; color: #262e3a; } .ct-table tbody tr:last-child td { border-bottom: none; } .ct-table
+    tbody tr:hover td { background: #fafbfc; } .ct-table td.ltr { direction: ltr; text-align: start;
+    } .ct-content-title { font-weight: 700; color: #161c26; font-size: 0.875rem; line-height: 1.35;
+    } /* ── Table → cards ≤640px ── */ @media (max-width: 640px) { .ct-table-wrap { border-radius: 0;
+    border-left: none; border-right: none; } .ct-table { min-width: unset; } .ct-table thead {
+    display: none; } .ct-table tbody tr { display: block; border: 1px solid var(--admin-border);
+    border-radius: 0.875rem; margin-bottom: 0.875rem; padding: 0.875rem; background: #fff;
+    box-shadow: var(--admin-shadow-card); } .ct-table td { display: flex; justify-content:
+    space-between; align-items: center; padding: 0.4375rem 0; border-bottom: 1px solid #f7f8fa;
+    font-size: 0.8125rem; } .ct-table td:last-child { border-bottom: none; } .ct-table td::before {
+    content: attr(data-label); font-weight: 700; color: #6b7889; font-size: 0.6875rem; flex-shrink:
+    0; margin-inline-end: 0.5rem; } .ct-table td.ltr { direction: ltr; } } /* ── Homepage sections
+    list ── */ .ct-sections-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .ct-section-card { background: #fff; border: 1px solid var(--admin-border); border-radius:
+    0.875rem; padding: 1rem 1.25rem; box-shadow: var(--admin-shadow-card); display: flex;
+    align-items: center; gap: 1rem; flex-wrap: wrap; transition: box-shadow 0.15s; }
+    .ct-section-card:hover { box-shadow: var(--admin-shadow-pop); } .ct-section-order { width: 2rem;
+    height: 2rem; border-radius: 0.5rem; background: var(--admin-sidebar-active-bg); color:
+    var(--admin-sidebar-active); display: flex; align-items: center; justify-content: center;
+    font-size: 0.8125rem; font-weight: 800; flex-shrink: 0; } .ct-section-info { flex: 1; min-width:
+    0; } .ct-section-name { font-size: 0.9375rem; font-weight: 700; color: #161c26; }
+    .ct-section-meta { font-size: 0.75rem; color: #9aa6b4; margin-top: 0.1875rem; }
+    .ct-section-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .ct-drag-handle { color: #c5cdd7; cursor: grab; padding: 0.25rem; border-radius: 0.375rem;
+    transition: color 0.12s; } .ct-drag-handle:hover { color: #9aa6b4; background: #f4f5f7; } /* ──
+    Feature toggle button ── */ .ct-toggle-btn { display: inline-flex; align-items: center; gap:
+    0.375rem; padding: 0.3125rem 0.6875rem; font-size: 0.75rem; font-weight: 600; border-radius:
+    9999px; cursor: pointer; border: 1px solid transparent; transition: background 0.12s,
+    border-color 0.12s, color 0.12s; font-family: inherit; } .ct-toggle-btn.is-featured {
+    background: #dcfce7; color: #15803d; border-color: #a7f3d0; } .ct-toggle-btn.is-featured:hover {
+    background: #bbf7d0; border-color: #6ee7b7; } .ct-toggle-btn.not-featured { background: #f3f4f6;
+    color: #6b7280; border-color: #e5e7eb; } .ct-toggle-btn.not-featured:hover { background:
+    #e5e7eb; border-color: #d1d5db; } /* ── Homepage preview panel ── */ .ct-preview-wrap {
+    background: linear-gradient(135deg, #1e2535 0%, #0f1520 100%); border-radius: 1rem; overflow:
+    hidden; border: 1px solid rgb(255 255 255 / 0.1); margin-bottom: 2rem; } .ct-preview-topbar {
+    background: rgb(255 255 255 / 0.07); padding: 0.625rem 1rem; border-bottom: 1px solid rgb(255
+    255 255 / 0.08); display: flex; align-items: center; gap: 0.5rem; } .ct-preview-dot { width:
+    0.5625rem; height: 0.5625rem; border-radius: 50%; } .ct-preview-url { flex: 1; background:
+    rgb(255 255 255 / 0.08); border-radius: 0.375rem; padding: 0.25rem 0.625rem; font-size:
+    0.6875rem; color: rgb(255 255 255 / 0.4); direction: ltr; text-align: start; } .ct-preview-body
+    { padding: 0.875rem 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .ct-preview-section { background: rgb(255 255 255 / 0.06); border-radius: 0.5rem; padding:
+    0.5625rem 0.875rem; display: flex; align-items: center; justify-content: space-between; gap:
+    0.5rem; font-size: 0.8125rem; color: rgb(255 255 255 / 0.75); } .ct-preview-section-name {
+    font-weight: 600; } .ct-preview-tag { font-size: 0.625rem; font-weight: 700; padding: 0.125rem
+    0.4375rem; border-radius: 9999px; background: rgb(224 141 18 / 0.25); color: #e08d12; }
+    .ct-preview-tag.ct-preview-tag-draft { background: rgb(107 114 137 / 0.25); color: rgb(255 255
+    255 / 0.5); } /* ── Row action menu ── */ .ct-row-menu-wrap { position: relative; } .ct-row-menu
+    { position: absolute; inset-inline-end: 0; top: 100%; z-index: var(--z-dd); background: #fff;
+    border: 1px solid var(--admin-border); border-radius: 0.75rem; box-shadow:
+    var(--admin-shadow-pop); min-width: 168px; padding: 0.375rem; overflow: hidden; }
+    .ct-row-menu.hidden { display: none; } .ct-row-menu-item { display: flex; align-items: center;
+    gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-size: 0.8125rem; font-weight:
+    500; color: #262e3a; cursor: pointer; background: transparent; border: none; width: 100%;
+    text-align: start; font-family: inherit; transition: background 0.1s, color 0.1s; }
+    .ct-row-menu-item:hover { background: #f9fafb; } .ct-row-menu-item.danger { color: #d64545; }
+    .ct-row-menu-item.danger:hover { background: #fef2f2; } .ct-row-menu-sep { height: 1px;
+    background: var(--admin-border); margin: 0.25rem 0; } /* ── Confirm modal danger zone ── */
+    .ct-confirm-icon { width: 3.5rem; height: 3.5rem; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; margin: 0 auto 1rem; } .ct-confirm-icon.danger {
+    background: #fef2f2; } .ct-confirm-icon.warn { background: #fffbeb; } .ct-confirm-title {
+    font-size: 1.125rem; font-weight: 700; color: #161c26; text-align: center; margin-bottom:
+    0.5rem; } .ct-confirm-body { font-size: 0.875rem; color: #4b5563; text-align: center;
+    line-height: 1.7; } </style>
+  </head>
+  <body class="min-h-screen">
+    <a href="#main-content" class="admin-skip">تخطى إلى المحتوى الرئيسي</a>
+
+    <!-- ── Sidebar ── -->
+    <aside
+      id="admin-sidebar"
+      class="admin-sidebar"
+      role="navigation"
+      aria-label="قائمة إدارة المنصة"
+    >
+      <div class="admin-brand">
+        <div class="admin-brand-icon" aria-hidden="true">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#fff"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        </div>
+        <div class="admin-brand-text">
+          <span class="admin-brand-title">رحلاتي</span>
+          <span class="admin-brand-sub">مالك المنصة · Owner Admin</span>
+        </div>
+      </div>
+
+      <nav class="admin-nav" aria-label="روابط الإدارة الرئيسية">
+        <span class="admin-nav-section">الإدارة الرئيسية</span>
+        <ul role="list" style="display: contents">
+          <li>
+            <a href="index.html" class="admin-nav-item"
+              ><svg
+                class="admin-nav-icon"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <use href="#icon-grid" /></svg
+              >الرئيسية</a
+            >
+          </li>
+          <li>
+            <a href="companies.html" class="admin-nav-item"
+              ><svg
+                class="admin-nav-icon"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <use href="#icon-building" /></svg
+              >الشركات<span class="admin-nav-badge">38</span></a
+            >
+          </li>
+          <li>
+            <a href="plans.html" class="admin-nav-item"
+              ><svg
+                class="admin-nav-icon"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <use href="#icon-layers" /></svg
+              >الخطط</a
+            >
+          </li>
+          <li>
+            <a href="subscriptions.html" class="admin-nav-item"
+              ><svg
+                class="admin-nav-icon"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <use href="#icon-credit-card" /></svg
+              >الاشتراكات</a
+            >
+          </li>
+        </ul>
+
+        <span class="admin-nav-section" style="margin-top: 0.5rem">التحليل والمحتوى</span>
+        <ul role="list" style="display: contents">
+          <li>
+            <a href="analytics.html" class="admin-nav-item"
+              ><svg
+                class="admin-nav-icon"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <use href="#icon-bar-chart" /></svg
+              >التحليلات</a
+            >
+          </li>
+          <li>
+            <a href="content.html" class="admin-nav-item is-active" aria-current="page">
+              <svg
+                class="admin-nav-icon"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <use href="#icon-file-text" />
+              </svg>
+              المحتوى
+            </a>
+          </li>
+          <li>
+            <a href="analytics.html#integrations" class="admin-nav-item"
+              ><svg
+                class="admin-nav-icon"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <use href="#icon-plug" /></svg
+              >مراقبة التكاملات</a
+            >
+          </li>
+          <li>
+            <a href="#" class="admin-nav-item" data-coming-soon aria-label="الإعدادات — قريباً"
+              ><svg
+                class="admin-nav-icon"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <use href="#icon-settings" /></svg
+              >الإعدادات<span class="admin-nav-soon">قريباً</span></a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="admin-sidebar-footer-label">روابط سريعة</div>
+        <a href="../pages/index.html" class="admin-nav-item" style="font-size: 0.8125rem"
+          ><svg
+            class="admin-nav-icon"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <use href="#icon-globe" /></svg
+          >العودة للموقع</a
+        >
+        <a href="../dashboard/index.html" class="admin-nav-item" style="font-size: 0.8125rem"
+          ><svg
+            class="admin-nav-icon"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <use href="#icon-server" /></svg
+          >لوحة الشركات</a
+        >
+      </div>
+    </aside>
+
+    <div id="admin-scrim" class="admin-scrim" hidden aria-hidden="true"></div>
+
+    <!-- ── Main ── -->
+    <div class="admin-main">
+      <header class="admin-topbar" role="banner" aria-label="شريط الإدارة العلوي">
+        <button
+          id="btn-admin-menu"
+          type="button"
+          class="admin-tb-btn lg:hidden"
+          aria-label="فتح قائمة التنقل"
+          aria-expanded="false"
+          aria-controls="admin-sidebar"
+          style="min-width: 2.75rem; min-height: 2.75rem"
+        >
+          <svg
+            width="20"
+            height="20"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          >
+            <use href="#icon-menu" />
+          </svg>
+        </button>
+        <div class="hidden lg:flex items-center gap-2 flex-shrink-0">
+          <span style="font-size: 0.8125rem; font-weight: 800; color: #161c26">مالك المنصة</span>
+          <span style="width: 1px; height: 1.125rem; background: #dee3ea"></span>
+          <span style="font-size: 0.75rem; color: #9aa6b4; direction: ltr">Owner Admin</span>
+        </div>
+        <div style="position: relative; flex: 1; max-width: 240px" class="hidden sm:block">
+          <svg
+            style="
+              position: absolute;
+              inset-inline-start: 0.75rem;
+              top: 50%;
+              transform: translateY(-50%);
+              pointer-events: none;
+              color: #9aa6b4;
+              width: 1rem;
+              height: 1rem;
+            "
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <use href="#icon-search" />
+          </svg>
+          <input
+            type="search"
+            style="
+              width: 100%;
+              padding: 0.5rem 0.875rem 0.5rem 2.25rem;
+              border: 1px solid var(--admin-border);
+              border-radius: 0.5rem;
+              font-size: 0.875rem;
+              color: #262e3a;
+              background: #f9fafb;
+              font-family: inherit;
+            "
+            placeholder="بحث سريع…"
+            aria-label="بحث سريع"
+          />
+        </div>
+        <div style="flex: 1"></div>
+        <div style="position: relative">
+          <button
+            id="btn-notifications"
+            type="button"
+            class="admin-tb-btn"
+            aria-label="الإشعارات"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="dd-notifications"
+          >
+            <svg
+              width="18"
+              height="18"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <use href="#icon-bell" />
+            </svg>
+            <span class="admin-tb-badge" aria-hidden="true">3</span>
+          </button>
+          <div id="dd-notifications" class="admin-dd hidden" role="menu" style="min-width: 300px">
+            <div class="admin-dd-head">
+              <span class="admin-dd-title">الإشعارات</span
+              ><span class="admin-badge badge-pending">3 جديدة</span>
+            </div>
+            <button class="admin-dd-item" role="menuitem" type="button">
+              <span class="admin-dd-item-icon" style="background: #fef3c7" aria-hidden="true"
+                ><svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#D97706"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-file-text" /></svg
+              ></span>
+              <div class="admin-dd-item-text">
+                <span class="admin-dd-item-label">مقالة جديدة بانتظار المراجعة</span
+                ><span class="admin-dd-item-time">منذ 14 دقيقة</span>
+              </div>
+            </button>
+            <button class="admin-dd-item" role="menuitem" type="button">
+              <span class="admin-dd-item-icon" style="background: #eff6ff" aria-hidden="true"
+                ><svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#3B82F6"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-map-pin" /></svg
+              ></span>
+              <div class="admin-dd-item-text">
+                <span class="admin-dd-item-label">وجهة جديدة مُضافة</span
+                ><span class="admin-dd-item-time">منذ ساعة</span>
+              </div>
+            </button>
+            <button class="admin-dd-item" role="menuitem" type="button">
+              <span class="admin-dd-item-icon" style="background: #f5f3ff" aria-hidden="true"
+                ><svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#8B5CF6"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-layers" /></svg
+              ></span>
+              <div class="admin-dd-item-text">
+                <span class="admin-dd-item-label">عرض مميز انتهت صلاحيته</span
+                ><span class="admin-dd-item-time">منذ 3 ساعات</span>
+              </div>
+            </button>
+            <div style="padding: 0.625rem 1.125rem; border-top: 1px solid var(--admin-border)">
+              <button
+                type="button"
+                class="admin-btn admin-btn-ghost admin-btn-sm"
+                style="width: 100%; justify-content: center"
+              >
+                عرض الكل
+              </button>
+            </div>
+          </div>
+        </div>
+        <div style="position: relative">
+          <button
+            id="btn-user-menu"
+            type="button"
+            class="admin-tb-btn"
+            aria-label="قائمة المستخدم"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="dd-user-menu"
+            style="width: auto; padding-inline: 0.625rem; gap: 0.5rem"
+          >
+            <span
+              style="
+                width: 2rem;
+                height: 2rem;
+                border-radius: 0.5rem;
+                background: linear-gradient(135deg, #e08d12, #c26c0b);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.75rem;
+                font-weight: 800;
+                color: #fff;
+                flex-shrink: 0;
+              "
+              aria-hidden="true"
+              >أ</span
+            >
+            <span
+              class="hidden sm:block"
+              style="font-size: 0.8125rem; font-weight: 600; color: #262e3a"
+              >أحمد الإداري</span
+            >
+            <svg
+              class="hidden sm:block"
+              width="14"
+              height="14"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            >
+              <use href="#icon-chevron-down" />
+            </svg>
+          </button>
+          <div id="dd-user-menu" class="admin-dd hidden" role="menu" style="min-width: 220px">
+            <div
+              class="admin-dd-head"
+              style="flex-direction: column; align-items: flex-start; gap: 0.375rem"
+            >
+              <span style="font-size: 0.9375rem; font-weight: 700; color: #161c26"
+                >أحمد الإداري</span
+              >
+              <span style="font-size: 0.75rem; color: #9aa6b4; direction: ltr"
+                >admin@rihlaty.example.com</span
+              >
+            </div>
+            <div style="padding: 0.625rem 1.125rem; border-top: 1px solid var(--admin-border)">
+              <button
+                type="button"
+                class="admin-btn admin-btn-sm"
+                role="menuitem"
+                style="
+                  width: 100%;
+                  justify-content: center;
+                  background: #fef2f2;
+                  color: #d64545;
+                  border-color: #fee2e2;
+                "
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-logout" />
+                </svg>
+                تسجيل الخروج (تجريبي)
+              </button>
+            </div>
+          </div>
+        </div>
+        <div style="position: relative">
+          <button
+            id="btn-quick-action"
+            type="button"
+            class="admin-tb-btn"
+            aria-label="إنشاء محتوى"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="dd-quick-action"
+            style="
+              background: var(--admin-sidebar-active);
+              color: #fff;
+              border-color: var(--admin-sidebar-active);
+              width: auto;
+              padding-inline: 0.75rem;
+              gap: 0.375rem;
+              box-shadow: 0 2px 8px rgba(224, 141, 18, 0.3);
+            "
+          >
+            <svg
+              width="15"
+              height="15"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            >
+              <use href="#icon-plus" />
+            </svg>
+            <span class="hidden sm:inline" style="font-size: 0.8125rem; font-weight: 700"
+              >إنشاء محتوى</span
+            >
+          </button>
+          <div id="dd-quick-action" class="admin-dd hidden" role="menu" style="min-width: 210px">
+            <div class="admin-dd-head"><span class="admin-dd-title">إنشاء محتوى جديد</span></div>
+            <div style="padding: 0.3125rem">
+              <button
+                type="button"
+                class="admin-dd-item"
+                role="menuitem"
+                data-ct-create="destination"
+              >
+                <span class="admin-dd-item-icon" style="background: #eff6ff" aria-hidden="true"
+                  ><svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#3B82F6"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-map-pin" /></svg
+                ></span>
+                <div class="admin-dd-item-text">
+                  <span class="admin-dd-item-label">وجهة جديدة</span>
+                </div>
+              </button>
+              <button type="button" class="admin-dd-item" role="menuitem" data-ct-create="article">
+                <span class="admin-dd-item-icon" style="background: #f5f3ff" aria-hidden="true"
+                  ><svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#8B5CF6"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-file-text" /></svg
+                ></span>
+                <div class="admin-dd-item-text">
+                  <span class="admin-dd-item-label">مقالة جديدة</span>
+                </div>
+              </button>
+              <button type="button" class="admin-dd-item" role="menuitem" data-ct-create="deal">
+                <span class="admin-dd-item-icon" style="background: #fef3c7" aria-hidden="true"
+                  ><svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#D97706"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-layers" /></svg
+                ></span>
+                <div class="admin-dd-item-text">
+                  <span class="admin-dd-item-label">عرض مميز</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main id="main-content" class="admin-content" role="main" tabindex="-1">
+        <nav class="admin-breadcrumb" aria-label="مسار التنقل">
+          <a href="index.html">لوحة الإدارة</a>
+          <span class="admin-breadcrumb-sep" aria-hidden="true">/</span>
+          <span aria-current="page">المحتوى</span>
+        </nav>
+
+        <!-- ══════════════════ CONTENT (T032) ══════════════════════════ --> <!-- ── Page
+        header ── -->
+        <div class="admin-page-header">
+          <div>
+            <h1 class="admin-page-title">إدارة المحتوى</h1>
+            <p class="admin-page-desc">
+              إدارة الصفحة الرئيسية · الوجهات · المقالات · العروض والكوبونات المميزة
+              <span class="admin-honesty" style="margin-inline-start: 0.5rem">
+                <svg
+                  width="12"
+                  height="12"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-info" />
+                </svg>
+                لا يتم نشر محتوى حقيقي في هذه النسخة
+              </span>
+            </p>
+          </div>
+          <div class="admin-page-actions">
+            <button type="button" class="admin-btn admin-btn-secondary" data-ct-action="export">
+              <svg
+                width="14"
+                height="14"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <use href="#icon-download" />
+              </svg>
+              تصدير (تجريبي)
+            </button>
+            <button
+              type="button"
+              class="admin-btn admin-btn-primary"
+              data-modal-open="modal-ct-create"
+              data-ct-create="article"
+              id="btn-ct-create"
+            >
+              <svg
+                width="14"
+                height="14"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <use href="#icon-plus" />
+              </svg>
+              إنشاء محتوى تجريبي
+            </button>
+          </div>
+        </div>
+
+        <!-- ── 8 Stats ── -->
+        <div class="ct-stats-grid">
+          <!-- 1. مقالات المدونة -->
+          <div class="ct-stat-card">
+            <div class="ct-stat-top">
+              <span class="ct-stat-label">مقالات المدونة</span>
+              <span class="ct-stat-icon" style="background: #eff6ff">
+                <svg
+                  width="15"
+                  height="15"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#3B82F6"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-file-text" />
+                </svg>
+              </span>
+            </div>
+            <span class="ct-stat-value">24</span>
+            <span class="ct-stat-delta up">
+              <svg
+                width="11"
+                height="11"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <use href="#icon-trend-up" />
+              </svg>
+              +3 هذا الشهر
+            </span>
+          </div>
+
+          <!-- 2. الوجهات -->
+          <div class="ct-stat-card">
+            <div class="ct-stat-top">
+              <span class="ct-stat-label">الوجهات</span>
+              <span class="ct-stat-icon" style="background: #ecfdf5">
+                <svg
+                  width="15"
+                  height="15"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#10B981"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-map-pin" />
+                </svg>
+              </span>
+            </div>
+            <span class="ct-stat-value">18</span>
+            <span class="ct-stat-delta up">
+              <svg
+                width="11"
+                height="11"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <use href="#icon-trend-up" />
+              </svg>
+              +2 هذا الشهر
+            </span>
+          </div>
+
+          <!-- 3. العروض المميزة -->
+          <div class="ct-stat-card">
+            <div class="ct-stat-top">
+              <span class="ct-stat-label">العروض المميزة</span>
+              <span class="ct-stat-icon" style="background: #fffbeb">
+                <svg
+                  width="15"
+                  height="15"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#E08D12"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-layers" />
+                </svg>
+              </span>
+            </div>
+            <span class="ct-stat-value">12</span>
+            <span class="ct-stat-delta up">
+              <svg
+                width="11"
+                height="11"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <use href="#icon-trend-up" />
+              </svg>
+              +1 هذا الشهر
+            </span>
+          </div>
+
+          <!-- 4. الكوبونات المميزة -->
+          <div class="ct-stat-card">
+            <div class="ct-stat-top">
+              <span class="ct-stat-label">الكوبونات المميزة</span>
+              <span class="ct-stat-icon" style="background: #f5f3ff">
+                <svg
+                  width="15"
+                  height="15"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#8B5CF6"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-award" />
+                </svg>
+              </span>
+            </div>
+            <span class="ct-stat-value">9</span>
+            <span class="ct-stat-delta warn">
+              <svg
+                width="11"
+                height="11"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <use href="#icon-minus" />
+              </svg>
+              بدون تغيير
+            </span>
+          </div>
+
+          <!-- 5. أقسام الصفحة الرئيسية -->
+          <div class="ct-stat-card">
+            <div class="ct-stat-top">
+              <span class="ct-stat-label">أقسام الصفحة الرئيسية</span>
+              <span class="ct-stat-icon" style="background: #f0fdf4">
+                <svg
+                  width="15"
+                  height="15"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#15803D"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-grid" />
+                </svg>
+              </span>
+            </div>
+            <span class="ct-stat-value">7</span>
+            <span class="ct-stat-delta up" style="color: #15803d">كل الأقسام منشورة</span>
+          </div>
+
+          <!-- 6. المسودات -->
+          <div class="ct-stat-card">
+            <div class="ct-stat-top">
+              <span class="ct-stat-label">المسودات</span>
+              <span class="ct-stat-icon" style="background: #f3f4f6">
+                <svg
+                  width="15"
+                  height="15"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#6B7280"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-edit" />
+                </svg>
+              </span>
+            </div>
+            <span class="ct-stat-value">5</span>
+            <span class="ct-stat-delta warn">
+              <svg
+                width="11"
+                height="11"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <use href="#icon-clock" />
+              </svg>
+              تحتاج نشراً
+            </span>
+          </div>
+
+          <!-- 7. بانتظار المراجعة -->
+          <div class="ct-stat-card" style="border-top: 2px solid #d64545">
+            <div class="ct-stat-top">
+              <span class="ct-stat-label">بانتظار المراجعة</span>
+              <span class="ct-stat-icon" style="background: #fef2f2">
+                <svg
+                  width="15"
+                  height="15"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#D64545"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-alert-circle" />
+                </svg>
+              </span>
+            </div>
+            <span class="ct-stat-value" style="color: #d64545">4</span>
+            <span class="ct-stat-delta down">
+              <svg
+                width="11"
+                height="11"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <use href="#icon-alert-circle" />
+              </svg>
+              يتطلب إجراء عاجل
+            </span>
+          </div>
+
+          <!-- 8. المنشور (تجريبي) -->
+          <div class="ct-stat-card" style="border-top: 2px solid #10b981">
+            <div class="ct-stat-top">
+              <span class="ct-stat-label">المنشور (تجريبي)</span>
+              <span class="ct-stat-icon" style="background: #ecfdf5">
+                <svg
+                  width="15"
+                  height="15"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#10B981"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-check-circle" />
+                </svg>
+              </span>
+            </div>
+            <span class="ct-stat-value">52</span>
+            <span class="ct-stat-delta up">
+              <svg
+                width="11"
+                height="11"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <use href="#icon-trend-up" />
+              </svg>
+              +6 هذا الشهر
+            </span>
+          </div>
+        </div>
+        <!-- /ct-stats-grid --> <!-- ── Tab bar ── -->
+        <div role="tablist" aria-label="أقسام إدارة المحتوى" class="ct-tab-bar" id="ct-tablist">
+          <button
+            type="button"
+            role="tab"
+            id="tab-homepage"
+            aria-selected="true"
+            aria-controls="panel-homepage"
+            class="ct-tab-btn"
+          >
+            <svg
+              width="14"
+              height="14"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <use href="#icon-grid" />
+            </svg>
+            أقسام الصفحة الرئيسية
+            <span class="ct-tab-badge">7</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            id="tab-destinations"
+            aria-selected="false"
+            aria-controls="panel-destinations"
+            class="ct-tab-btn"
+          >
+            <svg
+              width="14"
+              height="14"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <use href="#icon-map-pin" />
+            </svg>
+            الوجهات
+            <span class="ct-tab-badge">18</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            id="tab-blog"
+            aria-selected="false"
+            aria-controls="panel-blog"
+            class="ct-tab-btn"
+          >
+            <svg
+              width="14"
+              height="14"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <use href="#icon-file-text" />
+            </svg>
+            المقالات
+            <span class="ct-tab-badge">24</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            id="tab-deals"
+            aria-selected="false"
+            aria-controls="panel-deals"
+            class="ct-tab-btn"
+          >
+            <svg
+              width="14"
+              height="14"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <use href="#icon-layers" />
+            </svg>
+            عروض مميزة
+            <span class="ct-tab-badge">12</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            id="tab-coupons"
+            aria-selected="false"
+            aria-controls="panel-coupons"
+            class="ct-tab-btn"
+          >
+            <svg
+              width="14"
+              height="14"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <use href="#icon-award" />
+            </svg>
+            كوبونات مميزة
+            <span class="ct-tab-badge">9</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            id="tab-pending"
+            aria-selected="false"
+            aria-controls="panel-pending"
+            class="ct-tab-btn"
+          >
+            <svg
+              width="14"
+              height="14"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <use href="#icon-alert-circle" />
+            </svg>
+            بانتظار المراجعة
+            <span class="ct-tab-badge" style="background: #fef2f2; color: #d64545">4</span>
+          </button>
+        </div>
+
+        <!-- ══ Panel 1: أقسام الصفحة الرئيسية (active by default) ══ -->
+        <div
+          id="panel-homepage"
+          role="tabpanel"
+          aria-labelledby="tab-homepage"
+          class="ct-panel is-active"
+        >
+          <!-- Mini preview of the live homepage -->
+          <div class="ct-preview-wrap" style="margin-bottom: 1.5rem">
+            <div class="ct-preview-topbar">
+              <div class="ct-preview-dot" style="background: #ff5f57"></div>
+              <div class="ct-preview-dot" style="background: #febc2e"></div>
+              <div class="ct-preview-dot" style="background: #28c840"></div>
+              <div class="ct-preview-url">rihlaty.example.com</div>
+              <span style="font-size: 0.6875rem; color: rgba(255, 255, 255, 0.35); direction: ltr"
+                >معاينة الصفحة الرئيسية (تجريبي)</span
+              >
+            </div>
+            <div class="ct-preview-body" id="ct-preview-body">
+              <div class="ct-preview-section">
+                <span class="ct-preview-section-name">البانر الرئيسي</span>
+                <span class="ct-preview-tag">مميز</span>
+              </div>
+              <div class="ct-preview-section">
+                <span class="ct-preview-section-name">العروض المميزة</span>
+                <span class="ct-preview-tag">مميز</span>
+              </div>
+              <div class="ct-preview-section">
+                <span class="ct-preview-section-name">وجهات مختارة</span>
+                <span class="ct-preview-tag">مميز</span>
+              </div>
+              <div class="ct-preview-section">
+                <span class="ct-preview-section-name">أحدث الكوبونات</span>
+                <span class="ct-preview-tag">مميز</span>
+              </div>
+              <div class="ct-preview-section">
+                <span class="ct-preview-section-name">دليل المسافر</span>
+                <span class="ct-preview-tag">مميز</span>
+              </div>
+              <div class="ct-preview-section">
+                <span class="ct-preview-section-name">شهادات العملاء</span>
+                <span class="ct-preview-tag">مميز</span>
+              </div>
+              <div class="ct-preview-section">
+                <span class="ct-preview-section-name">نداء إجراء ختامي</span>
+                <span class="ct-preview-tag">مميز</span>
+              </div>
+            </div>
+          </div>
+          <!-- /ct-preview-wrap --> <!-- 7 section cards -->
+          <div class="admin-section-header">
+            <h2 class="admin-section-title">أقسام الصفحة الرئيسية</h2>
+            <span class="admin-honesty" style="font-size: 0.75rem">
+              <svg
+                width="11"
+                height="11"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <use href="#icon-info" />
+              </svg>
+              إعادة الترتيب تجريبية ولا تؤثر على الموقع الآن
+            </span>
+          </div>
+
+          <div class="ct-sections-list">
+            <!-- Section; 1: البانر الرئيسي -->
+            <div class="ct-section-card" data-section-id="section-hero">
+              <div class="ct-section-order" aria-label="الترتيب 1">1</div>
+              <div class="ct-section-info">
+                <div class="ct-section-name">البانر الرئيسي</div>
+                <div class="ct-section-meta">عنصر واحد · آخر تحديث 1 يونيو 2026</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span class="admin-badge badge-active">منشور تجريبي</span>
+                <button
+                  type="button"
+                  class="ct-toggle-btn is-featured"
+                  data-ct-action="toggle-feature"
+                  data-section="section-hero"
+                  title="تمييز القسم"
+                  aria-label="تمييز القسم"
+                >
+                  <svg
+                    width="11"
+                    height="11"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-check-circle" />
+                  </svg>
+                  مميز
+                </button>
+              </div>
+              <div class="ct-section-actions">
+                <button
+                  type="button"
+                  class="admin-btn admin-btn-sm admin-btn-secondary"
+                  data-ct-action="edit-section"
+                  data-section="section-hero"
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-edit" />
+                  </svg>
+                  تعديل
+                </button>
+                <button
+                  type="button"
+                  class="admin-btn admin-btn-sm admin-btn-ghost"
+                  data-ct-action="reorder-section"
+                  aria-label="إعادة ترتيب القسم"
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-menu" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="admin-btn admin-btn-sm admin-btn-ghost"
+                  data-ct-action="preview-section"
+                  data-section="section-hero"
+                  aria-label="معاينة القسم"
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-eye" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Section; 7: نداء إجراء ختامي -->
+            <div class="ct-section-card" data-section-id="section-final-cta">
+              <div class="ct-section-order" aria-label="الترتيب 7">7</div>
+              <div class="ct-section-info">
+                <div class="ct-section-name">نداء إجراء ختامي</div>
+                <div class="ct-section-meta">عنصر واحد · آخر تحديث 20 مايو 2026</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span class="admin-badge badge-active">منشور تجريبي</span>
+                <button
+                  type="button"
+                  class="ct-toggle-btn is-featured"
+                  data-ct-action="toggle-feature"
+                  data-section="section-final-cta"
+                >
+                  <svg
+                    width="11"
+                    height="11"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-check-circle" />
+                  </svg>
+                  مميز
+                </button>
+              </div>
+              <div class="ct-section-actions">
+                <button
+                  type="button"
+                  class="admin-btn admin-btn-sm admin-btn-secondary"
+                  data-ct-action="edit-section"
+                  data-section="section-final-cta"
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-edit" />
+                  </svg>
+                  تعديل
+                </button>
+                <button
+                  type="button"
+                  class="admin-btn admin-btn-sm admin-btn-ghost"
+                  data-ct-action="reorder-section"
+                  aria-label="إعادة ترتيب القسم"
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-menu" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="admin-btn admin-btn-sm admin-btn-ghost"
+                  data-ct-action="preview-section"
+                  data-section="section-final-cta"
+                  aria-label="معاينة القسم"
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-eye" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- /ct-sections-list -->
+        </div>
+        <!-- /panel-homepage --> <!-- ══ Panel; 2: الوجهات ══ -->
+        <div
+          id="panel-destinations"
+          role="tabpanel"
+          aria-labelledby="tab-destinations"
+          class="ct-panel"
+        >
+          <div class="admin-section-header" style="margin-bottom: 1rem">
+            <h2 class="admin-section-title">
+              الوجهات
+              <span style="font-size: 0.875rem; font-weight: 500; color: #9aa6b4">(18 وجهة)</span>
+            </h2>
+            <button
+              type="button"
+              class="admin-btn admin-btn-primary admin-btn-sm"
+              data-modal-open="modal-ct-create"
+              data-ct-create="destination"
+            >
+              <svg
+                width="13"
+                height="13"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <use href="#icon-plus" />
+              </svg>
+              وجهة جديدة
+            </button>
+          </div>
+          <div class="ct-table-wrap">
+            <table class="ct-table" aria-label="قائمة الوجهات">
+              <thead>
+                <tr>
+                  <th>الوجهة</th>
+                  <th>المنطقة</th>
+                  <th>الحالة</th>
+                  <th>عروض مرتبطة</th>
+                  <th>مقالات</th>
+                  <th>مميزة</th>
+                  <th>آخر تحديث</th>
+                  <th>إجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="الوجهة"><span class="ct-content-title">دبي</span></td>
+                  <td data-label="المنطقة">الخليج العربي</td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-published">منشور تجريبي</span>
+                  </td>
+                  <td data-label="عروض مرتبطة">54</td>
+                  <td data-label="مقالات">3</td>
+                  <td data-label="مميزة">
+                    <button
+                      type="button"
+                      class="ct-toggle-btn is-featured"
+                      data-ct-action="toggle-feature"
+                      data-content-id="dest-dubai"
+                    >
+                      <svg
+                        width="10"
+                        height="10"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <use href="#icon-check-circle" />
+                      </svg>
+                      مميزة
+                    </button>
+                  </td>
+                  <td data-label="آخر تحديث" class="ltr">2026-06-04</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="dest-dubai"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="publish-content"
+                        data-content-id="dest-dubai"
+                        title="نشر / إلغاء نشر"
+                        aria-label="نشر أو إلغاء نشر"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-eye" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="dest-dubai"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="الوجهة"><span class="ct-content-title">إسطنبول</span></td>
+                  <td data-label="المنطقة">أوروبا وآسيا</td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-published">منشور تجريبي</span>
+                  </td>
+                  <td data-label="عروض مرتبطة">38</td>
+                  <td data-label="مقالات">2</td>
+                  <td data-label="مميزة">
+                    <button
+                      type="button"
+                      class="ct-toggle-btn is-featured"
+                      data-ct-action="toggle-feature"
+                      data-content-id="dest-istanbul"
+                    >
+                      <svg
+                        width="10"
+                        height="10"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <use href="#icon-check-circle" />
+                      </svg>
+                      مميزة
+                    </button>
+                  </td>
+                  <td data-label="آخر تحديث" class="ltr">2026-05-30</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="dest-istanbul"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="publish-content"
+                        data-content-id="dest-istanbul"
+                        title="نشر / إلغاء نشر"
+                        aria-label="نشر أو إلغاء نشر"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-eye" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="dest-istanbul"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="الوجهة"><span class="ct-content-title">المالديف</span></td>
+                  <td data-label="المنطقة">جنوب آسيا</td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-published">منشور تجريبي</span>
+                  </td>
+                  <td data-label="عروض مرتبطة">24</td>
+                  <td data-label="مقالات">1</td>
+                  <td data-label="مميزة">
+                    <button
+                      type="button"
+                      class="ct-toggle-btn is-featured"
+                      data-ct-action="toggle-feature"
+                      data-content-id="dest-maldives"
+                    >
+                      <svg
+                        width="10"
+                        height="10"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <use href="#icon-check-circle" />
+                      </svg>
+                      مميزة
+                    </button>
+                  </td>
+                  <td data-label="آخر تحديث" class="ltr">2026-05-25</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="dest-maldives"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="publish-content"
+                        data-content-id="dest-maldives"
+                        title="نشر / إلغاء نشر"
+                        aria-label="نشر أو إلغاء نشر"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-eye" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="dest-maldives"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="الوجهة"><span class="ct-content-title">القاهرة</span></td>
+                  <td data-label="المنطقة">شمال أفريقيا</td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-published">منشور تجريبي</span>
+                  </td>
+                  <td data-label="عروض مرتبطة">18</td>
+                  <td data-label="مقالات">1</td>
+                  <td data-label="مميزة">
+                    <button
+                      type="button"
+                      class="ct-toggle-btn not-featured"
+                      data-ct-action="toggle-feature"
+                      data-content-id="dest-cairo"
+                    >
+                      غير مميزة
+                    </button>
+                  </td>
+                  <td data-label="آخر تحديث" class="ltr">2026-05-20</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="dest-cairo"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="publish-content"
+                        data-content-id="dest-cairo"
+                        title="نشر / إلغاء نشر"
+                        aria-label="نشر أو إلغاء نشر"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-eye" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="dest-cairo"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="الوجهة"><span class="ct-content-title">لندن</span></td>
+                  <td data-label="المنطقة">أوروبا</td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-published">منشور تجريبي</span>
+                  </td>
+                  <td data-label="عروض مرتبطة">16</td>
+                  <td data-label="مقالات">1</td>
+                  <td data-label="مميزة">
+                    <button
+                      type="button"
+                      class="ct-toggle-btn not-featured"
+                      data-ct-action="toggle-feature"
+                      data-content-id="dest-london"
+                    >
+                      غير مميزة
+                    </button>
+                  </td>
+                  <td data-label="آخر تحديث" class="ltr">2026-05-18</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="dest-london"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="publish-content"
+                        data-content-id="dest-london"
+                        title="نشر / إلغاء نشر"
+                        aria-label="نشر أو إلغاء نشر"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-eye" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="dest-london"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="الوجهة"><span class="ct-content-title">روما</span></td>
+                  <td data-label="المنطقة">أوروبا</td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-published">منشور تجريبي</span>
+                  </td>
+                  <td data-label="عروض مرتبطة">12</td>
+                  <td data-label="مقالات">0</td>
+                  <td data-label="مميزة">
+                    <button
+                      type="button"
+                      class="ct-toggle-btn not-featured"
+                      data-ct-action="toggle-feature"
+                      data-content-id="dest-rome"
+                    >
+                      غير مميزة
+                    </button>
+                  </td>
+                  <td data-label="آخر تحديث" class="ltr">2026-05-10</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="dest-rome"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="publish-content"
+                        data-content-id="dest-rome"
+                        title="نشر / إلغاء نشر"
+                        aria-label="نشر أو إلغاء نشر"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-eye" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="dest-rome"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- /panel-destinations --> <!-- ══ Panel; 3: المقالات ══ -->
+        <div id="panel-blog" role="tabpanel" aria-labelledby="tab-blog" class="ct-panel">
+          <div class="admin-section-header" style="margin-bottom: 1rem">
+            <h2 class="admin-section-title">
+              المقالات
+              <span style="font-size: 0.875rem; font-weight: 500; color: #9aa6b4">(24 مقالة)</span>
+            </h2>
+            <button
+              type="button"
+              class="admin-btn admin-btn-primary admin-btn-sm"
+              data-modal-open="modal-ct-create"
+              data-ct-create="article"
+            >
+              <svg
+                width="13"
+                height="13"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <use href="#icon-plus" />
+              </svg>
+              مقالة جديدة
+            </button>
+          </div>
+          <div class="ct-table-wrap">
+            <table class="ct-table" aria-label="قائمة المقالات">
+              <thead>
+                <tr>
+                  <th>العنوان</th>
+                  <th>الفئة</th>
+                  <th>الكاتب</th>
+                  <th>الحالة</th>
+                  <th>وقت القراءة</th>
+                  <th>الوجهة المرتبطة</th>
+                  <th>آخر تحديث</th>
+                  <th>إجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="العنوان">
+                    <span class="ct-content-title">كيف تجد أرخص عروض السفر إلى دبي؟</span>
+                  </td>
+                  <td data-label="الفئة">
+                    <span class="admin-badge badge-neutral">أرخص وجهات</span>
+                  </td>
+                  <td data-label="الكاتب">فريق رحلاتي</td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-published">منشور تجريبي</span>
+                  </td>
+                  <td data-label="وقت القراءة">8 د</td>
+                  <td data-label="الوجهة المرتبطة">دبي</td>
+                  <td data-label="آخر تحديث" class="ltr">2026-05-28</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="art-cheap-dubai-deals"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="publish-content"
+                        data-content-id="art-cheap-dubai-deals"
+                        title="نشر / إلغاء نشر"
+                        aria-label="نشر أو إلغاء نشر"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-eye" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="art-cheap-dubai-deals"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="العنوان">
+                    <span class="ct-content-title">١٠ نصائح ذهبية قبل السفر لأول مرة</span>
+                  </td>
+                  <td data-label="الفئة">
+                    <span class="admin-badge badge-neutral">نصائح السفر</span>
+                  </td>
+                  <td data-label="الكاتب">فريق رحلاتي</td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-published">منشور تجريبي</span>
+                  </td>
+                  <td data-label="وقت القراءة">6 د</td>
+                  <td data-label="الوجهة المرتبطة">إسطنبول</td>
+                  <td data-label="آخر تحديث" class="ltr">2026-05-01</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="art-travel-tips"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="publish-content"
+                        data-content-id="art-travel-tips"
+                        title="نشر / إلغاء نشر"
+                        aria-label="نشر أو إلغاء نشر"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-eye" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="art-travel-tips"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="العنوان">
+                    <span class="ct-content-title">أفضل وجهات العائلة في الصيف</span>
+                  </td>
+                  <td data-label="الفئة">
+                    <span class="admin-badge badge-neutral">سفر عائلي</span>
+                  </td>
+                  <td data-label="الكاتب">نور الكاتبة</td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-published">منشور تجريبي</span>
+                  </td>
+                  <td data-label="وقت القراءة">7 د</td>
+                  <td data-label="الوجهة المرتبطة">المالديف</td>
+                  <td data-label="آخر تحديث" class="ltr">2026-04-20</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="art-summer-family"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="publish-content"
+                        data-content-id="art-summer-family"
+                        title="نشر / إلغاء نشر"
+                        aria-label="نشر أو إلغاء نشر"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-eye" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="art-summer-family"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr style="background: #fffbeb">
+                  <td data-label="العنوان">
+                    <span class="ct-content-title">وفّر ٣٠٪ على رحلتك القادمة</span>
+                  </td>
+                  <td data-label="الفئة">
+                    <span class="admin-badge badge-neutral">توفير وكوبونات</span>
+                  </td>
+                  <td data-label="الكاتب">فريق رحلاتي</td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-draft">مسودة تجريبية</span>
+                  </td>
+                  <td data-label="وقت القراءة">5 د</td>
+                  <td data-label="الوجهة المرتبطة">دبي</td>
+                  <td data-label="آخر تحديث" class="ltr">2026-06-03</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-primary"
+                        data-ct-action="publish-content"
+                        data-content-id="art-save-30-percent"
+                        title="نشر المسودة"
+                        aria-label="نشر المسودة"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-eye" />
+                        </svg>
+                        نشر
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="art-save-30-percent"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="art-save-30-percent"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="العنوان">
+                    <span class="ct-content-title">دليل إسطنبول الشامل للمسافر العربي</span>
+                  </td>
+                  <td data-label="الفئة">
+                    <span class="admin-badge badge-neutral">أدلة السفر</span>
+                  </td>
+                  <td data-label="الكاتب">كريم المرشد</td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-published">منشور تجريبي</span>
+                  </td>
+                  <td data-label="وقت القراءة">10 د</td>
+                  <td data-label="الوجهة المرتبطة">إسطنبول</td>
+                  <td data-label="آخر تحديث" class="ltr">2026-03-15</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="art-istanbul-guide"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="publish-content"
+                        data-content-id="art-istanbul-guide"
+                        title="نشر / إلغاء نشر"
+                        aria-label="نشر أو إلغاء نشر"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-eye" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="art-istanbul-guide"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- /panel-blog --> <!-- ══ Panel; 4: عروض مميزة ══ -->
+        <div id="panel-deals" role="tabpanel" aria-labelledby="tab-deals" class="ct-panel">
+          <div class="admin-section-header" style="margin-bottom: 1rem">
+            <h2 class="admin-section-title">
+              العروض المميزة
+              <span style="font-size: 0.875rem; font-weight: 500; color: #9aa6b4">(12 عرضاً)</span>
+            </h2>
+            <span class="admin-honesty" style="font-size: 0.75rem">
+              <svg
+                width="11"
+                height="11"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <use href="#icon-info" />
+              </svg>
+              التميز لا يؤثر فعلياً على الصفحة الرئيسية الآن
+            </span>
+          </div>
+          <div class="ct-table-wrap">
+            <table class="ct-table" aria-label="قائمة العروض المميزة">
+              <thead>
+                <tr>
+                  <th>العرض</th>
+                  <th>الشركة</th>
+                  <th>الوجهة</th>
+                  <th>الحالة</th>
+                  <th>الترتيب</th>
+                  <th>انتهاء الصلاحية</th>
+                  <th>إجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="العرض">
+                    <span class="ct-content-title">عطلة في شرم الشيخ – 4 ليالٍ</span>
+                  </td>
+                  <td data-label="الشركة">
+                    <a
+                      href="company-details.html?id=co-001"
+                      class="admin-btn admin-btn-sm admin-btn-ghost"
+                      style="padding: 0; font-weight: 600; color: var(--admin-sidebar-active)"
+                      >وكالة النيل</a
+                    >
+                  </td>
+                  <td data-label="الوجهة">شرم الشيخ</td>
+                  <td data-label="الحالة"><span class="admin-badge badge-featured">مميز</span></td>
+                  <td data-label="الترتيب">
+                    <span style="font-weight: 800; color: var(--admin-sidebar-active)">#1</span>
+                  </td>
+                  <td data-label="انتهاء الصلاحية" class="ltr">2026-06-25</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="ct-toggle-btn is-featured"
+                        data-ct-action="toggle-feature"
+                        data-content-id="deal-001"
+                        style="font-size: 0.6875rem"
+                      >
+                        إلغاء التميز
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="deal-001"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="العرض">
+                    <span class="ct-content-title">باقة دبي الفاخرة – 5 ليالٍ</span>
+                  </td>
+                  <td data-label="الشركة">
+                    <a
+                      href="company-details.html?id=co-001"
+                      class="admin-btn admin-btn-sm admin-btn-ghost"
+                      style="padding: 0; font-weight: 600; color: var(--admin-sidebar-active)"
+                      >وكالة النيل</a
+                    >
+                  </td>
+                  <td data-label="الوجهة">دبي</td>
+                  <td data-label="الحالة"><span class="admin-badge badge-featured">مميز</span></td>
+                  <td data-label="الترتيب">
+                    <span style="font-weight: 800; color: var(--admin-sidebar-active)">#2</span>
+                  </td>
+                  <td data-label="انتهاء الصلاحية" class="ltr">2026-07-31</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="ct-toggle-btn is-featured"
+                        data-ct-action="toggle-feature"
+                        data-content-id="deal-003"
+                        style="font-size: 0.6875rem"
+                      >
+                        إلغاء التميز
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="deal-003"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="العرض">
+                    <span class="ct-content-title">جولة باريس العاطفية – 5 ليالٍ</span>
+                  </td>
+                  <td data-label="الشركة">
+                    <a
+                      href="company-details.html?id=co-007"
+                      class="admin-btn admin-btn-sm admin-btn-ghost"
+                      style="padding: 0; font-weight: 600; color: var(--admin-sidebar-active)"
+                      >يورو ترافيل</a
+                    >
+                  </td>
+                  <td data-label="الوجهة">باريس</td>
+                  <td data-label="الحالة"><span class="admin-badge badge-featured">مميز</span></td>
+                  <td data-label="الترتيب">
+                    <span style="font-weight: 800; color: var(--admin-sidebar-active)">#3</span>
+                  </td>
+                  <td data-label="انتهاء الصلاحية" class="ltr">2026-09-30</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="ct-toggle-btn is-featured"
+                        data-ct-action="toggle-feature"
+                        data-content-id="deal-005"
+                        style="font-size: 0.6875rem"
+                      >
+                        إلغاء التميز
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="deal-005"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="العرض">
+                    <span class="ct-content-title">باريس رومانسية – 6 ليالٍ</span>
+                  </td>
+                  <td data-label="الشركة">
+                    <a
+                      href="company-details.html?id=co-007"
+                      class="admin-btn admin-btn-sm admin-btn-ghost"
+                      style="padding: 0; font-weight: 600; color: var(--admin-sidebar-active)"
+                      >يورو ترافيل</a
+                    >
+                  </td>
+                  <td data-label="الوجهة">باريس</td>
+                  <td data-label="الحالة"><span class="admin-badge badge-featured">مميز</span></td>
+                  <td data-label="الترتيب">
+                    <span style="font-weight: 800; color: var(--admin-sidebar-active)">#4</span>
+                  </td>
+                  <td data-label="انتهاء الصلاحية" class="ltr">2026-08-31</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="ct-toggle-btn is-featured"
+                        data-ct-action="toggle-feature"
+                        data-content-id="deal-007"
+                        style="font-size: 0.6875rem"
+                      >
+                        إلغاء التميز
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="deal-007"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- /panel-deals --> <!-- ══ Panel; 5: كوبونات مميزة ══ -->
+        <div id="panel-coupons" role="tabpanel" aria-labelledby="tab-coupons" class="ct-panel">
+          <div class="admin-section-header" style="margin-bottom: 1rem">
+            <h2 class="admin-section-title">
+              الكوبونات المميزة
+              <span style="font-size: 0.875rem; font-weight: 500; color: #9aa6b4">(9 كوبونات)</span>
+            </h2>
+            <span class="admin-honesty" style="font-size: 0.75rem">
+              <svg
+                width="11"
+                height="11"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <use href="#icon-info" />
+              </svg>
+              التميز لا يؤثر فعلياً على الصفحة الرئيسية الآن
+            </span>
+          </div>
+          <div class="ct-table-wrap">
+            <table class="ct-table" aria-label="قائمة الكوبونات المميزة">
+              <thead>
+                <tr>
+                  <th>كود الكوبون</th>
+                  <th>المزود</th>
+                  <th>الخصم</th>
+                  <th>الحالة</th>
+                  <th>انتهاء الصلاحية</th>
+                  <th>مميز</th>
+                  <th>إجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="كود الكوبون" class="ltr">
+                    <span
+                      style="
+                        font-family: monospace;
+                        font-size: 0.9375rem;
+                        font-weight: 800;
+                        color: #161c26;
+                        letter-spacing: 0.04em;
+                      "
+                      >FLY15</span
+                    >
+                  </td>
+                  <td data-label="المزود">يورو ترافيل سيستمز</td>
+                  <td data-label="الخصم">
+                    <span style="font-weight: 800; color: #15803d">15%</span>
+                  </td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-active">نشط تجريبي</span>
+                  </td>
+                  <td data-label="انتهاء الصلاحية" class="ltr">2026-08-31</td>
+                  <td data-label="مميز">
+                    <button
+                      type="button"
+                      class="ct-toggle-btn is-featured"
+                      data-ct-action="toggle-feature"
+                      data-content-id="coupon-flights-15"
+                    >
+                      <svg
+                        width="10"
+                        height="10"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <use href="#icon-check-circle" />
+                      </svg>
+                      مميز
+                    </button>
+                  </td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="coupon-flights-15"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="coupon-flights-15"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="كود الكوبون" class="ltr">
+                    <span
+                      style="
+                        font-family: monospace;
+                        font-size: 0.9375rem;
+                        font-weight: 800;
+                        color: #161c26;
+                        letter-spacing: 0.04em;
+                      "
+                      >HOTEL20</span
+                    >
+                  </td>
+                  <td data-label="المزود">نزل شرم الريزورت</td>
+                  <td data-label="الخصم">
+                    <span style="font-weight: 800; color: #15803d">20%</span>
+                  </td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-active">نشط تجريبي</span>
+                  </td>
+                  <td data-label="انتهاء الصلاحية" class="ltr">2026-09-30</td>
+                  <td data-label="مميز">
+                    <button
+                      type="button"
+                      class="ct-toggle-btn is-featured"
+                      data-ct-action="toggle-feature"
+                      data-content-id="coupon-hotel-20"
+                    >
+                      <svg
+                        width="10"
+                        height="10"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <use href="#icon-check-circle" />
+                      </svg>
+                      مميز
+                    </button>
+                  </td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="coupon-hotel-20"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="coupon-hotel-20"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="كود الكوبون" class="ltr">
+                    <span
+                      style="
+                        font-family: monospace;
+                        font-size: 0.9375rem;
+                        font-weight: 800;
+                        color: #161c26;
+                        letter-spacing: 0.04em;
+                      "
+                      >SUMMER25</span
+                    >
+                  </td>
+                  <td data-label="المزود">وكالة الوفاء للسياحة</td>
+                  <td data-label="الخصم">
+                    <span style="font-weight: 800; color: #15803d">25%</span>
+                  </td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-active">نشط تجريبي</span>
+                  </td>
+                  <td data-label="انتهاء الصلاحية" class="ltr">2026-08-31</td>
+                  <td data-label="مميز">
+                    <button
+                      type="button"
+                      class="ct-toggle-btn is-featured"
+                      data-ct-action="toggle-feature"
+                      data-content-id="coupon-summer-25"
+                    >
+                      <svg
+                        width="10"
+                        height="10"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <use href="#icon-check-circle" />
+                      </svg>
+                      مميز
+                    </button>
+                  </td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="coupon-summer-25"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="coupon-summer-25"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="كود الكوبون" class="ltr">
+                    <span
+                      style="
+                        font-family: monospace;
+                        font-size: 0.9375rem;
+                        font-weight: 800;
+                        color: #161c26;
+                        letter-spacing: 0.04em;
+                      "
+                      >LUXURY30</span
+                    >
+                  </td>
+                  <td data-label="المزود">نخيل السفر</td>
+                  <td data-label="الخصم">
+                    <span style="font-weight: 800; color: #15803d">30%</span>
+                  </td>
+                  <td data-label="الحالة">
+                    <span class="admin-badge badge-active">نشط تجريبي</span>
+                  </td>
+                  <td data-label="انتهاء الصلاحية" class="ltr">2026-12-31</td>
+                  <td data-label="مميز">
+                    <button
+                      type="button"
+                      class="ct-toggle-btn is-featured"
+                      data-ct-action="toggle-feature"
+                      data-content-id="coupon-luxury-30"
+                    >
+                      <svg
+                        width="10"
+                        height="10"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <use href="#icon-check-circle" />
+                      </svg>
+                      مميز
+                    </button>
+                  </td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-secondary"
+                        data-ct-action="edit-content"
+                        data-content-id="coupon-luxury-30"
+                        title="تعديل"
+                        aria-label="تعديل"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="delete-content"
+                        data-content-id="coupon-luxury-30"
+                        style="color: #d64545"
+                        title="حذف"
+                        aria-label="حذف"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-trash" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- /panel-coupons --> <!-- ══ Panel; 6: بانتظار المراجعة ══ -->
+        <div id="panel-pending" role="tabpanel" aria-labelledby="tab-pending" class="ct-panel">
+          <div class="admin-section-header" style="margin-bottom: 1rem">
+            <h2 class="admin-section-title">
+              بانتظار المراجعة
+              <span
+                class="admin-badge badge-error"
+                style="margin-inline-start: 0.5rem; vertical-align: middle"
+                >4 طلبات</span
+              >
+            </h2>
+            <span
+              class="admin-honesty"
+              style="font-size: 0.75rem; border-color: #fecaca; background: #fef2f2; color: #b91c1c"
+            >
+              <svg
+                width="11"
+                height="11"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <use href="#icon-alert-circle" />
+              </svg>
+              المراجعة والقبول تجريبيان — لا يتم نشر فعلي
+            </span>
+          </div>
+          <div class="ct-table-wrap">
+            <table class="ct-table" aria-label="قائمة المحتوى بانتظار المراجعة">
+              <thead>
+                <tr>
+                  <th>النوع</th>
+                  <th>العنوان</th>
+                  <th>المصدر</th>
+                  <th>سبب المراجعة</th>
+                  <th>مقدم الطلب</th>
+                  <th>تاريخ الإرسال</th>
+                  <th>إجراءات</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background: #fffbeb">
+                  <td data-label="النوع"><span class="admin-badge badge-warning">عرض</span></td>
+                  <td data-label="العنوان">
+                    <span class="ct-content-title">باقة سياحية جديدة إلى بالي – 8 ليالٍ</span>
+                  </td>
+                  <td data-label="المصدر">قوافل السياحة والترفيه</td>
+                  <td
+                    data-label="سبب المراجعة"
+                    style="max-width: 200px; font-size: 0.75rem; color: #6b7280"
+                  >
+                    عرض جديد بسعر مخفض جداً
+                  </td>
+                  <td data-label="مقدم الطلب">منصور الطيب</td>
+                  <td data-label="تاريخ الإرسال" class="ltr">2026-06-04</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-primary"
+                        style="background: #10b981; border-color: #10b981"
+                        data-ct-action="approve-content"
+                        data-content-id="pending-bali"
+                        title="قبول"
+                        aria-label="قبول"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-check" />
+                        </svg>
+                        قبول
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-danger"
+                        data-ct-action="reject-content"
+                        data-content-id="pending-bali"
+                        title="رفض"
+                        aria-label="رفض"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-x" />
+                        </svg>
+                        رفض
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="add-note"
+                        data-content-id="pending-bali"
+                        title="إضافة ملاحظة"
+                        aria-label="إضافة ملاحظة"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr style="background: #fef2f2">
+                  <td data-label="النوع"><span class="admin-badge badge-neutral">كوبون</span></td>
+                  <td data-label="العنوان">
+                    <span class="ct-content-title">كوبون خصم 60% على الفنادق</span>
+                  </td>
+                  <td data-label="المصدر">سماء السفر</td>
+                  <td
+                    data-label="سبب المراجعة"
+                    style="max-width: 200px; font-size: 0.75rem; color: #6b7280"
+                  >
+                    نسبة خصم عالية غير معتادة
+                  </td>
+                  <td data-label="مقدم الطلب">هبة الرشيد</td>
+                  <td data-label="تاريخ الإرسال" class="ltr">2026-06-03</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-primary"
+                        style="background: #10b981; border-color: #10b981"
+                        data-ct-action="approve-content"
+                        data-content-id="pending-coupon60"
+                        title="قبول"
+                        aria-label="قبول"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-check" />
+                        </svg>
+                        قبول
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-danger"
+                        data-ct-action="reject-content"
+                        data-content-id="pending-coupon60"
+                        title="رفض"
+                        aria-label="رفض"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-x" />
+                        </svg>
+                        رفض
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="add-note"
+                        data-content-id="pending-coupon60"
+                        title="إضافة ملاحظة"
+                        aria-label="إضافة ملاحظة"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-label="النوع"><span class="admin-badge badge-pending">مقالة</span></td>
+                  <td data-label="العنوان">
+                    <span class="ct-content-title">أفضل الفنادق الرخيصة في دبي 2026</span>
+                  </td>
+                  <td data-label="المصدر">فريق المحتوى الخارجي</td>
+                  <td
+                    data-label="سبب المراجعة"
+                    style="max-width: 200px; font-size: 0.75rem; color: #6b7280"
+                  >
+                    محتوى خارجي يحتاج مراجعة تحريرية
+                  </td>
+                  <td data-label="مقدم الطلب">أحمد المحتوى</td>
+                  <td data-label="تاريخ الإرسال" class="ltr">2026-06-02</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-primary"
+                        style="background: #10b981; border-color: #10b981"
+                        data-ct-action="approve-content"
+                        data-content-id="pending-dubai-hotels"
+                        title="قبول"
+                        aria-label="قبول"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-check" />
+                        </svg>
+                        قبول
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-danger"
+                        data-ct-action="reject-content"
+                        data-content-id="pending-dubai-hotels"
+                        title="رفض"
+                        aria-label="رفض"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-x" />
+                        </svg>
+                        رفض
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="add-note"
+                        data-content-id="pending-dubai-hotels"
+                        title="إضافة ملاحظة"
+                        aria-label="إضافة ملاحظة"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr style="background: #fffbeb">
+                  <td data-label="النوع"><span class="admin-badge badge-warning">عرض</span></td>
+                  <td data-label="العنوان">
+                    <span class="ct-content-title">عرض عمرة عائلية 2026 شامل</span>
+                  </td>
+                  <td data-label="المصدر">أمل السياحة والحج والعمرة</td>
+                  <td
+                    data-label="سبب المراجعة"
+                    style="max-width: 200px; font-size: 0.75rem; color: #6b7280"
+                  >
+                    صور مشتبه في ترخيصها
+                  </td>
+                  <td data-label="مقدم الطلب">عبد الله الغامدي</td>
+                  <td data-label="تاريخ الإرسال" class="ltr">2026-06-05</td>
+                  <td data-label="إجراءات">
+                    <div style="display: flex; gap: 0.375rem; flex-wrap: wrap">
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-primary"
+                        style="background: #10b981; border-color: #10b981"
+                        data-ct-action="approve-content"
+                        data-content-id="pending-omra"
+                        title="قبول"
+                        aria-label="قبول"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-check" />
+                        </svg>
+                        قبول
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-danger"
+                        data-ct-action="reject-content"
+                        data-content-id="pending-omra"
+                        title="رفض"
+                        aria-label="رفض"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-x" />
+                        </svg>
+                        رفض
+                      </button>
+                      <button
+                        type="button"
+                        class="admin-btn admin-btn-sm admin-btn-ghost"
+                        data-ct-action="add-note"
+                        data-content-id="pending-omra"
+                        title="إضافة ملاحظة"
+                        aria-label="إضافة ملاحظة"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        >
+                          <use href="#icon-edit" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- /panel-pending --> <!-- ── FAQ ── -->
+        <section style="margin-top: 2.5rem" id="ct-faq" aria-label="أسئلة شائعة حول إدارة المحتوى">
+          <div class="admin-section-header" style="margin-bottom: 1rem">
+            <h2 class="admin-section-title">أسئلة شائعة</h2>
+          </div>
+          <div class="admin-faq">
+            <div class="admin-faq-item">
+              <button type="button" class="admin-faq-q" aria-expanded="false">
+                هل يتم نشر المحتوى فعليًا عند الضغط على "نشر"؟
+                <svg
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-chevron-down" />
+                </svg>
+              </button>
+              <div class="admin-faq-a">
+                لا. جميع إجراءات النشر في هذه النسخة تجريبية فقط. لا يتم إرسال أي محتوى إلى خادم
+                حقيقي أو تحديث الموقع العام. كل التغييرات تُعاد إلى وضعها الأصلي عند إعادة تحميل
+                الصفحة.
+              </div>
+            </div>
+
+            <div class="admin-faq-item">
+              <button type="button" class="admin-faq-q" aria-expanded="false">
+                هل يمكن ربط هذه الواجهة بنظام CMS حقيقي لاحقًا؟
+                <svg
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-chevron-down" />
+                </svg>
+              </button>
+              <div class="admin-faq-a">
+                نعم. تم تصميم الواجهة لتكون قابلة للربط مع أنظمة CMS كـ Contentful أو Strapi أو
+                واجهة برمجية مخصصة. كل زر إجراء يحمل `data-ct-action` و`data-content-id` جاهزَين
+                للربط بنقاط API المستقبلية.
+              </div>
+            </div>
+
+            <div class="admin-faq-item">
+              <button type="button" class="admin-faq-q" aria-expanded="false">
+                هل تمييز عرض أو كوبون يؤثر على الصفحة الرئيسية الآن؟
+                <svg
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-chevron-down" />
+                </svg>
+              </button>
+              <div class="admin-faq-a">
+                لا. تبديل التمييز يُغيّر الحالة المرئية في هذه الواجهة فقط (جلسة المتصفح الحالية)
+                ولا يؤثر على الصفحة الرئيسية العامة. في البيئة الإنتاجية، سيتم ربط هذا الإجراء بـ
+                API يحدّث ترتيب العرض على الموقع فعليًا.
+              </div>
+            </div>
+
+            <div class="admin-faq-item">
+              <button type="button" class="admin-faq-q" aria-expanded="false">
+                كيف تتم مراجعة المحتوى الوارد من مصادر خارجية؟
+                <svg
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-chevron-down" />
+                </svg>
+              </button>
+              <div class="admin-faq-a">
+                يظهر المحتوى المستورد أو المقدم من شركاء في تبويب "بانتظار المراجعة" مع سبب الإحالة.
+                المشرف يراجع كل طلب ثم يختار القبول أو الرفض يدويًا. لا يتم نشر أي محتوى تلقائيًا
+                دون مراجعة بشرية — حتى في النسخة الإنتاجية.
+              </div>
+            </div>
+
+            <div class="admin-faq-item">
+              <button type="button" class="admin-faq-q" aria-expanded="false">
+                هل يتم حذف المحتوى فعليًا عند الضغط على "حذف"؟
+                <svg
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-chevron-down" />
+                </svg>
+              </button>
+              <div class="admin-faq-a">
+                لا. جميع عمليات الحذف تجريبية. لا يُرسَل أي طلب إلى قاعدة البيانات في هذه النسخة.
+                يُعرض مربع تأكيد قبل أي حذف لمنع الأخطاء العرضية، وبعد التأكيد يظهر إشعار مؤقت فقط
+                دون أي حذف فعلي.
+              </div>
+            </div>
+
+            <div class="admin-faq-item">
+              <button type="button" class="admin-faq-q" aria-expanded="false">
+                ما الفرق بين "أقسام الصفحة الرئيسية" وبقية المحتوى؟
+                <svg
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-chevron-down" />
+                </svg>
+              </button>
+              <div class="admin-faq-a">
+                أقسام الصفحة الرئيسية تتحكم في هيكل وترتيب كتل عرض الصفحة العامة (البانر، العروض،
+                الوجهات…). أما الوجهات والمقالات والعروض والكوبونات فهي محتوى المنصة الفعلي. يمكن
+                تمييز أي عنصر من المحتوى ليظهر داخل القسم المناسب في الصفحة الرئيسية.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ Modals ══ --> <!-- ── Create/Edit Content modal ── -->
+        <div
+          id="modal-ct-create"
+          class="modal"
+          hidden
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-ct-create-title"
+        >
+          <div class="modal-box modal-box-wide">
+            <div class="modal-header">
+              <h2 class="modal-title" id="modal-ct-create-title">إنشاء محتوى تجريبي</h2>
+              <button type="button" class="modal-close" data-modal-close aria-label="إغلاق">
+                <svg
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-x" />
+                </svg>
+              </button>
+            </div>
+            <div class="modal-form">
+              <div
+                class="admin-honesty"
+                style="margin-bottom: 1.25rem; width: 100%; justify-content: flex-start"
+              >
+                <svg
+                  width="13"
+                  height="13"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-info" />
+                </svg>
+                إجراء تجريبي — لا يتم الحفظ على خادم في هذه النسخة
+              </div>
+              <form id="form-ct-create" novalidate>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+                  <div class="admin-field">
+                    <label class="admin-label" for="ct-content-type"
+                      >نوع المحتوى <span aria-hidden="true" style="color: #d64545">*</span></label
+                    >
+                    <select
+                      id="ct-content-type"
+                      name="type"
+                      class="admin-select"
+                      required
+                      data-validate="required"
+                    >
+                      <option value="">— اختر النوع —</option>
+                      <option value="destination">وجهة</option>
+                      <option value="article">مقالة</option>
+                      <option value="deal">عرض مميز</option>
+                      <option value="coupon">كوبون مميز</option>
+                    </select>
+                  </div>
+
+                  <div class="admin-field">
+                    <label class="admin-label" for="ct-content-status"
+                      >الحالة <span aria-hidden="true" style="color: #d64545">*</span></label
+                    >
+                    <select
+                      id="ct-content-status"
+                      name="status"
+                      class="admin-select"
+                      required
+                      data-validate="required"
+                    >
+                      <option value="">— اختر الحالة —</option>
+                      <option value="draft">مسودة</option>
+                      <option value="published">منشور (تجريبي)</option>
+                      <option value="featured">مميز</option>
+                    </select>
+                  </div>
+
+                  <div class="admin-field" style="grid-column: 1/-1">
+                    <label class="admin-label" for="ct-content-title"
+                      >عنوان المحتوى <span aria-hidden="true" style="color: #d64545">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="ct-content-title"
+                      name="title"
+                      class="admin-input"
+                      style="width: 100%"
+                      placeholder="مثال: دليل السفر إلى بالي"
+                      required
+                      data-validate="required"
+                      minlength="5"
+                      maxlength="120"
+                    />
+                  </div>
+
+                  <div class="admin-field" style="grid-column: 1/-1">
+                    <label class="admin-label" for="ct-content-slug">
+                      الـ Slug <span aria-hidden="true" style="color: #d64545">*</span>
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: #9aa6b4;
+                          font-size: 0.75rem;
+                          margin-inline-start: 0.25rem;
+                        "
+                        >(أحرف صغيرة وشرطات فقط)</span
+                      >
+                    </label>
+                    <input
+                      type="text"
+                      id="ct-content-slug"
+                      name="slug"
+                      class="admin-input"
+                      style="width: 100%; direction: ltr"
+                      placeholder="travel-guide-bali"
+                      required
+                      data-validate="required"
+                      pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    />
+                  </div>
+
+                  <div class="admin-field">
+                    <label class="admin-label" for="ct-content-category">الفئة</label>
+                    <select id="ct-content-category" name="category" class="admin-select">
+                      <option value="">— بدون فئة —</option>
+                      <option value="tips">نصائح السفر</option>
+                      <option value="guides">أدلة السفر</option>
+                      <option value="family">سفر عائلي</option>
+                      <option value="budget">أرخص وجهات</option>
+                      <option value="savings">توفير وكوبونات</option>
+                    </select>
+                  </div>
+
+                  <div class="admin-field" style="justify-content: flex-end">
+                    <label class="admin-label" for="ct-content-featured">تمييز المحتوى</label>
+                    <div
+                      style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.375rem"
+                    >
+                      <input
+                        type="checkbox"
+                        id="ct-content-featured"
+                        name="featured"
+                        style="
+                          width: 1.125rem;
+                          height: 1.125rem;
+                          accent-color: var(--admin-sidebar-active);
+                        "
+                      />
+                      <label
+                        for="ct-content-featured"
+                        style="font-size: 0.875rem; color: #262e3a; cursor: pointer"
+                        >تمييز في الصفحة الرئيسية (تجريبي)</label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="admin-field" style="grid-column: 1/-1">
+                    <label class="admin-label" for="ct-content-summary">ملخص / وصف</label>
+                    <textarea
+                      id="ct-content-summary"
+                      name="summary"
+                      class="admin-textarea"
+                      style="width: 100%"
+                      placeholder="وصف مختصر يظهر في بطاقة المحتوى أو نتائج البحث…"
+                      maxlength="300"
+                      rows="3"
+                    ></textarea>
+                  </div>
+
+                  <div class="admin-field" style="grid-column: 1/-1">
+                    <label class="admin-label" for="ct-content-notes">ملاحظات داخلية</label>
+                    <textarea
+                      id="ct-content-notes"
+                      name="notes"
+                      class="admin-textarea"
+                      style="width: 100%"
+                      placeholder="ملاحظات للفريق الداخلي فقط — لا تظهر للزوار"
+                      rows="2"
+                    ></textarea>
+                  </div>
+                </div>
+                <!-- /grid -->
+
+                <div class="modal-actions">
+                  <button type="button" class="admin-btn admin-btn-ghost" data-modal-close>
+                    إلغاء
+                  </button>
+                  <button
+                    type="submit"
+                    class="admin-btn admin-btn-primary"
+                    id="btn-ct-create-submit"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    >
+                      <use href="#icon-save" />
+                    </svg>
+                    حفظ تجريبي
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- /modal-ct-create --> <!-- ── Publish / Unpublish confirm ── -->
+        <div
+          id="modal-ct-publish"
+          class="modal"
+          hidden
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-ct-publish-title"
+        >
+          <div class="modal-box" style="max-width: 420px">
+            <div class="modal-header">
+              <h2 class="modal-title" id="modal-ct-publish-title">تأكيد النشر</h2>
+              <button type="button" class="modal-close" data-modal-close aria-label="إغلاق">
+                <svg
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-x" />
+                </svg>
+              </button>
+            </div>
+            <div class="modal-form" style="text-align: center">
+              <div class="ct-confirm-icon warn">
+                <svg
+                  width="28"
+                  height="28"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#D97706"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-eye" />
+                </svg>
+              </div>
+              <p class="ct-confirm-title">نشر / إلغاء نشر المحتوى؟</p>
+              <p class="ct-confirm-body">
+                سيتم تغيير حالة المحتوى تجريبيًا فقط.<br />
+                <strong>لا يتم نشر فعلي على الموقع في هذه النسخة.</strong>
+              </p>
+              <div
+                style="
+                  margin-top: 1.25rem;
+                  padding: 0.875rem;
+                  background: #fffbeb;
+                  border-radius: 0.625rem;
+                  border: 1px solid #fde68a;
+                  text-align: start;
+                "
+              >
+                <span style="font-size: 0.8125rem; color: #92400e; font-weight: 500">
+                  حالة تجريبية · قابل للربط لاحقًا بنظام CMS
+                </span>
+              </div>
+              <div class="modal-actions" style="justify-content: center">
+                <button type="button" class="admin-btn admin-btn-ghost" data-modal-close>
+                  إلغاء
+                </button>
+                <button
+                  type="button"
+                  class="admin-btn admin-btn-primary"
+                  id="btn-ct-publish-confirm"
+                  data-ct-action="confirm-publish"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-eye" />
+                  </svg>
+                  تأكيد النشر (تجريبي)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /modal-ct-publish --> <!-- ── Delete confirm ── -->
+        <div
+          id="modal-ct-delete"
+          class="modal"
+          hidden
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-ct-delete-title"
+        >
+          <div class="modal-box" style="max-width: 420px">
+            <div class="modal-header">
+              <h2 class="modal-title" id="modal-ct-delete-title">تأكيد الحذف</h2>
+              <button type="button" class="modal-close" data-modal-close aria-label="إغلاق">
+                <svg
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-x" />
+                </svg>
+              </button>
+            </div>
+            <div class="modal-form" style="text-align: center">
+              <div class="ct-confirm-icon danger">
+                <svg
+                  width="28"
+                  height="28"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#D64545"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                >
+                  <use href="#icon-trash" />
+                </svg>
+              </div>
+              <p class="ct-confirm-title">حذف هذا المحتوى؟</p>
+              <p class="ct-confirm-body">
+                هذا الإجراء تجريبي فقط ولن يُحذف أي محتوى فعليًا من قاعدة البيانات.<br />
+                <strong>إعادة التحميل تُعيد البيانات إلى وضعها الأصلي.</strong>
+              </p>
+              <div class="modal-actions" style="justify-content: center">
+                <button type="button" class="admin-btn admin-btn-ghost" data-modal-close>
+                  إلغاء
+                </button>
+                <button
+                  type="button"
+                  class="admin-btn admin-btn-danger"
+                  id="btn-ct-delete-confirm"
+                  data-ct-action="confirm-delete"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <use href="#icon-trash" />
+                  </svg>
+                  حذف (تجريبي)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /modal-ct-delete -->
+      </main>
+
+      <footer class="admin-footer">
+        <span>رحلاتي © <span data-year></span></span>
+        <span style="font-size: 0.6875rem; color: #c5cdd7"
+          >بيانات تجريبية / واجهة أمامية فقط / لا يوجد نشر فعلي</span
+        >
+      </footer>
+    </div>
+
+    <div
+      id="toast-root"
+      aria-live="polite"
+      aria-atomic="false"
+      style="
+        position: fixed;
+        bottom: 1.25rem;
+        inset-inline-end: 1.25rem;
+        z-index: var(--z-toast);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        pointer-events: none;
+        max-width: 22rem;
+      "
+    ></div>
+
+    <script src="../src/js/ui.js" defer></script>
+    <script src="../src/js/main.js" defer></script>
+    <script src="../src/js/admin.js" defer></script>
+  </body>
+</html>

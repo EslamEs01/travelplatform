@@ -26,7 +26,9 @@
       document.body.appendChild(live);
     }
     live.textContent = '';
-    requestAnimationFrame(function () { live.textContent = msg; });
+    requestAnimationFrame(function () {
+      live.textContent = msg;
+    });
   }
 
   /**
@@ -66,8 +68,9 @@
 
   /** Show inline-success block and optionally navigate after a delay. */
   function showSuccess(form, msg, href, delay) {
-    var successBlock = form.querySelector('[data-frontend-success]') ||
-      form.parentElement && form.parentElement.querySelector('[data-frontend-success]');
+    var successBlock =
+      form.querySelector('[data-frontend-success]') ||
+      (form.parentElement && form.parentElement.querySelector('[data-frontend-success]'));
     var submitBtn = form.querySelector('[type="submit"]');
     if (submitBtn) submitBtn.disabled = true;
 
@@ -78,7 +81,9 @@
     if (successBlock) {
       successBlock.hidden = false;
       successBlock.setAttribute('tabindex', '-1');
-      setTimeout(function () { successBlock.focus(); }, 50);
+      setTimeout(function () {
+        successBlock.focus();
+      }, 50);
     }
 
     if (href) {
@@ -121,20 +126,24 @@
     var pwInput = regForm.querySelector('#reg-password');
     var pwConfirm = regForm.querySelector('#reg-confirm-password');
 
-    handleFormSubmit(regForm, {
-      'reg-password': function (val) {
-        return val.length < 8 ? 'يجب أن تكون كلمة المرور 8 أحرف على الأقل' : null;
+    handleFormSubmit(
+      regForm,
+      {
+        'reg-password': function (val) {
+          return val.length < 8 ? 'يجب أن تكون كلمة المرور 8 أحرف على الأقل' : null;
+        },
+        'reg-confirm-password': function (val) {
+          var pw = pwInput ? pwInput.value : '';
+          return val !== pw ? 'كلمات المرور غير متطابقة' : null;
+        },
+        terms: function (val, field) {
+          return !field.checked ? 'يجب الموافقة على الشروط والأحكام' : null;
+        },
       },
-      'reg-confirm-password': function (val) {
-        var pw = pwInput ? pwInput.value : '';
-        return val !== pw ? 'كلمات المرور غير متطابقة' : null;
-      },
-      'terms': function (val, field) {
-        return !field.checked ? 'يجب الموافقة على الشروط والأحكام' : null;
+      function (form) {
+        showSuccess(form, 'تم إنشاء الحساب بنجاح (واجهة أمامية فقط)', 'saved-deals.html', 2000);
       }
-    }, function (form) {
-      showSuccess(form, 'تم إنشاء الحساب بنجاح (واجهة أمامية فقط)', 'saved-deals.html', 2000);
-    });
+    );
 
     // Live password strength hint
     if (pwInput) {
@@ -176,12 +185,18 @@
     }
 
     tabs.forEach(function (tab, idx) {
-      tab.addEventListener('click', function () { activateTab(idx); });
+      tab.addEventListener('click', function () {
+        activateTab(idx);
+      });
       tab.addEventListener('keydown', function (e) {
         var next = idx;
-        if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = (idx - 1 + tabs.length) % tabs.length;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowUp')
+          next = (idx - 1 + tabs.length) % tabs.length;
         if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = (idx + 1) % tabs.length;
-        if (next !== idx) { activateTab(next); tabs[next].focus(); }
+        if (next !== idx) {
+          activateTab(next);
+          tabs[next].focus();
+        }
       });
     });
   }
@@ -237,7 +252,10 @@
       // Re-show hidden items (if they were just hidden vs removed)
       // Since we remove from DOM, signal via toast; full restore requires reload
       if (TUI && TUI.toast) {
-        TUI.toast('لإعادة جميع العناصر الافتراضية، يرجى إعادة تحميل الصفحة', { type: 'info', duration: 5000 });
+        TUI.toast('لإعادة جميع العناصر الافتراضية، يرجى إعادة تحميل الصفحة', {
+          type: 'info',
+          duration: 5000,
+        });
       }
     });
   }
@@ -262,13 +280,13 @@
     flight: 'طيران',
     hotel: 'فندق',
     package: 'باقة',
-    destination: 'وجهة'
+    destination: 'وجهة',
   };
 
   var STATUS_LABELS_AR = {
     active: 'نشط',
     paused: 'متوقف',
-    triggered: 'مُفعَّل (نموذجي)'
+    triggered: 'مُفعَّل (نموذجي)',
   };
 
   function initAlertTypeToggle() {
@@ -317,40 +335,57 @@
     var typeSelect = document.getElementById('alert-type');
     var methodSelect = document.getElementById('notify-method');
 
-    handleFormSubmit(form, {
-      'alert-to': function (val) { return !val.trim() ? 'يرجى إدخال الوجهة' : null; },
-      'alert-budget': function (val) { return (!val || isNaN(val) || Number(val) <= 0) ? 'يرجى إدخال ميزانية صحيحة' : null; },
-      'alert-month': function (val) { return !val ? 'يرجى اختيار شهر السفر' : null; },
-      'notify-email': function (val, field) {
-        if (methodSelect && methodSelect.value === 'email' && !field.disabled) {
-          return !val.trim() ? 'يرجى إدخال البريد الإلكتروني' : null;
+    handleFormSubmit(
+      form,
+      {
+        'alert-to': function (val) {
+          return !val.trim() ? 'يرجى إدخال الوجهة' : null;
+        },
+        'alert-budget': function (val) {
+          return !val || isNaN(val) || Number(val) <= 0 ? 'يرجى إدخال ميزانية صحيحة' : null;
+        },
+        'alert-month': function (val) {
+          return !val ? 'يرجى اختيار شهر السفر' : null;
+        },
+        'notify-email': function (val, field) {
+          if (methodSelect && methodSelect.value === 'email' && !field.disabled) {
+            return !val.trim() ? 'يرجى إدخال البريد الإلكتروني' : null;
+          }
+          return null;
+        },
+      },
+      function (form) {
+        var toInput = form.querySelector('#alert-to');
+        var destination = toInput ? toInput.value : 'وجهة جديدة';
+        var type = typeSelect ? typeSelect.value : 'destination';
+        var budgetInput = form.querySelector('#alert-budget');
+        var budget = budgetInput ? budgetInput.value : '0';
+
+        appendAlertCard({
+          id: 'alert-' + ++_alertCounter,
+          type: type,
+          destination: destination,
+          maxBudget: Number(budget),
+        });
+        updateAlertStats();
+
+        if (TUI && TUI.toast) {
+          TUI.toast('تم إنشاء التنبيه بنجاح (واجهة أمامية فقط)', { type: 'success' });
         }
-        return null;
+        var successBlock = form.querySelector('[data-frontend-success]');
+        if (successBlock) {
+          successBlock.hidden = false;
+          successBlock.setAttribute('tabindex', '-1');
+          setTimeout(function () {
+            successBlock.focus();
+          }, 50);
+        }
+        form.reset();
+        // re-run toggles after reset
+        initAlertTypeToggle();
+        initNotifyMethodToggle();
       }
-    }, function (form) {
-      var toInput = form.querySelector('#alert-to');
-      var destination = toInput ? toInput.value : 'وجهة جديدة';
-      var type = typeSelect ? typeSelect.value : 'destination';
-      var budgetInput = form.querySelector('#alert-budget');
-      var budget = budgetInput ? budgetInput.value : '0';
-
-      appendAlertCard({ id: 'alert-' + ++_alertCounter, type: type, destination: destination, maxBudget: Number(budget) });
-      updateAlertStats();
-
-      if (TUI && TUI.toast) {
-        TUI.toast('تم إنشاء التنبيه بنجاح (واجهة أمامية فقط)', { type: 'success' });
-      }
-      var successBlock = form.querySelector('[data-frontend-success]');
-      if (successBlock) {
-        successBlock.hidden = false;
-        successBlock.setAttribute('tabindex', '-1');
-        setTimeout(function () { successBlock.focus(); }, 50);
-      }
-      form.reset();
-      // re-run toggles after reset
-      initAlertTypeToggle();
-      initNotifyMethodToggle();
-    });
+    );
   }
 
   function appendAlertCard(data) {
@@ -367,17 +402,29 @@
     card.innerHTML =
       '<div class="flex items-start justify-between gap-3">' +
       '  <div>' +
-      '    <span class="badge badge-source-partner text-xs me-2">' + _escHtml(typeLabel) + '</span>' +
+      '    <span class="badge badge-source-partner text-xs me-2">' +
+      _escHtml(typeLabel) +
+      '</span>' +
       '    <span class="badge badge-active text-xs">نشط</span>' +
       '  </div>' +
       '  <div class="flex gap-2">' +
-      '    <button type="button" class="btn btn-ghost btn-sm" data-edit-alert="' + _escHtml(data.id) + '" aria-label="تعديل التنبيه">تعديل</button>' +
-      '    <button type="button" class="btn btn-ghost btn-sm" data-pause-alert="' + _escHtml(data.id) + '" aria-label="إيقاف التنبيه">إيقاف</button>' +
-      '    <button type="button" class="btn btn-ghost btn-sm text-red-600" data-delete-alert="' + _escHtml(data.id) + '" aria-label="حذف التنبيه">حذف</button>' +
+      '    <button type="button" class="btn btn-ghost btn-sm" data-edit-alert="' +
+      _escHtml(data.id) +
+      '" aria-label="تعديل التنبيه">تعديل</button>' +
+      '    <button type="button" class="btn btn-ghost btn-sm" data-pause-alert="' +
+      _escHtml(data.id) +
+      '" aria-label="إيقاف التنبيه">إيقاف</button>' +
+      '    <button type="button" class="btn btn-ghost btn-sm text-red-600" data-delete-alert="' +
+      _escHtml(data.id) +
+      '" aria-label="حذف التنبيه">حذف</button>' +
       '  </div>' +
       '</div>' +
-      '<h3 class="font-semibold text-ink-700">' + _escHtml(data.destination) + '</h3>' +
-      '<p class="text-sm text-ink-400">الميزانية المستهدفة: <strong class="text-lagoon-600">' + _escHtml(String(data.maxBudget)) + ' ر.س</strong></p>' +
+      '<h3 class="font-semibold text-ink-700">' +
+      _escHtml(data.destination) +
+      '</h3>' +
+      '<p class="text-sm text-ink-400">الميزانية المستهدفة: <strong class="text-lagoon-600">' +
+      _escHtml(String(data.maxBudget)) +
+      ' ر.س</strong></p>' +
       '<p class="text-xs text-amber-600 font-medium">مثال توضيحي — لا رصد حقيقي للأسعار في هذه النسخة</p>';
     list.insertBefore(card, list.firstChild);
 
@@ -433,7 +480,9 @@
 
     updateAlertStats();
     if (TUI && TUI.toast) {
-      TUI.toast(newStatus === 'active' ? 'تم تفعيل التنبيه' : 'تم إيقاف التنبيه مؤقتاً', { type: 'info' });
+      TUI.toast(newStatus === 'active' ? 'تم تفعيل التنبيه' : 'تم إيقاف التنبيه مؤقتاً', {
+        type: 'info',
+      });
     }
     announce(newStatus === 'active' ? 'تم تفعيل التنبيه' : 'تم إيقاف التنبيه مؤقتاً');
   }
@@ -511,7 +560,9 @@
 
   function updateAlertStats() {
     var cards = document.querySelectorAll('[data-alert]');
-    var active = 0, paused = 0, triggered = 0;
+    var active = 0,
+      paused = 0,
+      triggered = 0;
     cards.forEach(function (card) {
       var status = card.getAttribute('data-alert-status');
       if (status === 'active') active++;
@@ -539,14 +590,16 @@
     var personalForm = document.getElementById('personal-info-form');
     if (personalForm) {
       handleFormSubmit(personalForm, {}, function () {
-        if (TUI && TUI.toast) TUI.toast('تم حفظ بيانات الملف الشخصي (واجهة أمامية فقط)', { type: 'success' });
+        if (TUI && TUI.toast)
+          TUI.toast('تم حفظ بيانات الملف الشخصي (واجهة أمامية فقط)', { type: 'success' });
       });
     }
 
     var prefsForm = document.getElementById('travel-prefs-form');
     if (prefsForm) {
       handleFormSubmit(prefsForm, {}, function () {
-        if (TUI && TUI.toast) TUI.toast('تم حفظ تفضيلات السفر (واجهة أمامية فقط)', { type: 'success' });
+        if (TUI && TUI.toast)
+          TUI.toast('تم حفظ تفضيلات السفر (واجهة أمامية فقط)', { type: 'success' });
       });
     }
   }
@@ -554,7 +607,10 @@
   function initNotificationToggles() {
     document.querySelectorAll('[data-notify-toggle]').forEach(function (toggle) {
       toggle.addEventListener('change', function () {
-        var label = toggle.getAttribute('aria-label') || toggle.getAttribute('data-notify-toggle') || 'الإشعار';
+        var label =
+          toggle.getAttribute('aria-label') ||
+          toggle.getAttribute('data-notify-toggle') ||
+          'الإشعار';
         var msg = toggle.checked ? 'تم تفعيل: ' + label : 'تم إيقاف: ' + label;
         if (TUI && TUI.toast) TUI.toast(msg + ' (واجهة أمامية فقط)', { type: 'info' });
         announce(msg);
@@ -569,20 +625,27 @@
     var newPw = form.querySelector('#new-password');
     var confirmPw = form.querySelector('#confirm-password');
 
-    handleFormSubmit(form, {
-      'new-password': function (val) {
-        return val.length < 8 ? 'يجب أن تكون كلمة المرور الجديدة 8 أحرف على الأقل' : null;
+    handleFormSubmit(
+      form,
+      {
+        'new-password': function (val) {
+          return val.length < 8 ? 'يجب أن تكون كلمة المرور الجديدة 8 أحرف على الأقل' : null;
+        },
+        'confirm-password': function (val) {
+          var pw = newPw ? newPw.value : '';
+          return val !== pw ? 'كلمات المرور غير متطابقة' : null;
+        },
       },
-      'confirm-password': function (val) {
-        var pw = newPw ? newPw.value : '';
-        return val !== pw ? 'كلمات المرور غير متطابقة' : null;
+      function (form) {
+        if (TUI && TUI.toast) {
+          TUI.toast('لم يتم تغيير أي كلمة مرور — واجهة أمامية تجريبية فقط', {
+            type: 'info',
+            duration: 6000,
+          });
+        }
+        form.reset();
       }
-    }, function (form) {
-      if (TUI && TUI.toast) {
-        TUI.toast('لم يتم تغيير أي كلمة مرور — واجهة أمامية تجريبية فقط', { type: 'info', duration: 6000 });
-      }
-      form.reset();
-    });
+    );
   }
 
   function initLogout() {
@@ -590,7 +653,10 @@
     if (!logoutBtn) return;
     logoutBtn.addEventListener('click', function () {
       if (TUI && TUI.toast) {
-        TUI.toast('تم تسجيل الخروج (لا جلسة حقيقية في هذه النسخة)', { type: 'info', duration: 3000 });
+        TUI.toast('تم تسجيل الخروج (لا جلسة حقيقية في هذه النسخة)', {
+          type: 'info',
+          duration: 3000,
+        });
       }
       setTimeout(function () {
         global.location.href = 'index.html';
@@ -614,12 +680,21 @@
   document.addEventListener('DOMContentLoaded', function () {
     var page = document.documentElement.getAttribute('data-page');
     switch (page) {
-      case 'login':        initLogin();        break;
-      case 'register':     initRegister();     break;
-      case 'saved-deals':  initSavedDeals();   break;
-      case 'price-alerts': initPriceAlerts();  break;
-      case 'profile':      initProfile();      break;
+      case 'login':
+        initLogin();
+        break;
+      case 'register':
+        initRegister();
+        break;
+      case 'saved-deals':
+        initSavedDeals();
+        break;
+      case 'price-alerts':
+        initPriceAlerts();
+        break;
+      case 'profile':
+        initProfile();
+        break;
     }
   });
-
-}(window));
+})(window);

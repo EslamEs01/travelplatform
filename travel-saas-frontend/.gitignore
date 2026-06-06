@@ -1,5 +1,4 @@
 node_modules/
-assets/css/tailwind.css
 .DS_Store
 Thumbs.db
 *.tmp

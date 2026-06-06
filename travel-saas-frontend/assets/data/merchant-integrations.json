@@ -39,7 +39,12 @@
       "health": "off",
       "configFields": [
         { "name": "affiliateId", "labelAr": "Affiliate ID", "type": "text", "required": true },
-        { "name": "destination", "labelAr": "الوجهة الافتراضية", "type": "text", "required": false },
+        {
+          "name": "destination",
+          "labelAr": "الوجهة الافتراضية",
+          "type": "text",
+          "required": false
+        },
         { "name": "linkTemplate", "labelAr": "قالب الرابط", "type": "text", "required": false },
         { "name": "trackingParam", "labelAr": "معامل التتبع", "type": "text", "required": false }
       ],
@@ -118,7 +123,12 @@
       "health": "ok",
       "configFields": [
         { "name": "apiKey", "labelAr": "API Key", "type": "text", "required": true },
-        { "name": "apiSecret", "labelAr": "API Secret (placeholder)", "type": "text", "required": true },
+        {
+          "name": "apiSecret",
+          "labelAr": "API Secret (placeholder)",
+          "type": "text",
+          "required": true
+        },
         { "name": "environment", "labelAr": "البيئة", "type": "select", "required": true }
       ],
       "warningsAr": null
@@ -134,7 +144,12 @@
       "lastSyncMock": "لم تتم المزامنة (تجريبي)",
       "health": "ok",
       "configFields": [
-        { "name": "apiToken", "labelAr": "API Token (placeholder)", "type": "text", "required": true },
+        {
+          "name": "apiToken",
+          "labelAr": "API Token (placeholder)",
+          "type": "text",
+          "required": true
+        },
         { "name": "environment", "labelAr": "البيئة", "type": "select", "required": true }
       ],
       "warningsAr": null
@@ -150,7 +165,12 @@
       "lastSyncMock": "لم تتم المزامنة (تجريبي)",
       "health": "ok",
       "configFields": [
-        { "name": "apiKey", "labelAr": "API/Rapid Key (placeholder)", "type": "text", "required": true },
+        {
+          "name": "apiKey",
+          "labelAr": "API/Rapid Key (placeholder)",
+          "type": "text",
+          "required": true
+        },
         { "name": "market", "labelAr": "السوق", "type": "select", "required": false }
       ],
       "warningsAr": null
@@ -167,7 +187,12 @@
       "health": "ok",
       "configFields": [
         { "name": "apiKey", "labelAr": "API Key (placeholder)", "type": "text", "required": true },
-        { "name": "secret", "labelAr": "API Secret (placeholder)", "type": "text", "required": true }
+        {
+          "name": "secret",
+          "labelAr": "API Secret (placeholder)",
+          "type": "text",
+          "required": true
+        }
       ],
       "warningsAr": null
     },
@@ -325,10 +350,20 @@
       "lastSyncMock": "لم تتم المزامنة (تجريبي)",
       "health": "off",
       "configFields": [
-        { "name": "provider", "labelAr": "الجهة المزودة (placeholder)", "type": "text", "required": false },
+        {
+          "name": "provider",
+          "labelAr": "الجهة المزودة (placeholder)",
+          "type": "text",
+          "required": false
+        },
         { "name": "senderName", "labelAr": "اسم المرسِل", "type": "text", "required": false },
         { "name": "apiKey", "labelAr": "API Key (placeholder)", "type": "text", "required": false },
-        { "name": "phone", "labelAr": "رقم الهاتف (placeholder)", "type": "text", "required": false }
+        {
+          "name": "phone",
+          "labelAr": "رقم الهاتف (placeholder)",
+          "type": "text",
+          "required": false
+        }
       ],
       "warningsAr": null
     },

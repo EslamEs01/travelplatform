@@ -1,0 +1,146 @@
+[
+  {
+    "id": "travelpayouts",
+    "name": "Travelpayouts",
+    "category": "شبكة تسويق بالعمولة",
+    "status": "healthy",
+    "affectedCompanies": 0,
+    "lastCheck": "2026-06-05T09:00:00Z",
+    "severity": "info",
+    "uptime": "99.98%",
+    "responseTimeMs": 142,
+    "errors": []
+  },
+  {
+    "id": "booking-affiliate",
+    "name": "Booking Affiliate",
+    "category": "شراكة فنادق",
+    "status": "healthy",
+    "affectedCompanies": 0,
+    "lastCheck": "2026-06-05T09:00:00Z",
+    "severity": "info",
+    "uptime": "99.95%",
+    "responseTimeMs": 188,
+    "errors": []
+  },
+  {
+    "id": "coupon-api",
+    "name": "Coupon API",
+    "category": "إدارة الكوبونات",
+    "status": "degraded",
+    "affectedCompanies": 2,
+    "lastCheck": "2026-06-05T08:45:00Z",
+    "severity": "warning",
+    "uptime": "97.20%",
+    "responseTimeMs": 840,
+    "errors": [
+      {
+        "company": "co-003",
+        "issue": "بطء في التحقق من صلاحية الكوبون — زمن الاستجابة أعلى من المعتاد (>800ms)",
+        "severity": "warning"
+      },
+      {
+        "company": "co-010",
+        "issue": "فشل متقطع في تحديث عداد الاستخدام للكوبونات المجمعة",
+        "severity": "warning"
+      }
+    ]
+  },
+  {
+    "id": "email-notifications",
+    "name": "Email Notifications",
+    "category": "تنبيهات البريد الإلكتروني",
+    "status": "healthy",
+    "affectedCompanies": 0,
+    "lastCheck": "2026-06-05T09:00:00Z",
+    "severity": "info",
+    "uptime": "99.90%",
+    "responseTimeMs": 95,
+    "errors": []
+  },
+  {
+    "id": "whatsapp",
+    "name": "WhatsApp",
+    "category": "مراسلة فورية",
+    "status": "healthy",
+    "affectedCompanies": 0,
+    "lastCheck": "2026-06-05T09:00:00Z",
+    "severity": "info",
+    "uptime": "99.85%",
+    "responseTimeMs": 210,
+    "errors": []
+  },
+  {
+    "id": "scraping-review-queue",
+    "name": "Scraping Review Queue",
+    "category": "مراجعة العروض الآلية",
+    "status": "degraded",
+    "affectedCompanies": 3,
+    "lastCheck": "2026-06-05T08:30:00Z",
+    "severity": "warning",
+    "uptime": "94.50%",
+    "responseTimeMs": 1200,
+    "errors": [
+      {
+        "company": "co-009",
+        "issue": "تراكم في قائمة الانتظار — 47 عرضاً بانتظار المراجعة منذ أكثر من 24 ساعة",
+        "severity": "warning"
+      },
+      {
+        "company": "co-011",
+        "issue": "فشل تلقائي في استخراج بيانات عروض العمرة بسبب تغيير في هيكل مصدر البيانات",
+        "severity": "warning"
+      },
+      {
+        "company": "co-007",
+        "issue": "تأخر في معالجة دفعة العروض الجديدة — أكثر من 2 ساعة",
+        "severity": "warning"
+      }
+    ]
+  },
+  {
+    "id": "amadeus-api",
+    "name": "Amadeus API",
+    "category": "بيانات الرحلات الجوية",
+    "status": "healthy",
+    "affectedCompanies": 0,
+    "lastCheck": "2026-06-05T09:00:00Z",
+    "severity": "info",
+    "uptime": "99.92%",
+    "responseTimeMs": 320,
+    "errors": []
+  },
+  {
+    "id": "duffel-api",
+    "name": "Duffel API",
+    "category": "حجز تذاكر طيران",
+    "status": "down",
+    "affectedCompanies": 4,
+    "lastCheck": "2026-06-05T07:15:00Z",
+    "severity": "critical",
+    "uptime": "81.30%",
+    "responseTimeMs": null,
+    "errors": [
+      {
+        "company": "co-002",
+        "issue": "انقطاع كامل في خدمة Duffel API منذ 07:15 صباحًا — لا يمكن استرداد أسعار الرحلات",
+        "severity": "critical"
+      },
+      {
+        "company": "co-011",
+        "issue": "فشل كل محاولات الاتصال بـ Duffel — توقف نظام حجز التذاكر بالكامل",
+        "severity": "critical"
+      },
+      {
+        "company": "co-005",
+        "issue": "خطأ 503 متكرر من Duffel — العملاء لا يستطيعون إتمام طلبات الحجز",
+        "severity": "critical"
+      },
+      {
+        "company": "co-007",
+        "issue": "انقطاع Duffel يؤثر على عروض الرحلات الدولية — العروض غير محدّثة",
+        "severity": "critical"
+      }
+    ]
+  }
+]
