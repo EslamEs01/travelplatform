@@ -23,7 +23,6 @@
     "doctype-style": ["error", { "style": "lowercase" }],
     "void-style": ["error", { "style": "selfclose" }],
     "close-order": "error",
-    "parser-error": "off",
     "no-dup-attr": "error",
     "no-dup-id": "error",
     "svg-focusable": "off",
@@ -31,7 +30,8 @@
     "no-unknown-elements": "warn",
     "attribute-allowed-values": "off",
     "no-redundant-role": "off",
-    "unique-landmark": "off"
+    "unique-landmark": "off",
+    "form-dup-name": ["error", { "shared": ["radio", "checkbox"] }]
   },
   "elements": ["html5"]
 }

@@ -1,81 +1,70 @@
 <!-- SPECKIT START -->
-## Active feature: 010-saas-owner-admin-dashboard
+## Active feature: 011-frontend-qa-polish
 
-Frontend-first **Travel SaaS Platform**. Current phase builds the **SaaS owner/admin surface** — the platform-owner
-control room above the public site (002–005) and merchant dashboard (006–009) — as **seven new standalone pages in a new
-`admin/` directory**: `index.html` (`admin-overview`), `companies.html` (`admin-companies`), `company-details.html`
-(`admin-company-details`), `plans.html` (`admin-plans`), `subscriptions.html` (`admin-subscriptions`), `analytics.html`
-(`admin-analytics`), `content.html` (`admin-content`). They use a **NEW dedicated admin shell** that is visually related
-to the product but **clearly distinct** from the merchant `.dash-*` shell: a dark slate **`ink`** sidebar rail + gold
-**`sunset`** accent + "مالك المنصة · Owner Admin" brand label, via page-scoped `.admin-*` classes (same tokens, different
-role — no new identity). Each page authors its **own `<head>`** from `partials/head.html` (NOT the public
-`header.html`/`footer.html`); paths resolve from `admin/`: `../assets/css/tailwind.css`, `../src/js/{ui,main,admin}.js`,
-`../pages/…`, `../dashboard/…`, `company-details.html?id=`. Core content is **static HTML** (renders without JS — every
-KPI/feed/table/card/plan/comparison/all-6-content-tab-panels/usage-bar/billing/modal-content-container in the DOM). A
-**NEW self-contained `src/js/admin.js`** (loaded `defer` after ui.js+main.js; mirrors the `dashboard.js` IIFE pattern,
-imports/modifies nothing) carries an `_ADMIN_PAGES` guard on `<html data-page>` + shell init (sidebar drawer + 3 topbar
-dropdowns) + shared primitives (TUI.toast wrapper, `DropdownController`, row-action-menu, `validateAndSubmit` over
-`TUI.validateForm`, **shared confirm-modal helper**, a generic **filter/sort/search engine** w/ `aria-live` count +
-removable chips + reset, slugify) + **7 per-page controllers**. It **reuses** `window.TUI` (toast/modal/drawer/
-validateForm/copyToClipboard) and `main.js`'s declarative `data-*` (drawer/modal/coming-soon/copy/toast/validate/year)
-**unchanged**. **index**: 4 quick actions + ≥10 KPIs + activity (≥10) + top companies (≥8 → details) + 8 integration-
-health cards + subscription alerts + **5 CSS visuals** + 7 quick actions + checklist (5) + empty/skeleton. **companies**:
-≥8 stats + search/8 filters/6-sort + count/chips/reset + **≥12 rows** (table→cards) + row menu (view/change-plan/suspend/
-extend-trial/add-note/contact/**login-as disabled-safe**) + bulk (**suspend-selected confirm**) + 4 modals + 7 segment
-filters + FAQ ≥5. **company-details**: default mock company w/ or w/o `?id=` + profile + **≥8 usage bars** (warnings) +
-timeline ≥10 + top-deals + 7 booking stats + 8 integration rows + billing timeline + notes + support panel + 7 modals
-(incl. **reset-usage confirm** + **login-as safety**) + FAQ ≥5. **plans**: 4 plan cards + monthly/yearly toggle +
-comparison table (≥14 rows) + create/edit modal + duplicate + **disable confirm** + companies-on-plan + FAQ ≥5.
-**subscriptions**: 8 stats (MRR/ARR) + search/filters/5-sort/count + **≥12 rows** + 8 row actions + bulk + detail/invoice/
-extend-trial modals + **cancel confirm** + FAQ ≥5. **analytics**: date-range + compare + export + ≥12 KPIs + **8 CSS
-visuals** (no chart lib) + 5 tables + ≥5 recommendations + export modal + `#integrations` anchor + FAQ ≥5. **content**: 8
-stats + **6 tabs** (all panels in DOM) + 7 homepage sections + 5 tab tables + create/edit modal + feature toggle +
-**publish/delete confirms** + approve/reject + homepage preview + FAQ ≥5. All confirmations use `.modal`/`TUI.modal` — **no
-browser dialogs**. State is **session-only** (reload restores mock defaults). **All chart-like visuals are CSS/HTML — no
-chart/table library.**
+Frontend-first **Travel SaaS Platform**. Current phase is a **final frontend QA + polish pass** over everything built in
+Specs 001–010 — **NOT a feature build**. It audits, surgically fixes, re-verifies, and reports across **32 existing pages**
+(public `pages/` ×16, merchant `dashboard/` ×9, owner `admin/` ×7) + the 7 shared JS modules
+(`ui/main/dashboard/discovery/content/member/admin.js`) + the shared CSS build / `partials/` / `assets/`. The single
+deliverable is **`travel-saas-frontend/QA-FRONTEND-CHECKLIST.md`** (the only new file). **Method**: audit → categorize →
+**surgical in-place fix** (reuse `window.TUI` + `main.js` `data-*`, no rewrite) → re-verify → honest report. **Hard
+constraints**: add NO product feature, NO new page, NO framework, NO backend, NO visual-identity change; remove NO working
+section. The **4 Spec 008 pages** (`dashboard/{bookings,booking-details,customers,customer-details}.html`) are confirmed
+**ABSENT and stay unbuilt** — the audit guarantees every reference to them resolves to a `data-coming-soon` affordance,
+never a 404.
 
-**Key decisions (research D1–D13)**: new distinct admin shell (ink rail + sunset accent + `.admin-*`; D1); 7 standalone
-`admin/*.html`, own `<head>`, `../` paths (D2); **new self-contained `admin.js`** — NOT extending `dashboard.js` — guard +
-shell init + 7 controllers, reuse TUI + main.js data-* (D3); **one-line additive `tailwind.config.js` glob**
-`./admin/**/*.html` — the build does NOT yet scan `admin/`, so without it the pages render unstyled (D4, the single
-foundation-config touch — differs from Spec 009); static-HTML-first, JSON = backend-ready reference, no baseline fetch
-(D5); CSS/HTML visuals only — bars/conic-gradient donut/trend/stacked (D6); one client-side filter/sort/search engine w/
-aria-live count + chips + reset, segment cards drive presets (D7); all destructive actions via `.modal`/`TUI.modal`
-confirm helper, no dialogs (D8); **"Login as company" always disabled/safe + impersonation safety modal** (D9);
-session-only state (D10); 7 backend-ready JSON catalogs (`admin-overview/-companies≥12/-plans×4/-subscriptions≥12/
--platform-analytics/-content/-integration-health×8`) reusing `deals/merchant-deals/merchant-coupons/destinations-full/
-articles` ids — **self-sufficient where `merchant-bookings.json`/`merchant-customers.json` are ABSENT (only
-`merchant-bookings-preview.json` exists; Spec 008 pages were never built)** (D11); `مراقبة التكاملات`→`analytics.html#
-integrations`, `الإعدادات`→coming-soon toast, unbuilt 008 + owner billing/support stay coming-soon, **no merchant/public
-page edited** (D12); table→cards + grids reflow + sidebar→drawer + ~44px + reduced-motion at 360px (D13). Sprite already
-has building/credit-card/award/pie-chart/activity/plug/users/bar-chart/map-pin/shield/trend-* (added in 009) — append
-only if genuinely missing (dollar-sign/file-text/layers/server). Small page-scoped `<style>` per page for KPI/plan/
-segment grids + CSS visuals + content tabs + usage bars + table→cards. `ui.js`/`main.js`/`dashboard.js`/`discovery.js`/
-`content.js`/`member.js`, the public/member `pages/`, the merchant `dashboard/` pages, and `partials/header.html`/
-`footer.html` stay **unchanged**. No new visual identity, no foundation rebuild, no backend.
+**14 audit areas**: (1) inventory (32 render; 4 documented-absent); (2) navigation (every link/CTA/row-action/modal-action
+resolves; folder-aware relative paths — `pages/`→siblings, `dashboard/`→`../pages/`, `admin/`→`../pages/`+`../dashboard/`;
+0 bare-`#`/dead/404; stale coming-soon repointed); (3) responsive (no overflow at 320/360/390/768/1024/1280; tables→cards
+or scroll-affordance; ≥44px); (4) RTL (logical props; `dir="ltr"` on coupon-codes/emails/URLs/invoice-ids/amounts;
+breadcrumb + drawer side); (5) visual consistency (one design system across surfaces — token spot-check); (6) JS
+interactions (drawers/dropdowns/modals/toasts/copy/toggles/filters/tabs/row-menus/bulk/confirm all work; no console error;
+no duplicate-listener repeated toasts; body-scroll lock/unlock); (7) forms (labels + inline `aria-invalid`/`aria-describedby`
++ honest success, no unintended reload); (8) content honesty (no false live/real-backend claims; approved safe wording;
+session-only); (9) SEO/semantics (one `<h1>`, hierarchy, Arabic title/meta, landmarks, valid non-misleading JSON-LD); (10)
+a11y WCAG 2.1 AA (focus/keyboard/labels/`aria-live`/icon-button names/contrast/reduced-motion; axe-if-serveable else
+documented manual); (11) performance/assets (no CDN, local fonts, `defer`, no broken image/SVG, no dup scripts, no
+chart/table lib, no runtime-fetch core dep); (12) file cleanup (no stray backups/dead code; JSON valid + ids consistent;
+styleguide/components still render — **never delete**); (13) end-to-end flows (public/merchant/admin each complete, no dead
+control); (14) non-regression (Specs 001–010 still render after any shared-file edit).
 
-**Product honesty**: never real admin login, company suspension/activation, plan/price change, subscription billing,
-invoice, payment, impersonation, integration monitoring, content publishing, export, email/WhatsApp, or persistence —
-بيانات تجريبية / واجهة أمامية فقط / إجراء تجريبي / لا يتم الحفظ على خادم في هذه النسخة / لا يتم تنفيذ تغيير حقيقي / لا توجد
-مدفوعات فعلية / لا يتم تسجيل دخول كالشركة فعليًا / قابل للربط لاحقًا بلوحة إدارة حقيقية / قابل للربط لاحقًا بنظام اشتراكات
-ودفع / حالة تجريبية.
+**Key decisions (research D1–D16)**: audit→fix→verify never rewrite (D1); reuse installed toolchain only — build /
+stack-grep / html-validate / node --check / stylelint / axe / serve (D2); folder-aware link crawler + path rules (D3); 4
+Spec 008 pages → coming-soon, unbuilt (D4); responsive = viewport matrix + static overflow sweep + delegated browser script
+(D5); RTL = logical-property + `dir="ltr"` enforcement (D6); visual = token spot-check across surfaces (D7); JS = per-
+primitive review + console proxies (D8); forms = label+inline-error+honest-success (D9); honesty = bilingual forbidden-claim
+grep + safe-wording map (D10); SEO = structural sweep (D11); a11y = axe-or-documented-manual AA (D12); perf =
+CDN/defer/broken-path/dup-script sweep (D13); cleanup = backups/dead-code/data-consistency (D14); **fix-safety: NEVER
+`prettier --write` HTML with inline `<style>` (Prettier v3 escapes `<`→`\3c` + breaks `@media`) — keep/extend
+`.prettierignore`; keep `.htmlvalidate.json` aligned to real HTML5 output** (D15); honest static-vs-browser split + PASS /
+PASS WITH NOTES / FAIL rubric — executor has no browser, so browser-only console/pixel checks are scripted in quickstart for
+the user (D16). State stays **session-only**; only `QA-FRONTEND-CHECKLIST.md` is added; every shared-file edit is followed by
+a non-regression re-render.
+
+**Product honesty (verify + enforce platform-wide)**: no copy may claim real prices, booking, payment, invoice, auth, API,
+scraping, notifications, analytics, CMS publishing, billing, suspension/plan-change, impersonation, or persistence — rewrite
+to بيانات تجريبية / أسعار إرشادية / إجراء تجريبي / قابل للربط لاحقًا / لا يتم تنفيذ إجراء حقيقي في هذه النسخة / لا يتم الحفظ
+على خادم حاليًا / لا يتم إرسال إشعارات حقيقية / لا يتم معالجة مدفوعات فعلية / طلب حجز / يحتاج مراجعة قبل النشر. Source badges
+(Partner/Affiliate/Manual Deal/API Ready) + safe booking labels (View Deal/Request Booking/Compare Offer/Get Coupon) +
+login-as disabled/safe.
 
 **Read the current plan and its design artifacts:**
 
-- Plan: `specs/010-saas-owner-admin-dashboard/plan.md`
-- Spec: `specs/010-saas-owner-admin-dashboard/spec.md`
-- Research (decisions D1–D13): `specs/010-saas-owner-admin-dashboard/research.md`
-- Page/section inventory, schemas, interaction & form maps: `specs/010-saas-owner-admin-dashboard/data-model.md`
-- Contracts: `specs/010-saas-owner-admin-dashboard/contracts/` (admin-shell, overview-page, companies-page, plans-page, subscriptions-page, analytics-page, content-page, mock-data)
-- Quickstart & QA gate: `specs/010-saas-owner-admin-dashboard/quickstart.md`
-- Reused merchant analytics/integrations/settings (Spec 009): `specs/009-merchant-analytics-integrations-settings/`
-- Reused merchant deals/coupons (Spec 007): `specs/007-merchant-deals-coupons/`
-- Reused merchant shell/overview (Spec 006): `specs/006-merchant-dashboard-shell/`
-- Reused member pages (Spec 005): `specs/005-member-auth-saved-alerts/`
-- Reused content pages (Spec 004): `specs/004-destinations-blog-seo/`
-- Reused discovery pages (Spec 003): `specs/003-public-discovery-pages/`
-- Reused homepage (Spec 002): `specs/002-public-homepage/`
-- Foundation reused (Spec 001): `specs/001-frontend-foundation/` (page-shell, ui-utilities, component-patterns)
+- Plan: `specs/011-frontend-qa-polish/plan.md`
+- Spec: `specs/011-frontend-qa-polish/spec.md`
+- Research (decisions D1–D16): `specs/011-frontend-qa-polish/research.md`
+- Page inventory, issue taxonomy, audit-gate registry, report schema: `specs/011-frontend-qa-polish/data-model.md`
+- Contracts: `specs/011-frontend-qa-polish/contracts/` (audit-gates, navigation-audit, content-honesty, qa-report)
+- Quickstart & QA gate (exact commands + delegated browser script): `specs/011-frontend-qa-polish/quickstart.md`
+- Audited surface — SaaS owner admin (Spec 010): `specs/010-saas-owner-admin-dashboard/`
+- Audited surface — merchant analytics/integrations/settings (Spec 009): `specs/009-merchant-analytics-integrations-settings/`
+- Audited surface — merchant deals/coupons (Spec 007): `specs/007-merchant-deals-coupons/`
+- Audited surface — merchant shell/overview (Spec 006): `specs/006-merchant-dashboard-shell/`
+- Audited surface — member pages (Spec 005): `specs/005-member-auth-saved-alerts/`
+- Audited surface — content/SEO pages (Spec 004): `specs/004-destinations-blog-seo/`
+- Audited surface — discovery pages (Spec 003): `specs/003-public-discovery-pages/`
+- Audited surface — homepage (Spec 002): `specs/002-public-homepage/`
+- Audited foundation — styleguide/components, shell, UI utilities (Spec 001): `specs/001-frontend-foundation/`
+- Note: Spec 008 (merchant bookings/customers) was never built — its 4 pages stay coming-soon, not built here.
 - Governing constitution: `.specify/memory/constitution.md`
 
 **Stack (non-negotiable)**: HTML + local Tailwind CSS v3.4 build (PostCSS) + vanilla JS only.

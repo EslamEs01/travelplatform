@@ -1,4 +1,8 @@
 node_modules/
 assets/css/tailwind.css
 package-lock.json
+# All HTML files contain inline <style> blocks — Prettier v3 escapes < → \3c inside them,
+# breaking @media rules and CSS. Scope `npm run format` to JS/JSON/CSS only.
 admin/**/*.html
+dashboard/**/*.html
+pages/**/*.html
