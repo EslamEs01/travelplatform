@@ -9,9 +9,15 @@
 
   // ─── Guard: run on all merchant dashboard pages ─────────────────────────────
   var _DASH_PAGES = [
-    'merchant-dashboard','merchant-deals','merchant-create-deal',
-    'merchant-edit-deal','merchant-coupons','merchant-create-coupon',
-    'merchant-analytics','merchant-integrations','merchant-settings'
+    'merchant-dashboard',
+    'merchant-deals',
+    'merchant-create-deal',
+    'merchant-edit-deal',
+    'merchant-coupons',
+    'merchant-create-coupon',
+    'merchant-analytics',
+    'merchant-integrations',
+    'merchant-settings',
   ];
   var _currentPage = document.documentElement.dataset && document.documentElement.dataset.page;
   if (!_currentPage || _DASH_PAGES.indexOf(_currentPage) === -1) {
@@ -19,7 +25,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-
     // ─── Helpers ────────────────────────────────────────────────────────────
 
     var _prm = global.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -88,13 +93,19 @@
       }
 
       function toggle() {
-        if (self.isOpen) { close(); } else { open(); }
+        if (self.isOpen) {
+          close();
+        } else {
+          open();
+        }
       }
 
       triggerEl.addEventListener('click', function (e) {
         e.stopPropagation();
         // Close all other dropdowns first
-        document.dispatchEvent(new CustomEvent('dash:dropdown-close-all', { detail: { except: self } }));
+        document.dispatchEvent(
+          new CustomEvent('dash:dropdown-close-all', { detail: { except: self } })
+        );
         toggle();
       });
 
@@ -207,13 +218,19 @@
         if (rule.required && !val) {
           valid = false;
           field.setAttribute('aria-invalid', 'true');
-          if (errorEl) { errorEl.textContent = rule.requiredMsg || 'هذا الحقل مطلوب'; errorEl.hidden = false; }
+          if (errorEl) {
+            errorEl.textContent = rule.requiredMsg || 'هذا الحقل مطلوب';
+            errorEl.hidden = false;
+          }
           if (!firstInvalid) firstInvalid = field;
         }
         if (rule.minLength && val.length > 0 && val.length < rule.minLength) {
           valid = false;
           field.setAttribute('aria-invalid', 'true');
-          if (errorEl) { errorEl.textContent = rule.minLengthMsg || 'الحد الأدنى ' + rule.minLength + ' أحرف'; errorEl.hidden = false; }
+          if (errorEl) {
+            errorEl.textContent = rule.minLengthMsg || 'الحد الأدنى ' + rule.minLength + ' أحرف';
+            errorEl.hidden = false;
+          }
           if (!firstInvalid) firstInvalid = field;
         }
       });
@@ -230,8 +247,8 @@
     // ─── Sidebar / Drawer ────────────────────────────────────────────────────
 
     var sidebarDrawer = document.getElementById('sidebar-drawer');
-    var sidebarScrim  = document.getElementById('sidebar-scrim');
-    var menuBtn       = document.getElementById('btn-mobile-menu');
+    var sidebarScrim = document.getElementById('sidebar-scrim');
+    var menuBtn = document.getElementById('btn-mobile-menu');
 
     function openSidebar() {
       if (!sidebarDrawer) return;
@@ -291,20 +308,20 @@
 
     function initDropdown(triggerId, menuId) {
       var trigger = document.getElementById(triggerId);
-      var menu    = document.getElementById(menuId);
+      var menu = document.getElementById(menuId);
       if (trigger && menu) {
         _dropdowns.push(new DropdownController(trigger, menu));
       }
     }
 
     initDropdown('btn-notifications', 'dropdown-notifications');
-    initDropdown('btn-quick-add',     'dropdown-quick-add');
-    initDropdown('btn-user-menu',     'dropdown-user-menu');
+    initDropdown('btn-quick-add', 'dropdown-quick-add');
+    initDropdown('btn-user-menu', 'dropdown-user-menu');
 
     // ─── Global Search Mock ──────────────────────────────────────────────────
 
-    var searchForm   = document.getElementById('topbar-search-form');
-    var searchInput  = document.getElementById('topbar-search-input');
+    var searchForm = document.getElementById('topbar-search-form');
+    var searchInput = document.getElementById('topbar-search-input');
 
     if (searchForm) {
       searchForm.addEventListener('submit', function (e) {
@@ -315,7 +332,10 @@
         } else {
           toast('أدخل كلمة للبحث', 'warning');
         }
-        if (searchInput) { searchInput.value = ''; searchInput.blur(); }
+        if (searchInput) {
+          searchInput.value = '';
+          searchInput.blur();
+        }
       });
     }
 
@@ -355,7 +375,7 @@
       var btn = e.target.closest('[data-row-action]');
       if (!btn) return;
       var action = btn.getAttribute('data-row-action');
-      var row    = btn.closest('[data-booking-row]');
+      var row = btn.closest('[data-booking-row]');
 
       // Close the menu
       var menu = btn.closest('.row-action-menu');
@@ -364,10 +384,10 @@
       if (action === 'change-status') {
         var modal = document.getElementById('modal-status-change');
         if (modal && row) {
-          var ref  = row.dataset.bookingRef  || '';
+          var ref = row.dataset.bookingRef || '';
           var stat = row.dataset.bookingStatus || '';
-          var refInput  = modal.querySelector('[name="booking-ref"]');
-          var statSel   = modal.querySelector('[name="new-status"]');
+          var refInput = modal.querySelector('[name="booking-ref"]');
+          var statSel = modal.querySelector('[name="new-status"]');
           if (refInput) refInput.value = ref;
           if (statSel && stat) statSel.value = stat;
           if (global.TUI && TUI.modal) TUI.modal.open('modal-status-change');
@@ -382,7 +402,10 @@
         }
       } else if (action === 'contact') {
         var custName = row ? (row.querySelector('.booking-customer-name') || {}).textContent : '';
-        toast('جارٍ التواصل مع ' + (custName || 'العميل') + ' — بيانات تجريبية، لا اتصال حقيقي', 'info');
+        toast(
+          'جارٍ التواصل مع ' + (custName || 'العميل') + ' — بيانات تجريبية، لا اتصال حقيقي',
+          'info'
+        );
       } else if (action === 'assign') {
         toast('تعيين مستخدم — واجهة أمامية فقط / قابل للربط لاحقاً', 'info');
       } else if (action === 'view-details') {
@@ -396,31 +419,40 @@
     if (statusForm) {
       statusForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        var ok = validateAndSubmit(statusForm, {
-          'new-status': { required: true, requiredMsg: 'اختر الحالة الجديدة' }
-        }, function (form) {
-          var ref    = (form.elements['booking-ref']  || {}).value || '';
-          var newStat = (form.elements['new-status']   || {}).value || '';
+        var ok = validateAndSubmit(
+          statusForm,
+          {
+            'new-status': { required: true, requiredMsg: 'اختر الحالة الجديدة' },
+          },
+          function (form) {
+            var ref = (form.elements['booking-ref'] || {}).value || '';
+            var newStat = (form.elements['new-status'] || {}).value || '';
 
-          // Optimistically update the row badge
-          var row = document.querySelector('[data-booking-ref="' + ref + '"]');
-          if (row) {
-            var badge = row.querySelector('.booking-status-badge');
-            if (badge && newStat) {
-              var statMap = {
-                'New': 'جديد', 'Contacted': 'تم التواصل', 'Pending Payment': 'بانتظار الدفع',
-                'Confirmed': 'مؤكد', 'Cancelled': 'ملغى', 'Completed': 'مكتمل'
-              };
-              badge.textContent = statMap[newStat] || newStat;
-              badge.className = 'badge booking-status-badge status-' + newStat.toLowerCase().replace(/\s+/g, '-');
-              row.setAttribute('data-booking-status', newStat);
+            // Optimistically update the row badge
+            var row = document.querySelector('[data-booking-ref="' + ref + '"]');
+            if (row) {
+              var badge = row.querySelector('.booking-status-badge');
+              if (badge && newStat) {
+                var statMap = {
+                  New: 'جديد',
+                  Contacted: 'تم التواصل',
+                  'Pending Payment': 'بانتظار الدفع',
+                  Confirmed: 'مؤكد',
+                  Cancelled: 'ملغى',
+                  Completed: 'مكتمل',
+                };
+                badge.textContent = statMap[newStat] || newStat;
+                badge.className =
+                  'badge booking-status-badge status-' + newStat.toLowerCase().replace(/\s+/g, '-');
+                row.setAttribute('data-booking-status', newStat);
+              }
             }
+            if (global.TUI && TUI.modal) TUI.modal.close('modal-status-change');
+            toast('تم تحديث حالة الطلب ' + ref + ' — واجهة أمامية فقط، لا تنفيذ حقيقي', 'success');
+            announce('تم تحديث حالة الطلب ' + ref);
+            form.reset();
           }
-          if (global.TUI && TUI.modal) TUI.modal.close('modal-status-change');
-          toast('تم تحديث حالة الطلب ' + ref + ' — واجهة أمامية فقط، لا تنفيذ حقيقي', 'success');
-          announce('تم تحديث حالة الطلب ' + ref);
-          form.reset();
-        });
+        );
         return ok;
       });
     }
@@ -431,15 +463,24 @@
     if (noteForm) {
       noteForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        validateAndSubmit(noteForm, {
-          'note-text': { required: true, requiredMsg: 'الملاحظة مطلوبة', minLength: 5, minLengthMsg: 'الملاحظة قصيرة جداً' }
-        }, function (form) {
-          var ref = (form.elements['note-booking-ref'] || {}).value || '';
-          if (global.TUI && TUI.modal) TUI.modal.close('modal-add-note');
-          toast('تمت إضافة الملاحظة على الطلب ' + ref + ' — بيانات تجريبية فقط', 'success');
-          announce('تمت إضافة الملاحظة');
-          form.reset();
-        });
+        validateAndSubmit(
+          noteForm,
+          {
+            'note-text': {
+              required: true,
+              requiredMsg: 'الملاحظة مطلوبة',
+              minLength: 5,
+              minLengthMsg: 'الملاحظة قصيرة جداً',
+            },
+          },
+          function (form) {
+            var ref = (form.elements['note-booking-ref'] || {}).value || '';
+            if (global.TUI && TUI.modal) TUI.modal.close('modal-add-note');
+            toast('تمت إضافة الملاحظة على الطلب ' + ref + ' — بيانات تجريبية فقط', 'success');
+            announce('تمت إضافة الملاحظة');
+            form.reset();
+          }
+        );
       });
     }
 
@@ -449,9 +490,9 @@
 
     function updateOnboardingProgress() {
       if (!onboardingContainer) return;
-      var total    = onboardingContainer.querySelectorAll('[data-onboarding-item]').length;
-      var done     = onboardingContainer.querySelectorAll('[data-onboarding-item].is-done').length;
-      var progressBar  = document.getElementById('onboarding-progress-bar');
+      var total = onboardingContainer.querySelectorAll('[data-onboarding-item]').length;
+      var done = onboardingContainer.querySelectorAll('[data-onboarding-item].is-done').length;
+      var progressBar = document.getElementById('onboarding-progress-bar');
       var progressText = document.getElementById('onboarding-progress-text');
       var pct = total > 0 ? Math.round((done / total) * 100) : 0;
       if (progressBar) {
@@ -491,7 +532,7 @@
       var btn = e.target.closest('[data-integration-action]');
       if (!btn) return;
       var action = btn.getAttribute('data-integration-action');
-      var name   = btn.closest('[data-integration-name]')
+      var name = btn.closest('[data-integration-name]')
         ? btn.closest('[data-integration-name]').getAttribute('data-integration-name')
         : 'التكامل';
       if (action === 'coming-soon') {
@@ -518,7 +559,10 @@
         if (isDesktop) {
           sidebarDrawer.removeAttribute('inert');
           sidebarDrawer.classList.remove('is-open');
-          if (sidebarScrim) { sidebarScrim.classList.remove('is-visible'); sidebarScrim.setAttribute('hidden', ''); }
+          if (sidebarScrim) {
+            sidebarScrim.classList.remove('is-visible');
+            sidebarScrim.setAttribute('hidden', '');
+          }
           document.body.classList.remove('sidebar-open');
         } else {
           // On mobile default sidebar is closed/inert unless opened
@@ -540,10 +584,12 @@
     // ─── Shared primitives (used by all new page controllers) ───────────────
 
     function slugify(str) {
-      return (str || '').toLowerCase()
+      return (str || '')
+        .toLowerCase()
         .replace(/[\s_]+/g, '-')
         .replace(/[^؀-ۿ\w-]/g, '')
-        .replace(/-+/g, '-').replace(/^-+|-+$/g, '');
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
     }
 
     function generateCode(len) {
@@ -557,7 +603,10 @@
 
     function confirmModal(modalId, onConfirm) {
       var modal = document.getElementById(modalId);
-      if (!modal) { if (typeof onConfirm === 'function') onConfirm(); return; }
+      if (!modal) {
+        if (typeof onConfirm === 'function') onConfirm();
+        return;
+      }
       if (global.TUI && TUI.modal) {
         TUI.modal.open(modalId);
         var confirmBtn = modal.querySelector('[data-modal-confirm]');
@@ -590,7 +639,9 @@
           var items = listEl.querySelectorAll('[data-repeater-item]');
           if (!items.length) return;
           var clone = items[items.length - 1].cloneNode(true);
-          clone.querySelectorAll('input, textarea').forEach(function (f) { f.value = ''; });
+          clone.querySelectorAll('input, textarea').forEach(function (f) {
+            f.value = '';
+          });
           listEl.appendChild(clone);
           var newInput = clone.querySelector('input, textarea');
           if (newInput) newInput.focus();
@@ -599,34 +650,57 @@
     }
 
     // ─── Page dispatch ───────────────────────────────────────────────────────
-    if (_currentPage === 'merchant-deals')         { initMerchantDeals(); }
-    if (_currentPage === 'merchant-create-deal')   { initMerchantCreateDeal(); }
-    if (_currentPage === 'merchant-edit-deal')     { initMerchantEditDeal(); }
-    if (_currentPage === 'merchant-coupons')       { initMerchantCoupons(); }
-    if (_currentPage === 'merchant-create-coupon') { initMerchantCreateCoupon(); }
-    if (_currentPage === 'merchant-analytics')     { initMerchantAnalytics(); }
-    if (_currentPage === 'merchant-integrations')  { initMerchantIntegrations(); }
-    if (_currentPage === 'merchant-settings')      { initMerchantSettings(); }
+    if (_currentPage === 'merchant-deals') {
+      initMerchantDeals();
+    }
+    if (_currentPage === 'merchant-create-deal') {
+      initMerchantCreateDeal();
+    }
+    if (_currentPage === 'merchant-edit-deal') {
+      initMerchantEditDeal();
+    }
+    if (_currentPage === 'merchant-coupons') {
+      initMerchantCoupons();
+    }
+    if (_currentPage === 'merchant-create-coupon') {
+      initMerchantCreateCoupon();
+    }
+    if (_currentPage === 'merchant-analytics') {
+      initMerchantAnalytics();
+    }
+    if (_currentPage === 'merchant-integrations') {
+      initMerchantIntegrations();
+    }
+    if (_currentPage === 'merchant-settings') {
+      initMerchantSettings();
+    }
 
     // ─── merchant-deals controller (T012) ────────────────────────────────────
     function initMerchantDeals() {
-      var rows       = Array.from(document.querySelectorAll('[data-deal-row]'));
-      var tableWrap  = document.querySelector('.deals-table-wrap');
+      var rows = Array.from(document.querySelectorAll('[data-deal-row]'));
+      var tableWrap = document.querySelector('.deals-table-wrap');
       var emptyState = document.getElementById('deals-empty-state');
-      var countText  = document.getElementById('deals-result-count');
-      var chipsBar   = document.getElementById('deals-chips-bar');
-      var searchInp  = document.getElementById('deals-search');
-      var sortSel    = document.getElementById('deals-sort');
+      var countText = document.getElementById('deals-result-count');
+      var chipsBar = document.getElementById('deals-chips-bar');
+      var searchInp = document.getElementById('deals-search');
+      var sortSel = document.getElementById('deals-sort');
       var filterForm = document.getElementById('deals-filter-form');
 
       var state = {
-        search: '', status: '', destination: '', dealType: '',
-        sourceType: '', expiryStatus: '', priceMin: '', priceMax: '',
-        featuredOnly: false
+        search: '',
+        status: '',
+        destination: '',
+        dealType: '',
+        sourceType: '',
+        expiryStatus: '',
+        priceMin: '',
+        priceMax: '',
+        featuredOnly: false,
       };
 
-      var today = new Date(); today.setHours(0, 0, 0, 0);
-      var in30  = new Date(today.getTime() + 30 * 86400000);
+      var today = new Date();
+      today.setHours(0, 0, 0, 0);
+      var in30 = new Date(today.getTime() + 30 * 86400000);
 
       function expiryCategory(dateStr) {
         if (!dateStr) return 'unknown';
@@ -638,32 +712,43 @@
       }
 
       function matchesFilters(row) {
-        var title    = (row.getAttribute('data-title')       || '').toLowerCase();
-        var dest     = (row.getAttribute('data-destination') || '').toLowerCase();
-        var prov     = (row.getAttribute('data-provider')    || '').toLowerCase();
-        var rowStatus= (row.getAttribute('data-status')      || '').toLowerCase();
-        var source   = (row.getAttribute('data-source')      || '').toLowerCase();
-        var dtype    = (row.getAttribute('data-type')        || '').toLowerCase();
-        var price    = parseFloat(row.getAttribute('data-price')    || '0');
+        var title = (row.getAttribute('data-title') || '').toLowerCase();
+        var dest = (row.getAttribute('data-destination') || '').toLowerCase();
+        var prov = (row.getAttribute('data-provider') || '').toLowerCase();
+        var rowStatus = (row.getAttribute('data-status') || '').toLowerCase();
+        var source = (row.getAttribute('data-source') || '').toLowerCase();
+        var dtype = (row.getAttribute('data-type') || '').toLowerCase();
+        var price = parseFloat(row.getAttribute('data-price') || '0');
         var featured = row.getAttribute('data-featured') === 'true';
-        var expiry   = row.getAttribute('data-expiry') || '';
+        var expiry = row.getAttribute('data-expiry') || '';
 
         if (state.search) {
           var q = state.search.toLowerCase();
-          if (title.indexOf(q) === -1 && dest.indexOf(q) === -1 && prov.indexOf(q) === -1) return false;
+          if (title.indexOf(q) === -1 && dest.indexOf(q) === -1 && prov.indexOf(q) === -1)
+            return false;
         }
-        if (state.status      && rowStatus !== state.status.toLowerCase()) return false;
+        if (state.status && rowStatus !== state.status.toLowerCase()) return false;
         if (state.destination && dest.indexOf(state.destination.toLowerCase()) === -1) return false;
-        if (state.dealType    && dtype !== state.dealType.toLowerCase()) return false;
-        if (state.sourceType  && source !== state.sourceType.toLowerCase()) return false;
-        if (state.priceMin    && !isNaN(parseFloat(state.priceMin)) && price < parseFloat(state.priceMin)) return false;
-        if (state.priceMax    && !isNaN(parseFloat(state.priceMax)) && price > parseFloat(state.priceMax)) return false;
+        if (state.dealType && dtype !== state.dealType.toLowerCase()) return false;
+        if (state.sourceType && source !== state.sourceType.toLowerCase()) return false;
+        if (
+          state.priceMin &&
+          !isNaN(parseFloat(state.priceMin)) &&
+          price < parseFloat(state.priceMin)
+        )
+          return false;
+        if (
+          state.priceMax &&
+          !isNaN(parseFloat(state.priceMax)) &&
+          price > parseFloat(state.priceMax)
+        )
+          return false;
         if (state.featuredOnly && !featured) return false;
         if (state.expiryStatus) {
           var cat = expiryCategory(expiry);
-          if (state.expiryStatus === 'near'    && cat !== 'near')    return false;
+          if (state.expiryStatus === 'near' && cat !== 'near') return false;
           if (state.expiryStatus === 'expired' && cat !== 'expired') return false;
-          if (state.expiryStatus === 'active'  && cat !== 'active')  return false;
+          if (state.expiryStatus === 'active' && cat !== 'active') return false;
         }
         return true;
       }
@@ -672,31 +757,48 @@
         var sortKey = sortSel ? sortSel.value : 'updated-desc';
         switch (sortKey) {
           case 'price-asc':
-            return parseFloat(a.getAttribute('data-price')||0) - parseFloat(b.getAttribute('data-price')||0);
+            return (
+              parseFloat(a.getAttribute('data-price') || 0) -
+              parseFloat(b.getAttribute('data-price') || 0)
+            );
           case 'price-desc':
-            return parseFloat(b.getAttribute('data-price')||0) - parseFloat(a.getAttribute('data-price')||0);
+            return (
+              parseFloat(b.getAttribute('data-price') || 0) -
+              parseFloat(a.getAttribute('data-price') || 0)
+            );
           case 'clicks-desc':
-            return parseInt(b.getAttribute('data-clicks')||0) - parseInt(a.getAttribute('data-clicks')||0);
+            return (
+              parseInt(b.getAttribute('data-clicks') || 0) -
+              parseInt(a.getAttribute('data-clicks') || 0)
+            );
           case 'inquiries-desc':
-            return parseInt(b.getAttribute('data-inquiries')||0) - parseInt(a.getAttribute('data-inquiries')||0);
+            return (
+              parseInt(b.getAttribute('data-inquiries') || 0) -
+              parseInt(a.getAttribute('data-inquiries') || 0)
+            );
           case 'expiry-asc': {
-            var da = new Date(a.getAttribute('data-expiry')||'2099-12-31');
-            var db = new Date(b.getAttribute('data-expiry')||'2099-12-31');
+            var da = new Date(a.getAttribute('data-expiry') || '2099-12-31');
+            var db = new Date(b.getAttribute('data-expiry') || '2099-12-31');
             return da - db;
           }
           default: {
-            var ua = new Date(a.getAttribute('data-updated')||'2000-01-01');
-            var ub = new Date(b.getAttribute('data-updated')||'2000-01-01');
+            var ua = new Date(a.getAttribute('data-updated') || '2000-01-01');
+            var ub = new Date(b.getAttribute('data-updated') || '2000-01-01');
             return ub - ua;
           }
         }
       }
 
       var CHIP_LABELS = {
-        status: 'الحالة', destination: 'الوجهة', dealType: 'النوع',
-        sourceType: 'المصدر', expiryStatus: 'الانتهاء',
-        priceMin: 'الحد الأدنى', priceMax: 'الحد الأقصى',
-        featuredOnly: 'المميزة فقط', search: 'البحث'
+        status: 'الحالة',
+        destination: 'الوجهة',
+        dealType: 'النوع',
+        sourceType: 'المصدر',
+        expiryStatus: 'الانتهاء',
+        priceMin: 'الحد الأدنى',
+        priceMax: 'الحد الأقصى',
+        featuredOnly: 'المميزة فقط',
+        search: 'البحث',
       };
 
       function renderChips() {
@@ -713,7 +815,8 @@
           el.className = 'filter-chip';
           el.setAttribute('aria-label', 'إزالة فلتر ' + label);
           el.dataset.chipKey = key;
-          el.innerHTML = '<span>' + label + '</span><span aria-hidden="true" class="chip-x">×</span>';
+          el.innerHTML =
+            '<span>' + label + '</span><span aria-hidden="true" class="chip-x">×</span>';
           chipsBar.appendChild(el);
         });
       }
@@ -729,26 +832,35 @@
           if (show) visible++;
         });
 
-        if (tbody) sorted.forEach(function (row) { tbody.appendChild(row); });
+        if (tbody)
+          sorted.forEach(function (row) {
+            tbody.appendChild(row);
+          });
 
         if (countText) {
           countText.textContent = 'عرض ' + visible + ' من ' + rows.length + ' عرض';
         }
         announce('عرض ' + visible + ' عرض من أصل ' + rows.length);
 
-        if (emptyState) emptyState.hidden = (visible > 0);
-        if (tableWrap)  tableWrap.classList.toggle('table-empty', visible === 0);
+        if (emptyState) emptyState.hidden = visible > 0;
+        if (tableWrap) tableWrap.classList.toggle('table-empty', visible === 0);
 
         renderChips();
       }
 
       function resetFilters() {
         state = {
-          search: '', status: '', destination: '', dealType: '',
-          sourceType: '', expiryStatus: '', priceMin: '', priceMax: '',
-          featuredOnly: false
+          search: '',
+          status: '',
+          destination: '',
+          dealType: '',
+          sourceType: '',
+          expiryStatus: '',
+          priceMin: '',
+          priceMax: '',
+          featuredOnly: false,
         };
-        if (searchInp)  searchInp.value = '';
+        if (searchInp) searchInp.value = '';
         if (sortSel && sortSel.options.length) sortSel.value = sortSel.options[0].value;
         if (filterForm) filterForm.reset();
         applyAndRender();
@@ -763,15 +875,16 @@
 
       if (filterForm) {
         filterForm.addEventListener('change', function (e) {
-          var el = e.target, name = el.name || '';
-          if (name === 'filter-status')      state.status = el.value;
+          var el = e.target,
+            name = el.name || '';
+          if (name === 'filter-status') state.status = el.value;
           if (name === 'filter-destination') state.destination = el.value;
-          if (name === 'filter-type')        state.dealType = el.value;
-          if (name === 'filter-source')      state.sourceType = el.value;
-          if (name === 'filter-expiry')      state.expiryStatus = el.value;
-          if (name === 'filter-price-min')   state.priceMin = el.value;
-          if (name === 'filter-price-max')   state.priceMax = el.value;
-          if (name === 'filter-featured')    state.featuredOnly = el.checked;
+          if (name === 'filter-type') state.dealType = el.value;
+          if (name === 'filter-source') state.sourceType = el.value;
+          if (name === 'filter-expiry') state.expiryStatus = el.value;
+          if (name === 'filter-price-min') state.priceMin = el.value;
+          if (name === 'filter-price-max') state.priceMax = el.value;
+          if (name === 'filter-featured') state.featuredOnly = el.checked;
           applyAndRender();
         });
       }
@@ -786,15 +899,22 @@
           if (key === 'featuredOnly') state.featuredOnly = false;
           else state[key] = '';
           var fieldNames = {
-            status: 'filter-status', destination: 'filter-destination',
-            dealType: 'filter-type', sourceType: 'filter-source',
-            expiryStatus: 'filter-expiry', priceMin: 'filter-price-min',
-            priceMax: 'filter-price-max', featuredOnly: 'filter-featured'
+            status: 'filter-status',
+            destination: 'filter-destination',
+            dealType: 'filter-type',
+            sourceType: 'filter-source',
+            expiryStatus: 'filter-expiry',
+            priceMin: 'filter-price-min',
+            priceMax: 'filter-price-max',
+            featuredOnly: 'filter-featured',
           };
           var fn = fieldNames[key];
           if (fn) {
             var field = (filterForm && filterForm.elements[fn]) || document.getElementById(fn);
-            if (field) { if (field.type === 'checkbox') field.checked = false; else field.value = ''; }
+            if (field) {
+              if (field.type === 'checkbox') field.checked = false;
+              else field.value = '';
+            }
           }
           if (key === 'search' && searchInp) searchInp.value = '';
           applyAndRender();
@@ -821,28 +941,70 @@
         var id = row.getAttribute('data-id') || '';
         var menuEl = document.getElementById('row-menu-' + id);
         if (!menuEl) return;
-        var eyeSvg   = '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
-        var editSvg  = '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
-        var dupSvg   = '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
-        var pauseSvg = '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
-        var starSvg  = '<svg width="14" height="14" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
-        var archSvg  = '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>';
-        var trashSvg = '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>';
+        var eyeSvg =
+          '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+        var editSvg =
+          '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+        var dupSvg =
+          '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+        var pauseSvg =
+          '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+        var starSvg =
+          '<svg width="14" height="14" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+        var archSvg =
+          '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>';
+        var trashSvg =
+          '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>';
         menuEl.innerHTML =
-          '<a href="../pages/deal-details.html?id=' + id + '" role="menuitem" class="rmi" data-row-action="view" data-deal-id="' + id + '">' + eyeSvg + ' عرض الصفحة العامة</a>' +
-          '<a href="edit-deal.html?id=' + id + '" role="menuitem" class="rmi" data-row-action="edit" data-deal-id="' + id + '">' + editSvg + ' تعديل</a>' +
-          '<button type="button" role="menuitem" class="rmi" data-row-action="duplicate" data-deal-id="' + id + '">' + dupSvg + ' تكرار العرض</button>' +
-          '<button type="button" role="menuitem" class="rmi" data-row-action="toggle-pause" data-deal-id="' + id + '">' + pauseSvg + ' إيقاف / تفعيل</button>' +
-          '<button type="button" role="menuitem" class="rmi" data-row-action="toggle-featured" data-deal-id="' + id + '">' + starSvg + ' تمييز / إلغاء التمييز</button>' +
+          '<a href="../pages/deal-details.html?id=' +
+          id +
+          '" role="menuitem" class="rmi" data-row-action="view" data-deal-id="' +
+          id +
+          '">' +
+          eyeSvg +
+          ' عرض الصفحة العامة</a>' +
+          '<a href="edit-deal.html?id=' +
+          id +
+          '" role="menuitem" class="rmi" data-row-action="edit" data-deal-id="' +
+          id +
+          '">' +
+          editSvg +
+          ' تعديل</a>' +
+          '<button type="button" role="menuitem" class="rmi" data-row-action="duplicate" data-deal-id="' +
+          id +
+          '">' +
+          dupSvg +
+          ' تكرار العرض</button>' +
+          '<button type="button" role="menuitem" class="rmi" data-row-action="toggle-pause" data-deal-id="' +
+          id +
+          '">' +
+          pauseSvg +
+          ' إيقاف / تفعيل</button>' +
+          '<button type="button" role="menuitem" class="rmi" data-row-action="toggle-featured" data-deal-id="' +
+          id +
+          '">' +
+          starSvg +
+          ' تمييز / إلغاء التمييز</button>' +
           '<div class="row-menu-sep" role="separator"></div>' +
-          '<button type="button" role="menuitem" class="rmi" data-row-action="archive" data-deal-id="' + id + '">' + archSvg + ' أرشفة</button>' +
-          '<button type="button" role="menuitem" class="rmi is-danger" data-row-action="delete" data-deal-id="' + id + '">' + trashSvg + ' حذف</button>';
+          '<button type="button" role="menuitem" class="rmi" data-row-action="archive" data-deal-id="' +
+          id +
+          '">' +
+          archSvg +
+          ' أرشفة</button>' +
+          '<button type="button" role="menuitem" class="rmi is-danger" data-row-action="delete" data-deal-id="' +
+          id +
+          '">' +
+          trashSvg +
+          ' حذف</button>';
       });
 
       // Simple modal open/close (no TUI.modal dependency for deals)
       function openDealModal(modalId, onConfirm) {
         var overlay = document.getElementById(modalId);
-        if (!overlay) { if (typeof onConfirm === 'function') onConfirm(); return; }
+        if (!overlay) {
+          if (typeof onConfirm === 'function') onConfirm();
+          return;
+        }
         overlay.removeAttribute('hidden');
         document.body.style.overflow = 'hidden';
         var confirmBtn = overlay.querySelector('[data-modal-confirm]');
@@ -851,28 +1013,52 @@
           overlay.setAttribute('hidden', '');
           document.body.style.overflow = '';
         }
-        function doConfirm() { cleanUp(); closeModal(); if (typeof onConfirm === 'function') onConfirm(); }
-        function doCancel()  { cleanUp(); closeModal(); }
-        function onKey(e) { if (e.key === 'Escape') { cleanUp(); closeModal(); } }
-        function onBg(e) { if (e.target === overlay) { cleanUp(); closeModal(); } }
+        function doConfirm() {
+          cleanUp();
+          closeModal();
+          if (typeof onConfirm === 'function') onConfirm();
+        }
+        function doCancel() {
+          cleanUp();
+          closeModal();
+        }
+        function onKey(e) {
+          if (e.key === 'Escape') {
+            cleanUp();
+            closeModal();
+          }
+        }
+        function onBg(e) {
+          if (e.target === overlay) {
+            cleanUp();
+            closeModal();
+          }
+        }
         function cleanUp() {
           if (confirmBtn) confirmBtn.removeEventListener('click', doConfirm);
-          cancelBtns.forEach(function (b) { b.removeEventListener('click', doCancel); });
+          cancelBtns.forEach(function (b) {
+            b.removeEventListener('click', doCancel);
+          });
           document.removeEventListener('keydown', onKey);
           overlay.removeEventListener('click', onBg);
         }
         if (confirmBtn) confirmBtn.addEventListener('click', doConfirm);
-        cancelBtns.forEach(function (b) { b.addEventListener('click', doCancel); });
+        cancelBtns.forEach(function (b) {
+          b.addEventListener('click', doCancel);
+        });
         document.addEventListener('keydown', onKey);
         overlay.addEventListener('click', onBg);
         var focusEl = overlay.querySelector('[data-modal-cancel], [data-modal-confirm]');
-        if (focusEl) setTimeout(function () { focusEl.focus(); }, 40);
+        if (focusEl)
+          setTimeout(function () {
+            focusEl.focus();
+          }, 40);
       }
 
       // Bulk selection
-      var bulkBar       = document.getElementById('deals-bulk-bar');
-      var bulkCountEl   = document.getElementById('deals-bulk-count');
-      var selectAllCb   = document.getElementById('deals-select-all');
+      var bulkBar = document.getElementById('deals-bulk-bar');
+      var bulkCountEl = document.getElementById('deals-bulk-count');
+      var selectAllCb = document.getElementById('deals-select-all');
 
       function getCheckedRows() {
         return rows.filter(function (r) {
@@ -885,10 +1071,12 @@
         var checked = getCheckedRows();
         var n = checked.length;
         if (bulkCountEl) bulkCountEl.textContent = n + ' عرض محدد';
-        if (bulkBar)     bulkBar.classList.toggle('is-visible', n > 0);
+        if (bulkBar) bulkBar.classList.toggle('is-visible', n > 0);
         if (selectAllCb) {
-          var visible = rows.filter(function (r) { return r.style.display !== 'none'; });
-          selectAllCb.checked       = visible.length > 0 && n === visible.length;
+          var visible = rows.filter(function (r) {
+            return r.style.display !== 'none';
+          });
+          selectAllCb.checked = visible.length > 0 && n === visible.length;
           selectAllCb.indeterminate = n > 0 && n < visible.length;
         }
         announce(n > 0 ? n + ' عرض محدد' : 'لا توجد عروض محددة');
@@ -896,10 +1084,14 @@
 
       if (selectAllCb) {
         selectAllCb.addEventListener('change', function () {
-          rows.filter(function (r) { return r.style.display !== 'none'; }).forEach(function (r) {
-            var cb = r.querySelector('.deal-row-cb');
-            if (cb) cb.checked = selectAllCb.checked;
-          });
+          rows
+            .filter(function (r) {
+              return r.style.display !== 'none';
+            })
+            .forEach(function (r) {
+              var cb = r.querySelector('.deal-row-cb');
+              if (cb) cb.checked = selectAllCb.checked;
+            });
           updateBulkBar();
         });
       }
@@ -927,17 +1119,24 @@
             if (titleEl) {
               var orig = titleEl.childNodes[0];
               if (orig && orig.nodeType === 3) {
-                orig.textContent = orig.textContent.replace(' (نسخة تجريبية)', '') + ' (نسخة تجريبية)';
+                orig.textContent =
+                  orig.textContent.replace(' (نسخة تجريبية)', '') + ' (نسخة تجريبية)';
               } else {
-                titleEl.textContent = titleEl.textContent.replace(' (نسخة تجريبية)', '') + ' (نسخة تجريبية)';
+                titleEl.textContent =
+                  titleEl.textContent.replace(' (نسخة تجريبية)', '') + ' (نسخة تجريبية)';
               }
             }
             var newId = dealId + '-copy';
             clone.setAttribute('data-id', newId);
             var cloneMenu = clone.querySelector('.row-action-menu');
-            if (cloneMenu) { cloneMenu.id = 'row-menu-' + newId; cloneMenu.innerHTML = ''; }
+            if (cloneMenu) {
+              cloneMenu.id = 'row-menu-' + newId;
+              cloneMenu.innerHTML = '';
+            }
             var trigger = clone.querySelector('[data-row-action-trigger]');
-            if (trigger) { trigger.setAttribute('aria-controls', 'row-menu-' + newId); }
+            if (trigger) {
+              trigger.setAttribute('aria-controls', 'row-menu-' + newId);
+            }
             var cbClone = clone.querySelector('.deal-row-cb');
             if (cbClone) cbClone.checked = false;
             row.parentNode.insertBefore(clone, row.nextSibling);
@@ -950,17 +1149,22 @@
         if (action === 'toggle-pause') {
           if (!row) return;
           var cur = row.getAttribute('data-status');
-          var nStatus = (cur === 'active') ? 'paused' : 'active';
-          var nLabel  = (nStatus === 'active') ? 'نشط' : 'موقوف';
-          var nClass  = (nStatus === 'active') ? 'badge-active' : 'badge-paused';
-          var nDot    = (nStatus === 'active') ? '#15803D' : '#A16207';
+          var nStatus = cur === 'active' ? 'paused' : 'active';
+          var nLabel = nStatus === 'active' ? 'نشط' : 'موقوف';
+          var nClass = nStatus === 'active' ? 'badge-active' : 'badge-paused';
+          var nDot = nStatus === 'active' ? '#15803D' : '#A16207';
           row.setAttribute('data-status', nStatus);
           var sbadge = row.querySelector('td[data-label="الحالة"] .badge');
           if (sbadge) {
             sbadge.className = 'badge ' + nClass;
-            sbadge.innerHTML = '<span class="badge-dot" style="background:' + nDot + '"></span>' + nLabel;
+            sbadge.innerHTML =
+              '<span class="badge-dot" style="background:' + nDot + '"></span>' + nLabel;
           }
-          toast((nStatus === 'active' ? 'تم تفعيل' : 'تم إيقاف') + ' العرض — إجراء تجريبي / session فقط', 'info');
+          toast(
+            (nStatus === 'active' ? 'تم تفعيل' : 'تم إيقاف') +
+              ' العرض — إجراء تجريبي / session فقط',
+            'info'
+          );
           applyAndRender();
           return;
         }
@@ -989,7 +1193,10 @@
             if (row) {
               row.setAttribute('data-status', 'archived');
               var sb = row.querySelector('td[data-label="الحالة"] .badge');
-              if (sb) { sb.className = 'badge badge-archived'; sb.innerHTML = '<span class="badge-dot" style="background:#7C3AED"></span>مؤرشف'; }
+              if (sb) {
+                sb.className = 'badge badge-archived';
+                sb.innerHTML = '<span class="badge-dot" style="background:#7C3AED"></span>مؤرشف';
+              }
               row.style.opacity = '.6';
               applyAndRender();
             }
@@ -1006,7 +1213,9 @@
               row.style.transform = 'translateX(1rem)';
               setTimeout(function () {
                 row.remove();
-                rows = rows.filter(function (r) { return r !== row; });
+                rows = rows.filter(function (r) {
+                  return r !== row;
+                });
                 applyAndRender();
               }, 260);
             }
@@ -1020,7 +1229,7 @@
       document.addEventListener('click', function (e) {
         var btn = e.target.closest('[data-bulk-action]');
         if (!btn) return;
-        var action  = btn.getAttribute('data-bulk-action');
+        var action = btn.getAttribute('data-bulk-action');
         var checked = getCheckedRows();
         if (!checked.length && action !== 'export') {
           toast('حدد عروضاً أولاً', 'warning');
@@ -1028,22 +1237,37 @@
         }
 
         function uncheckAll() {
-          rows.forEach(function (r) { var cb = r.querySelector('.deal-row-cb'); if (cb) cb.checked = false; });
-          if (selectAllCb) { selectAllCb.checked = false; selectAllCb.indeterminate = false; }
+          rows.forEach(function (r) {
+            var cb = r.querySelector('.deal-row-cb');
+            if (cb) cb.checked = false;
+          });
+          if (selectAllCb) {
+            selectAllCb.checked = false;
+            selectAllCb.indeterminate = false;
+          }
           updateBulkBar();
         }
 
         if (action === 'activate' || action === 'pause') {
-          var nSt = (action === 'activate') ? 'active' : 'paused';
-          var nLbl = (nSt === 'active') ? 'نشط' : 'موقوف';
-          var nCls = (nSt === 'active') ? 'badge-active' : 'badge-paused';
-          var nDotC = (nSt === 'active') ? '#15803D' : '#A16207';
+          var nSt = action === 'activate' ? 'active' : 'paused';
+          var nLbl = nSt === 'active' ? 'نشط' : 'موقوف';
+          var nCls = nSt === 'active' ? 'badge-active' : 'badge-paused';
+          var nDotC = nSt === 'active' ? '#15803D' : '#A16207';
           checked.forEach(function (r) {
             r.setAttribute('data-status', nSt);
             var b = r.querySelector('td[data-label="الحالة"] .badge');
-            if (b) { b.className = 'badge ' + nCls; b.innerHTML = '<span class="badge-dot" style="background:' + nDotC + '"></span>' + nLbl; }
+            if (b) {
+              b.className = 'badge ' + nCls;
+              b.innerHTML =
+                '<span class="badge-dot" style="background:' + nDotC + '"></span>' + nLbl;
+            }
           });
-          toast((nSt === 'active' ? 'تم تفعيل ' : 'تم إيقاف ') + checked.length + ' عروض — إجراء تجريبي', 'success');
+          toast(
+            (nSt === 'active' ? 'تم تفعيل ' : 'تم إيقاف ') +
+              checked.length +
+              ' عروض — إجراء تجريبي',
+            'success'
+          );
           uncheckAll();
           applyAndRender();
           return;
@@ -1054,7 +1278,10 @@
             checked.forEach(function (r) {
               r.setAttribute('data-status', 'archived');
               var b = r.querySelector('td[data-label="الحالة"] .badge');
-              if (b) { b.className = 'badge badge-archived'; b.innerHTML = '<span class="badge-dot" style="background:#7C3AED"></span>مؤرشف'; }
+              if (b) {
+                b.className = 'badge badge-archived';
+                b.innerHTML = '<span class="badge-dot" style="background:#7C3AED"></span>مؤرشف';
+              }
               r.style.opacity = '.6';
             });
             toast('تمت أرشفة ' + checked.length + ' عروض — إجراء تجريبي', 'info');
@@ -1066,11 +1293,17 @@
 
         if (action === 'bulk-delete') {
           var bodyEl = document.getElementById('modal-bulk-delete-body');
-          if (bodyEl) bodyEl.textContent = 'سيتم حذف ' + checked.length + ' عرض محدد. هذا الإجراء لا يمكن التراجع عنه — بيانات تجريبية فقط.';
+          if (bodyEl)
+            bodyEl.textContent =
+              'سيتم حذف ' +
+              checked.length +
+              ' عرض محدد. هذا الإجراء لا يمكن التراجع عنه — بيانات تجريبية فقط.';
           openDealModal('modal-deals-bulk-delete', function () {
             checked.forEach(function (r) {
               r.remove();
-              rows = rows.filter(function (x) { return x !== r; });
+              rows = rows.filter(function (x) {
+                return x !== r;
+              });
             });
             toast('تم حذف ' + checked.length + ' عروض — إجراء تجريبي', 'warning');
             uncheckAll();
@@ -1085,11 +1318,8 @@
           return;
         }
       });
-
     }
-
   }); // end DOMContentLoaded
-
 })(window);
 
 // ─── T021: merchant-edit-deal controller ─────────────────────────────────────
@@ -1099,21 +1329,30 @@ function initMerchantEditDeal() {
 
   // ── Load inline JSON + resolve ?id ────────────────────────────────────────
   var dataEl = document.getElementById('merchant-deals-data');
-  var deals  = [];
-  try { deals = JSON.parse(dataEl ? dataEl.textContent : '[]'); } catch(e) {}
+  var deals = [];
+  try {
+    deals = JSON.parse(dataEl ? dataEl.textContent : '[]');
+  } catch (e) {}
 
-  var urlId  = (new URLSearchParams(window.location.search)).get('id') || 'deal-001';
-  var deal   = deals.filter(function(d){ return d.id === urlId; })[0];
+  var urlId = new URLSearchParams(window.location.search).get('id') || 'deal-001';
+  var deal = deals.filter(function (d) {
+    return d.id === urlId;
+  })[0];
 
   // Unknown id → fall back to static default (deal-001 already in HTML)
   if (deal && deal.id !== 'deal-001') {
     prefillEditForm(form, deal);
   } else if (!deal) {
-    deal = deals.filter(function(d){ return d.id === 'deal-001'; })[0];
+    deal = deals.filter(function (d) {
+      return d.id === 'deal-001';
+    })[0];
   }
 
   // Update header stats + links for whatever deal is shown
-  var activeDeal = (deals.filter(function(d){ return d.id === urlId; })[0]) || deal;
+  var activeDeal =
+    deals.filter(function (d) {
+      return d.id === urlId;
+    })[0] || deal;
   if (activeDeal) updateEditHeader(activeDeal);
 
   // ── Prefill helper ────────────────────────────────────────────────────────
@@ -1121,8 +1360,11 @@ function initMerchantEditDeal() {
     function setVal(name, val) {
       var el = f.elements[name];
       if (!el) return;
-      if (el.type === 'checkbox') { el.checked = !!val; }
-      else { el.value = val != null ? val : ''; }
+      if (el.type === 'checkbox') {
+        el.checked = !!val;
+      } else {
+        el.value = val != null ? val : '';
+      }
     }
     setVal('title', d.title);
     setVal('dealType', d.dealType);
@@ -1160,56 +1402,89 @@ function initMerchantEditDeal() {
     if (!list || !Array.isArray(items)) return;
     var existingItems = list.querySelectorAll('[data-repeater-item]');
     var addBtn = list.querySelector('[data-repeater-add]');
-    existingItems.forEach(function(item){ item.remove(); });
-    items.forEach(function(val) {
+    existingItems.forEach(function (item) {
+      item.remove();
+    });
+    items.forEach(function (val) {
       var row = document.createElement('div');
       row.setAttribute('data-repeater-item', '');
       row.className = 'repeater-item';
       var inp = document.createElement('input');
-      inp.type = 'text'; inp.className = 'field-input'; inp.dir = 'auto';
-      inp.name = 'repeater-item'; inp.value = val;
+      inp.type = 'text';
+      inp.className = 'field-input';
+      inp.dir = 'auto';
+      inp.name = 'repeater-item';
+      inp.value = val;
       var btn = document.createElement('button');
-      btn.type = 'button'; btn.setAttribute('data-repeater-remove', '');
-      btn.className = 'repeater-remove'; btn.setAttribute('aria-label', 'حذف');
+      btn.type = 'button';
+      btn.setAttribute('data-repeater-remove', '');
+      btn.className = 'repeater-remove';
+      btn.setAttribute('aria-label', 'حذف');
       btn.textContent = '×';
-      row.appendChild(inp); row.appendChild(btn);
+      row.appendChild(inp);
+      row.appendChild(btn);
       list.insertBefore(row, addBtn || null);
     });
   }
 
   function updateEditHeader(d) {
-    var refEl   = document.getElementById('edit-deal-ref');
-    var badge   = document.getElementById('edit-status-badge');
+    var refEl = document.getElementById('edit-deal-ref');
+    var badge = document.getElementById('edit-status-badge');
     var sidebar = document.getElementById('sidebar-status-badge');
     var pubLink = document.getElementById('edit-public-preview-link');
-    var sbPub   = document.getElementById('sidebar-public-link');
-    var updEl   = document.getElementById('edit-last-updated');
-    var byEl    = document.getElementById('edit-created-by');
-    var clkEl   = document.getElementById('edit-clicks');
-    var inqEl   = document.getElementById('edit-inquiries');
+    var sbPub = document.getElementById('sidebar-public-link');
+    var updEl = document.getElementById('edit-last-updated');
+    var byEl = document.getElementById('edit-created-by');
+    var clkEl = document.getElementById('edit-clicks');
+    var inqEl = document.getElementById('edit-inquiries');
 
     if (refEl) refEl.textContent = d.id;
     if (updEl) updEl.textContent = d.lastUpdated || '—';
-    if (byEl)  byEl.textContent  = d.createdBy   || '—';
+    if (byEl) byEl.textContent = d.createdBy || '—';
     if (clkEl) clkEl.textContent = (d.clicks || 0).toLocaleString('ar');
     if (inqEl) inqEl.textContent = (d.inquiries || 0).toLocaleString('ar');
 
-    var statusBadgeClass = {
-      'Active':'badge-active','Draft':'badge-draft','Scheduled':'badge-scheduled',
-      'Paused':'badge-paused','Expired':'badge-expired','Archived':'badge-archived'
-    }[d.status] || 'badge-draft';
-    var statusLabel = { 'Active':'نشط','Draft':'مسودة','Scheduled':'مجدول','Paused':'موقوف','Expired':'منتهي','Archived':'مؤرشف' }[d.status] || d.status;
-    var dotColor = { 'Active':'#15803D','Draft':'#94A3B8','Scheduled':'#1D4ED8','Paused':'#A16207','Expired':'#DC2626','Archived':'#7C3AED' }[d.status] || '#94A3B8';
-    [badge, sidebar].forEach(function(el){
-      if (el) { el.className = 'badge ' + statusBadgeClass; el.innerHTML = '<span class="badge-dot" style="background:' + dotColor + '"></span>' + statusLabel; }
+    var statusBadgeClass =
+      {
+        Active: 'badge-active',
+        Draft: 'badge-draft',
+        Scheduled: 'badge-scheduled',
+        Paused: 'badge-paused',
+        Expired: 'badge-expired',
+        Archived: 'badge-archived',
+      }[d.status] || 'badge-draft';
+    var statusLabel =
+      {
+        Active: 'نشط',
+        Draft: 'مسودة',
+        Scheduled: 'مجدول',
+        Paused: 'موقوف',
+        Expired: 'منتهي',
+        Archived: 'مؤرشف',
+      }[d.status] || d.status;
+    var dotColor =
+      {
+        Active: '#15803D',
+        Draft: '#94A3B8',
+        Scheduled: '#1D4ED8',
+        Paused: '#A16207',
+        Expired: '#DC2626',
+        Archived: '#7C3AED',
+      }[d.status] || '#94A3B8';
+    [badge, sidebar].forEach(function (el) {
+      if (el) {
+        el.className = 'badge ' + statusBadgeClass;
+        el.innerHTML =
+          '<span class="badge-dot" style="background:' + dotColor + '"></span>' + statusLabel;
+      }
     });
 
-    var url = d.publicUrl || ('../pages/deal-details.html?id=' + d.id);
+    var url = d.publicUrl || '../pages/deal-details.html?id=' + d.id;
     if (pubLink) pubLink.href = url;
-    if (sbPub)   sbPub.href  = url;
+    if (sbPub) sbPub.href = url;
 
     var toggleLbl = document.getElementById('toggle-pause-label');
-    if (toggleLbl) toggleLbl.textContent = (d.status === 'Active') ? 'إيقاف مؤقت' : 'تفعيل';
+    if (toggleLbl) toggleLbl.textContent = d.status === 'Active' ? 'إيقاف مؤقت' : 'تفعيل';
 
     var editPreviewLink = document.getElementById('edit-preview-link');
     if (editPreviewLink) editPreviewLink.href = url;
@@ -1222,19 +1497,26 @@ function initMerchantEditDeal() {
 
   var titleInp = form.elements['title'];
   if (titleInp) {
-    titleInp.addEventListener('input', function() {
-      if (!slugEdited && slugInp) { slugInp.value = slugify(this.value); updateSlugPreview(); }
+    titleInp.addEventListener('input', function () {
+      if (!slugEdited && slugInp) {
+        slugInp.value = slugify(this.value);
+        updateSlugPreview();
+      }
     });
   }
   if (slugInp) {
-    slugInp.addEventListener('input', function() {
+    slugInp.addEventListener('input', function () {
       slugEdited = !!this.value;
       this.value = slugify(this.value);
       updateSlugPreview();
     });
   }
   function updateSlugPreview() {
-    if (slugPreview) slugPreview.textContent = slugInp && slugInp.value ? 'rihlaty.example.com/deals/' + slugInp.value : 'rihlaty.example.com/deals/...';
+    if (slugPreview)
+      slugPreview.textContent =
+        slugInp && slugInp.value
+          ? 'rihlaty.example.com/deals/' + slugInp.value
+          : 'rihlaty.example.com/deals/...';
   }
 
   var srcSel = form.elements['sourceType'];
@@ -1242,32 +1524,41 @@ function initMerchantEditDeal() {
   var scrapedMsg = document.getElementById('source-scraped-msg');
   function updateSourceConditionals() {
     var v = srcSel ? srcSel.value : '';
-    if (apiMsg) apiMsg.hidden = (v !== 'API Ready');
-    if (scrapedMsg) scrapedMsg.hidden = (v !== 'Scraped Pending Review');
+    if (apiMsg) apiMsg.hidden = v !== 'API Ready';
+    if (scrapedMsg) scrapedMsg.hidden = v !== 'Scraped Pending Review';
   }
   if (srcSel) srcSel.addEventListener('change', updateSourceConditionals);
   updateSourceConditionals();
 
   var flexCb = form.elements['flexibleDates'];
   var flexWrap = document.getElementById('flexible-note-wrap');
-  if (flexCb) flexCb.addEventListener('change', function(){ if (flexWrap) flexWrap.hidden = !this.checked; });
+  if (flexCb)
+    flexCb.addEventListener('change', function () {
+      if (flexWrap) flexWrap.hidden = !this.checked;
+    });
 
   var statusSel = form.elements['status'];
   var schedWrap = document.getElementById('schedule-date-wrap');
-  if (statusSel) statusSel.addEventListener('change', function(){ if (schedWrap) schedWrap.hidden = (this.value !== 'Scheduled'); });
+  if (statusSel)
+    statusSel.addEventListener('change', function () {
+      if (schedWrap) schedWrap.hidden = this.value !== 'Scheduled';
+    });
 
   makeRepeater(document.getElementById('highlights-list'));
   makeRepeater(document.getElementById('included-list'));
   makeRepeater(document.getElementById('not-included-list'));
 
   var coverInput = document.getElementById('deal-cover-image');
-  var coverPrev  = document.getElementById('cover-preview');
+  var coverPrev = document.getElementById('cover-preview');
   if (coverInput && coverPrev) {
-    coverInput.addEventListener('change', function() {
+    coverInput.addEventListener('change', function () {
       var file = this.files && this.files[0];
       if (!file || !file.type.startsWith('image/')) return;
       var reader = new FileReader();
-      reader.onload = function(e){ coverPrev.src = e.target.result; coverPrev.style.display = 'block'; };
+      reader.onload = function (e) {
+        coverPrev.src = e.target.result;
+        coverPrev.style.display = 'block';
+      };
       reader.readAsDataURL(file);
       toast('تمت المعاينة — لا يتم رفع ملفات حقيقية الآن', 'info');
     });
@@ -1276,152 +1567,229 @@ function initMerchantEditDeal() {
   // ── Modal helper ──────────────────────────────────────────────────────────
   function openEditModal(modalId, onConfirm) {
     var overlay = document.getElementById(modalId);
-    if (!overlay) { if (typeof onConfirm === 'function') onConfirm(); return; }
+    if (!overlay) {
+      if (typeof onConfirm === 'function') onConfirm();
+      return;
+    }
     overlay.removeAttribute('hidden');
     document.body.style.overflow = 'hidden';
-    function close(){ overlay.setAttribute('hidden',''); document.body.style.overflow = ''; }
-    function doConfirm(){ cleanup(); close(); if (typeof onConfirm === 'function') onConfirm(); }
-    function doCancel(){ cleanup(); close(); }
-    function onKey(e){ if (e.key === 'Escape'){ cleanup(); close(); } }
-    function onBg(e){ if (e.target === overlay){ cleanup(); close(); } }
-    function cleanup(){
-      overlay.querySelectorAll('[data-modal-cancel]').forEach(function(b){ b.removeEventListener('click', doCancel); });
+    function close() {
+      overlay.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+    }
+    function doConfirm() {
+      cleanup();
+      close();
+      if (typeof onConfirm === 'function') onConfirm();
+    }
+    function doCancel() {
+      cleanup();
+      close();
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') {
+        cleanup();
+        close();
+      }
+    }
+    function onBg(e) {
+      if (e.target === overlay) {
+        cleanup();
+        close();
+      }
+    }
+    function cleanup() {
+      overlay.querySelectorAll('[data-modal-cancel]').forEach(function (b) {
+        b.removeEventListener('click', doCancel);
+      });
       var cb = overlay.querySelector('[data-modal-confirm]');
       if (cb) cb.removeEventListener('click', doConfirm);
       document.removeEventListener('keydown', onKey);
       overlay.removeEventListener('click', onBg);
     }
-    overlay.querySelectorAll('[data-modal-cancel]').forEach(function(b){ b.addEventListener('click', doCancel); });
+    overlay.querySelectorAll('[data-modal-cancel]').forEach(function (b) {
+      b.addEventListener('click', doCancel);
+    });
     var confirmBtn = overlay.querySelector('[data-modal-confirm]');
     if (confirmBtn) confirmBtn.addEventListener('click', doConfirm);
     document.addEventListener('keydown', onKey);
     overlay.addEventListener('click', onBg);
     var focus = overlay.querySelector('[data-modal-cancel]');
-    if (focus) setTimeout(function(){ focus.focus(); }, 40);
+    if (focus)
+      setTimeout(function () {
+        focus.focus();
+      }, 40);
   }
 
   // ── Preview modal ─────────────────────────────────────────────────────────
   function openPreviewModal() {
-    var title  = (form.elements['title'] && form.elements['title'].value) || '—';
-    var dest   = (form.elements['destination'] && form.elements['destination'].value) || '—';
-    var price  = (form.elements['priceFrom'] && form.elements['priceFrom'].value) || '';
-    var pBefore= (form.elements['priceBefore'] && form.elements['priceBefore'].value) || '';
-    var curr   = (form.elements['currency'] && form.elements['currency'].value) || 'ر.س';
-    var src    = (form.elements['sourceType'] && form.elements['sourceType'].value) || '';
-    var srcMap = { 'Manual Deal':'badge-source-manual','Partner Link':'badge-source-partner','Affiliate':'badge-source-affiliate','API Ready':'badge-source-api','Scraped Pending Review':'badge-source-scraped' };
-    var el = function(id){ return document.getElementById(id); };
+    var title = (form.elements['title'] && form.elements['title'].value) || '—';
+    var dest = (form.elements['destination'] && form.elements['destination'].value) || '—';
+    var price = (form.elements['priceFrom'] && form.elements['priceFrom'].value) || '';
+    var pBefore = (form.elements['priceBefore'] && form.elements['priceBefore'].value) || '';
+    var curr = (form.elements['currency'] && form.elements['currency'].value) || 'ر.س';
+    var src = (form.elements['sourceType'] && form.elements['sourceType'].value) || '';
+    var srcMap = {
+      'Manual Deal': 'badge-source-manual',
+      'Partner Link': 'badge-source-partner',
+      Affiliate: 'badge-source-affiliate',
+      'API Ready': 'badge-source-api',
+      'Scraped Pending Review': 'badge-source-scraped',
+    };
+    var el = function (id) {
+      return document.getElementById(id);
+    };
     if (el('edit-preview-title-val')) el('edit-preview-title-val').textContent = title;
-    if (el('edit-preview-dest'))      el('edit-preview-dest').textContent      = dest;
-    if (el('edit-preview-price'))     el('edit-preview-price').textContent     = price ? price + ' ' + curr : '—';
-    if (el('edit-preview-price-before')) el('edit-preview-price-before').textContent = pBefore ? pBefore + ' ' + curr : '';
-    if (el('edit-preview-source'))    el('edit-preview-source').innerHTML      = src ? '<span class="badge ' + (srcMap[src]||'badge-source-manual') + '">' + src + '</span>' : '';
+    if (el('edit-preview-dest')) el('edit-preview-dest').textContent = dest;
+    if (el('edit-preview-price'))
+      el('edit-preview-price').textContent = price ? price + ' ' + curr : '—';
+    if (el('edit-preview-price-before'))
+      el('edit-preview-price-before').textContent = pBefore ? pBefore + ' ' + curr : '';
+    if (el('edit-preview-source'))
+      el('edit-preview-source').innerHTML = src
+        ? '<span class="badge ' + (srcMap[src] || 'badge-source-manual') + '">' + src + '</span>'
+        : '';
     openEditModal('modal-edit-preview');
   }
 
   // ── Form submit + action wiring ───────────────────────────────────────────
   var validationRules = {
-    'title':            { required: true, requiredMsg: 'عنوان العرض مطلوب' },
-    'dealType':         { required: true, requiredMsg: 'نوع العرض مطلوب' },
-    'destination':      { required: true, requiredMsg: 'الوجهة مطلوبة' },
-    'shortDescription': { required: true, requiredMsg: 'الوصف المختصر مطلوب' },
-    'priceFrom':        { required: true, requiredMsg: 'السعر الأساسي مطلوب' },
-    'expiryDate':       { required: true, requiredMsg: 'تاريخ انتهاء العرض مطلوب' },
-    'sourceType':       { required: true, requiredMsg: 'مصدر العرض مطلوب' }
+    title: { required: true, requiredMsg: 'عنوان العرض مطلوب' },
+    dealType: { required: true, requiredMsg: 'نوع العرض مطلوب' },
+    destination: { required: true, requiredMsg: 'الوجهة مطلوبة' },
+    shortDescription: { required: true, requiredMsg: 'الوصف المختصر مطلوب' },
+    priceFrom: { required: true, requiredMsg: 'السعر الأساسي مطلوب' },
+    expiryDate: { required: true, requiredMsg: 'تاريخ انتهاء العرض مطلوب' },
+    sourceType: { required: true, requiredMsg: 'مصدر العرض مطلوب' },
   };
 
   function doSaveChanges() {
-    var ok = validateAndSubmit(form, validationRules, function() {
+    var ok = validateAndSubmit(form, validationRules, function () {
       toast('تم حفظ التغييرات — إجراء تجريبي / session فقط / لا حفظ حقيقي', 'success');
     });
     if (!ok) toast('يرجى تصحيح الحقول المطلوبة أولاً', 'warning');
   }
 
-  function doDraft() { toast('تم الحفظ كمسودة — إجراء تجريبي / session فقط', 'info'); }
+  function doDraft() {
+    toast('تم الحفظ كمسودة — إجراء تجريبي / session فقط', 'info');
+  }
 
-  function doDuplicate() { toast('تم تكرار العرض — نسخة تجريبية / session فقط', 'success'); }
+  function doDuplicate() {
+    toast('تم تكرار العرض — نسخة تجريبية / session فقط', 'success');
+  }
 
   function doPauseActivate() {
-    var badge   = document.getElementById('edit-status-badge');
+    var badge = document.getElementById('edit-status-badge');
     var sidebar = document.getElementById('sidebar-status-badge');
-    var btnLbl  = document.getElementById('toggle-pause-label');
+    var btnLbl = document.getElementById('toggle-pause-label');
     if (!badge) return;
     var isCurrActive = badge.classList.contains('badge-active');
     var nClass = isCurrActive ? 'badge-paused' : 'badge-active';
     var nLabel = isCurrActive ? 'موقوف' : 'نشط';
-    var nDot   = isCurrActive ? '#A16207' : '#15803D';
-    var inner  = '<span class="badge-dot" style="background:' + nDot + '"></span>' + nLabel;
-    [badge, sidebar].forEach(function(el){ if (el) { el.className = 'badge ' + nClass; el.innerHTML = inner; } });
+    var nDot = isCurrActive ? '#A16207' : '#15803D';
+    var inner = '<span class="badge-dot" style="background:' + nDot + '"></span>' + nLabel;
+    [badge, sidebar].forEach(function (el) {
+      if (el) {
+        el.className = 'badge ' + nClass;
+        el.innerHTML = inner;
+      }
+    });
     if (btnLbl) btnLbl.textContent = isCurrActive ? 'تفعيل' : 'إيقاف مؤقت';
     toast((isCurrActive ? 'تم إيقاف' : 'تم تفعيل') + ' العرض — إجراء تجريبي', 'info');
   }
 
   function doArchive() {
-    openEditModal('modal-edit-archive', function() {
+    openEditModal('modal-edit-archive', function () {
       var badge = document.getElementById('edit-status-badge');
-      var sb    = document.getElementById('sidebar-status-badge');
+      var sb = document.getElementById('sidebar-status-badge');
       var inner = '<span class="badge-dot" style="background:#7C3AED"></span>مؤرشف';
-      [badge, sb].forEach(function(el){ if (el) { el.className = 'badge badge-archived'; el.innerHTML = inner; } });
+      [badge, sb].forEach(function (el) {
+        if (el) {
+          el.className = 'badge badge-archived';
+          el.innerHTML = inner;
+        }
+      });
       toast('تمت أرشفة العرض — إجراء تجريبي / session فقط', 'info');
     });
   }
 
   function doDelete() {
-    openEditModal('modal-edit-delete', function() {
+    openEditModal('modal-edit-delete', function () {
       toast('تم حذف العرض — إجراء تجريبي / session فقط', 'warning');
-      setTimeout(function(){ window.location.href = 'deals.html'; }, 1500);
+      setTimeout(function () {
+        window.location.href = 'deals.html';
+      }, 1500);
     });
   }
 
-  form.addEventListener('submit', function(e){ e.preventDefault(); doSaveChanges(); });
-
-  ['btn-save-changes-top','btn-save-changes-form','btn-save-changes-sidebar'].forEach(function(id){
-    var b = document.getElementById(id); if (b) b.addEventListener('click', doSaveChanges);
-  });
-  ['btn-save-draft-top','btn-save-draft-form','btn-save-draft-sidebar'].forEach(function(id){
-    var b = document.getElementById(id); if (b) b.addEventListener('click', doDraft);
-  });
-  ['btn-preview-top','btn-preview-form','btn-preview-sidebar'].forEach(function(id){
-    var b = document.getElementById(id); if (b) b.addEventListener('click', openPreviewModal);
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    doSaveChanges();
   });
 
-  var dupBtn  = document.getElementById('btn-duplicate');
+  ['btn-save-changes-top', 'btn-save-changes-form', 'btn-save-changes-sidebar'].forEach(
+    function (id) {
+      var b = document.getElementById(id);
+      if (b) b.addEventListener('click', doSaveChanges);
+    }
+  );
+  ['btn-save-draft-top', 'btn-save-draft-form', 'btn-save-draft-sidebar'].forEach(function (id) {
+    var b = document.getElementById(id);
+    if (b) b.addEventListener('click', doDraft);
+  });
+  ['btn-preview-top', 'btn-preview-form', 'btn-preview-sidebar'].forEach(function (id) {
+    var b = document.getElementById(id);
+    if (b) b.addEventListener('click', openPreviewModal);
+  });
+
+  var dupBtn = document.getElementById('btn-duplicate');
   var archBtn = document.getElementById('btn-archive');
-  var delBtn  = document.getElementById('btn-delete');
-  var togBtn  = document.getElementById('btn-toggle-pause');
-  if (dupBtn)  dupBtn.addEventListener('click', doDuplicate);
+  var delBtn = document.getElementById('btn-delete');
+  var togBtn = document.getElementById('btn-toggle-pause');
+  if (dupBtn) dupBtn.addEventListener('click', doDuplicate);
   if (archBtn) archBtn.addEventListener('click', doArchive);
-  if (delBtn)  delBtn.addEventListener('click', doDelete);
-  if (togBtn)  togBtn.addEventListener('click', doPauseActivate);
+  if (delBtn) delBtn.addEventListener('click', doDelete);
+  if (togBtn) togBtn.addEventListener('click', doPauseActivate);
 }
 
 // ─── T018: merchant-create-deal controller ───────────────────────────────────
 function initMerchantCreateDeal() {
-  var form         = document.getElementById('form-create-deal');
+  var form = document.getElementById('form-create-deal');
   if (!form) return;
 
-  var titleInp     = form.elements['title'];
-  var slugInp      = form.elements['slug'];
-  var slugPreview  = document.getElementById('slug-preview-val');
-  var sourceTypeSel= form.elements['sourceType'];
-  var statusSel    = form.elements['status'];
-  var flexCb       = form.elements['flexibleDates'];
+  var titleInp = form.elements['title'];
+  var slugInp = form.elements['slug'];
+  var slugPreview = document.getElementById('slug-preview-val');
+  var sourceTypeSel = form.elements['sourceType'];
+  var statusSel = form.elements['status'];
+  var flexCb = form.elements['flexibleDates'];
   var flexNoteWrap = document.getElementById('flexible-note-wrap');
-  var schedWrap    = document.getElementById('schedule-date-wrap');
-  var apiMsg       = document.getElementById('source-api-msg');
-  var scrapedMsg   = document.getElementById('source-scraped-msg');
-  var coverInput   = document.getElementById('deal-cover-image');
+  var schedWrap = document.getElementById('schedule-date-wrap');
+  var apiMsg = document.getElementById('source-api-msg');
+  var scrapedMsg = document.getElementById('source-scraped-msg');
+  var coverInput = document.getElementById('deal-cover-image');
   var coverPreview = document.getElementById('cover-preview');
-  var fillBar      = document.getElementById('summary-fill');
-  var missingEl    = document.getElementById('summary-missing');
+  var fillBar = document.getElementById('summary-fill');
+  var missingEl = document.getElementById('summary-missing');
 
-  var REQUIRED_FIELDS = ['title','dealType','destination','shortDescription','priceFrom','expiryDate','sourceType'];
+  var REQUIRED_FIELDS = [
+    'title',
+    'dealType',
+    'destination',
+    'shortDescription',
+    'priceFrom',
+    'expiryDate',
+    'sourceType',
+  ];
 
   // ── Slug auto-gen from title ──────────────────────────────────────────────
   var slugManuallyEdited = false;
   function updateSlugPreview() {
     var val = slugInp ? slugInp.value : '';
     if (slugPreview) {
-      slugPreview.textContent = val ? 'rihlaty.example.com/deals/' + val : 'rihlaty.example.com/deals/...';
+      slugPreview.textContent = val
+        ? 'rihlaty.example.com/deals/' + val
+        : 'rihlaty.example.com/deals/...';
     }
   }
   if (titleInp) {
@@ -1446,8 +1814,8 @@ function initMerchantCreateDeal() {
   function updateSourceConditionals() {
     if (!sourceTypeSel) return;
     var v = sourceTypeSel.value;
-    if (apiMsg)     apiMsg.hidden     = (v !== 'API Ready');
-    if (scrapedMsg) scrapedMsg.hidden = (v !== 'Scraped Pending Review');
+    if (apiMsg) apiMsg.hidden = v !== 'API Ready';
+    if (scrapedMsg) scrapedMsg.hidden = v !== 'Scraped Pending Review';
     updateSummary();
   }
   if (sourceTypeSel) sourceTypeSel.addEventListener('change', updateSourceConditionals);
@@ -1463,7 +1831,7 @@ function initMerchantCreateDeal() {
   // ── Status = Scheduled → schedule date ───────────────────────────────────
   if (statusSel) {
     statusSel.addEventListener('change', function () {
-      if (schedWrap) schedWrap.hidden = (this.value !== 'Scheduled');
+      if (schedWrap) schedWrap.hidden = this.value !== 'Scheduled';
     });
   }
 
@@ -1477,12 +1845,13 @@ function initMerchantCreateDeal() {
     if (fillBar) fillBar.style.width = pct + '%';
     if (missingEl) {
       var missing = REQUIRED_FIELDS.length - filled.length;
-      missingEl.innerHTML = missing === 0
-        ? '<span style="color:#15803D">✓ جميع الحقول المطلوبة مكتملة</span>'
-        : '<span style="color:#DC2626">' + missing + '</span> حقل مطلوب غير مكتمل';
+      missingEl.innerHTML =
+        missing === 0
+          ? '<span style="color:#15803D">✓ جميع الحقول المطلوبة مكتملة</span>'
+          : '<span style="color:#DC2626">' + missing + '</span> حقل مطلوب غير مكتمل';
     }
   }
-  form.addEventListener('input',  updateSummary);
+  form.addEventListener('input', updateSummary);
   form.addEventListener('change', updateSummary);
   updateSummary();
 
@@ -1516,52 +1885,92 @@ function initMerchantCreateDeal() {
     if (!overlay) return;
     overlay.removeAttribute('hidden');
     document.body.style.overflow = 'hidden';
-    function close() { overlay.setAttribute('hidden',''); document.body.style.overflow = ''; if (typeof onClose === 'function') onClose(); }
-    function onKey(e) { if (e.key === 'Escape') { cleanup(); close(); } }
-    function onBg(e) { if (e.target === overlay) { cleanup(); close(); } }
+    function close() {
+      overlay.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+      if (typeof onClose === 'function') onClose();
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') {
+        cleanup();
+        close();
+      }
+    }
+    function onBg(e) {
+      if (e.target === overlay) {
+        cleanup();
+        close();
+      }
+    }
     function cleanup() {
-      overlay.querySelectorAll('[data-modal-cancel],[data-modal-close]').forEach(function(b){ b.removeEventListener('click', doClose); });
+      overlay.querySelectorAll('[data-modal-cancel],[data-modal-close]').forEach(function (b) {
+        b.removeEventListener('click', doClose);
+      });
       document.removeEventListener('keydown', onKey);
       overlay.removeEventListener('click', onBg);
     }
-    function doClose() { cleanup(); close(); }
-    overlay.querySelectorAll('[data-modal-cancel],[data-modal-close]').forEach(function(b){ b.addEventListener('click', doClose); });
+    function doClose() {
+      cleanup();
+      close();
+    }
+    overlay.querySelectorAll('[data-modal-cancel],[data-modal-close]').forEach(function (b) {
+      b.addEventListener('click', doClose);
+    });
     document.addEventListener('keydown', onKey);
     overlay.addEventListener('click', onBg);
     var focusEl = overlay.querySelector('[data-modal-cancel]');
-    if (focusEl) setTimeout(function(){ focusEl.focus(); }, 40);
+    if (focusEl)
+      setTimeout(function () {
+        focusEl.focus();
+      }, 40);
   }
 
   // ── Preview modal ─────────────────────────────────────────────────────────
   function openPreviewModal() {
-    var title  = (form.elements['title'] && form.elements['title'].value) || 'العنوان غير مُدخل';
-    var dest   = (form.elements['destination'] && form.elements['destination'].value) || '—';
-    var price  = (form.elements['priceFrom'] && form.elements['priceFrom'].value) || '';
-    var pBefore= (form.elements['priceBefore'] && form.elements['priceBefore'].value) || '';
-    var curr   = (form.elements['currency'] && form.elements['currency'].value) || 'ر.س';
-    var src    = (form.elements['sourceType'] && form.elements['sourceType'].value) || '';
-    var srcMap = { 'Manual Deal':'badge-source-manual', 'Partner Link':'badge-source-partner', 'Affiliate':'badge-source-affiliate', 'API Ready':'badge-source-api', 'Scraped Pending Review':'badge-source-scraped' };
+    var title = (form.elements['title'] && form.elements['title'].value) || 'العنوان غير مُدخل';
+    var dest = (form.elements['destination'] && form.elements['destination'].value) || '—';
+    var price = (form.elements['priceFrom'] && form.elements['priceFrom'].value) || '';
+    var pBefore = (form.elements['priceBefore'] && form.elements['priceBefore'].value) || '';
+    var curr = (form.elements['currency'] && form.elements['currency'].value) || 'ر.س';
+    var src = (form.elements['sourceType'] && form.elements['sourceType'].value) || '';
+    var srcMap = {
+      'Manual Deal': 'badge-source-manual',
+      'Partner Link': 'badge-source-partner',
+      Affiliate: 'badge-source-affiliate',
+      'API Ready': 'badge-source-api',
+      'Scraped Pending Review': 'badge-source-scraped',
+    };
     var srcCls = srcMap[src] || 'badge-source-manual';
     var srcLbl = src || 'Manual Deal';
 
-    var el = function(id){ return document.getElementById(id); };
-    if (el('preview-title'))        el('preview-title').textContent = title;
-    if (el('preview-destination'))  el('preview-destination').textContent = dest;
-    if (el('preview-price'))        el('preview-price').textContent = price ? price + ' ' + curr : '—';
-    if (el('preview-price-before')) el('preview-price-before').textContent = pBefore ? pBefore + ' ' + curr : '';
-    if (el('preview-source-badge')) el('preview-source-badge').innerHTML = '<span class="badge ' + srcCls + '">' + srcLbl + '</span>';
+    var el = function (id) {
+      return document.getElementById(id);
+    };
+    if (el('preview-title')) el('preview-title').textContent = title;
+    if (el('preview-destination')) el('preview-destination').textContent = dest;
+    if (el('preview-price')) el('preview-price').textContent = price ? price + ' ' + curr : '—';
+    if (el('preview-price-before'))
+      el('preview-price-before').textContent = pBefore ? pBefore + ' ' + curr : '';
+    if (el('preview-source-badge'))
+      el('preview-source-badge').innerHTML =
+        '<span class="badge ' + srcCls + '">' + srcLbl + '</span>';
     openModal('modal-deal-preview');
   }
 
   // ── Form validation + publish / draft ────────────────────────────────────
   var validationRules = {
-    'title':            { required: true, requiredMsg: 'عنوان العرض مطلوب', minLength: 3, minLengthMsg: 'العنوان قصير جداً' },
-    'dealType':         { required: true, requiredMsg: 'نوع العرض مطلوب' },
-    'destination':      { required: true, requiredMsg: 'الوجهة مطلوبة' },
-    'shortDescription': { required: true, requiredMsg: 'الوصف المختصر مطلوب' },
-    'priceFrom':        { required: true, requiredMsg: 'السعر الأساسي مطلوب' },
-    'expiryDate':       { required: true, requiredMsg: 'تاريخ انتهاء العرض مطلوب' },
-    'sourceType':       { required: true, requiredMsg: 'مصدر العرض مطلوب' }
+    title: {
+      required: true,
+      requiredMsg: 'عنوان العرض مطلوب',
+      minLength: 3,
+      minLengthMsg: 'العنوان قصير جداً',
+    },
+    dealType: { required: true, requiredMsg: 'نوع العرض مطلوب' },
+    destination: { required: true, requiredMsg: 'الوجهة مطلوبة' },
+    shortDescription: { required: true, requiredMsg: 'الوصف المختصر مطلوب' },
+    priceFrom: { required: true, requiredMsg: 'السعر الأساسي مطلوب' },
+    expiryDate: { required: true, requiredMsg: 'تاريخ انتهاء العرض مطلوب' },
+    sourceType: { required: true, requiredMsg: 'مصدر العرض مطلوب' },
   };
 
   function doPublish() {
@@ -1581,15 +1990,15 @@ function initMerchantCreateDeal() {
   });
 
   // Wire all publish / draft / preview buttons
-  ['btn-publish-top','btn-publish-form','btn-publish-sidebar'].forEach(function(id){
+  ['btn-publish-top', 'btn-publish-form', 'btn-publish-sidebar'].forEach(function (id) {
     var b = document.getElementById(id);
     if (b) b.addEventListener('click', doPublish);
   });
-  ['btn-save-draft-top','btn-save-draft-form','btn-save-draft-sidebar'].forEach(function(id){
+  ['btn-save-draft-top', 'btn-save-draft-form', 'btn-save-draft-sidebar'].forEach(function (id) {
     var b = document.getElementById(id);
     if (b) b.addEventListener('click', doDraft);
   });
-  ['btn-preview-top','btn-preview-form','btn-preview-sidebar'].forEach(function(id){
+  ['btn-preview-top', 'btn-preview-form', 'btn-preview-sidebar'].forEach(function (id) {
     var b = document.getElementById(id);
     if (b) b.addEventListener('click', openPreviewModal);
   });
@@ -1597,21 +2006,27 @@ function initMerchantCreateDeal() {
 
 // ─── T025: merchant-coupons controller ───────────────────────────────────────
 function initMerchantCoupons() {
-  var rows       = Array.from(document.querySelectorAll('[data-coupon-row]'));
-  var tableWrap  = document.querySelector('.coupons-table-wrap');
+  var rows = Array.from(document.querySelectorAll('[data-coupon-row]'));
+  var tableWrap = document.querySelector('.coupons-table-wrap');
   var emptyState = document.getElementById('coupons-empty-state');
-  var countText  = document.getElementById('coupons-result-count');
-  var chipsBar   = document.getElementById('coupons-chips-bar');
-  var sortSel    = document.getElementById('coupons-sort');
+  var countText = document.getElementById('coupons-result-count');
+  var chipsBar = document.getElementById('coupons-chips-bar');
+  var sortSel = document.getElementById('coupons-sort');
 
   var state = {
-    search: '', status: '', discountType: '',
-    provider: '', sourceType: '', category: '',
-    relatedDeal: '', expiryStatus: ''
+    search: '',
+    status: '',
+    discountType: '',
+    provider: '',
+    sourceType: '',
+    category: '',
+    relatedDeal: '',
+    expiryStatus: '',
   };
 
-  var today = new Date(); today.setHours(0,0,0,0);
-  var in30  = new Date(today.getTime() + 30 * 86400000);
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+  var in30 = new Date(today.getTime() + 30 * 86400000);
 
   function toast(msg, type) {
     if (window.TUI && TUI.toast) TUI.toast(msg, { type: type || 'info', duration: 4000 });
@@ -1634,14 +2049,14 @@ function initMerchantCoupons() {
   }
 
   function rowMatches(row) {
-    var ds   = (row.dataset.status || '').toLowerCase();
+    var ds = (row.dataset.status || '').toLowerCase();
     var dsrc = (row.dataset.source || '').toLowerCase();
-    var ddt  = (row.dataset.discountType || '').toLowerCase();
-    var dpv  = (row.dataset.provider || '').toLowerCase();
+    var ddt = (row.dataset.discountType || '').toLowerCase();
+    var dpv = (row.dataset.provider || '').toLowerCase();
     var dcat = (row.dataset.category || '').toLowerCase();
     var drel = (row.dataset.related || '').toLowerCase();
     var dexp = row.dataset.expiry || '';
-    var dcode= (row.dataset.code || '').toLowerCase();
+    var dcode = (row.dataset.code || '').toLowerCase();
     var dtxt = dcode + ' ' + dpv + ' ' + drel;
 
     if (state.search && dtxt.indexOf(state.search.toLowerCase()) === -1) return false;
@@ -1662,27 +2077,47 @@ function initMerchantCoupons() {
     var val = sortSel ? sortSel.value : 'updated-desc';
     var copy = matched.slice();
     if (val === 'expiry-asc') {
-      copy.sort(function(a,b){ return new Date(a.dataset.expiry||0) - new Date(b.dataset.expiry||0); });
+      copy.sort(function (a, b) {
+        return new Date(a.dataset.expiry || 0) - new Date(b.dataset.expiry || 0);
+      });
     } else if (val === 'copies-desc') {
-      copy.sort(function(a,b){ return (+b.dataset.copies||0) - (+a.dataset.copies||0); });
+      copy.sort(function (a, b) {
+        return (+b.dataset.copies || 0) - (+a.dataset.copies || 0);
+      });
     } else if (val === 'used-desc') {
-      copy.sort(function(a,b){ return (+b.dataset.used||0) - (+a.dataset.used||0); });
+      copy.sort(function (a, b) {
+        return (+b.dataset.used || 0) - (+a.dataset.used || 0);
+      });
     }
     return copy;
   }
 
   function chipLabel(key, val) {
-    var map = { search:'بحث', status:'الحالة', discountType:'نوع الخصم', provider:'المزود', sourceType:'المصدر', category:'الفئة', relatedDeal:'العرض', expiryStatus:'الانتهاء' };
+    var map = {
+      search: 'بحث',
+      status: 'الحالة',
+      discountType: 'نوع الخصم',
+      provider: 'المزود',
+      sourceType: 'المصدر',
+      category: 'الفئة',
+      relatedDeal: 'العرض',
+      expiryStatus: 'الانتهاء',
+    };
     return (map[key] || key) + ': ' + val;
   }
 
   function applyFilters() {
     var matched = rows.filter(rowMatches);
-    var sorted  = sortRows(matched);
-    var tbody   = tableWrap ? tableWrap.querySelector('tbody') : null;
+    var sorted = sortRows(matched);
+    var tbody = tableWrap ? tableWrap.querySelector('tbody') : null;
 
-    rows.forEach(function(r){ r.hidden = true; });
-    sorted.forEach(function(r){ r.hidden = false; if (tbody) tbody.appendChild(r); });
+    rows.forEach(function (r) {
+      r.hidden = true;
+    });
+    sorted.forEach(function (r) {
+      r.hidden = false;
+      if (tbody) tbody.appendChild(r);
+    });
 
     var vis = sorted.length;
     if (countText) countText.textContent = 'عرض ' + vis + ' من ' + rows.length + ' كوبون';
@@ -1690,14 +2125,19 @@ function initMerchantCoupons() {
 
     if (chipsBar) {
       chipsBar.innerHTML = '';
-      Object.keys(state).forEach(function(k){
+      Object.keys(state).forEach(function (k) {
         if (!state[k]) return;
         var chip = document.createElement('button');
         chip.type = 'button';
         chip.className = 'filter-chip';
         chip.setAttribute('aria-label', 'إزالة فلتر: ' + chipLabel(k, state[k]));
-        chip.innerHTML = chipLabel(k, state[k]) + ' <span class="chip-x" aria-hidden="true">×</span>';
-        chip.addEventListener('click', function(){ state[k]=''; syncForm(); applyFilters(); });
+        chip.innerHTML =
+          chipLabel(k, state[k]) + ' <span class="chip-x" aria-hidden="true">×</span>';
+        chip.addEventListener('click', function () {
+          state[k] = '';
+          syncForm();
+          applyFilters();
+        });
         chipsBar.appendChild(chip);
       });
     }
@@ -1705,105 +2145,187 @@ function initMerchantCoupons() {
   }
 
   function syncForm() {
-    var get = function(id){ var e=document.getElementById(id); if(e) e.value=state[{ 'coupons-search':'search','filter-coupon-status':'status','filter-discount-type':'discountType','filter-coupon-provider':'provider','filter-coupon-source':'sourceType','filter-coupon-category':'category','filter-related-deal':'relatedDeal','filter-coupon-expiry':'expiryStatus' }[id]]||''; };
-    ['coupons-search','filter-coupon-status','filter-discount-type','filter-coupon-provider','filter-coupon-source','filter-coupon-category','filter-related-deal','filter-coupon-expiry'].forEach(get);
+    var get = function (id) {
+      var e = document.getElementById(id);
+      if (e)
+        e.value =
+          state[
+            {
+              'coupons-search': 'search',
+              'filter-coupon-status': 'status',
+              'filter-discount-type': 'discountType',
+              'filter-coupon-provider': 'provider',
+              'filter-coupon-source': 'sourceType',
+              'filter-coupon-category': 'category',
+              'filter-related-deal': 'relatedDeal',
+              'filter-coupon-expiry': 'expiryStatus',
+            }[id]
+          ] || '';
+    };
+    [
+      'coupons-search',
+      'filter-coupon-status',
+      'filter-discount-type',
+      'filter-coupon-provider',
+      'filter-coupon-source',
+      'filter-coupon-category',
+      'filter-related-deal',
+      'filter-coupon-expiry',
+    ].forEach(get);
   }
 
   function readForm() {
-    function v(id){ var e=document.getElementById(id); return e ? e.value.trim() : ''; }
-    state.search       = v('coupons-search');
-    state.status       = v('filter-coupon-status');
+    function v(id) {
+      var e = document.getElementById(id);
+      return e ? e.value.trim() : '';
+    }
+    state.search = v('coupons-search');
+    state.status = v('filter-coupon-status');
     state.discountType = v('filter-discount-type');
-    state.provider     = v('filter-coupon-provider');
-    state.sourceType   = v('filter-coupon-source');
-    state.category     = v('filter-coupon-category');
-    state.relatedDeal  = v('filter-related-deal');
+    state.provider = v('filter-coupon-provider');
+    state.sourceType = v('filter-coupon-source');
+    state.category = v('filter-coupon-category');
+    state.relatedDeal = v('filter-related-deal');
     state.expiryStatus = v('filter-coupon-expiry');
   }
 
   var filterForm = document.getElementById('coupons-filter-form');
   if (filterForm) {
-    filterForm.addEventListener('input',  function(){ readForm(); applyFilters(); });
-    filterForm.addEventListener('change', function(){ readForm(); applyFilters(); });
+    filterForm.addEventListener('input', function () {
+      readForm();
+      applyFilters();
+    });
+    filterForm.addEventListener('change', function () {
+      readForm();
+      applyFilters();
+    });
   }
   if (sortSel) sortSel.addEventListener('change', applyFilters);
 
   function doReset() {
-    Object.keys(state).forEach(function(k){ state[k]=''; });
+    Object.keys(state).forEach(function (k) {
+      state[k] = '';
+    });
     syncForm();
     applyFilters();
     toast('تم مسح الفلاتر', 'info');
   }
-  document.querySelectorAll('[data-coupons-reset]').forEach(function(b){ b.addEventListener('click', doReset); });
-  document.querySelectorAll('[data-coupons-toast]').forEach(function(b){
-    b.addEventListener('click', function(){ toast(this.dataset.couponsToast || 'إجراء تجريبي', 'info'); });
+  document.querySelectorAll('[data-coupons-reset]').forEach(function (b) {
+    b.addEventListener('click', doReset);
+  });
+  document.querySelectorAll('[data-coupons-toast]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      toast(this.dataset.couponsToast || 'إجراء تجريبي', 'info');
+    });
   });
 
   // ── Copy code ─────────────────────────────────────────────────────────────
   function copyCode(code) {
     if (!code) return;
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(code).then(function(){ toast('تم نسخ الكود: ' + code + ' — إجراء تجريبي', 'success'); }).catch(function(){ toast('تعذّر النسخ', 'warning'); });
-    } else { toast('المتصفح لا يدعم النسخ التلقائي', 'warning'); }
+      navigator.clipboard
+        .writeText(code)
+        .then(function () {
+          toast('تم نسخ الكود: ' + code + ' — إجراء تجريبي', 'success');
+        })
+        .catch(function () {
+          toast('تعذّر النسخ', 'warning');
+        });
+    } else {
+      toast('المتصفح لا يدعم النسخ التلقائي', 'warning');
+    }
   }
 
   // ── Delete modal ──────────────────────────────────────────────────────────
   var _delTarget = null;
-  var delModal   = document.getElementById('modal-coupon-delete');
+  var delModal = document.getElementById('modal-coupon-delete');
   var delConfBtn = document.getElementById('modal-coupon-delete-confirm');
 
   function openDeleteModal(row) {
     _delTarget = row;
-    if (!delModal) { row.remove(); rows.splice(rows.indexOf(row),1); toast('تم الحذف التجريبي','success'); applyFilters(); return; }
+    if (!delModal) {
+      row.remove();
+      rows.splice(rows.indexOf(row), 1);
+      toast('تم الحذف التجريبي', 'success');
+      applyFilters();
+      return;
+    }
     delModal.removeAttribute('hidden');
     document.body.style.overflow = 'hidden';
     var cancel = delModal.querySelector('[data-modal-cancel]');
-    if (cancel) setTimeout(function(){ cancel.focus(); }, 40);
+    if (cancel)
+      setTimeout(function () {
+        cancel.focus();
+      }, 40);
   }
   function closeDeleteModal() {
-    if (delModal) delModal.setAttribute('hidden','');
+    if (delModal) delModal.setAttribute('hidden', '');
     document.body.style.overflow = '';
     _delTarget = null;
   }
   if (delConfBtn) {
-    delConfBtn.addEventListener('click', function(){
-      if (_delTarget) { var i=rows.indexOf(_delTarget); if(i>-1) rows.splice(i,1); _delTarget.remove(); toast('تم الحذف التجريبي — لا حذف حقيقي على الخادم','success'); }
-      closeDeleteModal(); applyFilters();
+    delConfBtn.addEventListener('click', function () {
+      if (_delTarget) {
+        var i = rows.indexOf(_delTarget);
+        if (i > -1) rows.splice(i, 1);
+        _delTarget.remove();
+        toast('تم الحذف التجريبي — لا حذف حقيقي على الخادم', 'success');
+      }
+      closeDeleteModal();
+      applyFilters();
     });
   }
   if (delModal) {
-    delModal.querySelectorAll('[data-modal-cancel],[data-modal-close]').forEach(function(b){ b.addEventListener('click', closeDeleteModal); });
-    delModal.addEventListener('click', function(e){ if(e.target===delModal) closeDeleteModal(); });
-    document.addEventListener('keydown', function(e){ if(e.key==='Escape' && delModal && !delModal.hidden) closeDeleteModal(); });
+    delModal.querySelectorAll('[data-modal-cancel],[data-modal-close]').forEach(function (b) {
+      b.addEventListener('click', closeDeleteModal);
+    });
+    delModal.addEventListener('click', function (e) {
+      if (e.target === delModal) closeDeleteModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && delModal && !delModal.hidden) closeDeleteModal();
+    });
   }
 
   // ── Row action menus ──────────────────────────────────────────────────────
   var _openMenu = null;
 
   function closeAllMenus() {
-    document.querySelectorAll('.row-action-menu').forEach(function(m){ m.setAttribute('hidden',''); });
-    document.querySelectorAll('[data-row-coupon-trigger]').forEach(function(t){ t.setAttribute('aria-expanded','false'); });
+    document.querySelectorAll('.row-action-menu').forEach(function (m) {
+      m.setAttribute('hidden', '');
+    });
+    document.querySelectorAll('[data-row-coupon-trigger]').forEach(function (t) {
+      t.setAttribute('aria-expanded', 'false');
+    });
     _openMenu = null;
   }
 
   function buildMenuHTML(row) {
-    var status = (row.dataset.status||'').toLowerCase();
+    var status = (row.dataset.status || '').toLowerCase();
     var isPaused = status === 'paused';
     var code = row.dataset.code || '';
     var toggleLabel = isPaused ? 'تفعيل الكوبون' : 'إيقاف مؤقت';
-    var toggleIcon  = isPaused
+    var toggleIcon = isPaused
       ? '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>'
       : '<svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
-    return '<button type="button" class="rmi" data-mcopy="'+code+'" role="menuitem"><svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> نسخ الكود</button>'
-      + '<button type="button" class="rmi" data-coming-soon role="menuitem"><svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> تعديل</button>'
-      + '<button type="button" class="rmi" data-mdup role="menuitem"><svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> تكرار</button>'
-      + '<button type="button" class="rmi" data-mtoggle role="menuitem">' + toggleIcon + ' ' + toggleLabel + '</button>'
-      + '<button type="button" class="rmi" data-coming-soon role="menuitem"><svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> عرض الصفحة</button>'
-      + '<div class="row-menu-sep"></div>'
-      + '<button type="button" class="rmi is-danger" data-mdel role="menuitem"><svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg> حذف</button>';
+    return (
+      '<button type="button" class="rmi" data-mcopy="' +
+      code +
+      '" role="menuitem"><svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> نسخ الكود</button>' +
+      '<button type="button" class="rmi" data-coming-soon role="menuitem"><svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> تعديل</button>' +
+      '<button type="button" class="rmi" data-mdup role="menuitem"><svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> تكرار</button>' +
+      '<button type="button" class="rmi" data-mtoggle role="menuitem">' +
+      toggleIcon +
+      ' ' +
+      toggleLabel +
+      '</button>' +
+      '<button type="button" class="rmi" data-coming-soon role="menuitem"><svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> عرض الصفحة</button>' +
+      '<div class="row-menu-sep"></div>' +
+      '<button type="button" class="rmi is-danger" data-mdel role="menuitem"><svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg> حذف</button>'
+    );
   }
 
-  document.addEventListener('click', function(e){
+  document.addEventListener('click', function (e) {
     var trigger = e.target.closest('[data-row-coupon-trigger]');
     if (trigger) {
       var row = trigger.closest('[data-coupon-row]');
@@ -1814,55 +2336,85 @@ function initMerchantCoupons() {
       if (!isOpen && row) {
         menu.innerHTML = buildMenuHTML(row);
         menu.removeAttribute('hidden');
-        trigger.setAttribute('aria-expanded','true');
+        trigger.setAttribute('aria-expanded', 'true');
         _openMenu = menu;
         var first = menu.querySelector('[role="menuitem"]');
         if (first) first.focus();
 
         var copyBtn = menu.querySelector('[data-mcopy]');
-        if (copyBtn) copyBtn.addEventListener('click', function(){ copyCode(this.dataset.mcopy); closeAllMenus(); });
+        if (copyBtn)
+          copyBtn.addEventListener('click', function () {
+            copyCode(this.dataset.mcopy);
+            closeAllMenus();
+          });
 
         var dupBtn = menu.querySelector('[data-mdup]');
-        if (dupBtn) dupBtn.addEventListener('click', function(){ toast('تم إنشاء نسخة تجريبية من الكوبون — إجراء تجريبي','success'); closeAllMenus(); });
+        if (dupBtn)
+          dupBtn.addEventListener('click', function () {
+            toast('تم إنشاء نسخة تجريبية من الكوبون — إجراء تجريبي', 'success');
+            closeAllMenus();
+          });
 
         var togBtn = menu.querySelector('[data-mtoggle]');
-        if (togBtn) togBtn.addEventListener('click', function(){
-          var st = (row.dataset.status||'').toLowerCase();
-          var ns = st === 'paused' ? 'active' : 'paused';
-          row.dataset.status = ns;
-          var badge = row.querySelector('.badge-active,.badge-paused,.badge-draft,.badge-scheduled,.badge-expired,.badge-archived');
-          if (badge) {
-            var lbl = ns === 'active' ? 'نشط' : 'موقوف';
-            var dot = badge.querySelector('.badge-dot');
-            badge.className = 'badge badge-' + ns;
-            badge.innerHTML = (dot ? '<span class="badge-dot" style="background:' + (ns==='active'?'#15803D':'#A16207') + '"></span>' : '') + lbl;
-          }
-          toast(ns === 'active' ? 'تم تفعيل الكوبون تجريبياً' : 'تم إيقاف الكوبون تجريبياً','info');
-          closeAllMenus();
-        });
+        if (togBtn)
+          togBtn.addEventListener('click', function () {
+            var st = (row.dataset.status || '').toLowerCase();
+            var ns = st === 'paused' ? 'active' : 'paused';
+            row.dataset.status = ns;
+            var badge = row.querySelector(
+              '.badge-active,.badge-paused,.badge-draft,.badge-scheduled,.badge-expired,.badge-archived'
+            );
+            if (badge) {
+              var lbl = ns === 'active' ? 'نشط' : 'موقوف';
+              var dot = badge.querySelector('.badge-dot');
+              badge.className = 'badge badge-' + ns;
+              badge.innerHTML =
+                (dot
+                  ? '<span class="badge-dot" style="background:' +
+                    (ns === 'active' ? '#15803D' : '#A16207') +
+                    '"></span>'
+                  : '') + lbl;
+            }
+            toast(
+              ns === 'active' ? 'تم تفعيل الكوبون تجريبياً' : 'تم إيقاف الكوبون تجريبياً',
+              'info'
+            );
+            closeAllMenus();
+          });
 
         var delBtn = menu.querySelector('[data-mdel]');
-        if (delBtn) delBtn.addEventListener('click', function(){ openDeleteModal(row); closeAllMenus(); });
+        if (delBtn)
+          delBtn.addEventListener('click', function () {
+            openDeleteModal(row);
+            closeAllMenus();
+          });
       }
       return;
     }
     if (!e.target.closest('.row-action-menu')) closeAllMenus();
   });
 
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && _openMenu) closeAllMenus(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && _openMenu) closeAllMenus();
+  });
 
   // ── Bulk selection ────────────────────────────────────────────────────────
   var selectAll = document.getElementById('coupons-select-all');
-  var bulkBar   = document.getElementById('coupons-bulk-bar');
+  var bulkBar = document.getElementById('coupons-bulk-bar');
   var bulkCount = document.getElementById('coupons-bulk-count');
 
   function updateBulkBar() {
     var checked = document.querySelectorAll('.coupon-row-cb:checked');
     var n = checked.length;
-    if (bulkBar) { if(n>0) bulkBar.classList.add('is-visible'); else bulkBar.classList.remove('is-visible'); }
-    if (bulkCount) bulkCount.textContent = n + (n===1?' كوبون محدد':' كوبونات محددة');
+    if (bulkBar) {
+      if (n > 0) bulkBar.classList.add('is-visible');
+      else bulkBar.classList.remove('is-visible');
+    }
+    if (bulkCount) bulkCount.textContent = n + (n === 1 ? ' كوبون محدد' : ' كوبونات محددة');
     if (selectAll) {
-      var visible = rows.filter(function(r){ return !r.hidden; }).length;
+      var visible = rows.filter(function (r) {
+        return !r.hidden;
+      }).length;
       selectAll.indeterminate = n > 0 && n < visible;
       if (n > 0 && n >= visible) selectAll.checked = true;
       if (n === 0) selectAll.checked = false;
@@ -1870,30 +2422,49 @@ function initMerchantCoupons() {
   }
 
   if (selectAll) {
-    selectAll.addEventListener('change', function(){
-      rows.forEach(function(r){ if(!r.hidden){ var cb=r.querySelector('.coupon-row-cb'); if(cb) cb.checked=selectAll.checked; } });
+    selectAll.addEventListener('change', function () {
+      rows.forEach(function (r) {
+        if (!r.hidden) {
+          var cb = r.querySelector('.coupon-row-cb');
+          if (cb) cb.checked = selectAll.checked;
+        }
+      });
       updateBulkBar();
     });
   }
-  document.addEventListener('change', function(e){ if(e.target && e.target.classList.contains('coupon-row-cb')) updateBulkBar(); });
+  document.addEventListener('change', function (e) {
+    if (e.target && e.target.classList.contains('coupon-row-cb')) updateBulkBar();
+  });
 
-  document.querySelectorAll('[data-bulk-coupon-action]').forEach(function(btn){
-    btn.addEventListener('click', function(){
+  document.querySelectorAll('[data-bulk-coupon-action]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
       var action = this.dataset.bulkCouponAction;
-      var checked = Array.from(document.querySelectorAll('.coupon-row-cb:checked')).map(function(cb){ return cb.closest('[data-coupon-row]'); }).filter(Boolean);
+      var checked = Array.from(document.querySelectorAll('.coupon-row-cb:checked'))
+        .map(function (cb) {
+          return cb.closest('[data-coupon-row]');
+        })
+        .filter(Boolean);
       if (!checked.length) return;
       if (action === 'activate') {
-        checked.forEach(function(r){ r.dataset.status='active'; });
-        toast('تم تفعيل ' + checked.length + ' كوبون تجريبياً','success');
+        checked.forEach(function (r) {
+          r.dataset.status = 'active';
+        });
+        toast('تم تفعيل ' + checked.length + ' كوبون تجريبياً', 'success');
       } else if (action === 'pause') {
-        checked.forEach(function(r){ r.dataset.status='paused'; });
-        toast('تم إيقاف ' + checked.length + ' كوبون تجريبياً','info');
+        checked.forEach(function (r) {
+          r.dataset.status = 'paused';
+        });
+        toast('تم إيقاف ' + checked.length + ' كوبون تجريبياً', 'info');
       } else if (action === 'bulk-delete') {
-        checked.forEach(function(r){ var i=rows.indexOf(r); if(i>-1) rows.splice(i,1); r.remove(); });
-        toast('تم حذف ' + checked.length + ' كوبون تجريبياً','success');
+        checked.forEach(function (r) {
+          var i = rows.indexOf(r);
+          if (i > -1) rows.splice(i, 1);
+          r.remove();
+        });
+        toast('تم حذف ' + checked.length + ' كوبون تجريبياً', 'success');
         applyFilters();
       } else if (action === 'export') {
-        toast('تصدير تجريبي — لا يتم تصدير ملف حقيقي في هذه النسخة','info');
+        toast('تصدير تجريبي — لا يتم تصدير ملف حقيقي في هذه النسخة', 'info');
       }
       if (selectAll) selectAll.checked = false;
       updateBulkBar();
@@ -1914,10 +2485,13 @@ function initMerchantCreateCoupon() {
   }
 
   function slugify(str) {
-    return (str || '').toLowerCase()
+    return (str || '')
+      .toLowerCase()
       .replace(/[^a-z0-9؀-ۿ\s-]/g, '')
-      .trim().replace(/\s+/g, '-')
-      .replace(/-+/g, '-').substring(0, 80);
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .substring(0, 80);
   }
 
   function generateRandomCode() {
@@ -1930,35 +2504,42 @@ function initMerchantCreateCoupon() {
   }
 
   // ── Element refs ──────────────────────────────────────────────────────────
-  var codeInp         = form.elements['code'];
-  var categoryEl      = form.elements['category'];
-  var discTypeEl      = form.elements['discountType'];
-  var discValueEl     = form.elements['discountValue'];
-  var currencyEl      = form.elements['currency'];
-  var expiryEl        = form.elements['expiryDate'];
-  var sourceTypeEl    = form.elements['sourceType'];
-  var statusEl        = form.elements['status'];
-  var providerEl      = form.elements['provider'];
-  var slugInp         = form.elements['slug'];
-  var currencyWrap    = document.getElementById('currency-wrap');
-  var schedWrap       = document.getElementById('schedule-date-wrap');
-  var scrapedWarn     = document.getElementById('scraped-warning-wrap');
-  var slugPreview     = document.getElementById('slug-preview-val');
-  var fillBar         = document.getElementById('summary-fill');
-  var missingEl       = document.getElementById('summary-missing');
+  var codeInp = form.elements['code'];
+  var categoryEl = form.elements['category'];
+  var discTypeEl = form.elements['discountType'];
+  var discValueEl = form.elements['discountValue'];
+  var currencyEl = form.elements['currency'];
+  var expiryEl = form.elements['expiryDate'];
+  var sourceTypeEl = form.elements['sourceType'];
+  var statusEl = form.elements['status'];
+  var providerEl = form.elements['provider'];
+  var slugInp = form.elements['slug'];
+  var currencyWrap = document.getElementById('currency-wrap');
+  var schedWrap = document.getElementById('schedule-date-wrap');
+  var scrapedWarn = document.getElementById('scraped-warning-wrap');
+  var slugPreview = document.getElementById('slug-preview-val');
+  var fillBar = document.getElementById('summary-fill');
+  var missingEl = document.getElementById('summary-missing');
 
   // Preview elements
-  var previewCode     = document.getElementById('preview-code');
+  var previewCode = document.getElementById('preview-code');
   var previewDiscount = document.getElementById('preview-discount');
   var previewProvider = document.getElementById('preview-provider');
   var previewCategory = document.getElementById('preview-category');
-  var previewSource   = document.getElementById('preview-source-badge');
-  var previewExpiry   = document.getElementById('preview-expiry');
+  var previewSource = document.getElementById('preview-source-badge');
+  var previewExpiry = document.getElementById('preview-expiry');
 
-  var REQUIRED_FIELDS = ['code','category','discountType','discountValue','expiryDate','sourceType'];
+  var REQUIRED_FIELDS = [
+    'code',
+    'category',
+    'discountType',
+    'discountValue',
+    'expiryDate',
+    'sourceType',
+  ];
 
   // ── Generate random code ──────────────────────────────────────────────────
-  var genBtn  = document.getElementById('btn-generate-code');
+  var genBtn = document.getElementById('btn-generate-code');
   var copyBtn = document.getElementById('btn-copy-code');
 
   if (genBtn) {
@@ -1975,11 +2556,19 @@ function initMerchantCreateCoupon() {
   if (copyBtn) {
     copyBtn.addEventListener('click', function () {
       var code = codeInp ? codeInp.value.trim() : '';
-      if (!code) { toast('لا يوجد كود لنسخه — يرجى إدخال أو توليد كود أولاً', 'warning'); return; }
+      if (!code) {
+        toast('لا يوجد كود لنسخه — يرجى إدخال أو توليد كود أولاً', 'warning');
+        return;
+      }
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(code).then(function () {
-          toast('تم نسخ الكود: ' + code + ' — إجراء تجريبي', 'success');
-        }).catch(function () { toast('تعذّر النسخ — حاول مرة أخرى', 'warning'); });
+        navigator.clipboard
+          .writeText(code)
+          .then(function () {
+            toast('تم نسخ الكود: ' + code + ' — إجراء تجريبي', 'success');
+          })
+          .catch(function () {
+            toast('تعذّر النسخ — حاول مرة أخرى', 'warning');
+          });
       } else {
         toast('المتصفح لا يدعم النسخ التلقائي', 'warning');
       }
@@ -1991,7 +2580,9 @@ function initMerchantCreateCoupon() {
     codeInp.addEventListener('input', function () {
       var pos = this.selectionStart;
       this.value = this.value.toUpperCase();
-      try { this.setSelectionRange(pos, pos); } catch(e) {}
+      try {
+        this.setSelectionRange(pos, pos);
+      } catch (e) {}
       updateSlugPreview();
       updateLivePreview();
       updateSummary();
@@ -2002,8 +2593,8 @@ function initMerchantCreateCoupon() {
   function updateDiscountConditionals() {
     if (!discTypeEl) return;
     var v = discTypeEl.value;
-    if (currencyWrap) currencyWrap.hidden = (v !== 'Fixed amount');
-    if (currencyEl)   currencyEl.required = (v === 'Fixed amount');
+    if (currencyWrap) currencyWrap.hidden = v !== 'Fixed amount';
+    if (currencyEl) currencyEl.required = v === 'Fixed amount';
     updateLivePreview();
     updateSummary();
   }
@@ -2014,7 +2605,7 @@ function initMerchantCreateCoupon() {
   function updateSourceConditionals() {
     if (!sourceTypeEl) return;
     var v = sourceTypeEl.value;
-    if (scrapedWarn) scrapedWarn.hidden = (v !== 'Scraped Pending Review');
+    if (scrapedWarn) scrapedWarn.hidden = v !== 'Scraped Pending Review';
     updateLivePreview();
     updateSummary();
   }
@@ -2024,7 +2615,7 @@ function initMerchantCreateCoupon() {
   // ── Status → schedule date ────────────────────────────────────────────────
   if (statusEl) {
     statusEl.addEventListener('change', function () {
-      if (schedWrap) schedWrap.hidden = (this.value !== 'Scheduled');
+      if (schedWrap) schedWrap.hidden = this.value !== 'Scheduled';
     });
   }
 
@@ -2058,21 +2649,23 @@ function initMerchantCreateCoupon() {
 
   // ── Live preview card ──────────────────────────────────────────────────────
   var srcBadgeMap = {
-    'Manual': 'badge-source-manual',
-    'Affiliate': 'badge-source-affiliate',
+    Manual: 'badge-source-manual',
+    Affiliate: 'badge-source-affiliate',
     'Coupon API': 'badge-source-api',
-    'Scraped Pending Review': 'badge-source-scraped'
+    'Scraped Pending Review': 'badge-source-scraped',
   };
 
   function updateLivePreview() {
-    var code       = codeInp     ? codeInp.value.trim()     || 'CODE'  : 'CODE';
-    var dt         = discTypeEl  ? discTypeEl.value          : '';
-    var dv         = discValueEl ? discValueEl.value.trim()  : '';
-    var curr       = currencyEl  ? currencyEl.value          : 'ر.س';
-    var provider   = providerEl  ? providerEl.value.trim()   || '—'    : '—';
-    var category   = categoryEl  ? (categoryEl.options[categoryEl.selectedIndex] || {}).text || '—' : '—';
-    var srcType    = sourceTypeEl? sourceTypeEl.value        : '';
-    var expiry     = expiryEl    ? expiryEl.value            : '';
+    var code = codeInp ? codeInp.value.trim() || 'CODE' : 'CODE';
+    var dt = discTypeEl ? discTypeEl.value : '';
+    var dv = discValueEl ? discValueEl.value.trim() : '';
+    var curr = currencyEl ? currencyEl.value : 'ر.س';
+    var provider = providerEl ? providerEl.value.trim() || '—' : '—';
+    var category = categoryEl
+      ? (categoryEl.options[categoryEl.selectedIndex] || {}).text || '—'
+      : '—';
+    var srcType = sourceTypeEl ? sourceTypeEl.value : '';
+    var expiry = expiryEl ? expiryEl.value : '';
 
     // Code
     if (previewCode) previewCode.textContent = code;
@@ -2080,7 +2673,7 @@ function initMerchantCreateCoupon() {
     // Discount
     var discTxt = '—';
     if (dv) {
-      if (dt === 'Percentage')    discTxt = dv + '%';
+      if (dt === 'Percentage') discTxt = dv + '%';
       else if (dt === 'Fixed amount') discTxt = dv + ' ' + curr;
       else if (dt === 'Free service') discTxt = 'مجاني';
       else if (dt === 'Custom offer') discTxt = 'عرض مخصص';
@@ -2104,8 +2697,14 @@ function initMerchantCreateCoupon() {
     }
   }
 
-  form.addEventListener('input',  function () { updateLivePreview(); updateSummary(); });
-  form.addEventListener('change', function () { updateLivePreview(); updateSummary(); });
+  form.addEventListener('input', function () {
+    updateLivePreview();
+    updateSummary();
+  });
+  form.addEventListener('change', function () {
+    updateLivePreview();
+    updateSummary();
+  });
   updateLivePreview();
 
   // ── Summary completion tracker ────────────────────────────────────────────
@@ -2122,33 +2721,34 @@ function initMerchantCreateCoupon() {
     if (fillBar) fillBar.style.width = pct + '%';
     if (missingEl) {
       var missing = requiredNow.length - filled.length;
-      missingEl.innerHTML = missing === 0
-        ? '<span style="color:#15803D">✓ جميع الحقول المطلوبة مكتملة</span>'
-        : '<span style="color:#DC2626">' + missing + '</span> حقل مطلوب غير مكتمل';
+      missingEl.innerHTML =
+        missing === 0
+          ? '<span style="color:#15803D">✓ جميع الحقول المطلوبة مكتملة</span>'
+          : '<span style="color:#DC2626">' + missing + '</span> حقل مطلوب غير مكتمل';
     }
   }
   updateSummary();
 
   // ── Form validation helpers ───────────────────────────────────────────────
   function setFieldError(name, errorId, show) {
-    var el  = form.elements[name];
+    var el = form.elements[name];
     var err = document.getElementById(errorId);
-    if (el)  el.setAttribute('aria-invalid', show ? 'true' : 'false');
+    if (el) el.setAttribute('aria-invalid', show ? 'true' : 'false');
     if (err) err.hidden = !show;
   }
 
   function validateForm() {
     var ok = true;
     var requiredNow = [
-      { name:'code',          errId:'code-error' },
-      { name:'category',      errId:'category-error' },
-      { name:'discountType',  errId:'discount-type-error' },
-      { name:'discountValue', errId:'discount-value-error' },
-      { name:'expiryDate',    errId:'expiry-error' },
-      { name:'sourceType',    errId:'source-type-error' }
+      { name: 'code', errId: 'code-error' },
+      { name: 'category', errId: 'category-error' },
+      { name: 'discountType', errId: 'discount-type-error' },
+      { name: 'discountValue', errId: 'discount-value-error' },
+      { name: 'expiryDate', errId: 'expiry-error' },
+      { name: 'sourceType', errId: 'source-type-error' },
     ];
     if (discTypeEl && discTypeEl.value === 'Fixed amount') {
-      requiredNow.push({ name:'currency', errId:'currency-error' });
+      requiredNow.push({ name: 'currency', errId: 'currency-error' });
     }
     requiredNow.forEach(function (f) {
       var el = form.elements[f.name];
@@ -2168,7 +2768,10 @@ function initMerchantCreateCoupon() {
       if (firstErr) firstErr.focus();
       return;
     }
-    toast('تم النشر التجريبي — واجهة أمامية فقط / لا تفعيل حقيقي للكوبون / لا حفظ على خادم', 'success');
+    toast(
+      'تم النشر التجريبي — واجهة أمامية فقط / لا تفعيل حقيقي للكوبون / لا حفظ على خادم',
+      'success'
+    );
   }
 
   function doDraft() {
@@ -2180,11 +2783,11 @@ function initMerchantCreateCoupon() {
     doPublish();
   });
 
-  ['btn-publish-top','btn-publish-form','btn-publish-sidebar'].forEach(function (id) {
+  ['btn-publish-top', 'btn-publish-form', 'btn-publish-sidebar'].forEach(function (id) {
     var b = document.getElementById(id);
     if (b) b.addEventListener('click', doPublish);
   });
-  ['btn-save-draft-top','btn-save-draft-form','btn-save-draft-sidebar'].forEach(function (id) {
+  ['btn-save-draft-top', 'btn-save-draft-form', 'btn-save-draft-sidebar'].forEach(function (id) {
     var b = document.getElementById(id);
     if (b) b.addEventListener('click', doDraft);
   });
@@ -2192,21 +2795,20 @@ function initMerchantCreateCoupon() {
 
 // ─── merchant-analytics controller (T014) ────────────────────────────────────
 function initMerchantAnalytics() {
-
   // ── Date-range chips ──────────────────────────────────────────────────────
   var chips = document.querySelectorAll('.date-chip[data-range]');
   var customRegion = document.getElementById('custom-range-region');
   var dateFrom = document.getElementById('date-from');
-  var dateTo   = document.getElementById('date-to');
+  var dateTo = document.getElementById('date-to');
   var applyBtn = document.getElementById('btn-apply-range');
-  var dateErr  = document.getElementById('date-range-error');
+  var dateErr = document.getElementById('date-range-error');
 
   var RANGE_LABELS = {
     today: 'اليوم',
-    '7d':  'آخر 7 أيام',
+    '7d': 'آخر 7 أيام',
     '30d': 'آخر 30 يوم',
     month: 'هذا الشهر',
-    '90d': 'آخر 90 يوم'
+    '90d': 'آخر 90 يوم',
   };
 
   function setActiveChip(key) {
@@ -2223,11 +2825,15 @@ function initMerchantAnalytics() {
       setActiveChip(range);
 
       if (range === 'custom') {
-        if (customRegion) { customRegion.hidden = false; }
+        if (customRegion) {
+          customRegion.hidden = false;
+        }
         if (dateFrom) dateFrom.focus();
         announce('حدد نطاق التاريخ المخصص');
       } else {
-        if (customRegion) { customRegion.hidden = true; }
+        if (customRegion) {
+          customRegion.hidden = true;
+        }
         if (dateErr) dateErr.hidden = true;
         var label = RANGE_LABELS[range] || range;
         announce('تم تحديد الفترة: ' + label + ' — البيانات تجريبية ثابتة');
@@ -2241,15 +2847,21 @@ function initMerchantAnalytics() {
     applyBtn.addEventListener('click', function () {
       if (dateErr) dateErr.hidden = true;
       var from = dateFrom ? dateFrom.value : '';
-      var to   = dateTo   ? dateTo.value   : '';
+      var to = dateTo ? dateTo.value : '';
 
       if (!from || !to) {
-        if (dateErr) { dateErr.textContent = 'يرجى تحديد تاريخَي البداية والنهاية'; dateErr.hidden = false; }
+        if (dateErr) {
+          dateErr.textContent = 'يرجى تحديد تاريخَي البداية والنهاية';
+          dateErr.hidden = false;
+        }
         if (!from && dateFrom) dateFrom.focus();
         return;
       }
       if (from > to) {
-        if (dateErr) { dateErr.textContent = 'تاريخ البداية يجب أن يكون قبل تاريخ النهاية'; dateErr.hidden = false; }
+        if (dateErr) {
+          dateErr.textContent = 'تاريخ البداية يجب أن يكون قبل تاريخ النهاية';
+          dateErr.hidden = false;
+        }
         if (dateFrom) dateFrom.focus();
         return;
       }
@@ -2275,9 +2887,9 @@ function initMerchantAnalytics() {
     if (!btn) return;
     var fmt = btn.getAttribute('data-analytics-export');
     var msgs = {
-      pdf:      'تصدير PDF تجريبي — لا يتم إنشاء ملف فعلي في هذه النسخة',
-      csv:      'تصدير CSV تجريبي — لا يتم إنشاء ملف فعلي في هذه النسخة',
-      schedule: 'جدولة التقارير — قابل للربط لاحقاً / لا يتم إرسال تقرير حقيقي'
+      pdf: 'تصدير PDF تجريبي — لا يتم إنشاء ملف فعلي في هذه النسخة',
+      csv: 'تصدير CSV تجريبي — لا يتم إنشاء ملف فعلي في هذه النسخة',
+      schedule: 'جدولة التقارير — قابل للربط لاحقاً / لا يتم إرسال تقرير حقيقي',
     };
     toast(msgs[fmt] || 'تصدير تجريبي — لا يتم إنشاء ملف فعلي', 'info');
 
@@ -2285,7 +2897,8 @@ function initMerchantAnalytics() {
     var modal = document.getElementById('modal-export');
     if (modal && !modal.hidden) {
       modal.hidden = true;
-      document.getElementById('btn-export-report') && document.getElementById('btn-export-report').focus();
+      document.getElementById('btn-export-report') &&
+        document.getElementById('btn-export-report').focus();
     }
   });
 
@@ -2342,12 +2955,15 @@ function initMerchantAnalytics() {
 
     // Try Clipboard API, fallback gracefully
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(code).then(function () {
-        toast('تم نسخ كود «' + code + '» — بيانات تجريبية', 'success');
-        announce('تم نسخ الكود ' + code);
-      }).catch(function () {
-        toast('كود الكوبون: ' + code + ' (انسخه يدوياً)', 'info');
-      });
+      navigator.clipboard
+        .writeText(code)
+        .then(function () {
+          toast('تم نسخ كود «' + code + '» — بيانات تجريبية', 'success');
+          announce('تم نسخ الكود ' + code);
+        })
+        .catch(function () {
+          toast('كود الكوبون: ' + code + ' (انسخه يدوياً)', 'info');
+        });
     } else {
       toast('كود الكوبون: ' + code + ' (انسخه يدوياً)', 'info');
     }
@@ -2367,10 +2983,10 @@ function initMerchantIntegrations() {
   // Handles: category tabs, configure modals, Save/Test toasts, toggles, coming-soon.
   // State: frontend/session-only — reload restores mock defaults.
 
-  var grid        = document.getElementById('integration-grid');
-  var emptyState  = document.getElementById('intg-empty-state');
-  var countText   = document.getElementById('intg-count-text');
-  var tablist     = document.getElementById('category-tablist');
+  var grid = document.getElementById('integration-grid');
+  var emptyState = document.getElementById('intg-empty-state');
+  var countText = document.getElementById('intg-count-text');
+  var tablist = document.getElementById('category-tablist');
 
   // ── Row-action menus for integration cards ───────────────────────────────
   document.querySelectorAll('.intg-card .row-action-trigger').forEach(function (trigger) {
@@ -2422,7 +3038,7 @@ function initMerchantIntegrations() {
 
     cards.forEach(function (card) {
       var cat = card.getAttribute('data-category');
-      var show = (category === 'all') || (cat === category);
+      var show = category === 'all' || cat === category;
       card.hidden = !show;
       if (show) visibleCount++;
     });
@@ -2434,7 +3050,7 @@ function initMerchantIntegrations() {
 
     // Show/hide empty state
     if (emptyState) {
-      emptyState.hidden = (visibleCount > 0);
+      emptyState.hidden = visibleCount > 0;
     }
 
     // Announce to screen readers
@@ -2497,7 +3113,10 @@ function initMerchantIntegrations() {
     modal.addEventListener('click', function (e) {
       if (e.target === modal) {
         modal.hidden = true;
-        if (_lastModalTrigger) { _lastModalTrigger.focus(); _lastModalTrigger = null; }
+        if (_lastModalTrigger) {
+          _lastModalTrigger.focus();
+          _lastModalTrigger = null;
+        }
       }
     });
   });
@@ -2508,7 +3127,10 @@ function initMerchantIntegrations() {
     var open = document.querySelector('[id^="modal-cfg-"]:not([hidden])');
     if (open) {
       open.hidden = true;
-      if (_lastModalTrigger) { _lastModalTrigger.focus(); _lastModalTrigger = null; }
+      if (_lastModalTrigger) {
+        _lastModalTrigger.focus();
+        _lastModalTrigger = null;
+      }
     }
   });
 
@@ -2521,7 +3143,10 @@ function initMerchantIntegrations() {
     var modal = document.getElementById(modalId);
     if (modal) {
       modal.hidden = true;
-      if (_lastModalTrigger) { _lastModalTrigger.focus(); _lastModalTrigger = null; }
+      if (_lastModalTrigger) {
+        _lastModalTrigger.focus();
+        _lastModalTrigger = null;
+      }
     }
   });
 
@@ -2541,11 +3166,15 @@ function initMerchantIntegrations() {
     required.forEach(function (field) {
       var errEl = modal.querySelector('#err-' + field.id.replace('cfg-', ''));
       field.removeAttribute('aria-invalid');
-      if (errEl) { errEl.style.display = 'none'; }
+      if (errEl) {
+        errEl.style.display = 'none';
+      }
 
       if (!field.value.trim()) {
         field.setAttribute('aria-invalid', 'true');
-        if (errEl) { errEl.style.display = 'block'; }
+        if (errEl) {
+          errEl.style.display = 'block';
+        }
         if (!firstInvalid) firstInvalid = field;
       }
     });
@@ -2558,7 +3187,10 @@ function initMerchantIntegrations() {
 
     // Save mock
     modal.hidden = true;
-    if (_lastModalTrigger) { _lastModalTrigger.focus(); _lastModalTrigger = null; }
+    if (_lastModalTrigger) {
+      _lastModalTrigger.focus();
+      _lastModalTrigger = null;
+    }
     toast('تم حفظ الإعداد (تجريبي) — لا يتم الحفظ على خادم', 'success');
     announce('تم حفظ الإعداد تجريبياً');
   });
@@ -2571,7 +3203,9 @@ function initMerchantIntegrations() {
     if (_testToastTimer) return; // Debounce rapid clicks
     toast('اختبار اتصال تجريبي — لا يتم الاتصال بأي مصدر خارجي', 'info');
     announce('اختبار اتصال تجريبي');
-    _testToastTimer = setTimeout(function () { _testToastTimer = null; }, 2500);
+    _testToastTimer = setTimeout(function () {
+      _testToastTimer = null;
+    }, 2500);
   }
 
   document.addEventListener('click', function (e) {
@@ -2604,7 +3238,9 @@ function initMerchantIntegrations() {
         return;
       }
       _toggleCooldown[key] = true;
-      setTimeout(function () { delete _toggleCooldown[key]; }, 800);
+      setTimeout(function () {
+        delete _toggleCooldown[key];
+      }, 800);
 
       var labelEl = document.getElementById('lbl-' + key);
       var isOn = toggle.checked;
@@ -2679,26 +3315,33 @@ function initMerchantIntegrations() {
 
 // ─── merchant-settings controller (T023) ─────────────────────────────────────
 function initMerchantSettings() {
-
   /* ── helpers (scoped) ───────────────────────────────────────────────── */
   function toast(msg, type) {
-    if (window.TUI && TUI.toast) { TUI.toast(msg, { type: type || 'success', duration: 4000 }); return; }
+    if (window.TUI && TUI.toast) {
+      TUI.toast(msg, { type: type || 'success', duration: 4000 });
+      return;
+    }
     var root = document.getElementById('toast-root');
     if (!root) return;
     var el = document.createElement('div');
-    el.style.cssText = 'background:#1E293B;color:#fff;padding:.75rem 1.125rem;border-radius:.875rem;font-size:.875rem;box-shadow:0 4px 16px rgba(0,0,0,.2);max-width:320px;line-height:1.5;display:flex;align-items:center;gap:.5rem';
+    el.style.cssText =
+      'background:#1E293B;color:#fff;padding:.75rem 1.125rem;border-radius:.875rem;font-size:.875rem;box-shadow:0 4px 16px rgba(0,0,0,.2);max-width:320px;line-height:1.5;display:flex;align-items:center;gap:.5rem';
     if (type === 'error') el.style.background = '#7F1D1D';
     el.setAttribute('role', 'status');
     el.textContent = msg;
     root.appendChild(el);
-    setTimeout(function(){ el.remove(); }, 4000);
+    setTimeout(function () {
+      el.remove();
+    }, 4000);
   }
 
   function announce(msg) {
     var el = document.getElementById('dash-announcer');
     if (!el) return;
     el.textContent = '';
-    setTimeout(function(){ el.textContent = msg; }, 50);
+    setTimeout(function () {
+      el.textContent = msg;
+    }, 50);
   }
 
   // Open a modal and wire close/backdrop/Escape
@@ -2714,33 +3357,44 @@ function initMerchantSettings() {
       overlay.removeEventListener('click', onBg);
       document.removeEventListener('keydown', onKey);
     }
-    function onBg(e) { if (e.target === overlay) close(); }
-    function onKey(e) { if (e.key === 'Escape') close(); }
+    function onBg(e) {
+      if (e.target === overlay) close();
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') close();
+    }
     overlay.addEventListener('click', onBg);
     document.addEventListener('keydown', onKey);
-    overlay.querySelectorAll('[data-modal-close],[data-modal-cancel]').forEach(function(b){
+    overlay.querySelectorAll('[data-modal-close],[data-modal-cancel]').forEach(function (b) {
       b.addEventListener('click', close, { once: true });
     });
     var first = overlay.querySelector('input,select,textarea,[data-modal-close]');
-    if (first) setTimeout(function(){ first.focus(); }, 40);
+    if (first)
+      setTimeout(function () {
+        first.focus();
+      }, 40);
   }
 
   function closeModal(id) {
     var overlay = document.getElementById(id);
-    if (overlay) { overlay.setAttribute('hidden', ''); document.body.style.overflow = ''; }
+    if (overlay) {
+      overlay.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+    }
   }
 
   // Simple inline form validator
   function validateForm(formEl, rules) {
     var ok = true;
-    rules.forEach(function(r) {
+    rules.forEach(function (r) {
       var field = formEl.elements[r.name] || formEl.querySelector('#' + r.id);
       var errEl = r.errId ? document.getElementById(r.errId) : null;
       if (!field) return;
       var val = field.value.trim();
       var msg = '';
       if (r.required && !val) msg = r.requiredMsg || 'هذا الحقل مطلوب';
-      else if (r.email && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) msg = 'البريد الإلكتروني غير صحيح';
+      else if (r.email && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val))
+        msg = 'البريد الإلكتروني غير صحيح';
       else if (r.minLen && val.length < r.minLen) msg = r.minLenMsg || 'القيمة قصيرة جداً';
       else if (r.matchId) {
         var other = document.getElementById(r.matchId);
@@ -2749,109 +3403,149 @@ function initMerchantSettings() {
       if (msg) {
         ok = false;
         field.setAttribute('aria-invalid', 'true');
-        if (errEl) { errEl.textContent = msg; errEl.classList.add('is-visible'); }
+        if (errEl) {
+          errEl.textContent = msg;
+          errEl.classList.add('is-visible');
+        }
       } else {
         field.removeAttribute('aria-invalid');
-        if (errEl) { errEl.textContent = ''; errEl.classList.remove('is-visible'); }
+        if (errEl) {
+          errEl.textContent = '';
+          errEl.classList.remove('is-visible');
+        }
       }
     });
     return ok;
   }
 
   function clearFormErrors(formEl) {
-    formEl.querySelectorAll('[aria-invalid]').forEach(function(f){ f.removeAttribute('aria-invalid'); });
-    formEl.querySelectorAll('.form-error').forEach(function(e){ e.textContent = ''; e.classList.remove('is-visible'); });
+    formEl.querySelectorAll('[aria-invalid]').forEach(function (f) {
+      f.removeAttribute('aria-invalid');
+    });
+    formEl.querySelectorAll('.form-error').forEach(function (e) {
+      e.textContent = '';
+      e.classList.remove('is-visible');
+    });
   }
 
   /* ── Tab / anchor navigation ────────────────────────────────────────── */
   var navLinks = document.querySelectorAll('.settings-nav-link[data-settings-tab]');
-  var panels   = document.querySelectorAll('.settings-panel');
+  var panels = document.querySelectorAll('.settings-panel');
 
   function activateTab(tabKey) {
-    navLinks.forEach(function(link) {
+    navLinks.forEach(function (link) {
       var active = link.getAttribute('data-settings-tab') === tabKey;
       link.setAttribute('aria-selected', active ? 'true' : 'false');
     });
-    panels.forEach(function(panel) {
+    panels.forEach(function (panel) {
       var show = panel.id === 'section-' + tabKey;
-      if (show) panel.removeAttribute('hidden'); else panel.setAttribute('hidden', '');
+      if (show) panel.removeAttribute('hidden');
+      else panel.setAttribute('hidden', '');
     });
     announce(tabKey + ' — القسم نشط');
   }
 
-  navLinks.forEach(function(link) {
-    link.addEventListener('click', function(e) {
+  navLinks.forEach(function (link) {
+    link.addEventListener('click', function (e) {
       e.preventDefault();
       var key = link.getAttribute('data-settings-tab');
       activateTab(key);
       history.replaceState(null, '', '#' + key);
     });
-    link.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); link.click(); }
+    link.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        link.click();
+      }
     });
   });
 
   // Honor #section deep link on load
-  (function() {
+  (function () {
     var hash = location.hash.replace('#', '');
-    var valid = ['company','branding','booking','notifications','team','security','plan'];
+    var valid = ['company', 'branding', 'booking', 'notifications', 'team', 'security', 'plan'];
     if (hash && valid.indexOf(hash) !== -1) activateTab(hash);
   })();
 
   /* ── Save-all / Reset-all (header buttons) ──────────────────────────── */
-  var btnSaveAll  = document.getElementById('btn-save-all');
+  var btnSaveAll = document.getElementById('btn-save-all');
   var btnResetAll = document.getElementById('btn-reset-all');
-  if (btnSaveAll)  btnSaveAll.addEventListener('click', function(){ toast('تم حفظ كل التغييرات تجريبياً — لا يتم الحفظ على خادم الآن'); });
-  if (btnResetAll) btnResetAll.addEventListener('click', function(){
-    openModal('modal-danger-reset');
-  });
+  if (btnSaveAll)
+    btnSaveAll.addEventListener('click', function () {
+      toast('تم حفظ كل التغييرات تجريبياً — لا يتم الحفظ على خادم الآن');
+    });
+  if (btnResetAll)
+    btnResetAll.addEventListener('click', function () {
+      openModal('modal-danger-reset');
+    });
 
   /* ── Company form ────────────────────────────────────────────────────── */
   var formCompany = document.getElementById('form-company');
   if (formCompany) {
-    formCompany.addEventListener('submit', function(e) {
+    formCompany.addEventListener('submit', function (e) {
       e.preventDefault();
       clearFormErrors(formCompany);
       var ok = validateForm(formCompany, [
-        { name:'company_name', errId:'co-name-err', required:true, requiredMsg:'اسم الشركة مطلوب' },
-        { name:'phone',        errId:'co-phone-err',required:true, requiredMsg:'رقم الهاتف مطلوب' },
-        { name:'email',        errId:'co-email-err',required:true, requiredMsg:'البريد مطلوب', email:true }
+        {
+          name: 'company_name',
+          errId: 'co-name-err',
+          required: true,
+          requiredMsg: 'اسم الشركة مطلوب',
+        },
+        { name: 'phone', errId: 'co-phone-err', required: true, requiredMsg: 'رقم الهاتف مطلوب' },
+        {
+          name: 'email',
+          errId: 'co-email-err',
+          required: true,
+          requiredMsg: 'البريد مطلوب',
+          email: true,
+        },
       ]);
       if (ok) toast('تم حفظ بيانات الشركة تجريبياً — لا يتم الحفظ على خادم الآن');
     });
     var btnResetCo = formCompany.querySelector('[data-action="reset-company"]');
-    if (btnResetCo) btnResetCo.addEventListener('click', function(){ clearFormErrors(formCompany); toast('تمت إعادة التعيين تجريبياً', 'info'); });
+    if (btnResetCo)
+      btnResetCo.addEventListener('click', function () {
+        clearFormErrors(formCompany);
+        toast('تمت إعادة التعيين تجريبياً', 'info');
+      });
   }
 
   /* ── Logo / cover upload ─────────────────────────────────────────────── */
-  var btnLogo  = document.getElementById('btn-upload-logo');
+  var btnLogo = document.getElementById('btn-upload-logo');
   var btnCover = document.getElementById('btn-upload-cover');
-  if (btnLogo)  btnLogo.addEventListener('click', function(){ toast('لا يتم رفع ملفات حقيقية الآن — قابل للربط لاحقاً', 'info'); });
-  if (btnCover) btnCover.addEventListener('click', function(){ toast('لا يتم رفع ملفات حقيقية الآن — قابل للربط لاحقاً', 'info'); });
+  if (btnLogo)
+    btnLogo.addEventListener('click', function () {
+      toast('لا يتم رفع ملفات حقيقية الآن — قابل للربط لاحقاً', 'info');
+    });
+  if (btnCover)
+    btnCover.addEventListener('click', function () {
+      toast('لا يتم رفع ملفات حقيقية الآن — قابل للربط لاحقاً', 'info');
+    });
 
   /* ── Branding live preview ───────────────────────────────────────────── */
-  var primaryInput   = document.getElementById('co-primary-color');
+  var primaryInput = document.getElementById('co-primary-color');
   var secondaryInput = document.getElementById('co-secondary-color');
-  var slugInput      = document.getElementById('co-slug');
-  var previewCard    = document.getElementById('brand-preview-card');
-  var primarySwatch  = document.getElementById('primary-color-preview');
-  var secondarySwatch= document.getElementById('secondary-color-preview');
-  var primaryVal     = document.getElementById('primary-color-val');
-  var secondaryVal   = document.getElementById('secondary-color-val');
-  var slugPreviewFull= document.getElementById('slug-preview-full');
-  var brandUrlPreview= document.getElementById('brand-url-preview');
+  var slugInput = document.getElementById('co-slug');
+  var previewCard = document.getElementById('brand-preview-card');
+  var primarySwatch = document.getElementById('primary-color-preview');
+  var secondarySwatch = document.getElementById('secondary-color-preview');
+  var primaryVal = document.getElementById('primary-color-val');
+  var secondaryVal = document.getElementById('secondary-color-val');
+  var slugPreviewFull = document.getElementById('slug-preview-full');
+  var brandUrlPreview = document.getElementById('brand-url-preview');
 
   function updateBrandPreview() {
-    var primary   = primaryInput   ? primaryInput.value   : '#0E7C7B';
+    var primary = primaryInput ? primaryInput.value : '#0E7C7B';
     var secondary = secondaryInput ? secondaryInput.value : '#F4A300';
-    var slug      = slugInput      ? slugInput.value.trim() || 'your-agency' : 'your-agency';
-    var url       = 'travel.example.com/' + slug;
-    if (previewCard)     previewCard.style.setProperty('--preview-primary', primary);
-    if (previewCard)     previewCard.style.setProperty('--preview-secondary', secondary);
-    if (primarySwatch)  primarySwatch.style.background   = primary;
+    var slug = slugInput ? slugInput.value.trim() || 'your-agency' : 'your-agency';
+    var url = 'travel.example.com/' + slug;
+    if (previewCard) previewCard.style.setProperty('--preview-primary', primary);
+    if (previewCard) previewCard.style.setProperty('--preview-secondary', secondary);
+    if (primarySwatch) primarySwatch.style.background = primary;
     if (secondarySwatch) secondarySwatch.style.background = secondary;
-    if (primaryVal)     primaryVal.textContent   = primary;
-    if (secondaryVal)   secondaryVal.textContent = secondary;
+    if (primaryVal) primaryVal.textContent = primary;
+    if (secondaryVal) secondaryVal.textContent = secondary;
     if (slugPreviewFull) slugPreviewFull.textContent = url;
     if (brandUrlPreview) brandUrlPreview.textContent = url;
     // also update the public-page preview card url
@@ -2859,91 +3553,128 @@ function initMerchantSettings() {
     if (pubUrlEl) pubUrlEl.textContent = url;
   }
 
-  if (primaryInput)   primaryInput.addEventListener('input', updateBrandPreview);
+  if (primaryInput) primaryInput.addEventListener('input', updateBrandPreview);
   if (secondaryInput) secondaryInput.addEventListener('input', updateBrandPreview);
-  if (slugInput)      slugInput.addEventListener('input', updateBrandPreview);
+  if (slugInput) slugInput.addEventListener('input', updateBrandPreview);
 
   // Branding save
   var btnSaveBranding = document.getElementById('btn-save-branding');
-  if (btnSaveBranding) btnSaveBranding.addEventListener('click', function(){
-    toast('تم حفظ الهوية البصرية تجريبياً — لا يتم الحفظ على خادم الآن');
-  });
+  if (btnSaveBranding)
+    btnSaveBranding.addEventListener('click', function () {
+      toast('تم حفظ الهوية البصرية تجريبياً — لا يتم الحفظ على خادم الآن');
+    });
 
   var btnResetBranding = document.querySelector('[data-action="reset-branding"]');
-  if (btnResetBranding) btnResetBranding.addEventListener('click', function(){
-    if (primaryInput)   primaryInput.value   = '#0E7C7B';
-    if (secondaryInput) secondaryInput.value = '#F4A300';
-    if (slugInput)      slugInput.value      = 'alufuq-travel';
-    updateBrandPreview();
-    toast('تمت إعادة التعيين تجريبياً', 'info');
-  });
+  if (btnResetBranding)
+    btnResetBranding.addEventListener('click', function () {
+      if (primaryInput) primaryInput.value = '#0E7C7B';
+      if (secondaryInput) secondaryInput.value = '#F4A300';
+      if (slugInput) slugInput.value = 'alufuq-travel';
+      updateBrandPreview();
+      toast('تمت إعادة التعيين تجريبياً', 'info');
+    });
 
   /* ── Booking form ─────────────────────────────────────────────────────── */
   var formBooking = document.getElementById('form-booking');
   if (formBooking) {
-    formBooking.addEventListener('submit', function(e) {
+    formBooking.addEventListener('submit', function (e) {
       e.preventDefault();
       toast('تم حفظ تفضيلات الحجز تجريبياً — لا يتم الحفظ على خادم الآن');
     });
     var btnResetBk = formBooking.querySelector('[data-action="reset-booking"]');
-    if (btnResetBk) btnResetBk.addEventListener('click', function(){ toast('تمت إعادة التعيين تجريبياً', 'info'); });
+    if (btnResetBk)
+      btnResetBk.addEventListener('click', function () {
+        toast('تمت إعادة التعيين تجريبياً', 'info');
+      });
   }
 
   /* ── Notification toggles ────────────────────────────────────────────── */
   var notifLive = document.getElementById('notif-live');
-  document.querySelectorAll('[data-notif-key]').forEach(function(toggle) {
-    toggle.addEventListener('change', function() {
-      var key     = toggle.getAttribute('data-notif-key');
+  document.querySelectorAll('[data-notif-key]').forEach(function (toggle) {
+    toggle.addEventListener('change', function () {
+      var key = toggle.getAttribute('data-notif-key');
       var channel = toggle.getAttribute('data-channel');
-      var state   = toggle.checked ? 'مفعّل' : 'معطّل';
-      var msg     = channel + ' — ' + state + ' (تجريبي)';
-      if (notifLive) { notifLive.textContent = ''; setTimeout(function(){ notifLive.textContent = msg; }, 30); }
+      var state = toggle.checked ? 'مفعّل' : 'معطّل';
+      var msg = channel + ' — ' + state + ' (تجريبي)';
+      if (notifLive) {
+        notifLive.textContent = '';
+        setTimeout(function () {
+          notifLive.textContent = msg;
+        }, 30);
+      }
     });
   });
   var btnSaveNotif = document.getElementById('btn-save-notif');
-  if (btnSaveNotif) btnSaveNotif.addEventListener('click', function(){
-    toast('تم حفظ تفضيلات الإشعارات تجريبياً — لا يتم إرسال رسائل حقيقية');
-  });
+  if (btnSaveNotif)
+    btnSaveNotif.addEventListener('click', function () {
+      toast('تم حفظ تفضيلات الإشعارات تجريبياً — لا يتم إرسال رسائل حقيقية');
+    });
 
   /* ── generic data-toast buttons (inside settings panels) ────────────── */
-  document.querySelectorAll('#section-notifications [data-toast], #section-plan [data-toast], #section-security [data-toast]').forEach(function(btn){
-    btn.addEventListener('click', function(){ toast(btn.getAttribute('data-toast'), 'info'); });
-  });
+  document
+    .querySelectorAll(
+      '#section-notifications [data-toast], #section-plan [data-toast], #section-security [data-toast]'
+    )
+    .forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        toast(btn.getAttribute('data-toast'), 'info');
+      });
+    });
 
   /* ── Team: row-action menus ─────────────────────────────────────────── */
-  document.querySelectorAll('#section-team .row-action-trigger').forEach(function(trigger) {
+  document.querySelectorAll('#section-team .row-action-trigger').forEach(function (trigger) {
     var menu = trigger.nextElementSibling;
     if (!menu) return;
-    trigger.addEventListener('click', function(e) {
+    trigger.addEventListener('click', function (e) {
       e.stopPropagation();
       var isOpen = !menu.hidden;
-      document.querySelectorAll('.row-action-menu').forEach(function(m){ m.setAttribute('hidden',''); });
-      document.querySelectorAll('.row-action-trigger').forEach(function(t){ t.setAttribute('aria-expanded','false'); });
-      if (!isOpen) { menu.removeAttribute('hidden'); trigger.setAttribute('aria-expanded','true'); }
+      document.querySelectorAll('.row-action-menu').forEach(function (m) {
+        m.setAttribute('hidden', '');
+      });
+      document.querySelectorAll('.row-action-trigger').forEach(function (t) {
+        t.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        menu.removeAttribute('hidden');
+        trigger.setAttribute('aria-expanded', 'true');
+      }
     });
   });
-  document.addEventListener('click', function(){
-    document.querySelectorAll('#section-team .row-action-menu').forEach(function(m){ m.setAttribute('hidden',''); });
-    document.querySelectorAll('#section-team .row-action-trigger').forEach(function(t){ t.setAttribute('aria-expanded','false'); });
+  document.addEventListener('click', function () {
+    document.querySelectorAll('#section-team .row-action-menu').forEach(function (m) {
+      m.setAttribute('hidden', '');
+    });
+    document.querySelectorAll('#section-team .row-action-trigger').forEach(function (t) {
+      t.setAttribute('aria-expanded', 'false');
+    });
   });
 
   /* ── Team: invite modal ─────────────────────────────────────────────── */
-  document.querySelectorAll('[data-modal-open="modal-invite"]').forEach(function(btn){
-    btn.addEventListener('click', function(){
+  document.querySelectorAll('[data-modal-open="modal-invite"]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
       var formInv = document.getElementById('form-invite');
-      if (formInv) { formInv.reset(); clearFormErrors(formInv); }
+      if (formInv) {
+        formInv.reset();
+        clearFormErrors(formInv);
+      }
       openModal('modal-invite');
     });
   });
   var formInvite = document.getElementById('form-invite');
   if (formInvite) {
-    formInvite.addEventListener('submit', function(e) {
+    formInvite.addEventListener('submit', function (e) {
       e.preventDefault();
       clearFormErrors(formInvite);
       var ok = validateForm(formInvite, [
-        { name:'name',  errId:'invite-name-err',  required:true, requiredMsg:'الاسم مطلوب' },
-        { name:'email', errId:'invite-email-err', required:true, requiredMsg:'البريد مطلوب', email:true },
-        { name:'role',  errId:'invite-role-err',  required:true, requiredMsg:'الدور مطلوب' }
+        { name: 'name', errId: 'invite-name-err', required: true, requiredMsg: 'الاسم مطلوب' },
+        {
+          name: 'email',
+          errId: 'invite-email-err',
+          required: true,
+          requiredMsg: 'البريد مطلوب',
+          email: true,
+        },
+        { name: 'role', errId: 'invite-role-err', required: true, requiredMsg: 'الدور مطلوب' },
       ]);
       if (ok) {
         closeModal('modal-invite');
@@ -2953,26 +3684,34 @@ function initMerchantSettings() {
   }
 
   /* ── Team: change-role modal ─────────────────────────────────────────── */
-  document.querySelectorAll('[data-modal-open="modal-change-role"]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var name   = btn.getAttribute('data-member-name') || '—';
-      var idVal  = btn.getAttribute('data-member-id')   || '';
+  document.querySelectorAll('[data-modal-open="modal-change-role"]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var name = btn.getAttribute('data-member-name') || '—';
+      var idVal = btn.getAttribute('data-member-id') || '';
       var nameEl = document.getElementById('change-role-member-name');
-      var idEl   = document.getElementById('change-role-member-id');
+      var idEl = document.getElementById('change-role-member-id');
       if (nameEl) nameEl.textContent = 'العضو: ' + name;
-      if (idEl)   idEl.value = idVal;
+      if (idEl) idEl.value = idVal;
       var formCR = document.getElementById('form-change-role');
-      if (formCR) { formCR.reset(); clearFormErrors(formCR); }
+      if (formCR) {
+        formCR.reset();
+        clearFormErrors(formCR);
+      }
       openModal('modal-change-role');
     });
   });
   var formChangeRole = document.getElementById('form-change-role');
   if (formChangeRole) {
-    formChangeRole.addEventListener('submit', function(e) {
+    formChangeRole.addEventListener('submit', function (e) {
       e.preventDefault();
       clearFormErrors(formChangeRole);
       var ok = validateForm(formChangeRole, [
-        { name:'new_role', errId:'new-role-err', required:true, requiredMsg:'اختر الدور الجديد' }
+        {
+          name: 'new_role',
+          errId: 'new-role-err',
+          required: true,
+          requiredMsg: 'اختر الدور الجديد',
+        },
       ]);
       if (ok) {
         closeModal('modal-change-role');
@@ -2982,20 +3721,22 @@ function initMerchantSettings() {
   }
 
   /* ── Team: disable modal ────────────────────────────────────────────── */
-  document.querySelectorAll('[data-modal-open="modal-disable-member"]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var name    = btn.getAttribute('data-member-name') || '—';
-      var idVal   = btn.getAttribute('data-member-id')   || '';
-      var action  = btn.getAttribute('data-member-action') || 'disable';
-      var nameEl  = document.getElementById('disable-member-name');
+  document.querySelectorAll('[data-modal-open="modal-disable-member"]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var name = btn.getAttribute('data-member-name') || '—';
+      var idVal = btn.getAttribute('data-member-id') || '';
+      var action = btn.getAttribute('data-member-action') || 'disable';
+      var nameEl = document.getElementById('disable-member-name');
       var titleEl = document.getElementById('modal-disable-title');
-      var descEl  = document.getElementById('disable-action-desc');
+      var descEl = document.getElementById('disable-action-desc');
       var confirmBtn = document.getElementById('btn-confirm-disable');
-      if (nameEl)  nameEl.textContent  = 'العضو: ' + name;
+      if (nameEl) nameEl.textContent = 'العضو: ' + name;
       if (titleEl) titleEl.textContent = action === 'enable' ? 'تفعيل الحساب' : 'تعطيل الحساب';
-      if (descEl)  descEl.textContent  = action === 'enable'
-        ? 'سيتم إعادة تفعيل وصول هذا العضو. تجريبي — لا تغيير فعلي.'
-        : 'سيتم تعطيل وصول هذا العضو مؤقتاً. يمكن إعادة تفعيله لاحقاً.';
+      if (descEl)
+        descEl.textContent =
+          action === 'enable'
+            ? 'سيتم إعادة تفعيل وصول هذا العضو. تجريبي — لا تغيير فعلي.'
+            : 'سيتم تعطيل وصول هذا العضو مؤقتاً. يمكن إعادة تفعيله لاحقاً.';
       if (confirmBtn) {
         confirmBtn.textContent = action === 'enable' ? 'تأكيد التفعيل' : 'تأكيد التعطيل';
         confirmBtn.setAttribute('data-action', action);
@@ -3006,28 +3747,30 @@ function initMerchantSettings() {
   });
   var btnConfirmDisable = document.getElementById('btn-confirm-disable');
   if (btnConfirmDisable) {
-    btnConfirmDisable.addEventListener('click', function(){
+    btnConfirmDisable.addEventListener('click', function () {
       closeModal('modal-disable-member');
       var action = btnConfirmDisable.getAttribute('data-action') || 'disable';
-      toast((action === 'enable' ? 'تم تفعيل الحساب' : 'تم تعطيل الحساب') + ' تجريبياً — لا تغيير فعلي');
+      toast(
+        (action === 'enable' ? 'تم تفعيل الحساب' : 'تم تعطيل الحساب') + ' تجريبياً — لا تغيير فعلي'
+      );
     });
   }
 
   /* ── Team: remove modal ─────────────────────────────────────────────── */
-  document.querySelectorAll('[data-modal-open="modal-remove-member"]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var name  = btn.getAttribute('data-member-name') || '—';
-      var idVal = btn.getAttribute('data-member-id')   || '';
+  document.querySelectorAll('[data-modal-open="modal-remove-member"]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var name = btn.getAttribute('data-member-name') || '—';
+      var idVal = btn.getAttribute('data-member-id') || '';
       var nameEl = document.getElementById('remove-member-name');
-      var confBtn= document.getElementById('btn-confirm-remove');
-      if (nameEl)  nameEl.textContent = 'العضو: ' + name;
+      var confBtn = document.getElementById('btn-confirm-remove');
+      if (nameEl) nameEl.textContent = 'العضو: ' + name;
       if (confBtn) confBtn.setAttribute('data-member-id', idVal);
       openModal('modal-remove-member');
     });
   });
   var btnConfirmRemove = document.getElementById('btn-confirm-remove');
   if (btnConfirmRemove) {
-    btnConfirmRemove.addEventListener('click', function(){
+    btnConfirmRemove.addEventListener('click', function () {
       closeModal('modal-remove-member');
       toast('تم إزالة العضو تجريبياً — لا حذف فعلي على الخادم');
     });
@@ -3036,33 +3779,56 @@ function initMerchantSettings() {
   /* ── Security: change-password form ─────────────────────────────────── */
   var formPassword = document.getElementById('form-password');
   if (formPassword) {
-    formPassword.addEventListener('submit', function(e) {
+    formPassword.addEventListener('submit', function (e) {
       e.preventDefault();
       clearFormErrors(formPassword);
       var ok = validateForm(formPassword, [
-        { name:'current_password', errId:'pw-current-err', required:true, requiredMsg:'كلمة المرور الحالية مطلوبة' },
-        { name:'new_password',     errId:'pw-new-err',     required:true, requiredMsg:'كلمة المرور الجديدة مطلوبة', minLen:8, minLenMsg:'يجب أن تكون 8 أحرف على الأقل' },
-        { name:'confirm_password', errId:'pw-confirm-err', required:true, requiredMsg:'تأكيد كلمة المرور مطلوب', matchId:'pw-new', matchMsg:'كلمة المرور الجديدة وتأكيدها غير متطابقتين' }
+        {
+          name: 'current_password',
+          errId: 'pw-current-err',
+          required: true,
+          requiredMsg: 'كلمة المرور الحالية مطلوبة',
+        },
+        {
+          name: 'new_password',
+          errId: 'pw-new-err',
+          required: true,
+          requiredMsg: 'كلمة المرور الجديدة مطلوبة',
+          minLen: 8,
+          minLenMsg: 'يجب أن تكون 8 أحرف على الأقل',
+        },
+        {
+          name: 'confirm_password',
+          errId: 'pw-confirm-err',
+          required: true,
+          requiredMsg: 'تأكيد كلمة المرور مطلوب',
+          matchId: 'pw-new',
+          matchMsg: 'كلمة المرور الجديدة وتأكيدها غير متطابقتين',
+        },
       ]);
       if (ok) toast('تغيير كلمة المرور تجريبي — لا تغيير فعلي لكلمة مرورك');
     });
   }
 
   /* ── Security: session end buttons ──────────────────────────────────── */
-  document.querySelectorAll('#section-security .btn-danger[data-toast]').forEach(function(btn){
-    btn.addEventListener('click', function(){ toast(btn.getAttribute('data-toast'), 'info'); });
+  document.querySelectorAll('#section-security .btn-danger[data-toast]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      toast(btn.getAttribute('data-toast'), 'info');
+    });
   });
 
   /* ── Security: API key button ────────────────────────────────────────── */
-  document.querySelectorAll('#section-security .btn-outline[data-toast]').forEach(function(btn){
-    btn.addEventListener('click', function(){ toast(btn.getAttribute('data-toast'), 'info'); });
+  document.querySelectorAll('#section-security .btn-outline[data-toast]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      toast(btn.getAttribute('data-toast'), 'info');
+    });
   });
 
   /* ── Security: 2FA toggle ────────────────────────────────────────────── */
-  var toggle2FA   = document.getElementById('toggle-2fa');
-  var status2FA   = document.getElementById('2fa-status-text');
+  var toggle2FA = document.getElementById('toggle-2fa');
+  var status2FA = document.getElementById('2fa-status-text');
   if (toggle2FA) {
-    toggle2FA.addEventListener('change', function(){
+    toggle2FA.addEventListener('change', function () {
       var on = toggle2FA.checked;
       if (status2FA) status2FA.textContent = on ? 'مفعّل (تجريبي)' : 'غير مفعّل';
       toast('المصادقة الثنائية ' + (on ? 'مفعّلة' : 'معطّلة') + ' تجريبياً — لا تغيير فعلي');
@@ -3073,59 +3839,73 @@ function initMerchantSettings() {
   /* ── Plan: upgrade button ────────────────────────────────────────────── */
   var btnUpgrade = document.getElementById('btn-upgrade-plan');
   if (btnUpgrade) {
-    btnUpgrade.addEventListener('click', function(){
+    btnUpgrade.addEventListener('click', function () {
       toast('ترقية الباقة قادمة قريباً — الفوترة غير متاحة في هذه النسخة', 'info');
     });
   }
 
   /* ── Danger Zone modals ─────────────────────────────────────────────── */
   // Deactivate
-  document.querySelectorAll('[data-modal-open="modal-danger-deactivate"]').forEach(function(btn){
-    btn.addEventListener('click', function(){ openModal('modal-danger-deactivate'); });
+  document.querySelectorAll('[data-modal-open="modal-danger-deactivate"]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      openModal('modal-danger-deactivate');
+    });
   });
   var btnConfirmDeactivate = document.getElementById('btn-confirm-deactivate');
-  var deactivateInput      = document.getElementById('deactivate-confirm-input');
+  var deactivateInput = document.getElementById('deactivate-confirm-input');
   if (btnConfirmDeactivate) {
-    btnConfirmDeactivate.addEventListener('click', function(){
+    btnConfirmDeactivate.addEventListener('click', function () {
       var val = deactivateInput ? deactivateInput.value.trim() : '';
-      if (val !== 'تعليق') { toast('اكتب كلمة "تعليق" للتأكيد', 'error'); return; }
+      if (val !== 'تعليق') {
+        toast('اكتب كلمة "تعليق" للتأكيد', 'error');
+        return;
+      }
       closeModal('modal-danger-deactivate');
       toast('تم تعليق النشاط تجريبياً — لا تغيير فعلي في هذه النسخة', 'info');
     });
   }
 
   // Reset
-  document.querySelectorAll('[data-modal-open="modal-danger-reset"]').forEach(function(btn){
-    btn.addEventListener('click', function(){ openModal('modal-danger-reset'); });
+  document.querySelectorAll('[data-modal-open="modal-danger-reset"]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      openModal('modal-danger-reset');
+    });
   });
   var btnConfirmReset = document.getElementById('btn-confirm-reset');
   if (btnConfirmReset) {
-    btnConfirmReset.addEventListener('click', function(){
+    btnConfirmReset.addEventListener('click', function () {
       closeModal('modal-danger-reset');
       toast('تمت إعادة التعيين تجريبياً — يُعيد تحميل الصفحة فقط', 'info');
-      setTimeout(function(){ location.reload(); }, 1500);
+      setTimeout(function () {
+        location.reload();
+      }, 1500);
     });
   }
 
   // Delete
-  document.querySelectorAll('[data-modal-open="modal-danger-delete"]').forEach(function(btn){
-    btn.addEventListener('click', function(){ openModal('modal-danger-delete'); });
+  document.querySelectorAll('[data-modal-open="modal-danger-delete"]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      openModal('modal-danger-delete');
+    });
   });
   var btnConfirmDelete = document.getElementById('btn-confirm-delete');
-  var deleteInput      = document.getElementById('delete-confirm-input');
+  var deleteInput = document.getElementById('delete-confirm-input');
   if (btnConfirmDelete) {
-    btnConfirmDelete.addEventListener('click', function(){
+    btnConfirmDelete.addEventListener('click', function () {
       var val = deleteInput ? deleteInput.value.trim() : '';
-      if (val !== 'حذف') { toast('اكتب كلمة "حذف" للتأكيد', 'error'); return; }
+      if (val !== 'حذف') {
+        toast('اكتب كلمة "حذف" للتأكيد', 'error');
+        return;
+      }
       closeModal('modal-danger-delete');
       toast('تم تنفيذ الحذف تجريبياً — لا يحذف أي بيانات فعلية في هذه النسخة', 'info');
     });
   }
 
   /* ── data-modal-open (generic fallback for any unhandled triggers) ───── */
-  document.querySelectorAll('[data-modal-open]').forEach(function(btn){
+  document.querySelectorAll('[data-modal-open]').forEach(function (btn) {
     if (btn._settingsHandled) return;
-    btn.addEventListener('click', function(){
+    btn.addEventListener('click', function () {
       openModal(btn.getAttribute('data-modal-open'));
     });
   });

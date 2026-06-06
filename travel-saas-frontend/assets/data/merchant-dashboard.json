@@ -97,8 +97,8 @@
   ],
   "analytics": {
     "bookingInquiriesOverTime": [
-      { "label": "السبت",  "value": 3 },
-      { "label": "الأحد",  "value": 5 },
+      { "label": "السبت", "value": 3 },
+      { "label": "الأحد", "value": 5 },
       { "label": "الإثنين", "value": 4 },
       { "label": "الثلاثاء", "value": 8 },
       { "label": "الأربعاء", "value": 6 },
@@ -114,28 +114,28 @@
     "couponCopies": [
       { "label": "يناير", "value": 60 },
       { "label": "فبراير", "value": 75 },
-      { "label": "مارس",  "value": 92 },
+      { "label": "مارس", "value": 92 },
       { "label": "أبريل", "value": 85 },
-      { "label": "مايو",  "value": 110 },
+      { "label": "مايو", "value": 110 },
       { "label": "يونيو", "value": 130 }
     ],
     "topDestinations": [
-      { "label": "إسطنبول، تركيا",  "value": 28 },
-      { "label": "دبي، الإمارات",    "value": 22 },
+      { "label": "إسطنبول، تركيا", "value": 28 },
+      { "label": "دبي، الإمارات", "value": 22 },
       { "label": "شرم الشيخ، مصر", "value": 18 },
-      { "label": "باريس، فرنسا",    "value": 14 },
+      { "label": "باريس، فرنسا", "value": 14 },
       { "label": "بانكوك، تايلاند", "value": 10 }
     ],
     "trafficSources": [
-      { "label": "البحث المجاني",  "value": 42 },
+      { "label": "البحث المجاني", "value": 42 },
       { "label": "وسائل التواصل", "value": 31 },
-      { "label": "الإحالات",       "value": 17 },
-      { "label": "مباشر",          "value": 10 }
+      { "label": "الإحالات", "value": 17 },
+      { "label": "مباشر", "value": 10 }
     ],
     "deviceBreakdown": [
-      { "label": "جوال",   "value": 58 },
+      { "label": "جوال", "value": 58 },
       { "label": "سطح مكتب", "value": 34 },
-      { "label": "تابلت",  "value": 8 }
+      { "label": "تابلت", "value": 8 }
     ]
   },
   "alerts": [

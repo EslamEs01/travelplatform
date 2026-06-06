@@ -146,39 +146,214 @@
   },
   "tables": {
     "topCompanies": [
-      { "company": "co-011", "companyName": "أمل السياحة والحج والعمرة", "plan": "Enterprise", "bookingRequests": 2100, "dealsCount": 189, "mrrContribution": 349 },
-      { "company": "co-002", "companyName": "هلا للسياحة والسفر", "plan": "Enterprise", "bookingRequests": 1840, "dealsCount": 214, "mrrContribution": 349 },
-      { "company": "co-001", "companyName": "نخيل السفر", "plan": "Pro", "bookingRequests": 412, "dealsCount": 87, "mrrContribution": 149 },
-      { "company": "co-005", "companyName": "رواق السفر والسياحة", "plan": "Pro", "bookingRequests": 358, "dealsCount": 76, "mrrContribution": 149 },
-      { "company": "co-007", "companyName": "رياح الشرق للسياحة", "plan": "Pro", "bookingRequests": 290, "dealsCount": 62, "mrrContribution": 149 }
+      {
+        "company": "co-011",
+        "companyName": "أمل السياحة والحج والعمرة",
+        "plan": "Enterprise",
+        "bookingRequests": 2100,
+        "dealsCount": 189,
+        "mrrContribution": 349
+      },
+      {
+        "company": "co-002",
+        "companyName": "هلا للسياحة والسفر",
+        "plan": "Enterprise",
+        "bookingRequests": 1840,
+        "dealsCount": 214,
+        "mrrContribution": 349
+      },
+      {
+        "company": "co-001",
+        "companyName": "نخيل السفر",
+        "plan": "Pro",
+        "bookingRequests": 412,
+        "dealsCount": 87,
+        "mrrContribution": 149
+      },
+      {
+        "company": "co-005",
+        "companyName": "رواق السفر والسياحة",
+        "plan": "Pro",
+        "bookingRequests": 358,
+        "dealsCount": 76,
+        "mrrContribution": 149
+      },
+      {
+        "company": "co-007",
+        "companyName": "رياح الشرق للسياحة",
+        "plan": "Pro",
+        "bookingRequests": 290,
+        "dealsCount": 62,
+        "mrrContribution": 149
+      }
     ],
     "topDestinations": [
-      { "destination": "dest-dubai", "label": "دبي", "dealsCount": 54, "relatedArticles": 3, "avgPriceFrom": 3200 },
-      { "destination": "dest-istanbul", "label": "إسطنبول", "dealsCount": 38, "relatedArticles": 2, "avgPriceFrom": 2450 },
-      { "destination": "dest-maldives", "label": "المالديف", "dealsCount": 24, "relatedArticles": 1, "avgPriceFrom": 8500 },
-      { "destination": "dest-paris", "label": "باريس", "dealsCount": 19, "relatedArticles": 1, "avgPriceFrom": 4200 },
-      { "destination": "dest-london", "label": "لندن", "dealsCount": 16, "relatedArticles": 1, "avgPriceFrom": 3800 }
+      {
+        "destination": "dest-dubai",
+        "label": "دبي",
+        "dealsCount": 54,
+        "relatedArticles": 3,
+        "avgPriceFrom": 3200
+      },
+      {
+        "destination": "dest-istanbul",
+        "label": "إسطنبول",
+        "dealsCount": 38,
+        "relatedArticles": 2,
+        "avgPriceFrom": 2450
+      },
+      {
+        "destination": "dest-maldives",
+        "label": "المالديف",
+        "dealsCount": 24,
+        "relatedArticles": 1,
+        "avgPriceFrom": 8500
+      },
+      {
+        "destination": "dest-paris",
+        "label": "باريس",
+        "dealsCount": 19,
+        "relatedArticles": 1,
+        "avgPriceFrom": 4200
+      },
+      {
+        "destination": "dest-london",
+        "label": "لندن",
+        "dealsCount": 16,
+        "relatedArticles": 1,
+        "avgPriceFrom": 3800
+      }
     ],
     "topDeals": [
-      { "deal": "deal-003", "title": "باقة دبي الفاخرة 5 ليالٍ", "destination": "دبي", "clicks": 4210, "inquiries": 312, "company": "co-001" },
-      { "deal": "deal-009", "title": "باقة عمرة 2026 شاملة", "destination": "مكة المكرمة", "clicks": 3890, "inquiries": 287, "company": "co-011" },
-      { "deal": "deal-002", "title": "رحلة إلى إسطنبول 5 ليالٍ", "destination": "إسطنبول", "clicks": 3240, "inquiries": 241, "company": "co-003" },
-      { "deal": "deal-006", "title": "جنة المالديف 7 ليالٍ", "destination": "المالديف", "clicks": 2760, "inquiries": 198, "company": "co-006" },
-      { "deal": "deal-007", "title": "باريس رومانسية 6 ليالٍ", "destination": "باريس", "clicks": 2140, "inquiries": 167, "company": "co-007" }
+      {
+        "deal": "deal-003",
+        "title": "باقة دبي الفاخرة 5 ليالٍ",
+        "destination": "دبي",
+        "clicks": 4210,
+        "inquiries": 312,
+        "company": "co-001"
+      },
+      {
+        "deal": "deal-009",
+        "title": "باقة عمرة 2026 شاملة",
+        "destination": "مكة المكرمة",
+        "clicks": 3890,
+        "inquiries": 287,
+        "company": "co-011"
+      },
+      {
+        "deal": "deal-002",
+        "title": "رحلة إلى إسطنبول 5 ليالٍ",
+        "destination": "إسطنبول",
+        "clicks": 3240,
+        "inquiries": 241,
+        "company": "co-003"
+      },
+      {
+        "deal": "deal-006",
+        "title": "جنة المالديف 7 ليالٍ",
+        "destination": "المالديف",
+        "clicks": 2760,
+        "inquiries": 198,
+        "company": "co-006"
+      },
+      {
+        "deal": "deal-007",
+        "title": "باريس رومانسية 6 ليالٍ",
+        "destination": "باريس",
+        "clicks": 2140,
+        "inquiries": 167,
+        "company": "co-007"
+      }
     ],
     "integrationErrors": [
-      { "integration": "duffel-api", "integrationName": "Duffel API", "company": "co-002", "issue": "انقطاع كامل في الخدمة", "severity": "critical", "since": "2026-06-05T07:15:00Z" },
-      { "integration": "duffel-api", "integrationName": "Duffel API", "company": "co-011", "issue": "فشل كل محاولات الاتصال", "severity": "critical", "since": "2026-06-05T07:15:00Z" },
-      { "integration": "scraping-review-queue", "integrationName": "Scraping Review Queue", "company": "co-009", "issue": "تراكم 47 عرضاً بانتظار المراجعة", "severity": "warning", "since": "2026-06-04T08:00:00Z" },
-      { "integration": "coupon-api", "integrationName": "Coupon API", "company": "co-003", "issue": "بطء في التحقق من الكوبونات", "severity": "warning", "since": "2026-06-05T06:00:00Z" },
-      { "integration": "scraping-review-queue", "integrationName": "Scraping Review Queue", "company": "co-011", "issue": "فشل استخراج بيانات عروض العمرة", "severity": "warning", "since": "2026-06-04T14:00:00Z" }
+      {
+        "integration": "duffel-api",
+        "integrationName": "Duffel API",
+        "company": "co-002",
+        "issue": "انقطاع كامل في الخدمة",
+        "severity": "critical",
+        "since": "2026-06-05T07:15:00Z"
+      },
+      {
+        "integration": "duffel-api",
+        "integrationName": "Duffel API",
+        "company": "co-011",
+        "issue": "فشل كل محاولات الاتصال",
+        "severity": "critical",
+        "since": "2026-06-05T07:15:00Z"
+      },
+      {
+        "integration": "scraping-review-queue",
+        "integrationName": "Scraping Review Queue",
+        "company": "co-009",
+        "issue": "تراكم 47 عرضاً بانتظار المراجعة",
+        "severity": "warning",
+        "since": "2026-06-04T08:00:00Z"
+      },
+      {
+        "integration": "coupon-api",
+        "integrationName": "Coupon API",
+        "company": "co-003",
+        "issue": "بطء في التحقق من الكوبونات",
+        "severity": "warning",
+        "since": "2026-06-05T06:00:00Z"
+      },
+      {
+        "integration": "scraping-review-queue",
+        "integrationName": "Scraping Review Queue",
+        "company": "co-011",
+        "issue": "فشل استخراج بيانات عروض العمرة",
+        "severity": "warning",
+        "since": "2026-06-04T14:00:00Z"
+      }
     ],
     "highRiskSubscriptions": [
-      { "subscription": "sub-006", "company": "co-006", "companyName": "أجنحة للسفر والأعمال", "plan": "Growth", "status": "Past Due", "amount": 79, "daysOverdue": 5 },
-      { "subscription": "sub-009", "company": "co-009", "companyName": "قوافل السياحة والترفيه", "plan": "Pro", "status": "Expiring Soon", "amount": 149, "daysUntilExpiry": 7 },
-      { "subscription": "sub-012", "company": "co-012", "companyName": "سماء السفر", "plan": "Pro", "status": "Manual Review", "amount": 149, "daysOverdue": 0 },
-      { "subscription": "sub-004", "company": "co-004", "companyName": "مسافر للسياحة", "plan": "Starter", "status": "Trial", "amount": 0, "trialDaysLeft": 14 },
-      { "subscription": "sub-003", "company": "co-003", "companyName": "الوفاء لتنظيم الرحلات", "plan": "Growth", "status": "Active — Near Limits", "amount": 79, "daysOverdue": 0 }
+      {
+        "subscription": "sub-006",
+        "company": "co-006",
+        "companyName": "أجنحة للسفر والأعمال",
+        "plan": "Growth",
+        "status": "Past Due",
+        "amount": 79,
+        "daysOverdue": 5
+      },
+      {
+        "subscription": "sub-009",
+        "company": "co-009",
+        "companyName": "قوافل السياحة والترفيه",
+        "plan": "Pro",
+        "status": "Expiring Soon",
+        "amount": 149,
+        "daysUntilExpiry": 7
+      },
+      {
+        "subscription": "sub-012",
+        "company": "co-012",
+        "companyName": "سماء السفر",
+        "plan": "Pro",
+        "status": "Manual Review",
+        "amount": 149,
+        "daysOverdue": 0
+      },
+      {
+        "subscription": "sub-004",
+        "company": "co-004",
+        "companyName": "مسافر للسياحة",
+        "plan": "Starter",
+        "status": "Trial",
+        "amount": 0,
+        "trialDaysLeft": 14
+      },
+      {
+        "subscription": "sub-003",
+        "company": "co-003",
+        "companyName": "الوفاء لتنظيم الرحلات",
+        "plan": "Growth",
+        "status": "Active — Near Limits",
+        "amount": 79,
+        "daysOverdue": 0
+      }
     ]
   },
   "recommendations": [

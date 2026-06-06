@@ -31,11 +31,11 @@ npm run audit:a11y  # axe-core → pages/index.html
 
 ## Pages
 
-| File | Purpose | Audience |
-|------|---------|----------|
-| `pages/index.html` | Homepage — Arabic-RTL MVP | Public |
-| `pages/styleguide.html` | Design-token foundations reference | Dev / QA only |
-| `pages/components.html` | Component & interaction showcase *(Phase 5)* | Dev / QA only |
+| File                    | Purpose                                      | Audience      |
+| ----------------------- | -------------------------------------------- | ------------- |
+| `pages/index.html`      | Homepage — Arabic-RTL MVP                    | Public        |
+| `pages/styleguide.html` | Design-token foundations reference           | Dev / QA only |
+| `pages/components.html` | Component & interaction showcase _(Phase 5)_ | Dev / QA only |
 
 ---
 
@@ -84,29 +84,29 @@ All tokens are defined in `tailwind.config.js → theme.extend` and as CSS custo
 
 #### Lagoon (primary — trust + travel)
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `lagoon-50` | `#ECFBFB` | Tint backgrounds |
-| `lagoon-100` | `#D0F4F4` | Subtle fills |
-| `lagoon-200` | `#A4E9EA` | Hover fills |
-| `lagoon-300` | `#6FD7D9` | Borders / illustration |
-| `lagoon-400` | `#38BCC0` | Gradients |
-| `lagoon-500` | `#16A0A5` | Brand base |
+| Token        | Hex       | Usage                                     |
+| ------------ | --------- | ----------------------------------------- |
+| `lagoon-50`  | `#ECFBFB` | Tint backgrounds                          |
+| `lagoon-100` | `#D0F4F4` | Subtle fills                              |
+| `lagoon-200` | `#A4E9EA` | Hover fills                               |
+| `lagoon-300` | `#6FD7D9` | Borders / illustration                    |
+| `lagoon-400` | `#38BCC0` | Gradients                                 |
+| `lagoon-500` | `#16A0A5` | Brand base                                |
 | `lagoon-600` | `#0E8186` | **Primary buttons / links (AA on white)** |
-| `lagoon-700` | `#0E686C` | Hover / pressed |
-| `lagoon-800` | `#115457` | Headings on light |
-| `lagoon-900` | `#11464A` | Deep surfaces |
-| `lagoon-950` | `#042B2E` | Hero / footer base |
+| `lagoon-700` | `#0E686C` | Hover / pressed                           |
+| `lagoon-800` | `#115457` | Headings on light                         |
+| `lagoon-900` | `#11464A` | Deep surfaces                             |
+| `lagoon-950` | `#042B2E` | Hero / footer base                        |
 
 #### Sunset (accent — premium highlight)
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `sunset-100` | `#FCEBC8` | Badge fills |
-| `sunset-300` | `#F4BE52` | Star / highlight |
-| `sunset-500` | `#E08D12` | Accent base |
+| Token        | Hex       | Usage                               |
+| ------------ | --------- | ----------------------------------- |
+| `sunset-100` | `#FCEBC8` | Badge fills                         |
+| `sunset-300` | `#F4BE52` | Star / highlight                    |
+| `sunset-500` | `#E08D12` | Accent base                         |
 | `sunset-600` | `#C26C0B` | **Accent text / CTA (AA on white)** |
-| `sunset-700` | `#A14E0D` | Hover |
+| `sunset-700` | `#A14E0D` | Hover                               |
 
 #### Ink (neutrals)
 
@@ -114,12 +114,12 @@ All tokens are defined in `tailwind.config.js → theme.extend` and as CSS custo
 
 #### Semantic
 
-| Token | Hex | Text on |
-|-------|-----|---------|
-| `success` | `#1F9D57` | white |
+| Token     | Hex       | Text on   |
+| --------- | --------- | --------- |
+| `success` | `#1F9D57` | white     |
 | `warning` | `#E0A53B` | `ink-900` |
-| `danger` | `#D64545` | white |
-| `info` | `#2D74C4` | white |
+| `danger`  | `#D64545` | white     |
+| `info`    | `#2D74C4` | white     |
 
 ### Typography
 
@@ -127,56 +127,56 @@ All tokens are defined in `tailwind.config.js → theme.extend` and as CSS custo
 - **Body leading**: 1.75 (Arabic: 1.8)
 - **Heading leading**: 1.2
 
-| Token | rem | px |
-|-------|-----|----|
-| `text-xs` | 0.75 | 12 |
-| `text-sm` | 0.875 | 14 |
-| `text-base` | 1.0 | 16 |
-| `text-lg` | 1.125 | 18 |
-| `text-xl` | 1.25 | 20 |
-| `text-2xl` | 1.5 | 24 |
-| `text-3xl` | 1.875 | 30 |
-| `text-4xl` | 2.25 | 36 |
-| `text-5xl` | 3.0 | 48 |
+| Token       | rem   | px  |
+| ----------- | ----- | --- |
+| `text-xs`   | 0.75  | 12  |
+| `text-sm`   | 0.875 | 14  |
+| `text-base` | 1.0   | 16  |
+| `text-lg`   | 1.125 | 18  |
+| `text-xl`   | 1.25  | 20  |
+| `text-2xl`  | 1.5   | 24  |
+| `text-3xl`  | 1.875 | 30  |
+| `text-4xl`  | 2.25  | 36  |
+| `text-5xl`  | 3.0   | 48  |
 
 ### Border Radius
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `rounded-sm` | 0.375rem | Small chips |
-| `rounded-md` | 0.5rem | Inputs, small buttons |
-| `rounded-lg` | 0.75rem | **Buttons / inputs** |
-| `rounded-xl` | 1rem | Panels |
-| `rounded-2xl` | 1.5rem | **Cards** |
-| `rounded-full` | 9999px | **Badges / pills** |
+| Token          | Value    | Usage                 |
+| -------------- | -------- | --------------------- |
+| `rounded-sm`   | 0.375rem | Small chips           |
+| `rounded-md`   | 0.5rem   | Inputs, small buttons |
+| `rounded-lg`   | 0.75rem  | **Buttons / inputs**  |
+| `rounded-xl`   | 1rem     | Panels                |
+| `rounded-2xl`  | 1.5rem   | **Cards**             |
+| `rounded-full` | 9999px   | **Badges / pills**    |
 
 ### Shadows
 
-| Class | Usage |
-|-------|-------|
+| Class         | Usage                            |
+| ------------- | -------------------------------- |
 | `shadow-soft` | Subtle hover, secondary elements |
-| `shadow-card` | Card at rest |
-| `shadow-pop` | Card hover, modals |
+| `shadow-card` | Card at rest                     |
+| `shadow-pop`  | Card hover, modals               |
 
 ### Gradients (CSS Custom Properties)
 
-| Variable | Value |
-|----------|-------|
-| `--gradient-brand` | `lagoon-600 → lagoon-400` (135°) |
-| `--gradient-hero` | `lagoon-900 → lagoon-700` (180°) |
+| Variable            | Value                            |
+| ------------------- | -------------------------------- |
+| `--gradient-brand`  | `lagoon-600 → lagoon-400` (135°) |
+| `--gradient-hero`   | `lagoon-900 → lagoon-700` (180°) |
 | `--gradient-accent` | `lagoon-600 → sunset-500` (135°) |
 
 ### Z-Index Stack
 
-| Class | Value | Layer |
-|-------|-------|-------|
-| `z-dropdown` | 1000 | Dropdowns |
-| `z-sticky` | 1020 | Sticky header |
-| `z-drawer-overlay` | 1030 | Drawer scrim |
-| `z-drawer` | 1040 | Drawer panel |
-| `z-modal-overlay` | 1050 | Modal scrim |
-| `z-modal` | 1060 | Modal panel |
-| `z-toast` | 1080 | Toast notifications |
+| Class              | Value | Layer               |
+| ------------------ | ----- | ------------------- |
+| `z-dropdown`       | 1000  | Dropdowns           |
+| `z-sticky`         | 1020  | Sticky header       |
+| `z-drawer-overlay` | 1030  | Drawer scrim        |
+| `z-drawer`         | 1040  | Drawer panel        |
+| `z-modal-overlay`  | 1050  | Modal scrim         |
+| `z-modal`          | 1060  | Modal panel         |
+| `z-toast`          | 1080  | Toast notifications |
 
 ---
 
@@ -185,24 +185,24 @@ All tokens are defined in `tailwind.config.js → theme.extend` and as CSS custo
 All interactions are in `src/js/ui.js`, wired declaratively via `data-*` in `src/js/main.js`.
 
 ```js
-TUI.toast(msg, { type, duration, dismissible })       // info | success | error | warning
-TUI.modal.open(id, { onClose })  /  TUI.modal.close(id)
-TUI.drawer.open(id)  /  TUI.drawer.close(id)  /  TUI.drawer.toggle(id)
-TUI.validateForm(formEl, { rules })                   // → { valid, errors }
-TUI.copyToClipboard(text)                             // → Promise<boolean>
+TUI.toast(msg, { type, duration, dismissible }); // info | success | error | warning
+TUI.modal.open(id, { onClose }) / TUI.modal.close(id);
+TUI.drawer.open(id) / TUI.drawer.close(id) / TUI.drawer.toggle(id);
+TUI.validateForm(formEl, { rules }); // → { valid, errors }
+TUI.copyToClipboard(text); // → Promise<boolean>
 ```
 
-| Attribute | Effect |
-|-----------|--------|
-| `data-coming-soon` | Prevent navigation; show info toast |
-| `data-drawer-open="id"` | Open drawer |
-| `data-drawer-close` | Close nearest drawer |
-| `data-modal-open="id"` | Open modal |
-| `data-modal-close` | Close nearest modal |
-| `data-copy="text"` | Copy text → toast |
-| `data-toast="msg"` + `data-toast-type` | Show toast on click |
-| `data-validate` on `<form>` | Inline validation on submit |
-| `data-year` | Replaced with current year |
+| Attribute                              | Effect                              |
+| -------------------------------------- | ----------------------------------- |
+| `data-coming-soon`                     | Prevent navigation; show info toast |
+| `data-drawer-open="id"`                | Open drawer                         |
+| `data-drawer-close`                    | Close nearest drawer                |
+| `data-modal-open="id"`                 | Open modal                          |
+| `data-modal-close`                     | Close nearest modal                 |
+| `data-copy="text"`                     | Copy text → toast                   |
+| `data-toast="msg"` + `data-toast-type` | Show toast on click                 |
+| `data-validate` on `<form>`            | Inline validation on submit         |
+| `data-year`                            | Replaced with current year          |
 
 ---
 
@@ -230,10 +230,10 @@ grep -RInE "react|vue|angular|bootstrap|jquery|cdn\.tailwindcss|alert\(|confirm\
 
 ## Backend-Readiness (Django mapping)
 
-| Static now | Becomes later |
-|------------|---------------|
-| `partials/head.html` | `{% include "partials/head.html" %}` |
-| `partials/header.html` | `{% include "partials/header.html" %}` |
-| `partials/footer.html` | `{% include "partials/footer.html" %}` |
-| `../assets/...` | `{% static 'assets/...' %}` |
-| Inline mock content | Django template context / template tags |
+| Static now             | Becomes later                           |
+| ---------------------- | --------------------------------------- |
+| `partials/head.html`   | `{% include "partials/head.html" %}`    |
+| `partials/header.html` | `{% include "partials/header.html" %}`  |
+| `partials/footer.html` | `{% include "partials/footer.html" %}`  |
+| `../assets/...`        | `{% static 'assets/...' %}`             |
+| Inline mock content    | Django template context / template tags |

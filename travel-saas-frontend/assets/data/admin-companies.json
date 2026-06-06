@@ -15,7 +15,12 @@
     "couponsCount": 41,
     "bookingRequests": 412,
     "customersCount": 876,
-    "integrationsEnabled": ["travelpayouts", "booking-affiliate", "email-notifications", "whatsapp"],
+    "integrationsEnabled": [
+      "travelpayouts",
+      "booking-affiliate",
+      "email-notifications",
+      "whatsapp"
+    ],
     "lastActive": "2026-06-04T18:32:00Z",
     "trialEndsAt": null,
     "monthlyRevenueMock": 149,
@@ -30,12 +35,33 @@
       "contentPages": { "used": 16, "limit": 20 }
     },
     "recentActivity": [
-      { "type": "deal_created", "text": "أضاف عرضاً جديداً: باقة دبي الفاخرة 5 ليالٍ", "ref": "deal-003", "time": "2026-06-04T14:10:00Z" },
-      { "type": "coupon_updated", "text": "حدّث كوبون: خصم 30% على العروض الفاخرة", "ref": "coupon-luxury-30", "time": "2026-06-03T09:45:00Z" },
-      { "type": "integration_connected", "text": "ربط تكامل WhatsApp بنجاح", "ref": "whatsapp", "time": "2026-06-02T11:20:00Z" }
+      {
+        "type": "deal_created",
+        "text": "أضاف عرضاً جديداً: باقة دبي الفاخرة 5 ليالٍ",
+        "ref": "deal-003",
+        "time": "2026-06-04T14:10:00Z"
+      },
+      {
+        "type": "coupon_updated",
+        "text": "حدّث كوبون: خصم 30% على العروض الفاخرة",
+        "ref": "coupon-luxury-30",
+        "time": "2026-06-03T09:45:00Z"
+      },
+      {
+        "type": "integration_connected",
+        "text": "ربط تكامل WhatsApp بنجاح",
+        "ref": "whatsapp",
+        "time": "2026-06-02T11:20:00Z"
+      }
     ],
     "adminNotes": [
-      { "text": "عميل مميز — يسأل دوريًا عن ترقية للباقة Enterprise", "type": "info", "author": "أحمد الإداري", "followUpAt": "2026-07-01", "createdAt": "2026-05-20T10:00:00Z" }
+      {
+        "text": "عميل مميز — يسأل دوريًا عن ترقية للباقة Enterprise",
+        "type": "info",
+        "author": "أحمد الإداري",
+        "followUpAt": "2026-07-01",
+        "createdAt": "2026-05-20T10:00:00Z"
+      }
     ]
   },
   {
@@ -54,7 +80,16 @@
     "couponsCount": 98,
     "bookingRequests": 1840,
     "customersCount": 4200,
-    "integrationsEnabled": ["travelpayouts", "booking-affiliate", "coupon-api", "email-notifications", "whatsapp", "amadeus-api", "duffel-api", "scraping-review-queue"],
+    "integrationsEnabled": [
+      "travelpayouts",
+      "booking-affiliate",
+      "coupon-api",
+      "email-notifications",
+      "whatsapp",
+      "amadeus-api",
+      "duffel-api",
+      "scraping-review-queue"
+    ],
     "lastActive": "2026-06-05T08:15:00Z",
     "trialEndsAt": null,
     "monthlyRevenueMock": 349,
@@ -69,12 +104,33 @@
       "contentPages": { "used": 47, "limit": -1 }
     },
     "recentActivity": [
-      { "type": "deal_created", "text": "أضاف 12 عرضاً جديداً عبر واجهة برمجة Amadeus", "ref": "deal-002", "time": "2026-06-05T07:00:00Z" },
-      { "type": "customer_milestone", "text": "تجاوزت قاعدة العملاء 4000 عميل", "ref": null, "time": "2026-06-04T16:00:00Z" },
-      { "type": "analytics_export", "text": "صدّرت تقرير التحليلات الشهري", "ref": null, "time": "2026-06-03T12:00:00Z" }
+      {
+        "type": "deal_created",
+        "text": "أضاف 12 عرضاً جديداً عبر واجهة برمجة Amadeus",
+        "ref": "deal-002",
+        "time": "2026-06-05T07:00:00Z"
+      },
+      {
+        "type": "customer_milestone",
+        "text": "تجاوزت قاعدة العملاء 4000 عميل",
+        "ref": null,
+        "time": "2026-06-04T16:00:00Z"
+      },
+      {
+        "type": "analytics_export",
+        "text": "صدّرت تقرير التحليلات الشهري",
+        "ref": null,
+        "time": "2026-06-03T12:00:00Z"
+      }
     ],
     "adminNotes": [
-      { "text": "شريك استراتيجي — تطلب دومًا دعمًا مخصصًا وأولوية في قائمة الانتظار", "type": "info", "author": "ليلى الإدارة", "followUpAt": "2026-06-15", "createdAt": "2026-04-10T09:00:00Z" }
+      {
+        "text": "شريك استراتيجي — تطلب دومًا دعمًا مخصصًا وأولوية في قائمة الانتظار",
+        "type": "info",
+        "author": "ليلى الإدارة",
+        "followUpAt": "2026-06-15",
+        "createdAt": "2026-04-10T09:00:00Z"
+      }
     ]
   },
   {
@@ -108,11 +164,27 @@
       "contentPages": { "used": 12, "limit": 15 }
     },
     "recentActivity": [
-      { "type": "coupon_created", "text": "أنشأ كوبون رمضان: خصم 40%", "ref": "coupon-ramadan-40", "time": "2026-06-01T11:30:00Z" },
-      { "type": "deal_updated", "text": "حدّث عرض إسطنبول 5 ليالٍ", "ref": "deal-002", "time": "2026-05-30T14:00:00Z" }
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون رمضان: خصم 40%",
+        "ref": "coupon-ramadan-40",
+        "time": "2026-06-01T11:30:00Z"
+      },
+      {
+        "type": "deal_updated",
+        "text": "حدّث عرض إسطنبول 5 ليالٍ",
+        "ref": "deal-002",
+        "time": "2026-05-30T14:00:00Z"
+      }
     ],
     "adminNotes": [
-      { "text": "يقترب من حد العملاء — يُنصح بعرض الترقية لباقة Pro", "type": "warning", "author": "أحمد الإداري", "followUpAt": "2026-06-20", "createdAt": "2026-06-01T08:00:00Z" }
+      {
+        "text": "يقترب من حد العملاء — يُنصح بعرض الترقية لباقة Pro",
+        "type": "warning",
+        "author": "أحمد الإداري",
+        "followUpAt": "2026-06-20",
+        "createdAt": "2026-06-01T08:00:00Z"
+      }
     ]
   },
   {
@@ -146,11 +218,27 @@
       "contentPages": { "used": 2, "limit": 10 }
     },
     "recentActivity": [
-      { "type": "account_created", "text": "أنشأ حساب الشركة وبدأ فترة التجربة", "ref": null, "time": "2026-06-05T10:00:00Z" },
-      { "type": "deal_created", "text": "أضاف أول عرض: رحلة عمّان–إسطنبول", "ref": "deal-002", "time": "2026-06-04T09:00:00Z" }
+      {
+        "type": "account_created",
+        "text": "أنشأ حساب الشركة وبدأ فترة التجربة",
+        "ref": null,
+        "time": "2026-06-05T10:00:00Z"
+      },
+      {
+        "type": "deal_created",
+        "text": "أضاف أول عرض: رحلة عمّان–إسطنبول",
+        "ref": "deal-002",
+        "time": "2026-06-04T09:00:00Z"
+      }
     ],
     "adminNotes": [
-      { "text": "شركة ناشئة واعدة — تابع نهاية التجربة المجانية وعرض الترقية", "type": "info", "author": "ليلى الإدارة", "followUpAt": "2026-06-18", "createdAt": "2026-06-05T10:00:00Z" }
+      {
+        "text": "شركة ناشئة واعدة — تابع نهاية التجربة المجانية وعرض الترقية",
+        "type": "info",
+        "author": "ليلى الإدارة",
+        "followUpAt": "2026-06-18",
+        "createdAt": "2026-06-05T10:00:00Z"
+      }
     ]
   },
   {
@@ -184,8 +272,18 @@
       "contentPages": { "used": 14, "limit": 20 }
     },
     "recentActivity": [
-      { "type": "deal_created", "text": "أضاف عرض باقة عمرة 2026", "ref": "deal-009", "time": "2026-06-04T10:00:00Z" },
-      { "type": "coupon_created", "text": "أنشأ كوبون صيف 2026: خصم 25%", "ref": "coupon-summer-25", "time": "2026-06-02T08:00:00Z" }
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض باقة عمرة 2026",
+        "ref": "deal-009",
+        "time": "2026-06-04T10:00:00Z"
+      },
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون صيف 2026: خصم 25%",
+        "ref": "coupon-summer-25",
+        "time": "2026-06-02T08:00:00Z"
+      }
     ],
     "adminNotes": []
   },
@@ -220,11 +318,27 @@
       "contentPages": { "used": 8, "limit": 15 }
     },
     "recentActivity": [
-      { "type": "payment_failed", "text": "فشل سداد اشتراك يونيو 2026", "ref": null, "time": "2026-06-01T00:00:00Z" },
-      { "type": "deal_updated", "text": "حدّث عرض المالديف 7 ليالٍ", "ref": "deal-006", "time": "2026-05-27T14:00:00Z" }
+      {
+        "type": "payment_failed",
+        "text": "فشل سداد اشتراك يونيو 2026",
+        "ref": null,
+        "time": "2026-06-01T00:00:00Z"
+      },
+      {
+        "type": "deal_updated",
+        "text": "حدّث عرض المالديف 7 ليالٍ",
+        "ref": "deal-006",
+        "time": "2026-05-27T14:00:00Z"
+      }
     ],
     "adminNotes": [
-      { "text": "الدفع متأخر منذ يونيو — تواصل مع المالك وأبلغ بالانقطاع إن لم يُسدَّد خلال 7 أيام", "type": "warning", "author": "أحمد الإداري", "followUpAt": "2026-06-08", "createdAt": "2026-06-01T09:00:00Z" }
+      {
+        "text": "الدفع متأخر منذ يونيو — تواصل مع المالك وأبلغ بالانقطاع إن لم يُسدَّد خلال 7 أيام",
+        "type": "warning",
+        "author": "أحمد الإداري",
+        "followUpAt": "2026-06-08",
+        "createdAt": "2026-06-01T09:00:00Z"
+      }
     ]
   },
   {
@@ -258,8 +372,18 @@
       "contentPages": { "used": 11, "limit": 20 }
     },
     "recentActivity": [
-      { "type": "deal_created", "text": "أضاف عرض رحلة باريس 6 ليالٍ", "ref": "deal-007", "time": "2026-06-03T16:00:00Z" },
-      { "type": "coupon_created", "text": "أنشأ كوبون مستخدم جديد: خصم 50 ر.س", "ref": "coupon-new-user-50", "time": "2026-06-02T14:00:00Z" }
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض رحلة باريس 6 ليالٍ",
+        "ref": "deal-007",
+        "time": "2026-06-03T16:00:00Z"
+      },
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون مستخدم جديد: خصم 50 ر.س",
+        "ref": "coupon-new-user-50",
+        "time": "2026-06-02T14:00:00Z"
+      }
     ],
     "adminNotes": []
   },
@@ -294,11 +418,27 @@
       "contentPages": { "used": 6, "limit": 10 }
     },
     "recentActivity": [
-      { "type": "deal_created", "text": "أضاف عرض رحلة لندن 5 ليالٍ", "ref": "deal-008", "time": "2026-06-03T10:00:00Z" },
-      { "type": "coupon_created", "text": "أنشأ كوبون الشتاء: خصم 12%", "ref": "coupon-winter-12", "time": "2026-05-31T09:00:00Z" }
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض رحلة لندن 5 ليالٍ",
+        "ref": "deal-008",
+        "time": "2026-06-03T10:00:00Z"
+      },
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون الشتاء: خصم 12%",
+        "ref": "coupon-winter-12",
+        "time": "2026-05-31T09:00:00Z"
+      }
     ],
     "adminNotes": [
-      { "text": "عميلة نشطة على الباقة Starter — قد تستفيد من Growth", "type": "info", "author": "ليلى الإدارة", "followUpAt": "2026-07-10", "createdAt": "2026-05-15T08:00:00Z" }
+      {
+        "text": "عميلة نشطة على الباقة Starter — قد تستفيد من Growth",
+        "type": "info",
+        "author": "ليلى الإدارة",
+        "followUpAt": "2026-07-10",
+        "createdAt": "2026-05-15T08:00:00Z"
+      }
     ]
   },
   {
@@ -332,11 +472,27 @@
       "contentPages": { "used": 9, "limit": 20 }
     },
     "recentActivity": [
-      { "type": "renewal_warning", "text": "الاشتراك ينتهي خلال 7 أيام — لم يُجدَّد بعد", "ref": null, "time": "2026-06-05T00:00:00Z" },
-      { "type": "deal_created", "text": "أضاف عرض باقة بالي الاستوائية", "ref": "deal-010", "time": "2026-06-03T13:00:00Z" }
+      {
+        "type": "renewal_warning",
+        "text": "الاشتراك ينتهي خلال 7 أيام — لم يُجدَّد بعد",
+        "ref": null,
+        "time": "2026-06-05T00:00:00Z"
+      },
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض باقة بالي الاستوائية",
+        "ref": "deal-010",
+        "time": "2026-06-03T13:00:00Z"
+      }
     ],
     "adminNotes": [
-      { "text": "الاشتراك ينتهي 12 يونيو — أرسل تذكير تجديد فوري", "type": "warning", "author": "أحمد الإداري", "followUpAt": "2026-06-07", "createdAt": "2026-06-05T09:00:00Z" }
+      {
+        "text": "الاشتراك ينتهي 12 يونيو — أرسل تذكير تجديد فوري",
+        "type": "warning",
+        "author": "أحمد الإداري",
+        "followUpAt": "2026-06-07",
+        "createdAt": "2026-06-05T09:00:00Z"
+      }
     ]
   },
   {
@@ -370,8 +526,18 @@
       "contentPages": { "used": 11, "limit": 15 }
     },
     "recentActivity": [
-      { "type": "deal_created", "text": "أضاف عرض رحلة روما 4 ليالٍ", "ref": "deal-004", "time": "2026-06-04T15:00:00Z" },
-      { "type": "coupon_created", "text": "أنشأ كوبون الفندق: خصم 20%", "ref": "coupon-hotel-20", "time": "2026-06-02T11:00:00Z" }
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض رحلة روما 4 ليالٍ",
+        "ref": "deal-004",
+        "time": "2026-06-04T15:00:00Z"
+      },
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون الفندق: خصم 20%",
+        "ref": "coupon-hotel-20",
+        "time": "2026-06-02T11:00:00Z"
+      }
     ],
     "adminNotes": []
   },
@@ -391,7 +557,16 @@
     "couponsCount": 74,
     "bookingRequests": 2100,
     "customersCount": 5800,
-    "integrationsEnabled": ["travelpayouts", "booking-affiliate", "coupon-api", "email-notifications", "whatsapp", "amadeus-api", "duffel-api", "scraping-review-queue"],
+    "integrationsEnabled": [
+      "travelpayouts",
+      "booking-affiliate",
+      "coupon-api",
+      "email-notifications",
+      "whatsapp",
+      "amadeus-api",
+      "duffel-api",
+      "scraping-review-queue"
+    ],
     "lastActive": "2026-06-05T09:00:00Z",
     "trialEndsAt": null,
     "monthlyRevenueMock": 349,
@@ -406,12 +581,33 @@
       "contentPages": { "used": 83, "limit": -1 }
     },
     "recentActivity": [
-      { "type": "deal_created", "text": "أضاف 20 عرض عمرة موسم 1447", "ref": "deal-009", "time": "2026-06-05T08:00:00Z" },
-      { "type": "coupon_created", "text": "أنشأ كوبون عمرة 200 ر.س خصم", "ref": "coupon-umrah-200", "time": "2026-06-04T12:00:00Z" },
-      { "type": "customer_milestone", "text": "تجاوزت قاعدة العملاء 5000 عميل", "ref": null, "time": "2026-06-03T10:00:00Z" }
+      {
+        "type": "deal_created",
+        "text": "أضاف 20 عرض عمرة موسم 1447",
+        "ref": "deal-009",
+        "time": "2026-06-05T08:00:00Z"
+      },
+      {
+        "type": "coupon_created",
+        "text": "أنشأ كوبون عمرة 200 ر.س خصم",
+        "ref": "coupon-umrah-200",
+        "time": "2026-06-04T12:00:00Z"
+      },
+      {
+        "type": "customer_milestone",
+        "text": "تجاوزت قاعدة العملاء 5000 عميل",
+        "ref": null,
+        "time": "2026-06-03T10:00:00Z"
+      }
     ],
     "adminNotes": [
-      { "text": "أكبر عميل في قطاع العمرة — يطلب SLA خاص وتقارير مخصصة شهريًا", "type": "info", "author": "ليلى الإدارة", "followUpAt": "2026-07-01", "createdAt": "2026-03-15T10:00:00Z" }
+      {
+        "text": "أكبر عميل في قطاع العمرة — يطلب SLA خاص وتقارير مخصصة شهريًا",
+        "type": "info",
+        "author": "ليلى الإدارة",
+        "followUpAt": "2026-07-01",
+        "createdAt": "2026-03-15T10:00:00Z"
+      }
     ]
   },
   {
@@ -445,11 +641,27 @@
       "contentPages": { "used": 7, "limit": 20 }
     },
     "recentActivity": [
-      { "type": "review_flagged", "text": "تم تفعيل مراجعة يدوية بسبب نشاط غير مألوف", "ref": null, "time": "2026-06-01T08:00:00Z" },
-      { "type": "deal_created", "text": "أضاف عرض رحلة القاهرة–لندن", "ref": "deal-008", "time": "2026-05-29T11:00:00Z" }
+      {
+        "type": "review_flagged",
+        "text": "تم تفعيل مراجعة يدوية بسبب نشاط غير مألوف",
+        "ref": null,
+        "time": "2026-06-01T08:00:00Z"
+      },
+      {
+        "type": "deal_created",
+        "text": "أضاف عرض رحلة القاهرة–لندن",
+        "ref": "deal-008",
+        "time": "2026-05-29T11:00:00Z"
+      }
     ],
     "adminNotes": [
-      { "text": "مراجعة يدوية مفعّلة بسبب ارتفاع مفاجئ في عدد الكوبونات المكررة — انتظر التحقق", "type": "warning", "author": "أحمد الإداري", "followUpAt": "2026-06-07", "createdAt": "2026-06-01T08:00:00Z" }
+      {
+        "text": "مراجعة يدوية مفعّلة بسبب ارتفاع مفاجئ في عدد الكوبونات المكررة — انتظر التحقق",
+        "type": "warning",
+        "author": "أحمد الإداري",
+        "followUpAt": "2026-06-07",
+        "createdAt": "2026-06-01T08:00:00Z"
+      }
     ]
   }
 ]

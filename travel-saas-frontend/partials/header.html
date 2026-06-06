@@ -3,15 +3,31 @@
 <!-- ═══ Top Bar ═══════════════════════════════════════════════════════════════ -->
 <header class="site-header" role="banner">
   <div class="header-inner max-w-7xl mx-auto px-4 md:px-6 flex items-center h-16 gap-4">
-
     <!-- Brand -->
-    <a href="index.html" class="brand flex items-center gap-2 me-auto no-underline" aria-label="رحلاتي – الصفحة الرئيسية">
+    <a
+      href="index.html"
+      class="brand flex items-center gap-2 me-auto no-underline"
+      aria-label="رحلاتي – الصفحة الرئيسية"
+    >
       <span class="brand-mark" aria-hidden="true">
-        <svg width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="32" rx="9" fill="#0E8186"/>
-          <path d="M16 7C11.029 7 7 11.029 7 16s4.029 9 9 9 9-4.029 9-9-4.029-9-9-9z" fill="#38BCC0" opacity="0.35"/>
-          <path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/>
-          <circle cx="16" cy="14" r="3" fill="#0E8186"/>
+        <svg
+          width="34"
+          height="34"
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="32" height="32" rx="9" fill="#0E8186" />
+          <path
+            d="M16 7C11.029 7 7 11.029 7 16s4.029 9 9 9 9-4.029 9-9-4.029-9-9-9z"
+            fill="#38BCC0"
+            opacity="0.35"
+          />
+          <path
+            d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z"
+            fill="white"
+          />
+          <circle cx="16" cy="14" r="3" fill="#0E8186" />
         </svg>
       </span>
       <span class="brand-name text-xl font-bold text-lagoon-700 tracking-tight">رحلاتي</span>
@@ -35,18 +51,24 @@
       aria-disabled="true"
       tabindex="-1"
     >
-      <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-globe"/></svg>
+      <svg class="w-4 h-4" aria-hidden="true">
+        <use href="../assets/icons/sprite.svg#icon-globe" />
+      </svg>
       <span>EN</span>
     </button>
 
     <!-- Desktop CTAs -->
-    <a href="saved-deals.html" class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-ink-600 hover:text-lagoon-700 rounded-lg hover:bg-ink-100 transition-colors" aria-label="المحفوظات وحسابي">
-      <svg class="w-4 h-4" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>
+    <a
+      href="saved-deals.html"
+      class="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-ink-600 hover:text-lagoon-700 rounded-lg hover:bg-ink-100 transition-colors"
+      aria-label="المحفوظات وحسابي"
+    >
+      <svg class="w-4 h-4" aria-hidden="true">
+        <use href="../assets/icons/sprite.svg#icon-star" />
+      </svg>
       <span>حسابي</span>
     </a>
-    <a href="login.html" class="hidden md:flex btn btn-primary btn-sm">
-      تسجيل الدخول
-    </a>
+    <a href="login.html" class="hidden md:flex btn btn-primary btn-sm"> تسجيل الدخول </a>
 
     <!-- Mobile hamburger -->
     <button
@@ -57,9 +79,8 @@
       aria-controls="main-nav"
       data-drawer-open="main-nav"
     >
-      <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-menu"/></svg>
+      <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-menu" /></svg>
     </button>
-
   </div>
 </header>
 
@@ -76,15 +97,17 @@
   <div class="drawer-overlay" data-drawer-close aria-hidden="true"></div>
 
   <nav class="drawer-panel" aria-label="التنقل الرئيسي">
-
     <!-- Drawer header -->
     <div class="flex items-center justify-between p-4 border-b border-ink-100">
       <a href="index.html" class="brand flex items-center gap-2 no-underline">
         <span class="brand-mark" aria-hidden="true">
           <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
-            <rect width="32" height="32" rx="9" fill="#0E8186"/>
-            <path d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z" fill="white"/>
-            <circle cx="16" cy="14" r="3" fill="#0E8186"/>
+            <rect width="32" height="32" rx="9" fill="#0E8186" />
+            <path
+              d="M16 10C12.134 10 9 13.134 9 17c0 1.97.799 3.754 2.09 5.05L16 17l4.91 5.05A7.957 7.957 0 0023 17c0-3.866-3.134-7-7-7z"
+              fill="white"
+            />
+            <circle cx="16" cy="14" r="3" fill="#0E8186" />
           </svg>
         </span>
         <span class="text-lg font-bold text-lagoon-700">رحلاتي</span>
@@ -95,7 +118,7 @@
         aria-label="إغلاق القائمة"
         data-drawer-close
       >
-        <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-close"/></svg>
+        <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-close" /></svg>
       </button>
     </div>
 
@@ -103,37 +126,37 @@
     <ul class="drawer-nav flex-1 p-4 space-y-1" role="list">
       <li>
         <a href="index.html" class="drawer-nav-link drawer-nav-link-active" aria-current="page">
-          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plane"/></svg>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plane" /></svg>
           الرئيسية
         </a>
       </li>
       <li>
         <a href="deals.html" class="drawer-nav-link">
-          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star" /></svg>
           عروض السفر
         </a>
       </li>
       <li>
         <a href="compare.html" class="drawer-nav-link">
-          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search"/></svg>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search" /></svg>
           مقارنة الأسعار
         </a>
       </li>
       <li>
         <a href="coupons.html" class="drawer-nav-link">
-          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check"/></svg>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-shield-check" /></svg>
           كوبونات الخصم
         </a>
       </li>
       <li>
         <a href="destinations.html" class="drawer-nav-link">
-          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location"/></svg>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-location" /></svg>
           الوجهات
         </a>
       </li>
       <li>
         <a href="blog.html" class="drawer-nav-link">
-          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>
+          <svg aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info" /></svg>
           المدونة
         </a>
       </li>
@@ -141,24 +164,23 @@
 
     <!-- Drawer footer CTA -->
     <div class="p-4 border-t border-ink-100 space-y-3">
-      <a href="login.html" class="btn btn-primary w-full justify-center">
-        تسجيل الدخول
-      </a>
-      <a href="register.html" class="btn btn-outline w-full justify-center">
-        إنشاء حساب جديد
-      </a>
+      <a href="login.html" class="btn btn-primary w-full justify-center"> تسجيل الدخول </a>
+      <a href="register.html" class="btn btn-outline w-full justify-center"> إنشاء حساب جديد </a>
       <div class="flex gap-2">
         <a href="saved-deals.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs">
-          <svg class="w-3.5 h-3.5 me-1" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-star"/></svg>
+          <svg class="w-3.5 h-3.5 me-1" aria-hidden="true">
+            <use href="../assets/icons/sprite.svg#icon-star" />
+          </svg>
           المحفوظات
         </a>
         <a href="price-alerts.html" class="btn btn-ghost btn-sm flex-1 justify-center text-xs">
-          <svg class="w-3.5 h-3.5 me-1" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-info"/></svg>
+          <svg class="w-3.5 h-3.5 me-1" aria-hidden="true">
+            <use href="../assets/icons/sprite.svg#icon-info" />
+          </svg>
           التنبيهات
         </a>
       </div>
     </div>
-
   </nav>
 </div>
 
@@ -168,10 +190,10 @@
     position: sticky;
     top: 0;
     z-index: 1020;
-    background: rgba(255,255,255,0.92);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(222,227,234,0.6);
+    border-bottom: 1px solid rgba(222, 227, 234, 0.6);
     box-shadow: 0 1px 3px rgb(38 46 58 / 0.06);
   }
 
@@ -181,13 +203,21 @@
     padding: 0.5rem 0.75rem;
     font-size: 0.9rem;
     font-weight: 500;
-    color: #4D5969;
+    color: #4d5969;
     border-radius: 0.5rem;
     text-decoration: none;
-    transition: color 150ms, background 150ms;
+    transition:
+      color 150ms,
+      background 150ms;
   }
-  .nav-link:hover { color: #0E8186; background: #ECFBFB; }
-  .nav-link-active { color: #0E8186; font-weight: 600; }
+  .nav-link:hover {
+    color: #0e8186;
+    background: #ecfbfb;
+  }
+  .nav-link-active {
+    color: #0e8186;
+    font-weight: 600;
+  }
 
   .drawer-nav-link {
     display: flex;
@@ -196,14 +226,32 @@
     padding: 0.75rem 1rem;
     font-size: 1rem;
     font-weight: 500;
-    color: #3A4453;
+    color: #3a4453;
     border-radius: 0.75rem;
     text-decoration: none;
-    transition: color 150ms, background 150ms;
+    transition:
+      color 150ms,
+      background 150ms;
   }
-  .drawer-nav-link svg { width: 1.25rem; height: 1.25rem; flex: none; color: #9AA6B4; }
-  .drawer-nav-link:hover { color: #0E8186; background: #ECFBFB; }
-  .drawer-nav-link:hover svg { color: #0E8186; }
-  .drawer-nav-link-active { color: #0E8186; background: #ECFBFB; font-weight: 600; }
-  .drawer-nav-link-active svg { color: #0E8186; }
+  .drawer-nav-link svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+    color: #9aa6b4;
+  }
+  .drawer-nav-link:hover {
+    color: #0e8186;
+    background: #ecfbfb;
+  }
+  .drawer-nav-link:hover svg {
+    color: #0e8186;
+  }
+  .drawer-nav-link-active {
+    color: #0e8186;
+    background: #ecfbfb;
+    font-weight: 600;
+  }
+  .drawer-nav-link-active svg {
+    color: #0e8186;
+  }
 </style>

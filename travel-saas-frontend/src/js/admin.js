@@ -24,19 +24,32 @@
     initPrimitives();
 
     switch (page) {
-      case 'admin-overview':        initOverview();       break;
-      case 'admin-companies':       initCompanies();      break;
-      case 'admin-company-details': initCompanyDetails(); break;
-      case 'admin-plans':           initPlans();          break;
-      case 'admin-subscriptions':   initSubscriptions();  break;
-      case 'admin-analytics':       initAnalytics();      break;
-      case 'admin-content':         initContent();        break;
+      case 'admin-overview':
+        initOverview();
+        break;
+      case 'admin-companies':
+        initCompanies();
+        break;
+      case 'admin-company-details':
+        initCompanyDetails();
+        break;
+      case 'admin-plans':
+        initPlans();
+        break;
+      case 'admin-subscriptions':
+        initSubscriptions();
+        break;
+      case 'admin-analytics':
+        initAnalytics();
+        break;
+      case 'admin-content':
+        initContent();
+        break;
     }
   });
 
   /* ─── Shell init (T004) ─────────────────────────────────────────────────── */
   function initShell() {
-
     /* 1. data-year: belt-and-suspenders (main.js also handles this) */
     var year = new Date().getFullYear();
     document.querySelectorAll('[data-year]').forEach(function (el) {
@@ -52,7 +65,7 @@
      */
     function DropdownController(triggerId, panelId, siblings) {
       var trigger = document.getElementById(triggerId);
-      var panel   = document.getElementById(panelId);
+      var panel = document.getElementById(panelId);
       if (!trigger || !panel) return;
 
       var _siblings = siblings || [];
@@ -60,13 +73,15 @@
       var _animTimer = null;
 
       function getFocusableItems() {
-        return Array.prototype.slice.call(
-          panel.querySelectorAll(
-            'a[href], button:not([disabled]), [tabindex="0"], input, select, textarea'
+        return Array.prototype.slice
+          .call(
+            panel.querySelectorAll(
+              'a[href], button:not([disabled]), [tabindex="0"], input, select, textarea'
+            )
           )
-        ).filter(function (el) {
-          return !el.closest('[hidden]') && !el.closest('.hidden');
-        });
+          .filter(function (el) {
+            return !el.closest('[hidden]') && !el.closest('.hidden');
+          });
       }
 
       function open() {
@@ -74,7 +89,9 @@
         _open = true;
 
         /* close siblings first */
-        _siblings.forEach(function (s) { if (s && s !== self) s.close(); });
+        _siblings.forEach(function (s) {
+          if (s && s !== self) s.close();
+        });
 
         panel.classList.remove('hidden');
         trigger.setAttribute('aria-expanded', 'true');
@@ -101,10 +118,16 @@
       }
 
       function toggle() {
-        if (_open) { close(); } else { open(); }
+        if (_open) {
+          close();
+        } else {
+          open();
+        }
       }
 
-      function isOpen() { return _open; }
+      function isOpen() {
+        return _open;
+      }
 
       /* trigger click */
       trigger.addEventListener('click', function (e) {
@@ -156,8 +179,8 @@
 
     /* 3. Instantiate the three topbar dropdowns ─────────────────────────── */
     var ddNotifications = DropdownController('btn-notifications', 'dd-notifications', null);
-    var ddUserMenu      = DropdownController('btn-user-menu',     'dd-user-menu',     null);
-    var ddQuickAction   = DropdownController('btn-quick-action',  'dd-quick-action',  null);
+    var ddUserMenu = DropdownController('btn-user-menu', 'dd-user-menu', null);
+    var ddQuickAction = DropdownController('btn-quick-action', 'dd-quick-action', null);
 
     /* wire one-open-at-a-time by passing each other as siblings */
     var allDropdowns = [ddNotifications, ddUserMenu, ddQuickAction].filter(Boolean);
@@ -169,8 +192,8 @@
     /* Re-wrap each trigger click to close siblings before opening */
     [
       { triggerId: 'btn-notifications', dd: ddNotifications },
-      { triggerId: 'btn-user-menu',     dd: ddUserMenu      },
-      { triggerId: 'btn-quick-action',  dd: ddQuickAction   },
+      { triggerId: 'btn-user-menu', dd: ddUserMenu },
+      { triggerId: 'btn-quick-action', dd: ddQuickAction },
     ].forEach(function (entry) {
       if (!entry.dd) return;
       var btn = document.getElementById(entry.triggerId);
@@ -193,7 +216,7 @@
 
     /* 4. Sidebar drawer ──────────────────────────────────────────────────── */
     var adminSidebar = document.getElementById('admin-sidebar');
-    var adminScrim   = document.getElementById('admin-scrim');
+    var adminScrim = document.getElementById('admin-scrim');
     var adminMenuBtn = document.getElementById('btn-admin-menu');
 
     function openAdminSidebar() {
@@ -203,7 +226,9 @@
       adminSidebar.setAttribute('aria-hidden', 'false');
       if (adminScrim) {
         adminScrim.removeAttribute('hidden');
-        requestAnimationFrame(function () { adminScrim.classList.add('is-active'); });
+        requestAnimationFrame(function () {
+          adminScrim.classList.add('is-active');
+        });
         adminScrim.setAttribute('aria-hidden', 'false');
       }
       document.body.classList.add('admin-sidebar-open');
@@ -256,7 +281,10 @@
     function _onAdminBp(mq) {
       if ((mq.matches || mq) && adminSidebar) {
         adminSidebar.classList.remove('is-open');
-        if (adminScrim) { adminScrim.classList.remove('is-active'); adminScrim.setAttribute('hidden', ''); }
+        if (adminScrim) {
+          adminScrim.classList.remove('is-active');
+          adminScrim.setAttribute('hidden', '');
+        }
         document.body.classList.remove('admin-sidebar-open');
         if (adminMenuBtn) adminMenuBtn.setAttribute('aria-expanded', 'false');
       }
@@ -272,7 +300,6 @@
 
   /* ─── Shared primitives (T005) ──────────────────────────────────────────── */
   function initPrimitives() {
-
     /* 1. _toast ─────────────────────────────────────────────────────────── */
     _P._toast = function (msg, type) {
       if (window.TUI && typeof TUI.toast === 'function') {
@@ -467,16 +494,18 @@
     _P._filterEngine = function (opts) {
       if (!opts || !opts.listEl) return { apply: function () {}, reset: function () {} };
 
-      var listEl      = opts.listEl;
-      var rowSel      = opts.rowSelector || 'tr[data-id], [data-id]';
+      var listEl = opts.listEl;
+      var rowSel = opts.rowSelector || 'tr[data-id], [data-id]';
       var searchInput = opts.searchInputId ? document.getElementById(opts.searchInputId) : null;
-      var filterEls   = (opts.filterIds || []).map(function (id) {
-        return document.getElementById(id);
-      }).filter(Boolean);
-      var sortEl      = opts.sortSelectId ? document.getElementById(opts.sortSelectId) : null;
-      var countEl     = opts.countEl  || null;
-      var chipsEl     = opts.chipsEl  || null;
-      var emptyEl     = opts.emptyEl  || null;
+      var filterEls = (opts.filterIds || [])
+        .map(function (id) {
+          return document.getElementById(id);
+        })
+        .filter(Boolean);
+      var sortEl = opts.sortSelectId ? document.getElementById(opts.sortSelectId) : null;
+      var countEl = opts.countEl || null;
+      var chipsEl = opts.chipsEl || null;
+      var emptyEl = opts.emptyEl || null;
       var segmentBtns = opts.segmentBtns || [];
 
       /* current active filter values: { filterElId: value } */
@@ -489,7 +518,7 @@
       function matchesSearch(row, query) {
         if (!query) return true;
         var q = query.toLowerCase();
-        var name  = (row.dataset.name  || '').toLowerCase();
+        var name = (row.dataset.name || '').toLowerCase();
         var owner = (row.dataset.owner || '').toLowerCase();
         var email = (row.dataset.email || '').toLowerCase();
         return name.indexOf(q) !== -1 || owner.indexOf(q) !== -1 || email.indexOf(q) !== -1;
@@ -509,7 +538,9 @@
       }
 
       function camelCase(str) {
-        return str.replace(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
+        return str.replace(/-([a-z])/g, function (_, c) {
+          return c.toUpperCase();
+        });
       }
 
       function sortRows(rows) {
@@ -542,10 +573,12 @@
 
         var query = searchInput ? searchInput.value.trim() : '';
         if (query) {
-          chipsEl.appendChild(makeChip('بحث: ' + query, function () {
-            searchInput.value = '';
-            apply();
-          }));
+          chipsEl.appendChild(
+            makeChip('بحث: ' + query, function () {
+              searchInput.value = '';
+              apply();
+            })
+          );
         }
 
         filterEls.forEach(function (sel) {
@@ -554,16 +587,19 @@
             ? sel.options[sel.selectedIndex].text
             : sel.value;
           var capturedSel = sel;
-          chipsEl.appendChild(makeChip(label, function () {
-            capturedSel.value = '';
-            apply();
-          }));
+          chipsEl.appendChild(
+            makeChip(label, function () {
+              capturedSel.value = '';
+              apply();
+            })
+          );
         });
       }
 
       function makeChip(label, onRemove) {
         var chip = document.createElement('span');
-        chip.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 text-xs';
+        chip.className =
+          'inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 text-xs';
         chip.textContent = label;
 
         var removeBtn = document.createElement('button');
@@ -581,7 +617,7 @@
 
       function apply() {
         var query = searchInput ? searchInput.value.trim() : '';
-        var rows  = getRows();
+        var rows = getRows();
         var visible = [];
 
         rows.forEach(function (row) {
@@ -596,7 +632,9 @@
           /* find the parent of rows (tbody, ul, etc.) */
           var parent = sorted[0].parentElement;
           if (parent) {
-            sorted.forEach(function (row) { parent.appendChild(row); });
+            sorted.forEach(function (row) {
+              parent.appendChild(row);
+            });
           }
         }
 
@@ -617,7 +655,9 @@
 
       function reset() {
         if (searchInput) searchInput.value = '';
-        filterEls.forEach(function (sel) { sel.value = ''; });
+        filterEls.forEach(function (sel) {
+          sel.value = '';
+        });
         if (sortEl) sortEl.value = '';
         apply();
       }
@@ -647,7 +687,9 @@
                 sel.value = preset[key];
               }
             });
-          } catch (e) { /* malformed preset — ignore */ }
+          } catch (e) {
+            /* malformed preset — ignore */
+          }
           apply();
         });
       });
@@ -702,13 +744,15 @@
     if (btnConfirmSuspend) {
       btnConfirmSuspend.addEventListener('click', function () {
         var nameEl = document.getElementById('suspend-company-name');
-        var name   = nameEl ? nameEl.textContent : '—';
+        var name = nameEl ? nameEl.textContent : '—';
         /* close modal via TUI or manually */
         if (window.TUI && typeof TUI.modal === 'object' && typeof TUI.modal.close === 'function') {
           TUI.modal.close('modal-suspend-company');
         } else {
           var modal = document.getElementById('modal-suspend-company');
-          if (modal) { modal.setAttribute('hidden', ''); }
+          if (modal) {
+            modal.setAttribute('hidden', '');
+          }
         }
         toast('إجراء تجريبي — تم تعليق "' + name + '" (لا يحدث فعليًا)', 'warning');
       });
@@ -740,14 +784,16 @@
     }
 
     /* 5. Checklist toggle + aria-live remaining count ───────────────────── */
-    var checklist       = document.getElementById('overview-checklist');
-    var remainingBadge  = document.getElementById('checklist-remaining');
+    var checklist = document.getElementById('overview-checklist');
+    var remainingBadge = document.getElementById('checklist-remaining');
 
     function updateChecklistCount() {
       if (!checklist || !remainingBadge) return;
-      var items     = checklist.querySelectorAll('input[type="checkbox"]');
+      var items = checklist.querySelectorAll('input[type="checkbox"]');
       var remaining = 0;
-      items.forEach(function (cb) { if (!cb.checked) remaining++; });
+      items.forEach(function (cb) {
+        if (!cb.checked) remaining++;
+      });
       remainingBadge.textContent = remaining + (remaining === 1 ? ' متبقية' : ' متبقية');
       if (remaining === 0) {
         remainingBadge.className = 'admin-badge badge-active';
@@ -787,17 +833,30 @@
     _P._initRowActionMenus(document);
 
     /* ── 2. Filter / Sort / Search engine ────────────────────────────────── */
-    var tbody       = document.getElementById('co-tbody');
+    var tbody = document.getElementById('co-tbody');
     var searchInput = document.getElementById('co-search');
-    var countEl     = document.getElementById('co-count');
-    var chipsEl     = document.getElementById('co-chips');
-    var chipsPh     = document.getElementById('co-chips-ph');
-    var emptyEl     = document.getElementById('co-empty');
-    var resetBtn    = document.getElementById('btn-reset-filters');
-    var emptyReset  = document.getElementById('btn-empty-reset');
+    var countEl = document.getElementById('co-count');
+    var chipsEl = document.getElementById('co-chips');
+    var chipsPh = document.getElementById('co-chips-ph');
+    var emptyEl = document.getElementById('co-empty');
+    var resetBtn = document.getElementById('btn-reset-filters');
+    var emptyReset = document.getElementById('btn-empty-reset');
 
-    var filterIds = ['f-plan','f-sub-status','f-co-status','f-country','f-activity','f-integrations','f-trial','f-payment'];
-    var filterEls = filterIds.map(function (id) { return document.getElementById(id); }).filter(Boolean);
+    var filterIds = [
+      'f-plan',
+      'f-sub-status',
+      'f-co-status',
+      'f-country',
+      'f-activity',
+      'f-integrations',
+      'f-trial',
+      'f-payment',
+    ];
+    var filterEls = filterIds
+      .map(function (id) {
+        return document.getElementById(id);
+      })
+      .filter(Boolean);
 
     var sortBtns = document.querySelectorAll('.co-sort-btn');
     var _currentSort = 'newest';
@@ -818,22 +877,23 @@
 
       /* full-text search across visible cell text */
       if (q) {
-        var nameSp  = row.querySelector('.co-company-name');
+        var nameSp = row.querySelector('.co-company-name');
         var ownerTd = row.querySelector('[data-label="المالك"]');
         var emailTd = row.querySelector('[data-label="البريد الإلكتروني"] span');
-        var nameStr  = nameSp  ? nameSp.textContent.toLowerCase()  : '';
+        var nameStr = nameSp ? nameSp.textContent.toLowerCase() : '';
         var ownerStr = ownerTd ? ownerTd.textContent.toLowerCase() : '';
         var emailStr = emailTd ? emailTd.textContent.toLowerCase() : '';
-        if (nameStr.indexOf(q) === -1 && ownerStr.indexOf(q) === -1 && emailStr.indexOf(q) === -1) return false;
+        if (nameStr.indexOf(q) === -1 && ownerStr.indexOf(q) === -1 && emailStr.indexOf(q) === -1)
+          return false;
       }
 
-      var plan        = row.dataset.plan        || '';
-      var subStatus   = row.dataset.subStatus   || '';
-      var coStatus    = row.dataset.coStatus    || '';
-      var country     = row.dataset.country     || '';
-      var lastActive  = row.dataset.lastActive  || '';
-      var integrations= parseInt(row.dataset.integrations || '0', 10);
-      var trialEnds   = row.dataset.trialEnds   || '';
+      var plan = row.dataset.plan || '';
+      var subStatus = row.dataset.subStatus || '';
+      var coStatus = row.dataset.coStatus || '';
+      var country = row.dataset.country || '';
+      var lastActive = row.dataset.lastActive || '';
+      var integrations = parseInt(row.dataset.integrations || '0', 10);
+      var trialEnds = row.dataset.trialEnds || '';
 
       /* plan */
       var fPlan = document.getElementById('f-plan');
@@ -855,25 +915,27 @@
       var fActivity = document.getElementById('f-activity');
       if (fActivity && fActivity.value && lastActive) {
         var daysSinceActive = -_daysDiff(lastActive);
-        if (fActivity.value === 'today'  && daysSinceActive > 0)  return false;
-        if (fActivity.value === 'week'   && daysSinceActive > 7)  return false;
-        if (fActivity.value === 'month'  && daysSinceActive > 30) return false;
+        if (fActivity.value === 'today' && daysSinceActive > 0) return false;
+        if (fActivity.value === 'week' && daysSinceActive > 7) return false;
+        if (fActivity.value === 'month' && daysSinceActive > 30) return false;
       }
 
       /* integrations */
       var fInt = document.getElementById('f-integrations');
       if (fInt && fInt.value) {
         if (fInt.value === 'has-integrations' && integrations === 0) return false;
-        if (fInt.value === 'no-integrations'  && integrations  >  0) return false;
-        if (fInt.value === 'all-integrations' && integrations !== 8)  return false;
+        if (fInt.value === 'no-integrations' && integrations > 0) return false;
+        if (fInt.value === 'all-integrations' && integrations !== 8) return false;
       }
 
       /* trial ending */
       var fTrial = document.getElementById('f-trial');
       if (fTrial && fTrial.value && trialEnds) {
         var daysUntilTrial = _daysDiff(trialEnds);
-        if (fTrial.value === 'ending-week'  && (daysUntilTrial < 0 || daysUntilTrial > 7))  return false;
-        if (fTrial.value === 'ending-month' && (daysUntilTrial < 0 || daysUntilTrial > 30)) return false;
+        if (fTrial.value === 'ending-week' && (daysUntilTrial < 0 || daysUntilTrial > 7))
+          return false;
+        if (fTrial.value === 'ending-month' && (daysUntilTrial < 0 || daysUntilTrial > 30))
+          return false;
       } else if (fTrial && fTrial.value && !trialEnds) {
         return false;
       }
@@ -881,8 +943,8 @@
       /* payment */
       var fPay = document.getElementById('f-payment');
       if (fPay && fPay.value) {
-        if (fPay.value === 'overdue' && coStatus !== 'past-due')  return false;
-        if (fPay.value === 'paid'    && coStatus === 'past-due')  return false;
+        if (fPay.value === 'overdue' && coStatus !== 'past-due') return false;
+        if (fPay.value === 'paid' && coStatus === 'past-due') return false;
       }
 
       return true;
@@ -896,7 +958,10 @@
           case 'last-active':
             return (b.dataset.lastActive || '').localeCompare(a.dataset.lastActive || '');
           case 'booking-requests':
-            return parseInt(b.dataset.bookingRequests || '0', 10) - parseInt(a.dataset.bookingRequests || '0', 10);
+            return (
+              parseInt(b.dataset.bookingRequests || '0', 10) -
+              parseInt(a.dataset.bookingRequests || '0', 10)
+            );
           case 'mrr':
             return parseInt(b.dataset.mrr || '0', 10) - parseInt(a.dataset.mrr || '0', 10);
           case 'trial-ends': {
@@ -923,20 +988,26 @@
       var q = searchInput ? searchInput.value.trim() : '';
       if (q) {
         any = true;
-        chipsEl.appendChild(_makeChip('بحث: ' + q, function () {
-          searchInput.value = '';
-          applyFilters();
-        }));
+        chipsEl.appendChild(
+          _makeChip('بحث: ' + q, function () {
+            searchInput.value = '';
+            applyFilters();
+          })
+        );
       }
       filterEls.forEach(function (sel) {
         if (!sel || !sel.value) return;
         any = true;
-        var label = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : sel.value;
+        var label = sel.options[sel.selectedIndex]
+          ? sel.options[sel.selectedIndex].text
+          : sel.value;
         var cap = sel;
-        chipsEl.appendChild(_makeChip(label, function () {
-          cap.value = '';
-          applyFilters();
-        }));
+        chipsEl.appendChild(
+          _makeChip(label, function () {
+            cap.value = '';
+            applyFilters();
+          })
+        );
       });
       if (chipsPh) chipsPh.hidden = any;
     }
@@ -969,7 +1040,9 @@
       /* re-order in DOM */
       var ordered = sortedRows(visible);
       if (ordered.length) {
-        ordered.forEach(function (row) { tbody.appendChild(row); });
+        ordered.forEach(function (row) {
+          tbody.appendChild(row);
+        });
       }
 
       /* count */
@@ -984,7 +1057,9 @@
 
     function resetFilters() {
       if (searchInput) searchInput.value = '';
-      filterEls.forEach(function (sel) { if (sel) sel.value = ''; });
+      filterEls.forEach(function (sel) {
+        if (sel) sel.value = '';
+      });
       /* reset sort to default */
       _currentSort = 'newest';
       sortBtns.forEach(function (btn) {
@@ -1006,7 +1081,7 @@
     filterEls.forEach(function (sel) {
       if (sel) sel.addEventListener('change', applyFilters);
     });
-    if (resetBtn)  resetBtn.addEventListener('click',  resetFilters);
+    if (resetBtn) resetBtn.addEventListener('click', resetFilters);
     if (emptyReset) emptyReset.addEventListener('click', resetFilters);
 
     /* Sort buttons */
@@ -1040,11 +1115,13 @@
 
           /* reset filters first, then apply preset */
           if (searchInput) searchInput.value = '';
-          filterEls.forEach(function (sel) { if (sel) sel.value = ''; });
+          filterEls.forEach(function (sel) {
+            if (sel) sel.value = '';
+          });
 
           /* apply segment preset */
           var fSub = document.getElementById('f-sub-status');
-          var fCo  = document.getElementById('f-co-status');
+          var fCo = document.getElementById('f-co-status');
           var fPlan = document.getElementById('f-plan');
           switch (seg) {
             case 'trial-ending':
@@ -1092,9 +1169,9 @@
     applyFilters();
 
     /* ── 4. Select-all + row checkboxes + bulk bar ───────────────────────── */
-    var selectAll    = document.getElementById('co-select-all');
-    var bulkBar      = document.getElementById('co-bulk-bar');
-    var bulkCount    = document.getElementById('co-bulk-count');
+    var selectAll = document.getElementById('co-select-all');
+    var bulkBar = document.getElementById('co-bulk-bar');
+    var bulkCount = document.getElementById('co-bulk-count');
     var selectedLabel = document.getElementById('co-selected-label');
 
     function getVisibleCheckboxes() {
@@ -1115,7 +1192,7 @@
       var checked = getCheckedCheckboxes();
       var n = checked.length;
       if (bulkCount) bulkCount.textContent = n;
-      if (bulkBar)   bulkBar.style.display  = n > 0 ? 'flex' : 'none';
+      if (bulkBar) bulkBar.style.display = n > 0 ? 'flex' : 'none';
       if (selectedLabel) {
         selectedLabel.hidden = n === 0;
         selectedLabel.textContent = n + ' شركات محددة';
@@ -1123,7 +1200,7 @@
       /* update select-all indeterminate state */
       if (selectAll) {
         var total = getVisibleCheckboxes().length;
-        selectAll.checked       = total > 0 && n === total;
+        selectAll.checked = total > 0 && n === total;
         selectAll.indeterminate = n > 0 && n < total;
       }
       /* update bulk-suspend confirm count */
@@ -1134,7 +1211,9 @@
     if (selectAll) {
       selectAll.addEventListener('change', function () {
         var cbs = getVisibleCheckboxes();
-        cbs.forEach(function (cb) { cb.checked = selectAll.checked; });
+        cbs.forEach(function (cb) {
+          cb.checked = selectAll.checked;
+        });
         updateBulkBar();
       });
     }
@@ -1144,10 +1223,16 @@
         if (e.target.classList.contains('co-row-check')) {
           /* sync select-all */
           var allVisible = getVisibleCheckboxes();
-          var allChecked = allVisible.every(function (cb) { return cb.checked; });
+          var allChecked = allVisible.every(function (cb) {
+            return cb.checked;
+          });
           if (selectAll) {
             selectAll.checked = allVisible.length > 0 && allChecked;
-            selectAll.indeterminate = !allChecked && allVisible.some(function (cb) { return cb.checked; });
+            selectAll.indeterminate =
+              !allChecked &&
+              allVisible.some(function (cb) {
+                return cb.checked;
+              });
           }
           updateBulkBar();
         }
@@ -1156,15 +1241,20 @@
 
     /* Bulk action buttons */
     var bulkActions = [
-      { id: 'btn-bulk-plan',   msg: 'إجراء تجريبي — سيتم تغيير الخطة للشركات المحددة (لا يتم التغيير فعليًا)' },
-      { id: 'btn-bulk-trial',  msg: 'إجراء تجريبي — سيتم تمديد التجربة (لا يتم فعليًا)' },
-      { id: 'btn-bulk-note',   msg: 'إجراء تجريبي — ستُضاف الملاحظة للمحددة (لا يتم الحفظ)' },
+      {
+        id: 'btn-bulk-plan',
+        msg: 'إجراء تجريبي — سيتم تغيير الخطة للشركات المحددة (لا يتم التغيير فعليًا)',
+      },
+      { id: 'btn-bulk-trial', msg: 'إجراء تجريبي — سيتم تمديد التجربة (لا يتم فعليًا)' },
+      { id: 'btn-bulk-note', msg: 'إجراء تجريبي — ستُضاف الملاحظة للمحددة (لا يتم الحفظ)' },
       { id: 'btn-bulk-export', msg: 'إجراء تجريبي — لا يتم إنشاء ملف فعلي' },
     ];
     bulkActions.forEach(function (action) {
       var btn = document.getElementById(action.id);
       if (btn) {
-        btn.addEventListener('click', function () { toast(action.msg, 'info'); });
+        btn.addEventListener('click', function () {
+          toast(action.msg, 'info');
+        });
       }
     });
 
@@ -1175,8 +1265,13 @@
         var n = getCheckedCheckboxes().length;
         toast('إجراء تجريبي — تم إيقاف ' + n + ' شركات (لا يحدث فعليًا)', 'warning');
         /* uncheck all + hide bulk bar */
-        getCheckedCheckboxes().forEach(function (cb) { cb.checked = false; });
-        if (selectAll) { selectAll.checked = false; selectAll.indeterminate = false; }
+        getCheckedCheckboxes().forEach(function (cb) {
+          cb.checked = false;
+        });
+        if (selectAll) {
+          selectAll.checked = false;
+          selectAll.indeterminate = false;
+        }
         updateBulkBar();
       });
     }
@@ -1191,7 +1286,8 @@
       if (menu) {
         menu.classList.remove('is-open');
         var btn = menu.previousElementSibling;
-        if (btn && btn.classList.contains('row-action-btn')) btn.setAttribute('aria-expanded', 'false');
+        if (btn && btn.classList.contains('row-action-btn'))
+          btn.setAttribute('aria-expanded', 'false');
       }
 
       var target = item.dataset.modalOpen;
@@ -1210,11 +1306,13 @@
         var msTitle = document.getElementById('ms-title');
         var msLabel = document.getElementById('ms-action-label');
         var coAction = item.dataset.coAction || 'suspend';
-        if (msDisp)  msDisp.textContent  = item.dataset.companyName || '—';
-        if (msTitle) msTitle.textContent = coAction === 'reactivate' ? 'إعادة تفعيل الشركة' : 'إيقاف الشركة';
-        if (msLabel) msLabel.textContent = coAction === 'reactivate' ? 'تفعيل (تجريبي)' : 'إيقاف (تجريبي)';
+        if (msDisp) msDisp.textContent = item.dataset.companyName || '—';
+        if (msTitle)
+          msTitle.textContent = coAction === 'reactivate' ? 'إعادة تفعيل الشركة' : 'إيقاف الشركة';
+        if (msLabel)
+          msLabel.textContent = coAction === 'reactivate' ? 'تفعيل (تجريبي)' : 'إيقاف (تجريبي)';
         if (msDisp) msDisp.dataset.coAction = coAction;
-        if (msDisp) msDisp.dataset.coId     = item.dataset.companyId || '';
+        if (msDisp) msDisp.dataset.coId = item.dataset.companyId || '';
       }
 
       /* Add Note — populate company */
@@ -1226,7 +1324,10 @@
       /* Login-as: show safety toast (item is disabled but handle click defensively) */
       if (item.classList.contains('login-as-disabled')) {
         e.preventDefault();
-        toast('لا يتم تسجيل الدخول كالشركة فعليًا — ميزة الانتحال غير مفعّلة في هذه النسخة', 'warning');
+        toast(
+          'لا يتم تسجيل الدخول كالشركة فعليًا — ميزة الانتحال غير مفعّلة في هذه النسخة',
+          'warning'
+        );
         return;
       }
     });
@@ -1236,7 +1337,7 @@
     if (formAddCo) {
       formAddCo.addEventListener('submit', function (e) {
         e.preventDefault();
-        var nameField  = formAddCo.querySelector('#mac-company-name');
+        var nameField = formAddCo.querySelector('#mac-company-name');
         var ownerField = formAddCo.querySelector('#mac-owner-name');
         var emailField = formAddCo.querySelector('#mac-owner-email');
         var valid = true;
@@ -1247,7 +1348,10 @@
           if (!field.value.trim()) {
             valid = false;
             field.setAttribute('aria-invalid', 'true');
-            if (err) { err.textContent = 'هذا الحقل مطلوب'; err.hidden = false; }
+            if (err) {
+              err.textContent = 'هذا الحقل مطلوب';
+              err.hidden = false;
+            }
           } else {
             field.removeAttribute('aria-invalid');
             if (err) err.hidden = true;
@@ -1256,11 +1360,16 @@
 
         if (emailField) {
           var emailErr = document.getElementById('mac-owner-email-err');
-          var emailRe  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (!emailField.value.trim() || !emailRe.test(emailField.value.trim())) {
             valid = false;
             emailField.setAttribute('aria-invalid', 'true');
-            if (emailErr) { emailErr.textContent = !emailField.value.trim() ? 'هذا الحقل مطلوب' : 'بريد إلكتروني غير صالح'; emailErr.hidden = false; }
+            if (emailErr) {
+              emailErr.textContent = !emailField.value.trim()
+                ? 'هذا الحقل مطلوب'
+                : 'بريد إلكتروني غير صالح';
+              emailErr.hidden = false;
+            }
           } else {
             emailField.removeAttribute('aria-invalid');
             if (emailErr) emailErr.hidden = true;
@@ -1290,7 +1399,14 @@
         newPlanSel.removeAttribute('aria-invalid');
         var cpDisp = document.getElementById('mcp-company-display');
         var co = cpDisp ? cpDisp.textContent : '—';
-        toast('إجراء تجريبي — تم تغيير خطة "' + co + '" إلى ' + newPlanSel.value + ' (لا تُسوَّى مدفوعات)', 'success');
+        toast(
+          'إجراء تجريبي — تم تغيير خطة "' +
+            co +
+            '" إلى ' +
+            newPlanSel.value +
+            ' (لا تُسوَّى مدفوعات)',
+          'success'
+        );
         formChangePlan.reset();
         if (window.TUI && TUI.modal) TUI.modal.close('modal-change-plan');
       });
@@ -1302,18 +1418,21 @@
       formSuspend.addEventListener('submit', function (e) {
         e.preventDefault();
         var reasonField = document.getElementById('ms-reason');
-        var reasonErr   = document.getElementById('ms-reason-err');
+        var reasonErr = document.getElementById('ms-reason-err');
         if (!reasonField || !reasonField.value.trim()) {
           if (reasonField) reasonField.setAttribute('aria-invalid', 'true');
-          if (reasonErr)  { reasonErr.textContent = 'سبب الإجراء مطلوب'; reasonErr.hidden = false; }
+          if (reasonErr) {
+            reasonErr.textContent = 'سبب الإجراء مطلوب';
+            reasonErr.hidden = false;
+          }
           if (reasonField) reasonField.focus();
           return;
         }
         reasonField.removeAttribute('aria-invalid');
         if (reasonErr) reasonErr.hidden = true;
 
-        var msDisp   = document.getElementById('ms-company-display');
-        var coName   = msDisp ? msDisp.textContent  : '—';
+        var msDisp = document.getElementById('ms-company-display');
+        var coName = msDisp ? msDisp.textContent : '—';
         var coAction = msDisp ? msDisp.dataset.coAction : 'suspend';
         var actionLabel = coAction === 'reactivate' ? 'إعادة تفعيل' : 'إيقاف';
         toast('إجراء تجريبي — ' + actionLabel + ' "' + coName + '" (لا يحدث فعليًا)', 'warning');
@@ -1328,10 +1447,13 @@
       formAddNote.addEventListener('submit', function (e) {
         e.preventDefault();
         var noteField = document.getElementById('man-note');
-        var noteErr   = document.getElementById('man-note-err');
+        var noteErr = document.getElementById('man-note-err');
         if (!noteField || !noteField.value.trim()) {
           if (noteField) noteField.setAttribute('aria-invalid', 'true');
-          if (noteErr)  { noteErr.textContent = 'الملاحظة مطلوبة'; noteErr.hidden = false; }
+          if (noteErr) {
+            noteErr.textContent = 'الملاحظة مطلوبة';
+            noteErr.hidden = false;
+          }
           if (noteField) noteField.focus();
           return;
         }
@@ -1339,8 +1461,11 @@
         if (noteErr) noteErr.hidden = true;
 
         var manDisp = document.getElementById('man-company-display');
-        var coName  = manDisp ? manDisp.textContent : '—';
-        toast('إجراء تجريبي — تمت إضافة ملاحظة لـ"' + coName + '" (لا يتم الحفظ على خادم)', 'success');
+        var coName = manDisp ? manDisp.textContent : '—';
+        toast(
+          'إجراء تجريبي — تمت إضافة ملاحظة لـ"' + coName + '" (لا يتم الحفظ على خادم)',
+          'success'
+        );
         formAddNote.reset();
         if (window.TUI && TUI.modal) TUI.modal.close('modal-add-note');
       });
@@ -1368,36 +1493,43 @@
     }
 
     function requireField(elId, errId, msg) {
-      var el  = document.getElementById(elId);
+      var el = document.getElementById(elId);
       var err = document.getElementById(errId);
       if (!el || !el.value || !el.value.trim()) {
-        if (el)  el.setAttribute('aria-invalid', 'true');
-        if (err) { err.textContent = msg || 'هذا الحقل مطلوب'; err.hidden = false; }
+        if (el) el.setAttribute('aria-invalid', 'true');
+        if (err) {
+          err.textContent = msg || 'هذا الحقل مطلوب';
+          err.hidden = false;
+        }
         return false;
       }
-      if (el)  el.removeAttribute('aria-invalid');
+      if (el) el.removeAttribute('aria-invalid');
       if (err) err.hidden = true;
       return true;
     }
 
     function clearField(elId, errId) {
-      var el  = document.getElementById(elId);
+      var el = document.getElementById(elId);
       var err = document.getElementById(errId);
-      if (el)  { el.removeAttribute('aria-invalid'); if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = ''; }
+      if (el) {
+        el.removeAttribute('aria-invalid');
+        if (el.tagName === 'SELECT') el.selectedIndex = 0;
+        else el.value = '';
+      }
       if (err) err.hidden = true;
     }
 
     /* ── 1. Optional ?id= param → update company labels ─────────────────── */
     (function () {
-      var params  = new URLSearchParams(window.location.search);
-      var id      = params.get('id');
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
       if (!id) return;
       /* mirror company id in display spans */
       document.querySelectorAll('[data-cd-id]').forEach(function (el) {
         el.textContent = id;
       });
       /* in a real app we'd fetch /api/companies/:id here */
-    }());
+    })();
 
     /* ── 2. FAQ accordion ────────────────────────────────────────────────── */
     document.querySelectorAll('.admin-faq-q').forEach(function (btn) {
@@ -1416,9 +1548,12 @@
       var btn = e.target.closest('[data-invoice-view],[data-invoice-download],[data-invoice-send]');
       if (!btn) return;
       var inv = btn.dataset.invoiceView || btn.dataset.invoiceDownload || btn.dataset.invoiceSend;
-      if (btn.dataset.invoiceView)     toast('إجراء تجريبي — عرض الفاتورة ' + inv + ' (لا توجد فاتورة حقيقية)', 'info');
-      if (btn.dataset.invoiceDownload) toast('إجراء تجريبي — تحميل الفاتورة ' + inv + ' (لا يتم إنشاء ملف فعلي)', 'info');
-      if (btn.dataset.invoiceSend)     toast('إجراء تجريبي — إرسال الفاتورة ' + inv + ' (لا يُرسل بريد إلكتروني فعلي)', 'info');
+      if (btn.dataset.invoiceView)
+        toast('إجراء تجريبي — عرض الفاتورة ' + inv + ' (لا توجد فاتورة حقيقية)', 'info');
+      if (btn.dataset.invoiceDownload)
+        toast('إجراء تجريبي — تحميل الفاتورة ' + inv + ' (لا يتم إنشاء ملف فعلي)', 'info');
+      if (btn.dataset.invoiceSend)
+        toast('إجراء تجريبي — إرسال الفاتورة ' + inv + ' (لا يُرسل بريد إلكتروني فعلي)', 'info');
     });
 
     /* ── 4. Login-as disabled button → open safety modal ────────────────── */
@@ -1441,12 +1576,17 @@
         var valid = requireField('mcdcp-new-plan', 'mcdcp-plan-err', 'يرجى اختيار خطة جديدة');
         if (!valid) return;
         var planEl = document.getElementById('mcdcp-new-plan');
-        var planName = planEl ? (planEl.options[planEl.selectedIndex] || {}).text || planEl.value : '—';
+        var planName = planEl
+          ? (planEl.options[planEl.selectedIndex] || {}).text || planEl.value
+          : '—';
         closeModal('modal-cd-change-plan');
         clearField('mcdcp-new-plan', 'mcdcp-plan-err');
         var reasonEl = document.getElementById('mcdcp-reason');
         if (reasonEl) reasonEl.value = '';
-        toast('إجراء تجريبي — تم تغيير الخطة إلى "' + planName + '" (لا تُسوَّى مدفوعات حقيقية)', 'success');
+        toast(
+          'إجراء تجريبي — تم تغيير الخطة إلى "' + planName + '" (لا تُسوَّى مدفوعات حقيقية)',
+          'success'
+        );
       });
     }
 
@@ -1473,7 +1613,7 @@
         var valid = requireField('mcdet-days', 'mcdet-days-err', 'يرجى اختيار مدة التمديد');
         if (!valid) return;
         var daysEl = document.getElementById('mcdet-days');
-        var days   = daysEl ? daysEl.value : '—';
+        var days = daysEl ? daysEl.value : '—';
         closeModal('modal-cd-extend-trial');
         if (daysEl) daysEl.selectedIndex = 0;
         clearField('mcdet-days', 'mcdet-days-err');
@@ -1491,12 +1631,15 @@
         if (!noteEl || !noteEl.value.trim()) {
           noteEl && noteEl.setAttribute('aria-invalid', 'true');
           var noteErr = document.getElementById('mcdan-note-err');
-          if (noteErr) { noteErr.textContent = 'نص الملاحظة مطلوب'; noteErr.hidden = false; }
+          if (noteErr) {
+            noteErr.textContent = 'نص الملاحظة مطلوب';
+            noteErr.hidden = false;
+          }
           return;
         }
         var noteText = noteEl.value.trim();
-        var typeEl   = document.getElementById('mcdan-type');
-        var typeVal  = typeEl ? (typeEl.options[typeEl.selectedIndex] || {}).text || 'عامة' : 'عامة';
+        var typeEl = document.getElementById('mcdan-type');
+        var typeVal = typeEl ? (typeEl.options[typeEl.selectedIndex] || {}).text || 'عامة' : 'عامة';
 
         /* prepend new note to list */
         var notesList = document.getElementById('cd-notes-list');
@@ -1507,11 +1650,17 @@
           div.className = 'cd-note-item';
           div.innerHTML =
             '<div class="cd-note-header">' +
-            '<span class="cd-note-type">' + typeVal + '</span>' +
+            '<span class="cd-note-type">' +
+            typeVal +
+            '</span>' +
             '<span class="admin-badge badge-neutral">جديد</span>' +
             '</div>' +
-            '<p class="cd-note-text">' + noteText.replace(/</g, '&lt;') + '</p>' +
-            '<div class="cd-note-meta">أحمد الإداري · ' + dateStr + '</div>';
+            '<p class="cd-note-text">' +
+            noteText.replace(/</g, '&lt;') +
+            '</p>' +
+            '<div class="cd-note-meta">أحمد الإداري · ' +
+            dateStr +
+            '</div>';
           notesList.insertBefore(div, notesList.firstChild);
         }
 
@@ -1520,7 +1669,7 @@
         noteEl.removeAttribute('aria-invalid');
         var noteErr2 = document.getElementById('mcdan-note-err');
         if (noteErr2) noteErr2.hidden = true;
-        if (typeEl)  typeEl.selectedIndex = 0;
+        if (typeEl) typeEl.selectedIndex = 0;
         var fuEl = document.getElementById('mcdan-followup');
         if (fuEl) fuEl.value = '';
         toast('إجراء تجريبي — تمت إضافة الملاحظة (لا يتم الحفظ على خادم)', 'success');
@@ -1531,19 +1680,22 @@
     var btnContact = document.getElementById('btn-confirm-cd-contact');
     if (btnContact) {
       btnContact.addEventListener('click', function () {
-        var subj  = requireField('mcdc-subject', 'mcdc-subject-err', 'موضوع الرسالة مطلوب');
-        var body  = requireField('mcdc-body',    'mcdc-body-err',    'نص الرسالة مطلوب');
+        var subj = requireField('mcdc-subject', 'mcdc-subject-err', 'موضوع الرسالة مطلوب');
+        var body = requireField('mcdc-body', 'mcdc-body-err', 'نص الرسالة مطلوب');
         if (!subj || !body) return;
         closeModal('modal-cd-contact');
         var subjectEl = document.getElementById('mcdc-subject');
-        var bodyEl    = document.getElementById('mcdc-body');
+        var bodyEl = document.getElementById('mcdc-body');
         var channelEl = document.getElementById('mcdc-channel');
         if (subjectEl) subjectEl.value = '';
-        if (bodyEl)    bodyEl.value    = '';
+        if (bodyEl) bodyEl.value = '';
         if (channelEl) channelEl.selectedIndex = 0;
         clearField('mcdc-subject', 'mcdc-subject-err');
-        clearField('mcdc-body',    'mcdc-body-err');
-        toast('إجراء تجريبي — تم إرسال الرسالة (لا يُرسل بريد إلكتروني حقيقي في هذه النسخة)', 'success');
+        clearField('mcdc-body', 'mcdc-body-err');
+        toast(
+          'إجراء تجريبي — تم إرسال الرسالة (لا يُرسل بريد إلكتروني حقيقي في هذه النسخة)',
+          'success'
+        );
       });
     }
 
@@ -1561,9 +1713,11 @@
           var limitMatch = el.textContent.match(/\/ (.+)$/);
           if (limitMatch) el.textContent = '0 / ' + limitMatch[1];
         });
-        document.querySelectorAll('#cd-usage-list .cd-usage-warn, #cd-usage-list .cd-usage-danger').forEach(function (el) {
-          el.style.display = 'none';
-        });
+        document
+          .querySelectorAll('#cd-usage-list .cd-usage-warn, #cd-usage-list .cd-usage-danger')
+          .forEach(function (el) {
+            el.style.display = 'none';
+          });
         document.querySelectorAll('#cd-usage-list [role="progressbar"]').forEach(function (el) {
           el.setAttribute('aria-valuenow', '0');
         });
@@ -1587,7 +1741,10 @@
       var el = document.getElementById(inputId);
       var er = document.getElementById(errId);
       if (el) el.setAttribute('aria-invalid', 'true');
-      if (er) { er.textContent = msg; er.removeAttribute('hidden'); }
+      if (er) {
+        er.textContent = msg;
+        er.removeAttribute('hidden');
+      }
     }
     function clearErr(inputId, errId) {
       var el = document.getElementById(inputId);
@@ -1598,55 +1755,104 @@
 
     // mock plan data for pre-fill on edit
     var PLANS = {
-      'plan-starter':    { name: 'Starter',    monthly: 29,  yearly: 290,  desc: 'الباقة المثالية للوكالات الناشئة', support: 'standard', status: 'active' },
-      'plan-growth':     { name: 'Growth',     monthly: 79,  yearly: 790,  desc: 'للوكالات في مرحلة النمو',          support: 'priority',  status: 'active' },
-      'plan-pro':        { name: 'Pro',         monthly: 149, yearly: 1490, desc: 'الباقة الاحترافية الكاملة',        support: 'priority',  status: 'active' },
-      'plan-enterprise': { name: 'Enterprise',  monthly: 349, yearly: 3490, desc: 'باقة المؤسسات الكبرى',            support: 'dedicated', status: 'active' }
+      'plan-starter': {
+        name: 'Starter',
+        monthly: 29,
+        yearly: 290,
+        desc: 'الباقة المثالية للوكالات الناشئة',
+        support: 'standard',
+        status: 'active',
+      },
+      'plan-growth': {
+        name: 'Growth',
+        monthly: 79,
+        yearly: 790,
+        desc: 'للوكالات في مرحلة النمو',
+        support: 'priority',
+        status: 'active',
+      },
+      'plan-pro': {
+        name: 'Pro',
+        monthly: 149,
+        yearly: 1490,
+        desc: 'الباقة الاحترافية الكاملة',
+        support: 'priority',
+        status: 'active',
+      },
+      'plan-enterprise': {
+        name: 'Enterprise',
+        monthly: 349,
+        yearly: 3490,
+        desc: 'باقة المؤسسات الكبرى',
+        support: 'dedicated',
+        status: 'active',
+      },
     };
 
     // ── 1. Monthly/yearly billing toggle ─────────────────────────────
     var btnMonthly = document.getElementById('btn-billing-monthly');
-    var btnYearly  = document.getElementById('btn-billing-yearly');
+    var btnYearly = document.getElementById('btn-billing-yearly');
     var currentBilling = 'monthly';
 
     function applyBilling(mode) {
       currentBilling = mode;
       // toggle buttons
-      if (btnMonthly) { btnMonthly.classList.toggle('is-active', mode === 'monthly'); btnMonthly.setAttribute('aria-pressed', mode === 'monthly' ? 'true' : 'false'); }
-      if (btnYearly)  { btnYearly.classList.toggle('is-active',  mode === 'yearly');  btnYearly.setAttribute('aria-pressed',  mode === 'yearly'  ? 'true' : 'false'); }
+      if (btnMonthly) {
+        btnMonthly.classList.toggle('is-active', mode === 'monthly');
+        btnMonthly.setAttribute('aria-pressed', mode === 'monthly' ? 'true' : 'false');
+      }
+      if (btnYearly) {
+        btnYearly.classList.toggle('is-active', mode === 'yearly');
+        btnYearly.setAttribute('aria-pressed', mode === 'yearly' ? 'true' : 'false');
+      }
       // update every price display
-      document.querySelectorAll('.pl-price[data-price-monthly]').forEach(function(el) {
-        var val = mode === 'yearly' ? el.getAttribute('data-price-yearly') : el.getAttribute('data-price-monthly');
+      document.querySelectorAll('.pl-price[data-price-monthly]').forEach(function (el) {
+        var val =
+          mode === 'yearly'
+            ? el.getAttribute('data-price-yearly')
+            : el.getAttribute('data-price-monthly');
         el.textContent = val;
       });
       // update period text
-      document.querySelectorAll('.pl-price-period').forEach(function(el) {
+      document.querySelectorAll('.pl-price-period').forEach(function (el) {
         el.textContent = mode === 'yearly' ? '/سنة' : '/شهر';
       });
       // toggle note spans
-      document.querySelectorAll('[data-monthly-note]').forEach(function(el) { el.hidden = mode !== 'monthly'; });
-      document.querySelectorAll('[data-yearly-note]').forEach(function(el)  { el.hidden = mode !== 'yearly';  });
+      document.querySelectorAll('[data-monthly-note]').forEach(function (el) {
+        el.hidden = mode !== 'monthly';
+      });
+      document.querySelectorAll('[data-yearly-note]').forEach(function (el) {
+        el.hidden = mode !== 'yearly';
+      });
     }
 
-    if (btnMonthly) btnMonthly.addEventListener('click', function() { applyBilling('monthly'); });
-    if (btnYearly)  btnYearly.addEventListener('click',  function() { applyBilling('yearly');  });
+    if (btnMonthly)
+      btnMonthly.addEventListener('click', function () {
+        applyBilling('monthly');
+      });
+    if (btnYearly)
+      btnYearly.addEventListener('click', function () {
+        applyBilling('yearly');
+      });
 
     // ── 2. Companies-on-plan filter select ───────────────────────────
     var planFilterSel = document.getElementById('pl-plan-filter-select');
     function applyPlanFilter(planId) {
-      document.querySelectorAll('#pl-companies-tbody tr[data-plan-row]').forEach(function(row) {
-        row.hidden = (planId !== 'all' && row.getAttribute('data-plan-row') !== planId);
+      document.querySelectorAll('#pl-companies-tbody tr[data-plan-row]').forEach(function (row) {
+        row.hidden = planId !== 'all' && row.getAttribute('data-plan-row') !== planId;
       });
     }
     if (planFilterSel) {
       // apply default (growth) on load
       applyPlanFilter(planFilterSel.value);
-      planFilterSel.addEventListener('change', function() { applyPlanFilter(this.value); });
+      planFilterSel.addEventListener('change', function () {
+        applyPlanFilter(this.value);
+      });
     }
 
     // ── 3. View-companies-on-plan buttons ────────────────────────────
-    document.querySelectorAll('[data-plan-view-companies]').forEach(function(btn) {
-      btn.addEventListener('click', function() {
+    document.querySelectorAll('[data-plan-view-companies]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
         var planId = this.getAttribute('data-plan-view-companies');
         if (planFilterSel) {
           planFilterSel.value = planId;
@@ -1659,8 +1865,8 @@
     });
 
     // ── 4. Duplicate buttons ─────────────────────────────────────────
-    document.querySelectorAll('[data-plan-duplicate]').forEach(function(btn) {
-      btn.addEventListener('click', function() {
+    document.querySelectorAll('[data-plan-duplicate]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
         var planId = this.getAttribute('data-plan-duplicate');
         var p = PLANS[planId] || {};
         // pre-fill create modal with copied data
@@ -1668,10 +1874,10 @@
         var pm = document.getElementById('mpc-price-monthly');
         var py = document.getElementById('mpc-price-yearly');
         var pd = document.getElementById('mpc-description');
-        if (nm) nm.value = (p.name ? 'نسخة من ' + p.name : '');
+        if (nm) nm.value = p.name ? 'نسخة من ' + p.name : '';
         if (pm) pm.value = p.monthly || '';
-        if (py) py.value = p.yearly  || '';
-        if (pd) pd.value = p.desc   || '';
+        if (py) py.value = p.yearly || '';
+        if (pd) pd.value = p.desc || '';
         if (window.TUI && TUI.modal && typeof TUI.modal.open === 'function') {
           TUI.modal.open('modal-plans-create');
         }
@@ -1680,29 +1886,29 @@
     });
 
     // ── 5. Edit modal pre-fill ────────────────────────────────────────
-    document.querySelectorAll('[data-plan-edit]').forEach(function(btn) {
-      btn.addEventListener('click', function() {
+    document.querySelectorAll('[data-plan-edit]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
         var planId = this.getAttribute('data-plan-edit');
         var p = PLANS[planId] || {};
-        var nm  = document.getElementById('mpe-name');
-        var pm  = document.getElementById('mpe-price-monthly');
-        var py  = document.getElementById('mpe-price-yearly');
-        var pd  = document.getElementById('mpe-description');
-        var sp  = document.getElementById('mpe-support');
-        var st  = document.getElementById('mpe-status');
-        if (nm) nm.value = p.name    || '';
+        var nm = document.getElementById('mpe-name');
+        var pm = document.getElementById('mpe-price-monthly');
+        var py = document.getElementById('mpe-price-yearly');
+        var pd = document.getElementById('mpe-description');
+        var sp = document.getElementById('mpe-support');
+        var st = document.getElementById('mpe-status');
+        if (nm) nm.value = p.name || '';
         if (pm) pm.value = p.monthly || '';
-        if (py) py.value = p.yearly  || '';
-        if (pd) pd.value = p.desc    || '';
+        if (py) py.value = p.yearly || '';
+        if (pd) pd.value = p.desc || '';
         if (sp) sp.value = p.support || '';
-        if (st) st.value = p.status  || 'active';
+        if (st) st.value = p.status || 'active';
       });
     });
 
     // ── 6. Create plan confirm ────────────────────────────────────────
     var btnCreate = document.getElementById('btn-confirm-plans-create');
     if (btnCreate) {
-      btnCreate.addEventListener('click', function() {
+      btnCreate.addEventListener('click', function () {
         var ok = true;
         var nm = document.getElementById('mpc-name');
         var pm = document.getElementById('mpc-price-monthly');
@@ -1711,14 +1917,29 @@
         var st = document.getElementById('mpc-status');
         clearErr('mpc-name', 'mpc-name-err');
         clearErr('mpc-price-monthly', 'mpc-price-monthly-err');
-        clearErr('mpc-price-yearly',  'mpc-price-yearly-err');
+        clearErr('mpc-price-yearly', 'mpc-price-yearly-err');
         clearErr('mpc-support', 'mpc-support-err');
-        clearErr('mpc-status',  'mpc-status-err');
-        if (!nm || !nm.value.trim()) { fieldErr('mpc-name', 'mpc-name-err', 'اسم الخطة مطلوب'); ok = false; }
-        if (!pm || pm.value === '' || isNaN(Number(pm.value)) || Number(pm.value) < 0) { fieldErr('mpc-price-monthly', 'mpc-price-monthly-err', 'سعر صحيح ≥ 0'); ok = false; }
-        if (!py || py.value === '' || isNaN(Number(py.value)) || Number(py.value) < 0) { fieldErr('mpc-price-yearly',  'mpc-price-yearly-err',  'سعر صحيح ≥ 0'); ok = false; }
-        if (!sp || !sp.value) { fieldErr('mpc-support', 'mpc-support-err', 'مستوى الدعم مطلوب'); ok = false; }
-        if (!st || !st.value) { fieldErr('mpc-status',  'mpc-status-err',  'الحالة مطلوبة'); ok = false; }
+        clearErr('mpc-status', 'mpc-status-err');
+        if (!nm || !nm.value.trim()) {
+          fieldErr('mpc-name', 'mpc-name-err', 'اسم الخطة مطلوب');
+          ok = false;
+        }
+        if (!pm || pm.value === '' || isNaN(Number(pm.value)) || Number(pm.value) < 0) {
+          fieldErr('mpc-price-monthly', 'mpc-price-monthly-err', 'سعر صحيح ≥ 0');
+          ok = false;
+        }
+        if (!py || py.value === '' || isNaN(Number(py.value)) || Number(py.value) < 0) {
+          fieldErr('mpc-price-yearly', 'mpc-price-yearly-err', 'سعر صحيح ≥ 0');
+          ok = false;
+        }
+        if (!sp || !sp.value) {
+          fieldErr('mpc-support', 'mpc-support-err', 'مستوى الدعم مطلوب');
+          ok = false;
+        }
+        if (!st || !st.value) {
+          fieldErr('mpc-status', 'mpc-status-err', 'الحالة مطلوبة');
+          ok = false;
+        }
         if (!ok) return;
         closeModal('modal-plans-create');
         toast('إجراء تجريبي — لا يتم إنشاء خطة حقيقية في هذه النسخة', 'warning');
@@ -1728,7 +1949,7 @@
     // ── 7. Edit plan confirm ──────────────────────────────────────────
     var btnEdit = document.getElementById('btn-confirm-plans-edit');
     if (btnEdit) {
-      btnEdit.addEventListener('click', function() {
+      btnEdit.addEventListener('click', function () {
         var ok = true;
         var nm = document.getElementById('mpe-name');
         var pm = document.getElementById('mpe-price-monthly');
@@ -1737,14 +1958,29 @@
         var st = document.getElementById('mpe-status');
         clearErr('mpe-name', 'mpe-name-err');
         clearErr('mpe-price-monthly', 'mpe-price-monthly-err');
-        clearErr('mpe-price-yearly',  'mpe-price-yearly-err');
+        clearErr('mpe-price-yearly', 'mpe-price-yearly-err');
         clearErr('mpe-support', 'mpe-support-err');
-        clearErr('mpe-status',  'mpe-status-err');
-        if (!nm || !nm.value.trim()) { fieldErr('mpe-name', 'mpe-name-err', 'اسم الخطة مطلوب'); ok = false; }
-        if (!pm || pm.value === '' || isNaN(Number(pm.value)) || Number(pm.value) < 0) { fieldErr('mpe-price-monthly', 'mpe-price-monthly-err', 'سعر صحيح ≥ 0'); ok = false; }
-        if (!py || py.value === '' || isNaN(Number(py.value)) || Number(py.value) < 0) { fieldErr('mpe-price-yearly',  'mpe-price-yearly-err',  'سعر صحيح ≥ 0'); ok = false; }
-        if (!sp || !sp.value) { fieldErr('mpe-support', 'mpe-support-err', 'مستوى الدعم مطلوب'); ok = false; }
-        if (!st || !st.value) { fieldErr('mpe-status',  'mpe-status-err',  'الحالة مطلوبة'); ok = false; }
+        clearErr('mpe-status', 'mpe-status-err');
+        if (!nm || !nm.value.trim()) {
+          fieldErr('mpe-name', 'mpe-name-err', 'اسم الخطة مطلوب');
+          ok = false;
+        }
+        if (!pm || pm.value === '' || isNaN(Number(pm.value)) || Number(pm.value) < 0) {
+          fieldErr('mpe-price-monthly', 'mpe-price-monthly-err', 'سعر صحيح ≥ 0');
+          ok = false;
+        }
+        if (!py || py.value === '' || isNaN(Number(py.value)) || Number(py.value) < 0) {
+          fieldErr('mpe-price-yearly', 'mpe-price-yearly-err', 'سعر صحيح ≥ 0');
+          ok = false;
+        }
+        if (!sp || !sp.value) {
+          fieldErr('mpe-support', 'mpe-support-err', 'مستوى الدعم مطلوب');
+          ok = false;
+        }
+        if (!st || !st.value) {
+          fieldErr('mpe-status', 'mpe-status-err', 'الحالة مطلوبة');
+          ok = false;
+        }
         if (!ok) return;
         closeModal('modal-plans-edit');
         toast('إجراء تجريبي — لا يتم تعديل خطط أو أسعار حقيقية في هذه النسخة', 'warning');
@@ -1754,7 +1990,7 @@
     // ── 8. Disable plan confirm ───────────────────────────────────────
     var btnDisable = document.getElementById('btn-confirm-plans-disable');
     if (btnDisable) {
-      btnDisable.addEventListener('click', function() {
+      btnDisable.addEventListener('click', function () {
         closeModal('modal-plans-disable');
         toast('إجراء تجريبي — لا يتم تعطيل خطة حقيقية في هذه النسخة', 'warning');
       });
@@ -1763,11 +1999,11 @@
     // ── 9. FAQ accordion ─────────────────────────────────────────────
     var faq = document.getElementById('pl-faq');
     if (faq) {
-      faq.addEventListener('click', function(e) {
+      faq.addEventListener('click', function (e) {
         var btn = e.target.closest('.admin-faq-q');
         if (!btn) return;
         var expanded = btn.getAttribute('aria-expanded') === 'true';
-        faq.querySelectorAll('.admin-faq-q[aria-expanded="true"]').forEach(function(b) {
+        faq.querySelectorAll('.admin-faq-q[aria-expanded="true"]').forEach(function (b) {
           if (b !== btn) b.setAttribute('aria-expanded', 'false');
         });
         btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
@@ -1799,7 +2035,10 @@
       var el = document.getElementById(inputId);
       var er = document.getElementById(errId);
       if (el) el.setAttribute('aria-invalid', 'true');
-      if (er) { er.textContent = msg; er.removeAttribute('hidden'); }
+      if (er) {
+        er.textContent = msg;
+        er.removeAttribute('hidden');
+      }
     }
     function clearErr(inputId, errId) {
       var el = document.getElementById(inputId);
@@ -1812,21 +2051,21 @@
     var openMenuId = null;
 
     function closeSubMenus() {
-      document.querySelectorAll('.sub-row-menu').forEach(function(m) {
+      document.querySelectorAll('.sub-row-menu').forEach(function (m) {
         m.classList.add('hidden');
       });
-      document.querySelectorAll('[data-sub-menu-trigger]').forEach(function(b) {
+      document.querySelectorAll('[data-sub-menu-trigger]').forEach(function (b) {
         b.setAttribute('aria-expanded', 'false');
       });
       openMenuId = null;
     }
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       var trigger = e.target.closest('[data-sub-menu-trigger]');
       if (trigger) {
         e.stopPropagation();
-        var subId  = trigger.getAttribute('data-sub-menu-trigger');
-        var menu   = document.getElementById('menu-' + subId);
+        var subId = trigger.getAttribute('data-sub-menu-trigger');
+        var menu = document.getElementById('menu-' + subId);
         var isOpen = !menu.classList.contains('hidden');
         closeSubMenus();
         if (!isOpen && menu) {
@@ -1843,25 +2082,27 @@
       }
     });
 
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && openMenuId) { closeSubMenus(); }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && openMenuId) {
+        closeSubMenus();
+      }
     });
 
     /* ── filter / sort / search engine ───────────────────────────────── */
-    var tbody      = document.getElementById('sub-tbody');
-    var searchEl   = document.getElementById('sub-search');
-    var planSel    = document.getElementById('sub-filter-plan');
-    var statusSel  = document.getElementById('sub-filter-status');
+    var tbody = document.getElementById('sub-tbody');
+    var searchEl = document.getElementById('sub-search');
+    var planSel = document.getElementById('sub-filter-plan');
+    var statusSel = document.getElementById('sub-filter-status');
     var billingSel = document.getElementById('sub-filter-billing');
     var paymentSel = document.getElementById('sub-filter-payment');
-    var sortSel    = document.getElementById('sub-sort');
-    var resetBtn   = document.getElementById('sub-reset-filters');
+    var sortSel = document.getElementById('sub-sort');
+    var resetBtn = document.getElementById('sub-reset-filters');
     var emptyReset = document.getElementById('sub-empty-reset');
-    var countEl    = document.getElementById('sub-visible-count');
-    var chipsRow   = document.getElementById('sub-chips-row');
-    var emptyRow   = document.getElementById('sub-empty-state');
-    var bulkBar    = document.getElementById('sub-bulk-bar');
-    var bulkCount  = document.getElementById('sub-bulk-count');
+    var countEl = document.getElementById('sub-visible-count');
+    var chipsRow = document.getElementById('sub-chips-row');
+    var emptyRow = document.getElementById('sub-empty-state');
+    var bulkBar = document.getElementById('sub-bulk-bar');
+    var bulkCount = document.getElementById('sub-bulk-count');
 
     function getRows() {
       return tbody ? Array.from(tbody.querySelectorAll('tr[data-sub-id]')) : [];
@@ -1871,22 +2112,25 @@
       if (!chipsRow) return;
       chipsRow.innerHTML = '';
       var filters = [
-        { key: 'plan',    val: planSel    ? planSel.value    : '', label: 'الخطة' },
-        { key: 'status',  val: statusSel  ? statusSel.value  : '', label: 'الحالة' },
+        { key: 'plan', val: planSel ? planSel.value : '', label: 'الخطة' },
+        { key: 'status', val: statusSel ? statusSel.value : '', label: 'الحالة' },
         { key: 'billing', val: billingSel ? billingSel.value : '', label: 'الفوترة' },
-        { key: 'payment', val: paymentSel ? paymentSel.value : '', label: 'الدفع' }
+        { key: 'payment', val: paymentSel ? paymentSel.value : '', label: 'الدفع' },
       ];
       var q = searchEl ? searchEl.value.trim() : '';
       if (q) {
         var chip = _buildChip('search', q, 'بحث: ' + q);
         chipsRow.appendChild(chip);
       }
-      filters.forEach(function(f) {
+      filters.forEach(function (f) {
         if (f.val) {
           var displayVal = f.val;
-          if (f.key === 'billing') { displayVal = f.val === 'monthly' ? 'شهري' : 'سنوي'; }
+          if (f.key === 'billing') {
+            displayVal = f.val === 'monthly' ? 'شهري' : 'سنوي';
+          }
           if (f.key === 'payment') {
-            displayVal = f.val === 'Paid mock' ? 'مدفوع' : f.val === 'Failed mock' ? 'فاشل' : 'معلق';
+            displayVal =
+              f.val === 'Paid mock' ? 'مدفوع' : f.val === 'Failed mock' ? 'فاشل' : 'معلق';
           }
           chipsRow.appendChild(_buildChip(f.key, f.val, f.label + ': ' + displayVal));
         }
@@ -1898,22 +2142,31 @@
       span.className = 'sub-chip';
       span.setAttribute('data-chip-filter', filterKey);
       span.setAttribute('data-chip-value', filterVal);
-      span.innerHTML = labelText +
-        '<button type="button" class="sub-chip-remove" aria-label="إزالة مرشح ' + labelText + '">' +
+      span.innerHTML =
+        labelText +
+        '<button type="button" class="sub-chip-remove" aria-label="إزالة مرشح ' +
+        labelText +
+        '">' +
         '<svg width="10" height="10" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
         '</button>';
-      span.querySelector('.sub-chip-remove').addEventListener('click', function() {
+      span.querySelector('.sub-chip-remove').addEventListener('click', function () {
         removeChip(filterKey);
       });
       return span;
     }
 
     function removeChip(filterKey) {
-      if (filterKey === 'search' && searchEl) { searchEl.value = ''; }
-      else if (filterKey === 'plan'    && planSel)    { planSel.value = ''; }
-      else if (filterKey === 'status'  && statusSel)  { statusSel.value = ''; }
-      else if (filterKey === 'billing' && billingSel) { billingSel.value = ''; }
-      else if (filterKey === 'payment' && paymentSel) { paymentSel.value = ''; }
+      if (filterKey === 'search' && searchEl) {
+        searchEl.value = '';
+      } else if (filterKey === 'plan' && planSel) {
+        planSel.value = '';
+      } else if (filterKey === 'status' && statusSel) {
+        statusSel.value = '';
+      } else if (filterKey === 'billing' && billingSel) {
+        billingSel.value = '';
+      } else if (filterKey === 'payment' && paymentSel) {
+        paymentSel.value = '';
+      }
       applyFilters();
     }
 
@@ -1936,17 +2189,26 @@
       return td ? dateKey(td.textContent.trim()) : 0;
     }
 
-    var STATUS_WEIGHT = { 'Past Due': 0, 'Manual Review': 1, 'Expiring Soon': 2, 'Trial': 3, 'Active': 4 };
+    var STATUS_WEIGHT = {
+      'Past Due': 0,
+      'Manual Review': 1,
+      'Expiring Soon': 2,
+      Trial: 3,
+      Active: 4,
+    };
 
     function sortRows(rows) {
       var mode = sortSel ? sortSel.value : 'renewal-asc';
-      rows.sort(function(a, b) {
+      rows.sort(function (a, b) {
         var as = a.getAttribute('data-sub-status') || '';
         var bs = b.getAttribute('data-sub-status') || '';
-        if (mode === 'renewal-asc')  return renewalKey(a) - renewalKey(b);
-        if (mode === 'amount-desc')  return amountKey(b) - amountKey(a);
-        if (mode === 'newest')       return (b.getAttribute('data-sub-id') || '').localeCompare(a.getAttribute('data-sub-id') || '');
-        if (mode === 'past-due')     return (STATUS_WEIGHT[as] || 99) - (STATUS_WEIGHT[bs] || 99);
+        if (mode === 'renewal-asc') return renewalKey(a) - renewalKey(b);
+        if (mode === 'amount-desc') return amountKey(b) - amountKey(a);
+        if (mode === 'newest')
+          return (b.getAttribute('data-sub-id') || '').localeCompare(
+            a.getAttribute('data-sub-id') || ''
+          );
+        if (mode === 'past-due') return (STATUS_WEIGHT[as] || 99) - (STATUS_WEIGHT[bs] || 99);
         if (mode === 'trial-ending') {
           /* trial rows first, then by trial-end date */
           var aTrial = as === 'Trial' ? 0 : 1;
@@ -1958,26 +2220,26 @@
     }
 
     function applyFilters() {
-      var q       = searchEl    ? searchEl.value.trim().toLowerCase()    : '';
-      var plan    = planSel     ? planSel.value                          : '';
-      var status  = statusSel   ? statusSel.value                        : '';
-      var billing = billingSel  ? billingSel.value                       : '';
-      var payment = paymentSel  ? paymentSel.value                       : '';
+      var q = searchEl ? searchEl.value.trim().toLowerCase() : '';
+      var plan = planSel ? planSel.value : '';
+      var status = statusSel ? statusSel.value : '';
+      var billing = billingSel ? billingSel.value : '';
+      var payment = paymentSel ? paymentSel.value : '';
 
-      var rows    = getRows();
+      var rows = getRows();
       var visible = [];
 
-      rows.forEach(function(row) {
-        var rPlan    = row.getAttribute('data-sub-plan')    || '';
-        var rStatus  = row.getAttribute('data-sub-status')  || '';
+      rows.forEach(function (row) {
+        var rPlan = row.getAttribute('data-sub-plan') || '';
+        var rStatus = row.getAttribute('data-sub-status') || '';
         var rBilling = row.getAttribute('data-sub-billing') || '';
         var rPayment = row.getAttribute('data-sub-payment') || '';
-        var rText    = (row.textContent || '').toLowerCase();
+        var rText = (row.textContent || '').toLowerCase();
 
         var match =
-          (!q       || rText.indexOf(q) !== -1) &&
-          (!plan    || rPlan === plan) &&
-          (!status  || rStatus === status) &&
+          (!q || rText.indexOf(q) !== -1) &&
+          (!plan || rPlan === plan) &&
+          (!status || rStatus === status) &&
           (!billing || rBilling === billing) &&
           (!payment || rPayment === payment);
 
@@ -1987,8 +2249,10 @@
       sortRows(visible);
 
       /* reorder visible rows in DOM first, then hide/show */
-      visible.forEach(function(row) { tbody.appendChild(row); });
-      rows.forEach(function(row) {
+      visible.forEach(function (row) {
+        tbody.appendChild(row);
+      });
+      rows.forEach(function (row) {
         row.hidden = visible.indexOf(row) === -1;
       });
 
@@ -2003,47 +2267,61 @@
     }
 
     /* ── event wiring ────────────────────────────────────────────────── */
-    if (searchEl)   searchEl.addEventListener('input',  applyFilters);
-    if (planSel)    planSel.addEventListener('change',  applyFilters);
-    if (statusSel)  statusSel.addEventListener('change', applyFilters);
+    if (searchEl) searchEl.addEventListener('input', applyFilters);
+    if (planSel) planSel.addEventListener('change', applyFilters);
+    if (statusSel) statusSel.addEventListener('change', applyFilters);
     if (billingSel) billingSel.addEventListener('change', applyFilters);
     if (paymentSel) paymentSel.addEventListener('change', applyFilters);
-    if (sortSel)    sortSel.addEventListener('change',  applyFilters);
+    if (sortSel) sortSel.addEventListener('change', applyFilters);
 
     function resetFilters() {
-      if (searchEl)   searchEl.value   = '';
-      if (planSel)    planSel.value    = '';
-      if (statusSel)  statusSel.value  = '';
+      if (searchEl) searchEl.value = '';
+      if (planSel) planSel.value = '';
+      if (statusSel) statusSel.value = '';
       if (billingSel) billingSel.value = '';
       if (paymentSel) paymentSel.value = '';
-      if (sortSel)    sortSel.value    = 'renewal-asc';
+      if (sortSel) sortSel.value = 'renewal-asc';
       applyFilters();
     }
 
-    if (resetBtn)   resetBtn.addEventListener('click',   resetFilters);
+    if (resetBtn) resetBtn.addEventListener('click', resetFilters);
     if (emptyReset) emptyReset.addEventListener('click', resetFilters);
 
     /* ── select-all / bulk ───────────────────────────────────────────── */
     var selectAll = document.getElementById('sub-select-all');
-    var SELECTED  = new Set();
+    var SELECTED = new Set();
 
     function syncSelectAll() {
-      var visibleRows = getRows().filter(function(r) { return !r.hidden; });
-      var checks = visibleRows.map(function(r) { return r.querySelector('.sub-row-check'); }).filter(Boolean);
+      var visibleRows = getRows().filter(function (r) {
+        return !r.hidden;
+      });
+      var checks = visibleRows
+        .map(function (r) {
+          return r.querySelector('.sub-row-check');
+        })
+        .filter(Boolean);
       if (selectAll) {
-        selectAll.checked = checks.length > 0 && checks.every(function(c) { return c.checked; });
-        selectAll.indeterminate = !selectAll.checked && checks.some(function(c) { return c.checked; });
+        selectAll.checked =
+          checks.length > 0 &&
+          checks.every(function (c) {
+            return c.checked;
+          });
+        selectAll.indeterminate =
+          !selectAll.checked &&
+          checks.some(function (c) {
+            return c.checked;
+          });
       }
     }
 
     function updateBulk() {
       SELECTED.clear();
-      document.querySelectorAll('.sub-row-check:checked').forEach(function(c) {
+      document.querySelectorAll('.sub-row-check:checked').forEach(function (c) {
         var row = c.closest('tr[data-sub-id]');
         if (row) SELECTED.add(row.getAttribute('data-sub-id'));
       });
       var n = SELECTED.size;
-      if (bulkBar)   bulkBar.hidden  = n === 0;
+      if (bulkBar) bulkBar.hidden = n === 0;
       if (bulkCount) bulkCount.textContent = n + ' محدد' + (n === 1 ? '' : '');
       var bcc = document.getElementById('modal-bulk-cancel-count');
       if (bcc) bcc.textContent = n;
@@ -2051,9 +2329,11 @@
     }
 
     if (selectAll) {
-      selectAll.addEventListener('change', function() {
-        var visibleRows = getRows().filter(function(r) { return !r.hidden; });
-        visibleRows.forEach(function(row) {
+      selectAll.addEventListener('change', function () {
+        var visibleRows = getRows().filter(function (r) {
+          return !r.hidden;
+        });
+        visibleRows.forEach(function (row) {
           var c = row.querySelector('.sub-row-check');
           if (c) c.checked = selectAll.checked;
         });
@@ -2061,7 +2341,7 @@
       });
     }
 
-    document.addEventListener('change', function(e) {
+    document.addEventListener('change', function (e) {
       if (e.target && e.target.classList.contains('sub-row-check')) {
         updateBulk();
       }
@@ -2069,52 +2349,58 @@
 
     /* ── row actions toast/modal wiring ──────────────────────────────── */
     var ACTION_MSGS = {
-      'change-plan':       'تغيير الخطة — إجراء تجريبي، لا يتم تطبيق أي تغيير حقيقي',
-      'mark-paid':         'تم التعيين كمدفوع (تجريبي) — لا توجد معاملة حقيقية',
-      'send-reminder':     'تم إرسال التذكير (تجريبي) — لا يُرسل أي بريد إلكتروني حقيقي',
-      'download-invoice':  'تنزيل الفاتورة (تجريبي) — لا يوجد ملف PDF حقيقي',
-      'send-invoice-email':'تم إرسال الفاتورة بالبريد (تجريبي)',
+      'change-plan': 'تغيير الخطة — إجراء تجريبي، لا يتم تطبيق أي تغيير حقيقي',
+      'mark-paid': 'تم التعيين كمدفوع (تجريبي) — لا توجد معاملة حقيقية',
+      'send-reminder': 'تم إرسال التذكير (تجريبي) — لا يُرسل أي بريد إلكتروني حقيقي',
+      'download-invoice': 'تنزيل الفاتورة (تجريبي) — لا يوجد ملف PDF حقيقي',
+      'send-invoice-email': 'تم إرسال الفاتورة بالبريد (تجريبي)',
       'download-invoice-modal': 'تنزيل PDF (تجريبي) — لا يوجد ملف حقيقي',
-      'export-all':        'تصدير البيانات (تجريبي) — لا يتم إنشاء ملف فعلي'
+      'export-all': 'تصدير البيانات (تجريبي) — لا يتم إنشاء ملف فعلي',
     };
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-sub-action]');
       if (!btn) return;
       var action = btn.getAttribute('data-sub-action');
-      var msg = ACTION_MSGS[action] || ('إجراء ' + action + ' — تجريبي');
+      var msg = ACTION_MSGS[action] || 'إجراء ' + action + ' — تجريبي';
       toast(msg, 'info');
     });
 
     /* ── extend-trial validation ──────────────────────────────────────── */
     var btnConfirmExtend = document.getElementById('btn-confirm-sub-extend-trial');
     if (btnConfirmExtend) {
-      btnConfirmExtend.addEventListener('click', function() {
+      btnConfirmExtend.addEventListener('click', function () {
         var daysEl = document.getElementById('sub-ext-days');
-        var days   = daysEl ? parseInt(daysEl.value, 10) : NaN;
+        var days = daysEl ? parseInt(daysEl.value, 10) : NaN;
         if (!daysEl || isNaN(days) || days < 1 || days > 90) {
           fieldErr('sub-ext-days', 'sub-ext-days-err', 'يجب أن يكون بين 1 و90 يومًا');
           return;
         }
         clearErr('sub-ext-days', 'sub-ext-days-err');
         closeModal('modal-sub-extend-trial');
-        toast('تم تمديد فترة التجربة ' + days + ' يومًا (تجريبي) — لا يتم تطبيق أي تغيير حقيقي', 'success');
+        toast(
+          'تم تمديد فترة التجربة ' + days + ' يومًا (تجريبي) — لا يتم تطبيق أي تغيير حقيقي',
+          'success'
+        );
       });
     }
 
     /* ── cancel confirm ──────────────────────────────────────────────── */
     var btnConfirmCancel = document.getElementById('btn-confirm-sub-cancel');
     if (btnConfirmCancel) {
-      btnConfirmCancel.addEventListener('click', function() {
+      btnConfirmCancel.addEventListener('click', function () {
         closeModal('modal-sub-cancel');
-        toast('تم إلغاء الاشتراك (تجريبي) — لا يتم إيقاف أي خدمة حقيقية. الحالة تُعاد عند تحديث الصفحة.', 'info');
+        toast(
+          'تم إلغاء الاشتراك (تجريبي) — لا يتم إيقاف أي خدمة حقيقية. الحالة تُعاد عند تحديث الصفحة.',
+          'info'
+        );
       });
     }
 
     /* ── bulk cancel confirm ─────────────────────────────────────────── */
     var btnBulkCancel = document.getElementById('btn-confirm-sub-bulk-cancel');
     if (btnBulkCancel) {
-      btnBulkCancel.addEventListener('click', function() {
+      btnBulkCancel.addEventListener('click', function () {
         var n = SELECTED.size;
         closeModal('modal-sub-bulk-cancel');
         toast('تم إلغاء ' + n + ' اشتراك (تجريبي) — لا توجد إلغاءات حقيقية', 'info');
@@ -2122,24 +2408,25 @@
     }
 
     /* ── bulk action buttons ──────────────────────────────────────────── */
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-sub-bulk]');
       if (!btn) return;
       var action = btn.getAttribute('data-sub-bulk');
-      if (action === 'export')         toast('تصدير المحدد (تجريبي) — لا يتم إنشاء ملف فعلي', 'info');
-      else if (action === 'send-reminders') toast('تم إرسال التذكيرات (تجريبي) — لا تُرسل رسائل حقيقية', 'info');
-      else if (action === 'extend-trials')  openModal('modal-sub-extend-trial');
-      else if (action === 'mark-review')    toast('تم وضع علامة مراجعة (تجريبي)', 'info');
+      if (action === 'export') toast('تصدير المحدد (تجريبي) — لا يتم إنشاء ملف فعلي', 'info');
+      else if (action === 'send-reminders')
+        toast('تم إرسال التذكيرات (تجريبي) — لا تُرسل رسائل حقيقية', 'info');
+      else if (action === 'extend-trials') openModal('modal-sub-extend-trial');
+      else if (action === 'mark-review') toast('تم وضع علامة مراجعة (تجريبي)', 'info');
     });
 
     /* ── FAQ accordion ───────────────────────────────────────────────── */
     var faq = document.getElementById('sub-faq');
     if (faq) {
-      faq.addEventListener('click', function(e) {
+      faq.addEventListener('click', function (e) {
         var q = e.target.closest('.admin-faq-q');
         if (!q) return;
         var isOpen = q.getAttribute('aria-expanded') === 'true';
-        faq.querySelectorAll('.admin-faq-q[aria-expanded="true"]').forEach(function(other) {
+        faq.querySelectorAll('.admin-faq-q[aria-expanded="true"]').forEach(function (other) {
           if (other !== q) other.setAttribute('aria-expanded', 'false');
         });
         q.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
@@ -2149,7 +2436,414 @@
     /* ── initial render ──────────────────────────────────────────────── */
     applyFilters();
   }
-  function initAnalytics()      {}
-  function initContent()        {}
+  function initAnalytics() {
+    var toast = _P._toast;
 
-}());
+    /* ── Period preset buttons ─────────────────────────────────────── */
+    var periodBtns = document.querySelectorAll('[data-an-period]');
+    periodBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        periodBtns.forEach(function (b) {
+          b.classList.remove('is-active');
+        });
+        btn.classList.add('is-active');
+        var label = btn.textContent.trim();
+        toast('البيانات تجريبية — سيتم جلب بيانات ' + label + ' عند ربط الخلفية', 'info');
+      });
+    });
+
+    /* ── Apply date-range ──────────────────────────────────────────── */
+    var btnApply = document.getElementById('btn-an-apply');
+    if (btnApply) {
+      btnApply.addEventListener('click', function () {
+        var from = (document.getElementById('an-date-from') || {}).value || '';
+        var to = (document.getElementById('an-date-to') || {}).value || '';
+        if (from && to && from > to) {
+          toast('تاريخ البداية يجب أن يكون قبل تاريخ النهاية', 'error');
+          return;
+        }
+        periodBtns.forEach(function (b) {
+          b.classList.remove('is-active');
+        });
+        toast(
+          'البيانات تجريبية — الفترة من ' +
+            (from || '—') +
+            ' إلى ' +
+            (to || '—') +
+            ' (لا يوجد جلب فعلي)',
+          'info'
+        );
+      });
+    }
+
+    /* ── Compare toggle ────────────────────────────────────────────── */
+    var btnCompare = document.getElementById('btn-an-compare');
+    if (btnCompare) {
+      btnCompare.addEventListener('click', function () {
+        var pressed = btnCompare.getAttribute('aria-pressed') === 'true';
+        btnCompare.setAttribute('aria-pressed', pressed ? 'false' : 'true');
+        toast(
+          pressed
+            ? 'تم إيقاف المقارنة — البيانات تجريبية'
+            : 'تم تفعيل المقارنة بالفترة السابقة — البيانات تجريبية وليست مقارنة فعلية',
+          'info'
+        );
+      });
+    }
+
+    /* ── Export button → open modal ────────────────────────────────── */
+    var btnExport = document.getElementById('btn-an-export');
+    if (btnExport) {
+      btnExport.addEventListener('click', function () {
+        if (window.TUI && window.TUI.modal) {
+          window.TUI.modal('modal-an-export', 'open');
+        } else {
+          var m = document.getElementById('modal-an-export');
+          if (m) m.hidden = false;
+        }
+      });
+    }
+
+    /* ── Export modal actions ──────────────────────────────────────── */
+    var exportMsgs = {
+      csv: 'CSV تجريبي — لا يتم تنزيل ملف فعلي في هذه النسخة',
+      pdf: 'PDF تجريبي — لا يتم إنشاء ملف فعلي في هذه النسخة',
+      schedule: 'جدولة تجريبية — لا يتم إنشاء مهمة مجدولة فعلية',
+      email: 'إرسال تجريبي — لا يتم إرسال بريد إلكتروني فعلي',
+    };
+    document.addEventListener('click', function (e) {
+      var exportBtn = e.target.closest('[data-an-export-action]');
+      if (exportBtn) {
+        var action = exportBtn.dataset.anExportAction;
+        var msg = exportMsgs[action] || 'إجراء تجريبي';
+        if (window.TUI && window.TUI.modal) window.TUI.modal('modal-an-export', 'close');
+        else {
+          var m = document.getElementById('modal-an-export');
+          if (m) m.hidden = true;
+        }
+        toast(msg, 'info');
+        return;
+      }
+
+      /* ── Table / insight / recommendation action buttons ─────────── */
+      var actionBtn = e.target.closest('[data-an-action]');
+      if (actionBtn) {
+        var act = actionBtn.dataset.anAction;
+        var actionMsgs = {
+          'view-destination': 'فتح صفحة الوجهة — تجريبي',
+          'export-deals': 'تصدير بيانات العروض — لا يتم تصدير فعلي',
+          'refresh-integrations': 'تحديث حالة التكاملات — البيانات تجريبية وليست فعلية',
+          'escalate-integration': 'تم تسجيل التصعيد — لا يتم إرسال تنبيه فعلي',
+          'review-integration': 'فتح قائمة مراجعة التكامل — تجريبي',
+          'rec-escalate-duffel': 'تم إرسال طلب تصعيد Duffel API (تجريبي) — لا يتم إجراء فعلي',
+          'rec-contact-trial':
+            'تم إرسال عرض الترقية لمسافر للسياحة (تجريبي) — لا يتم إرسال بريد فعلي',
+          'rec-contact-renewal': 'تم تسجيل طلب التواصل مع قوافل السياحة (تجريبي)',
+          'rec-review-queue': 'فتح قائمة انتظار Scraping — تجريبي',
+          'rec-send-upgrades': 'تم إرسال عروض الترقية للشركات الثلاث (تجريبي) — لا يتم إرسال فعلي',
+        };
+        var msg = actionMsgs[act] || 'إجراء تجريبي — لا يتم تنفيذ فعلي';
+        toast(msg, act && act.indexOf('escalate') !== -1 ? 'warning' : 'success');
+      }
+    });
+
+    /* ── FAQ accordion ─────────────────────────────────────────────── */
+    var faqEl = document.getElementById('an-faq');
+    if (faqEl) {
+      faqEl.addEventListener('click', function (e) {
+        var btn = e.target.closest('.admin-faq-q');
+        if (!btn) return;
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        faqEl.querySelectorAll('.admin-faq-q').forEach(function (q) {
+          q.setAttribute('aria-expanded', 'false');
+        });
+        if (!expanded) btn.setAttribute('aria-expanded', 'true');
+      });
+    }
+  }
+  function initContent() {
+    var toast = _P._toast;
+
+    /* ── Tab system ──────────────────────────────────────────────────── */
+    var tablist = document.getElementById('ct-tablist');
+    var tabs = tablist ? tablist.querySelectorAll('[role="tab"]') : [];
+    var panels = document.querySelectorAll('[role="tabpanel"]');
+    var mainEl = document.getElementById('main-content');
+
+    function activateTab(tabEl) {
+      tabs.forEach(function (t) {
+        t.setAttribute('aria-selected', 'false');
+        t.removeAttribute('aria-current');
+      });
+      panels.forEach(function (p) {
+        p.classList.remove('is-active');
+      });
+      tabEl.setAttribute('aria-selected', 'true');
+      tabEl.setAttribute('aria-current', 'true');
+      var panel = document.getElementById(tabEl.getAttribute('aria-controls'));
+      if (panel) panel.classList.add('is-active');
+    }
+
+    if (tablist && tabs.length) {
+      /* Mark ready so CSS hides non-active panels */
+      if (mainEl) mainEl.classList.add('ct-tabs-ready');
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          activateTab(tab);
+        });
+      });
+
+      /* Deep-link: #blog / ?tab=blog */
+      var hashTab = (location.hash || '').replace('#', '');
+      var paramTab = new URLSearchParams(location.search).get('tab');
+      var target = paramTab || hashTab;
+      if (target) {
+        var found = null;
+        tabs.forEach(function (t) {
+          if (t.getAttribute('aria-controls') === 'panel-' + target) found = t;
+        });
+        if (found) activateTab(found);
+      }
+    }
+
+    /* ── Quick-action dropdown create triggers ───────────────────────── */
+    document.addEventListener('click', function (e) {
+      var createTrigger = e.target.closest('[data-ct-create]');
+      if (createTrigger && !createTrigger.closest('[data-modal-open]')) {
+        var type = createTrigger.dataset.ctCreate;
+        var sel = document.getElementById('ct-content-type');
+        if (sel) {
+          sel.value = type;
+        }
+        var title = document.getElementById('modal-ct-create-title');
+        var labels = {
+          destination: 'وجهة جديدة (تجريبي)',
+          article: 'مقالة جديدة (تجريبي)',
+          deal: 'عرض مميز (تجريبي)',
+          coupon: 'كوبون مميز (تجريبي)',
+        };
+        if (title) title.textContent = labels[type] || 'إنشاء محتوى تجريبي';
+        var modal = document.getElementById('modal-ct-create');
+        if (modal) {
+          modal.hidden = false;
+          var inp = document.getElementById('ct-content-title');
+          if (inp)
+            setTimeout(function () {
+              inp.focus();
+            }, 80);
+        }
+      }
+    });
+
+    /* ── Slug auto-fill from title ───────────────────────────────────── */
+    var titleInp = document.getElementById('ct-content-title');
+    var slugInp = document.getElementById('ct-content-slug');
+    if (titleInp && slugInp) {
+      titleInp.addEventListener('input', function () {
+        if (slugInp.dataset.manualEdit) return;
+        slugInp.value = titleInp.value
+          .trim()
+          .replace(/[\s؀-ۿ]+/g, '-')
+          .replace(/[^a-z0-9-]/gi, '')
+          .toLowerCase()
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '');
+      });
+      slugInp.addEventListener('input', function () {
+        slugInp.dataset.manualEdit = '1';
+      });
+    }
+
+    /* ── Create/Edit form validation + submit ────────────────────────── */
+    var form = document.getElementById('form-ct-create');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var ok = true;
+        ['ct-content-type', 'ct-content-title', 'ct-content-status', 'ct-content-slug'].forEach(
+          function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            el.classList.remove('has-error');
+            if (!el.value.trim()) {
+              el.classList.add('has-error');
+              ok = false;
+            }
+          }
+        );
+        if (slugInp && slugInp.value && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slugInp.value)) {
+          slugInp.classList.add('has-error');
+          toast('الـ Slug يجب أن يحتوي على أحرف إنجليزية صغيرة وأرقام وشرطات فقط', 'error');
+          return;
+        }
+        if (!ok) {
+          toast('يرجى تعبئة جميع الحقول المطلوبة', 'error');
+          return;
+        }
+        var modal = document.getElementById('modal-ct-create');
+        if (modal) modal.hidden = true;
+        form.reset();
+        if (slugInp) delete slugInp.dataset.manualEdit;
+        toast('تم حفظ المحتوى تجريبياً — لا يتم الحفظ على خادم في هذه النسخة', 'success');
+      });
+    }
+
+    /* ── Shared pending IDs for confirm modals ───────────────────────── */
+    var _pendingPublishId = null;
+    var _pendingDeleteId = null;
+
+    /* ── All delegated content actions ──────────────────────────────── */
+    document.addEventListener('click', function (e) {
+      /* Feature toggle */
+      var toggleBtn = e.target.closest('[data-ct-action="toggle-feature"]');
+      if (toggleBtn) {
+        var wasFeatured = toggleBtn.classList.contains('is-featured');
+        toggleBtn.classList.toggle('is-featured', !wasFeatured);
+        toggleBtn.classList.toggle('not-featured', wasFeatured);
+        if (!wasFeatured) {
+          toggleBtn.innerHTML =
+            '<svg width="10" height="10" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#icon-check-circle"/>​</svg> مميز';
+        } else {
+          toggleBtn.textContent = 'غير مميز';
+        }
+        toast(
+          !wasFeatured
+            ? 'تم تمييز المحتوى — لا يؤثر فعلياً على الصفحة الرئيسية الآن'
+            : 'تم إلغاء تمييز المحتوى — لا يؤثر فعلياً الآن',
+          'info'
+        );
+        _updatePreview();
+        return;
+      }
+
+      /* Publish → confirm modal */
+      var publishBtn = e.target.closest('[data-ct-action="publish-content"]');
+      if (publishBtn) {
+        _pendingPublishId = publishBtn.dataset.contentId || null;
+        var m = document.getElementById('modal-ct-publish');
+        if (m) m.hidden = false;
+        return;
+      }
+
+      /* Delete → confirm modal */
+      var deleteBtn = e.target.closest('[data-ct-action="delete-content"]');
+      if (deleteBtn) {
+        _pendingDeleteId = deleteBtn.dataset.contentId || null;
+        var m = document.getElementById('modal-ct-delete');
+        if (m) m.hidden = false;
+        return;
+      }
+
+      /* Publish confirm */
+      if (e.target.closest('[data-ct-action="confirm-publish"]')) {
+        var m = document.getElementById('modal-ct-publish');
+        if (m) m.hidden = true;
+        toast('تم تغيير حالة النشر تجريبياً — لا يتم نشر فعلي على الموقع في هذه النسخة', 'success');
+        _pendingPublishId = null;
+        return;
+      }
+
+      /* Delete confirm */
+      if (e.target.closest('[data-ct-action="confirm-delete"]')) {
+        var m = document.getElementById('modal-ct-delete');
+        if (m) m.hidden = true;
+        toast('تم الحذف تجريبياً — إعادة التحميل تستعيد البيانات الأصلية', 'success');
+        _pendingDeleteId = null;
+        return;
+      }
+
+      /* Approve pending */
+      var approveBtn = e.target.closest('[data-ct-action="approve-content"]');
+      if (approveBtn) {
+        var row = approveBtn.closest('tr');
+        if (row) row.style.opacity = '.45';
+        toast('تم قبول المحتوى تجريبياً — لا يتم نشر فعلي في هذه النسخة', 'success');
+        return;
+      }
+
+      /* Reject pending */
+      var rejectBtn = e.target.closest('[data-ct-action="reject-content"]');
+      if (rejectBtn) {
+        var row = rejectBtn.closest('tr');
+        if (row) row.style.opacity = '.45';
+        toast('تم رفض المحتوى — لا يتم إشعار المرسِل في هذه النسخة', 'warning');
+        return;
+      }
+
+      /* Add note */
+      if (e.target.closest('[data-ct-action="add-note"]')) {
+        toast('ملاحظة تجريبية — لا يتم حفظ ملاحظات فعلية في هذه النسخة', 'info');
+        return;
+      }
+
+      /* Section: edit / reorder / preview */
+      var sectionEdit = e.target.closest('[data-ct-action="edit-section"]');
+      if (sectionEdit) {
+        var card = sectionEdit.closest('.ct-section-card');
+        var nm = card ? (card.querySelector('.ct-section-name') || {}).textContent : '';
+        toast('تعديل "' + (nm ? nm.trim() : 'القسم') + '" تجريبي — لا يتم الحفظ الآن', 'info');
+        return;
+      }
+      if (e.target.closest('[data-ct-action="reorder-section"]')) {
+        toast('إعادة ترتيب الأقسام تجريبية — لا تؤثر على الموقع الآن', 'info');
+        return;
+      }
+      if (e.target.closest('[data-ct-action="preview-section"]')) {
+        toast('معاينة القسم تجريبية — تُحدَّث تلقائياً عند تغيير التمييز', 'info');
+        return;
+      }
+
+      /* Edit content → open create modal in edit mode */
+      if (e.target.closest('[data-ct-action="edit-content"]')) {
+        var titleEl = document.getElementById('modal-ct-create-title');
+        if (titleEl) titleEl.textContent = 'تعديل المحتوى (تجريبي)';
+        var modal = document.getElementById('modal-ct-create');
+        if (modal) modal.hidden = false;
+        return;
+      }
+
+      /* Export */
+      if (e.target.closest('[data-ct-action="export"]')) {
+        toast('تصدير البيانات تجريبي — لا يتم تنزيل ملف فعلي في هذه النسخة', 'info');
+      }
+    });
+
+    /* ── Homepage preview: reflect featured state ────────────────────── */
+    function _updatePreview() {
+      var body = document.getElementById('ct-preview-body');
+      if (!body) return;
+      var cards = document.querySelectorAll('.ct-section-card');
+      var html = '';
+      cards.forEach(function (card) {
+        var name = (card.querySelector('.ct-section-name') || {}).textContent || '';
+        var toggle = card.querySelector('.ct-toggle-btn');
+        var featured = toggle && toggle.classList.contains('is-featured');
+        html +=
+          '<div class="ct-preview-section">' +
+          '<span class="ct-preview-section-name">' +
+          name.trim() +
+          '</span>' +
+          (featured
+            ? '<span class="ct-preview-tag">مميز</span>'
+            : '<span class="ct-preview-tag ct-preview-tag-draft">مخفي</span>') +
+          '</div>';
+      });
+      if (html) body.innerHTML = html;
+    }
+
+    /* ── FAQ accordion ───────────────────────────────────────────────── */
+    var faqEl = document.getElementById('ct-faq');
+    if (faqEl) {
+      faqEl.addEventListener('click', function (e) {
+        var btn = e.target.closest('.admin-faq-q');
+        if (!btn) return;
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        faqEl.querySelectorAll('.admin-faq-q').forEach(function (q) {
+          q.setAttribute('aria-expanded', 'false');
+        });
+        if (!expanded) btn.setAttribute('aria-expanded', 'true');
+      });
+    }
+  }
+})();

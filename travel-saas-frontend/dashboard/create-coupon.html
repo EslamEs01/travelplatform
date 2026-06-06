@@ -1,879 +1,2433 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl" class="scroll-smooth" data-page="merchant-create-coupon">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>إنشاء كوبون جديد – رحلاتي (تجريبي)</title>
-  <meta name="description" content="إنشاء كوبون خصم جديد للوكالة — بيانات تجريبية وواجهة أمامية فقط.">
-  <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#0E8186">
-  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
-  <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/cairo-600.woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/tailwind.css">
-  <style>
-    /* ── dashboard/create-coupon.html page-scoped styles ── */
-    :root {
-      --sidebar-w: 260px; --topbar-h: 64px;
-      --sidebar-bg: #042B2E; --sidebar-active: #0E8186;
-      --sidebar-hover: rgba(14,129,134,.18); --sidebar-text: #A4E9EA;
-      --body-bg: #F4F6F9; --card-bg: #ffffff; --border-color: #E2E8F0;
-      --shadow-card: 0 1px 3px rgba(38,46,58,.07),0 1px 2px rgba(38,46,58,.04);
-      --shadow-pop: 0 10px 25px -5px rgba(38,46,58,.12),0 4px 10px -6px rgba(38,46,58,.08);
-      --z-dd: 1000; --z-drawer: 1040; --z-modal-overlay: 1050; --z-modal: 1060;
-    }
-    .skip-link { position:absolute;inset-inline-start:-999px;top:.5rem;background:#0E8186;color:#fff;padding:.5rem 1.25rem;border-radius:0 .5rem .5rem 0;font-weight:700;font-size:.875rem;z-index:9999;text-decoration:none;transition:inset-inline-start .15s; }
-    .skip-link:focus { inset-inline-start:0; }
-    body { background:var(--body-bg); }
-    .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>إنشاء كوبون جديد – رحلاتي (تجريبي)</title>
+    <meta
+      name="description"
+      content="إنشاء كوبون خصم جديد للوكالة — بيانات تجريبية وواجهة أمامية فقط."
+    />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0E8186" />
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../assets/fonts/cairo-600.woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="../assets/css/tailwind.css" />
+    <style>
+      /* ── dashboard/create-coupon.html page-scoped styles ── */
+      :root {
+        --sidebar-w: 260px;
+        --topbar-h: 64px;
+        --sidebar-bg: #042b2e;
+        --sidebar-active: #0e8186;
+        --sidebar-hover: rgba(14, 129, 134, 0.18);
+        --sidebar-text: #a4e9ea;
+        --body-bg: #f4f6f9;
+        --card-bg: #ffffff;
+        --border-color: #e2e8f0;
+        --shadow-card: 0 1px 3px rgba(38, 46, 58, 0.07), 0 1px 2px rgba(38, 46, 58, 0.04);
+        --shadow-pop:
+          0 10px 25px -5px rgba(38, 46, 58, 0.12), 0 4px 10px -6px rgba(38, 46, 58, 0.08);
+        --z-dd: 1000;
+        --z-drawer: 1040;
+        --z-modal-overlay: 1050;
+        --z-modal: 1060;
+      }
+      .skip-link {
+        position: absolute;
+        inset-inline-start: -999px;
+        top: 0.5rem;
+        background: #0e8186;
+        color: #fff;
+        padding: 0.5rem 1.25rem;
+        border-radius: 0 0.5rem 0.5rem 0;
+        font-weight: 700;
+        font-size: 0.875rem;
+        z-index: 9999;
+        text-decoration: none;
+        transition: inset-inline-start 0.15s;
+      }
+      .skip-link:focus {
+        inset-inline-start: 0;
+      }
+      body {
+        background: var(--body-bg);
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
 
-    /* ── Shell ── */
-    .dash-sidebar { position:fixed;top:0;bottom:0;inset-inline-start:0;width:var(--sidebar-w);background:var(--sidebar-bg);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;z-index:var(--z-drawer);transition:transform .25s cubic-bezier(.4,0,.2,1);scrollbar-width:thin;scrollbar-color:rgba(14,129,134,.4) transparent; }
-    .dash-sidebar:not(.is-open) { transform:translateX(100%); }
-    html[dir="ltr"] .dash-sidebar:not(.is-open) { transform:translateX(-100%); }
-    @media(min-width:1024px) { .dash-sidebar,html[dir="ltr"] .dash-sidebar { transform:translateX(0)!important;transition:none!important;z-index:10; } }
-    .dash-scrim { position:fixed;inset:0;background:rgba(22,28,38,.6);z-index:1030;opacity:0;pointer-events:none;transition:opacity .2s; }
-    .dash-scrim.is-visible { opacity:1;pointer-events:auto; }
-    .dash-main { display:flex;flex-direction:column;min-height:100dvh; }
-    @media(min-width:1024px) { .dash-main { margin-inline-start:var(--sidebar-w); } }
-    body.sidebar-open { overflow:hidden; }
-    .dash-topbar { position:sticky;top:0;height:var(--topbar-h);background:var(--card-bg);border-bottom:1px solid var(--border-color);display:flex;align-items:center;gap:.5rem;padding:0 1.25rem;z-index:var(--z-dd);box-shadow:0 1px 3px rgba(38,46,58,.05); }
-    .dash-dropdown { position:absolute;top:calc(var(--topbar-h) - 4px);inset-inline-end:0;background:var(--card-bg);border:1px solid var(--border-color);border-radius:.875rem;box-shadow:var(--shadow-pop);min-width:280px;z-index:var(--z-dd);overflow:hidden; }
-    .dash-dropdown[hidden] { display:none; }
-    .dash-dropdown.dd-animate { animation:dd-pop .15s cubic-bezier(.4,0,.2,1); }
-    @keyframes dd-pop { from{opacity:0;transform:translateY(-8px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
-    .topbar-search { display:flex;align-items:center;background:#F7F8FA;border:1px solid var(--border-color);border-radius:.625rem;padding:0 .75rem;height:2.25rem;gap:.375rem;flex:1;max-width:280px;transition:border-color .15s,box-shadow .15s; }
-    .topbar-search:focus-within { border-color:#16A0A5;box-shadow:0 0 0 3px rgba(22,160,165,.12);background:#fff; }
-    .topbar-search input { border:none;background:transparent;font-family:inherit;font-size:.875rem;color:#262E3A;width:100%;outline:none; }
-    .topbar-search input::placeholder { color:#9AA6B4; }
-    .dash-content { flex:1;padding:1.25rem 1rem 2.5rem;max-width:1400px;width:100%;margin-inline:auto; }
-    @media(min-width:768px) { .dash-content { padding:1.75rem 1.75rem 3rem; } }
-    @media(min-width:1280px) { .dash-content { padding:2rem 2.5rem 3rem; } }
-    .sidebar-brand { display:flex;align-items:center;gap:.75rem;padding:1.375rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0; }
-    .sidebar-brand-name { font-size:1.125rem;font-weight:800;color:#fff;letter-spacing:-.01em; }
-    .sidebar-brand-sub { font-size:.6875rem;color:#6FD7D9;font-weight:500; }
-    .sidebar-nav { flex:1;padding:.75rem 0; }
-    .sidebar-nav-item { list-style:none; }
-    .sidebar-nav-link { display:flex;align-items:center;gap:.75rem;padding:.6875rem 1.25rem;color:var(--sidebar-text);text-decoration:none;border-radius:.625rem;margin:.125rem .75rem;font-size:.9375rem;font-weight:500;transition:background .15s,color .15s;white-space:nowrap; }
-    .sidebar-nav-link:hover { background:var(--sidebar-hover);color:#fff; }
-    .sidebar-nav-link[aria-current="page"] { background:var(--sidebar-active);color:#fff;font-weight:700; }
-    .sidebar-section-label { font-size:.6875rem;font-weight:700;letter-spacing:.07em;color:rgba(164,233,234,.5);text-transform:uppercase;padding:.75rem 1.25rem .25rem;margin:0; }
-    .sidebar-bottom { border-top:1px solid rgba(255,255,255,.08);padding:.75rem 0;flex-shrink:0; }
-    .dash-breadcrumb { display:flex;align-items:center;gap:.375rem;font-size:.8125rem;color:#9AA6B4;padding-bottom:1rem; }
-    .dash-breadcrumb a { color:#6B7889;text-decoration:none; }
-    .dash-breadcrumb a:hover { color:#0E8186;text-decoration:underline; }
-    .dash-breadcrumb-sep { color:#C5CDD7;user-select:none; }
-    .dash-footer { border-top:1px solid var(--border-color);background:var(--card-bg);padding:1rem 1.75rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;font-size:.8125rem;color:#9AA6B4; }
+      /* ── Shell ── */
+      .dash-sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        inset-inline-start: 0;
+        width: var(--sidebar-w);
+        background: var(--sidebar-bg);
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        z-index: var(--z-drawer);
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        scrollbar-width: thin;
+        scrollbar-color: rgba(14, 129, 134, 0.4) transparent;
+      }
+      .dash-sidebar:not(.is-open) {
+        transform: translateX(100%);
+      }
+      html[dir='ltr'] .dash-sidebar:not(.is-open) {
+        transform: translateX(-100%);
+      }
+      @media (min-width: 1024px) {
+        .dash-sidebar,
+        html[dir='ltr'] .dash-sidebar {
+          transform: translateX(0) !important;
+          transition: none !important;
+          z-index: 10;
+        }
+      }
+      .dash-scrim {
+        position: fixed;
+        inset: 0;
+        background: rgba(22, 28, 38, 0.6);
+        z-index: 1030;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+      .dash-scrim.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .dash-main {
+        display: flex;
+        flex-direction: column;
+        min-height: 100dvh;
+      }
+      @media (min-width: 1024px) {
+        .dash-main {
+          margin-inline-start: var(--sidebar-w);
+        }
+      }
+      body.sidebar-open {
+        overflow: hidden;
+      }
+      .dash-topbar {
+        position: sticky;
+        top: 0;
+        height: var(--topbar-h);
+        background: var(--card-bg);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0 1.25rem;
+        z-index: var(--z-dd);
+        box-shadow: 0 1px 3px rgba(38, 46, 58, 0.05);
+      }
+      .dash-dropdown {
+        position: absolute;
+        top: calc(var(--topbar-h) - 4px);
+        inset-inline-end: 0;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 0.875rem;
+        box-shadow: var(--shadow-pop);
+        min-width: 280px;
+        z-index: var(--z-dd);
+        overflow: hidden;
+      }
+      .dash-dropdown[hidden] {
+        display: none;
+      }
+      .dash-dropdown.dd-animate {
+        animation: dd-pop 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      @keyframes dd-pop {
+        from {
+          opacity: 0;
+          transform: translateY(-8px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .topbar-search {
+        display: flex;
+        align-items: center;
+        background: #f7f8fa;
+        border: 1px solid var(--border-color);
+        border-radius: 0.625rem;
+        padding: 0 0.75rem;
+        height: 2.25rem;
+        gap: 0.375rem;
+        flex: 1;
+        max-width: 280px;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+      }
+      .topbar-search:focus-within {
+        border-color: #16a0a5;
+        box-shadow: 0 0 0 3px rgba(22, 160, 165, 0.12);
+        background: #fff;
+      }
+      .topbar-search input {
+        border: none;
+        background: transparent;
+        font-family: inherit;
+        font-size: 0.875rem;
+        color: #262e3a;
+        width: 100%;
+        outline: none;
+      }
+      .topbar-search input::placeholder {
+        color: #9aa6b4;
+      }
+      .dash-content {
+        flex: 1;
+        padding: 1.25rem 1rem 2.5rem;
+        max-width: 1400px;
+        width: 100%;
+        margin-inline: auto;
+      }
+      @media (min-width: 768px) {
+        .dash-content {
+          padding: 1.75rem 1.75rem 3rem;
+        }
+      }
+      @media (min-width: 1280px) {
+        .dash-content {
+          padding: 2rem 2.5rem 3rem;
+        }
+      }
+      .sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.375rem 1.25rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        flex-shrink: 0;
+      }
+      .sidebar-brand-name {
+        font-size: 1.125rem;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: -0.01em;
+      }
+      .sidebar-brand-sub {
+        font-size: 0.6875rem;
+        color: #6fd7d9;
+        font-weight: 500;
+      }
+      .sidebar-nav {
+        flex: 1;
+        padding: 0.75rem 0;
+      }
+      .sidebar-nav-item {
+        list-style: none;
+      }
+      .sidebar-nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6875rem 1.25rem;
+        color: var(--sidebar-text);
+        text-decoration: none;
+        border-radius: 0.625rem;
+        margin: 0.125rem 0.75rem;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        transition:
+          background 0.15s,
+          color 0.15s;
+        white-space: nowrap;
+      }
+      .sidebar-nav-link:hover {
+        background: var(--sidebar-hover);
+        color: #fff;
+      }
+      .sidebar-nav-link[aria-current='page'] {
+        background: var(--sidebar-active);
+        color: #fff;
+        font-weight: 700;
+      }
+      .sidebar-section-label {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        color: rgba(164, 233, 234, 0.5);
+        text-transform: uppercase;
+        padding: 0.75rem 1.25rem 0.25rem;
+        margin: 0;
+      }
+      .sidebar-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 0.75rem 0;
+        flex-shrink: 0;
+      }
+      .dash-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 0.8125rem;
+        color: #9aa6b4;
+        padding-bottom: 1rem;
+      }
+      .dash-breadcrumb a {
+        color: #6b7889;
+        text-decoration: none;
+      }
+      .dash-breadcrumb a:hover {
+        color: #0e8186;
+        text-decoration: underline;
+      }
+      .dash-breadcrumb-sep {
+        color: #c5cdd7;
+        user-select: none;
+      }
+      .dash-footer {
+        border-top: 1px solid var(--border-color);
+        background: var(--card-bg);
+        padding: 1rem 1.75rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        font-size: 0.8125rem;
+        color: #9aa6b4;
+      }
 
-    /* ── Page header ── */
-    .page-header-band { background:linear-gradient(135deg,#042B2E 0%,#0B545A 55%,#16A0A5 100%);border-radius:1.25rem;padding:1.5rem 2rem;position:relative;overflow:hidden;box-shadow:0 8px 24px -4px rgba(4,43,46,.3);margin-bottom:1.75rem; }
-    .page-header-band::before { content:'';position:absolute;inset:0;background:radial-gradient(circle at 85% 40%,rgba(56,188,192,.18) 0%,transparent 55%);pointer-events:none; }
+      /* ── Page header ── */
+      .page-header-band {
+        background: linear-gradient(135deg, #042b2e 0%, #0b545a 55%, #16a0a5 100%);
+        border-radius: 1.25rem;
+        padding: 1.5rem 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 24px -4px rgba(4, 43, 46, 0.3);
+        margin-bottom: 1.75rem;
+      }
+      .page-header-band::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at 85% 40%,
+          rgba(56, 188, 192, 0.18) 0%,
+          transparent 55%
+        );
+        pointer-events: none;
+      }
 
-    /* ── Buttons ── */
-    .btn { display:inline-flex;align-items:center;gap:.4rem;padding:.5625rem 1.125rem;border-radius:.75rem;font-family:inherit;font-size:.875rem;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:all .15s; }
-    .btn-primary { background:#0E8186;color:#fff; }
-    .btn-primary:hover { background:#0A6B6F;box-shadow:0 4px 12px rgba(14,129,134,.3); }
-    .btn-outline { background:transparent;border:1.5px solid var(--border-color);color:#4D5969; }
-    .btn-outline:hover { border-color:#0E8186;color:#0E8186;background:#F0FAFA; }
-    .btn-ghost { background:transparent;color:#6B7889;border:1.5px solid transparent; }
-    .btn-ghost:hover { background:#EEF1F5;color:#262E3A; }
-    .btn-sm { padding:.4rem .875rem;font-size:.8125rem; }
+      /* ── Buttons ── */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5625rem 1.125rem;
+        border-radius: 0.75rem;
+        font-family: inherit;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        border: none;
+        transition: all 0.15s;
+      }
+      .btn-primary {
+        background: #0e8186;
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: #0a6b6f;
+        box-shadow: 0 4px 12px rgba(14, 129, 134, 0.3);
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1.5px solid var(--border-color);
+        color: #4d5969;
+      }
+      .btn-outline:hover {
+        border-color: #0e8186;
+        color: #0e8186;
+        background: #f0fafa;
+      }
+      .btn-ghost {
+        background: transparent;
+        color: #6b7889;
+        border: 1.5px solid transparent;
+      }
+      .btn-ghost:hover {
+        background: #eef1f5;
+        color: #262e3a;
+      }
+      .btn-sm {
+        padding: 0.4rem 0.875rem;
+        font-size: 0.8125rem;
+      }
 
-    /* ── Safe note ── */
-    .safe-note { display:inline-flex;align-items:flex-start;gap:.5rem;padding:.5rem .875rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:.75rem;font-size:.75rem;color:rgba(255,255,255,.8);margin-top:.875rem; }
+      /* ── Safe note ── */
+      .safe-note {
+        display: inline-flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.5rem 0.875rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.75rem;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-top: 0.875rem;
+      }
 
-    /* ── Two-column layout ── */
-    .create-form-layout { display:grid;grid-template-columns:1fr 300px;gap:1.5rem;align-items:start; }
-    @media(max-width:1024px) { .create-form-layout { grid-template-columns:1fr; } }
+      /* ── Two-column layout ── */
+      .create-form-layout {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 1.5rem;
+        align-items: start;
+      }
+      @media (max-width: 1024px) {
+        .create-form-layout {
+          grid-template-columns: 1fr;
+        }
+      }
 
-    /* ── Form section ── */
-    .form-section { background:var(--card-bg);border:1px solid var(--border-color);border-radius:1rem;box-shadow:var(--shadow-card);margin-bottom:1.125rem;overflow:hidden; }
-    .form-section-header { display:flex;align-items:center;gap:.625rem;padding:.875rem 1.25rem;border-bottom:1px solid var(--border-color);background:#F8FAFC; }
-    .form-section-num { width:1.625rem;height:1.625rem;border-radius:50%;background:#ECFBFB;color:#0E8186;font-size:.8125rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
-    .form-section-title { font-size:.9375rem;font-weight:700;color:#262E3A;margin:0; }
-    .form-section-body { padding:1.25rem; }
+      /* ── Form section ── */
+      .form-section {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 1rem;
+        box-shadow: var(--shadow-card);
+        margin-bottom: 1.125rem;
+        overflow: hidden;
+      }
+      .form-section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 0.875rem 1.25rem;
+        border-bottom: 1px solid var(--border-color);
+        background: #f8fafc;
+      }
+      .form-section-num {
+        width: 1.625rem;
+        height: 1.625rem;
+        border-radius: 50%;
+        background: #ecfbfb;
+        color: #0e8186;
+        font-size: 0.8125rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .form-section-title {
+        font-size: 0.9375rem;
+        font-weight: 700;
+        color: #262e3a;
+        margin: 0;
+      }
+      .form-section-body {
+        padding: 1.25rem;
+      }
 
-    /* ── Form grid ── */
-    .form-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.875rem; }
-    .span-full { grid-column:1/-1; }
+      /* ── Form grid ── */
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 0.875rem;
+      }
+      .span-full {
+        grid-column: 1/-1;
+      }
 
-    /* ── Fields ── */
-    .field-group { display:flex;flex-direction:column; }
-    .field-label { font-size:.6875rem;font-weight:700;color:#6B7889;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.35rem; }
-    .field-input,.field-select,.field-textarea { width:100%;padding:.5625rem .75rem;border:1.5px solid #E2E8F0;border-radius:.625rem;background:#F8FAFC;font-size:.875rem;color:#262E3A;font-family:inherit;outline:none;transition:border-color .15s,box-shadow .15s,background .15s;appearance:none; }
-    .field-input:focus,.field-select:focus,.field-textarea:focus { border-color:#0E8186;box-shadow:0 0 0 3px rgba(14,129,134,.1);background:#fff; }
-    .field-input[aria-invalid="true"],.field-select[aria-invalid="true"] { border-color:#DC2626;box-shadow:0 0 0 3px rgba(220,38,38,.1); }
-    .field-textarea { resize:vertical;min-height:90px;line-height:1.6; }
-    .field-helper { font-size:.75rem;color:#9AA6B4;margin-top:.3rem;line-height:1.4; }
-    .field-error { font-size:.75rem;color:#DC2626;margin-top:.3rem;display:flex;align-items:center;gap:.25rem; }
-    .field-error[hidden] { display:none; }
-    .req { color:#DC2626;font-weight:900; }
+      /* ── Fields ── */
+      .field-group {
+        display: flex;
+        flex-direction: column;
+      }
+      .field-label {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        color: #6b7889;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.35rem;
+      }
+      .field-input,
+      .field-select,
+      .field-textarea {
+        width: 100%;
+        padding: 0.5625rem 0.75rem;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 0.625rem;
+        background: #f8fafc;
+        font-size: 0.875rem;
+        color: #262e3a;
+        font-family: inherit;
+        outline: none;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s,
+          background 0.15s;
+        appearance: none;
+      }
+      .field-input:focus,
+      .field-select:focus,
+      .field-textarea:focus {
+        border-color: #0e8186;
+        box-shadow: 0 0 0 3px rgba(14, 129, 134, 0.1);
+        background: #fff;
+      }
+      .field-input[aria-invalid='true'],
+      .field-select[aria-invalid='true'] {
+        border-color: #dc2626;
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+      }
+      .field-textarea {
+        resize: vertical;
+        min-height: 90px;
+        line-height: 1.6;
+      }
+      .field-helper {
+        font-size: 0.75rem;
+        color: #9aa6b4;
+        margin-top: 0.3rem;
+        line-height: 1.4;
+      }
+      .field-error {
+        font-size: 0.75rem;
+        color: #dc2626;
+        margin-top: 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+      .field-error[hidden] {
+        display: none;
+      }
+      .req {
+        color: #dc2626;
+        font-weight: 900;
+      }
 
-    /* ── Code input wrap ── */
-    .code-input-wrap { display:flex;gap:.5rem;align-items:center; }
-    .code-input-wrap .field-input { font-family:'Courier New',monospace;font-weight:700;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;flex:1; }
-    .code-btn { display:inline-flex;align-items:center;gap:.35rem;padding:.5rem .875rem;border-radius:.625rem;font-size:.8125rem;font-weight:700;cursor:pointer;border:1.5px solid;transition:all .12s;white-space:nowrap;flex-shrink:0;font-family:inherit; }
-    .code-btn-gen { background:#ECFBFB;border-color:#A4E9EA;color:#0E8186; }
-    .code-btn-gen:hover { background:#D1F7F7;border-color:#0E8186; }
-    .code-btn-copy { background:#F1F5F9;border-color:#E2E8F0;color:#475569; }
-    .code-btn-copy:hover { background:#E2E8F0;border-color:#94A3B8; }
+      /* ── Code input wrap ── */
+      .code-input-wrap {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .code-input-wrap .field-input {
+        font-family: 'Courier New', monospace;
+        font-weight: 700;
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        flex: 1;
+      }
+      .code-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.5rem 0.875rem;
+        border-radius: 0.625rem;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        cursor: pointer;
+        border: 1.5px solid;
+        transition: all 0.12s;
+        white-space: nowrap;
+        flex-shrink: 0;
+        font-family: inherit;
+      }
+      .code-btn-gen {
+        background: #ecfbfb;
+        border-color: #a4e9ea;
+        color: #0e8186;
+      }
+      .code-btn-gen:hover {
+        background: #d1f7f7;
+        border-color: #0e8186;
+      }
+      .code-btn-copy {
+        background: #f1f5f9;
+        border-color: #e2e8f0;
+        color: #475569;
+      }
+      .code-btn-copy:hover {
+        background: #e2e8f0;
+        border-color: #94a3b8;
+      }
 
-    /* ── Toggle ── */
-    .toggle-row { display:flex;align-items:center;gap:.625rem;padding:.5625rem .75rem;border:1.5px solid #E2E8F0;border-radius:.625rem;background:#F8FAFC;cursor:pointer;transition:border-color .15s; }
-    .toggle-row:focus-within { border-color:#0E8186; }
-    .toggle-row input[type="checkbox"] { width:1rem;height:1rem;accent-color:#0E8186;cursor:pointer;flex-shrink:0; }
-    .toggle-lbl { font-size:.875rem;color:#4D5969;cursor:pointer; }
+      /* ── Toggle ── */
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 0.5625rem 0.75rem;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 0.625rem;
+        background: #f8fafc;
+        cursor: pointer;
+        transition: border-color 0.15s;
+      }
+      .toggle-row:focus-within {
+        border-color: #0e8186;
+      }
+      .toggle-row input[type='checkbox'] {
+        width: 1rem;
+        height: 1rem;
+        accent-color: #0e8186;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .toggle-lbl {
+        font-size: 0.875rem;
+        color: #4d5969;
+        cursor: pointer;
+      }
 
-    /* ── Inline messages ── */
-    .inline-msg { display:flex;align-items:flex-start;gap:.5rem;padding:.625rem .875rem;border-radius:.75rem;font-size:.8125rem;line-height:1.5;margin-top:.5rem; }
-    .inline-msg[hidden] { display:none; }
-    .inline-msg-info { background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF; }
-    .inline-msg-warning { background:#FFFBEB;border:1px solid #FDE68A;color:#92400E; }
-    .inline-msg-danger { background:#FEF2F2;border:1px solid #FECACA;color:#991B1B; }
+      /* ── Inline messages ── */
+      .inline-msg {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.625rem 0.875rem;
+        border-radius: 0.75rem;
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        margin-top: 0.5rem;
+      }
+      .inline-msg[hidden] {
+        display: none;
+      }
+      .inline-msg-info {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #1e40af;
+      }
+      .inline-msg-warning {
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        color: #92400e;
+      }
+      .inline-msg-danger {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+      }
 
-    /* ── Slug / code preview ── */
-    .slug-preview-block { display:flex;align-items:center;gap:.375rem;padding:.5rem .75rem;background:#F1F5F9;border:1px solid #E2E8F0;border-radius:.625rem;margin-top:.375rem;font-size:.8125rem;color:#64748B;overflow:hidden; }
-    .slug-preview-block .slug-val { color:#0E8186;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+      /* ── Slug / code preview ── */
+      .slug-preview-block {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5rem 0.75rem;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.625rem;
+        margin-top: 0.375rem;
+        font-size: 0.8125rem;
+        color: #64748b;
+        overflow: hidden;
+      }
+      .slug-preview-block .slug-val {
+        color: #0e8186;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-    /* ── Sticky summary ── */
-    .form-sticky-col { position:sticky;top:calc(var(--topbar-h) + 1rem); }
-    .sticky-card { background:var(--card-bg);border:1px solid var(--border-color);border-radius:1rem;box-shadow:var(--shadow-card);padding:1.25rem; }
-    .summary-completion-bar { height:6px;background:#F1F5F9;border-radius:9999px;overflow:hidden;margin:.5rem 0 .25rem; }
-    .summary-completion-fill { height:100%;background:linear-gradient(90deg,#0E8186,#38BCC0);border-radius:9999px;width:0%;transition:width .3s; }
+      /* ── Sticky summary ── */
+      .form-sticky-col {
+        position: sticky;
+        top: calc(var(--topbar-h) + 1rem);
+      }
+      .sticky-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 1rem;
+        box-shadow: var(--shadow-card);
+        padding: 1.25rem;
+      }
+      .summary-completion-bar {
+        height: 6px;
+        background: #f1f5f9;
+        border-radius: 9999px;
+        overflow: hidden;
+        margin: 0.5rem 0 0.25rem;
+      }
+      .summary-completion-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #0e8186, #38bcc0);
+        border-radius: 9999px;
+        width: 0%;
+        transition: width 0.3s;
+      }
 
-    /* ── Live coupon preview card ── */
-    .coupon-preview-card {
-      background: linear-gradient(135deg,#F0FAFA,#E8F7F8);
-      border: 2px dashed #A4E9EA;
-      border-radius: 1rem;
-      padding: 1.25rem;
-      margin-top: 1rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .coupon-preview-card::before {
-      content: '';
-      position: absolute;
-      top: -12px; inset-inline-end: -12px;
-      width: 60px; height: 60px;
-      background: radial-gradient(circle,rgba(14,129,134,.12) 0%,transparent 70%);
-      pointer-events: none;
-    }
-    .coupon-preview-notch {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      margin-bottom: .875rem;
-    }
-    .coupon-preview-code {
-      font-family:'Courier New',monospace;
-      font-weight: 800;
-      font-size: 1.25rem;
-      letter-spacing: .1em;
-      color: #0E8186;
-      direction: ltr;
-      display: inline-block;
-      background: #ECFBFB;
-      border: 1.5px solid #A4E9EA;
-      border-radius: .5rem;
-      padding: .25rem .875rem;
-    }
-    .coupon-preview-discount {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #161C26;
-      line-height: 1.1;
-    }
-    .coupon-preview-meta { font-size: .8125rem; color: #6B7889; margin-top: .3rem; }
-    .badge { display:inline-flex;align-items:center;gap:.25rem;padding:.2rem .6rem;border-radius:9999px;font-size:.6875rem;font-weight:700;white-space:nowrap; }
-    .badge-source-manual { background:#F1F5F9;color:#475569; }
-    .badge-source-affiliate { background:#FDF4FF;color:#9333EA; }
-    .badge-source-api { background:#DBEAFE;color:#1D4ED8; }
-    .badge-source-scraped { background:#FFF7ED;color:#C2410C; }
+      /* ── Live coupon preview card ── */
+      .coupon-preview-card {
+        background: linear-gradient(135deg, #f0fafa, #e8f7f8);
+        border: 2px dashed #a4e9ea;
+        border-radius: 1rem;
+        padding: 1.25rem;
+        margin-top: 1rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .coupon-preview-card::before {
+        content: '';
+        position: absolute;
+        top: -12px;
+        inset-inline-end: -12px;
+        width: 60px;
+        height: 60px;
+        background: radial-gradient(circle, rgba(14, 129, 134, 0.12) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      .coupon-preview-notch {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.875rem;
+      }
+      .coupon-preview-code {
+        font-family: 'Courier New', monospace;
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: 0.1em;
+        color: #0e8186;
+        direction: ltr;
+        display: inline-block;
+        background: #ecfbfb;
+        border: 1.5px solid #a4e9ea;
+        border-radius: 0.5rem;
+        padding: 0.25rem 0.875rem;
+      }
+      .coupon-preview-discount {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #161c26;
+        line-height: 1.1;
+      }
+      .coupon-preview-meta {
+        font-size: 0.8125rem;
+        color: #6b7889;
+        margin-top: 0.3rem;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 9999px;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .badge-source-manual {
+        background: #f1f5f9;
+        color: #475569;
+      }
+      .badge-source-affiliate {
+        background: #fdf4ff;
+        color: #9333ea;
+      }
+      .badge-source-api {
+        background: #dbeafe;
+        color: #1d4ed8;
+      }
+      .badge-source-scraped {
+        background: #fff7ed;
+        color: #c2410c;
+      }
 
-    /* ── Modal ── */
-    .modal-overlay { position:fixed;inset:0;background:rgba(15,23,30,.55);backdrop-filter:blur(4px);z-index:var(--z-modal-overlay);display:flex;align-items:center;justify-content:center;padding:1rem; }
-    .modal-overlay[hidden] { display:none; }
-    .modal-box { background:var(--card-bg);border:1px solid var(--border-color);border-radius:1.25rem;box-shadow:var(--shadow-pop);padding:1.75rem;max-width:480px;width:100%;animation:modal-in .18s cubic-bezier(.4,0,.2,1); }
-    @keyframes modal-in { from{opacity:0;transform:scale(.95) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
-    @media(prefers-reduced-motion:reduce) { .modal-box { animation:none; } }
-    .modal-title { font-size:1.125rem;font-weight:800;color:#161C26; }
-    .modal-body { font-size:.9rem;color:#4D5969;margin-top:.5rem;line-height:1.65; }
-    .modal-actions { display:flex;gap:.625rem;margin-top:1.375rem;justify-content:flex-end;flex-wrap:wrap; }
-    .btn-cancel { display:inline-flex;align-items:center;gap:.375rem;padding:.5625rem 1.25rem;border-radius:.75rem;background:#F1F5F9;color:#475569;font-size:.875rem;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .12s; }
-    .btn-cancel:hover { background:#E2E8F0; }
-    .card { background:var(--card-bg);border:1px solid var(--border-color);border-radius:1rem;box-shadow:var(--shadow-card); }
-  </style>
-</head>
+      /* ── Modal ── */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 30, 0.55);
+        backdrop-filter: blur(4px);
+        z-index: var(--z-modal-overlay);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+      .modal-overlay[hidden] {
+        display: none;
+      }
+      .modal-box {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 1.25rem;
+        box-shadow: var(--shadow-pop);
+        padding: 1.75rem;
+        max-width: 480px;
+        width: 100%;
+        animation: modal-in 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      @keyframes modal-in {
+        from {
+          opacity: 0;
+          transform: scale(0.95) translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .modal-box {
+          animation: none;
+        }
+      }
+      .modal-title {
+        font-size: 1.125rem;
+        font-weight: 800;
+        color: #161c26;
+      }
+      .modal-body {
+        font-size: 0.9rem;
+        color: #4d5969;
+        margin-top: 0.5rem;
+        line-height: 1.65;
+      }
+      .modal-actions {
+        display: flex;
+        gap: 0.625rem;
+        margin-top: 1.375rem;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
+      .btn-cancel {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5625rem 1.25rem;
+        border-radius: 0.75rem;
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        transition: background 0.12s;
+      }
+      .btn-cancel:hover {
+        background: #e2e8f0;
+      }
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 1rem;
+        box-shadow: var(--shadow-card);
+      }
+    </style>
+  </head>
 
-<body class="antialiased font-sans">
-  <a href="#main" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
-  <div id="dash-announcer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+  <body class="antialiased font-sans">
+    <a href="#main" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
+    <div
+      id="dash-announcer"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      class="sr-only"
+    ></div>
 
-  <!-- ── Sidebar ── -->
-  <aside id="sidebar-drawer" class="dash-sidebar" aria-label="قائمة لوحة التحكم" inert>
-    <div class="sidebar-brand">
-      <a href="index.html" class="flex items-center gap-2 no-underline focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded-md" aria-label="الصفحة الرئيسية">
-        <span class="w-8 h-8 bg-lagoon-500 rounded-lg flex items-center justify-center flex-shrink-0" aria-hidden="true">
-          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
-        </span>
-        <div><div class="sidebar-brand-name">رحلاتي</div><div class="sidebar-brand-sub">لوحة التحكم التجريبية</div></div>
-      </a>
-    </div>
-    <nav class="sidebar-nav" aria-label="روابط لوحة التحكم">
-      <p class="sidebar-section-label">الرئيسية</p>
-      <ul class="list-none p-0 m-0">
-        <li class="sidebar-nav-item"><a href="index.html" class="sidebar-nav-link"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>الرئيسية</span></a></li>
-      </ul>
-      <p class="sidebar-section-label">إدارة العروض</p>
-      <ul class="list-none p-0 m-0">
-        <li class="sidebar-nav-item"><a href="deals.html" class="sidebar-nav-link"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span>العروض</span></a></li>
-        <li class="sidebar-nav-item"><a href="create-deal.html" class="sidebar-nav-link"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>إضافة عرض</span></a></li>
-        <li class="sidebar-nav-item"><a href="coupons.html" class="sidebar-nav-link"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z"/><line x1="9" y1="3" x2="9" y2="21"/></svg><span>الكوبونات</span></a></li>
-        <li class="sidebar-nav-item"><a href="create-coupon.html" class="sidebar-nav-link" aria-current="page"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>إنشاء كوبون</span></a></li>
-      </ul>
-      <p class="sidebar-section-label">العمليات</p>
-      <ul class="list-none p-0 m-0">
-        <li class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" data-coming-soon><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>طلبات الحجز</span></a></li>
-        <li class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" data-coming-soon><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>العملاء</span></a></li>
-        <li class="sidebar-nav-item"><a href="analytics.html" class="sidebar-nav-link"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg><span>التحليلات</span></a></li>
-      </ul>
-      <p class="sidebar-section-label">الإعدادات</p>
-      <ul class="list-none p-0 m-0">
-        <li class="sidebar-nav-item"><a href="integrations.html" class="sidebar-nav-link"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M7 17l-5 5"/><path d="M17 7l5-5"/><path d="M11 3l3 3-7 7-3-3z"/><path d="M13 21l-3-3 7-7 3 3z"/></svg><span>التكاملات</span></a></li>
-        <li class="sidebar-nav-item"><a href="settings.html" class="sidebar-nav-link"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>الإعدادات</span></a></li>
-      </ul>
-    </nav>
-    <div class="sidebar-bottom">
-      <ul class="list-none p-0 m-0">
-        <li class="sidebar-nav-item"><a href="../pages/index.html" class="sidebar-nav-link text-lagoon-300 hover:text-white"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><span>العودة للموقع</span></a></li>
-        <li class="sidebar-nav-item"><button type="button" class="sidebar-nav-link w-full text-start" data-action="logout"><svg width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>تسجيل الخروج</span></button></li>
-      </ul>
-    </div>
-  </aside>
-  <div id="sidebar-scrim" class="dash-scrim" hidden aria-hidden="true"></div>
-
-  <!-- ── Main ── -->
-  <div class="dash-main">
-
-    <!-- Topbar -->
-    <header class="dash-topbar" role="banner" aria-label="شريط التحكم العلوي">
-      <button id="btn-mobile-menu" type="button" class="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors flex-shrink-0" aria-label="فتح القائمة الجانبية" aria-controls="sidebar-drawer" aria-expanded="false">
-        <svg width="22" height="22" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-      <div class="hidden sm:flex items-center gap-1.5 text-sm text-ink-500 flex-shrink-0">
-        <a href="index.html" class="text-ink-700 font-semibold hover:text-lagoon-600">لوحة التحكم</a>
-        <svg width="14" height="14" aria-hidden="true" class="text-ink-300 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        <a href="coupons.html" class="text-ink-600 hover:text-lagoon-600">الكوبونات</a>
-        <svg width="14" height="14" aria-hidden="true" class="text-ink-300 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        <span class="text-ink-400">إنشاء كوبون</span>
+    <!-- ── Sidebar ── -->
+    <aside id="sidebar-drawer" class="dash-sidebar" aria-label="قائمة لوحة التحكم" inert>
+      <div class="sidebar-brand">
+        <a
+          href="index.html"
+          class="flex items-center gap-2 no-underline focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded-md"
+          aria-label="الصفحة الرئيسية"
+        >
+          <span
+            class="w-8 h-8 bg-lagoon-500 rounded-lg flex items-center justify-center flex-shrink-0"
+            aria-hidden="true"
+          >
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="#fff"
+              stroke-width="2"
+            >
+              <path
+                d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"
+              />
+            </svg>
+          </span>
+          <div>
+            <div class="sidebar-brand-name">رحلاتي</div>
+            <div class="sidebar-brand-sub">لوحة التحكم التجريبية</div>
+          </div>
+        </a>
       </div>
-      <div class="flex-1 min-w-2"></div>
-      <form id="topbar-search-form" role="search" class="topbar-search hidden md:flex" aria-label="البحث">
-        <svg width="16" height="16" aria-hidden="true" class="text-ink-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="search" name="q" placeholder="بحث تجريبي…" autocomplete="off" dir="auto" aria-label="حقل البحث">
-      </form>
-      <div class="relative flex-shrink-0">
-        <button id="btn-notifications" type="button" class="relative flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors" aria-label="الإشعارات" aria-haspopup="menu" aria-controls="dropdown-notifications" aria-expanded="false">
-          <svg width="20" height="20" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-        </button>
-        <div id="dropdown-notifications" class="dash-dropdown" role="menu" hidden style="min-width:280px"><div class="p-3 text-center text-sm text-ink-400">لا إشعارات — واجهة تجريبية</div></div>
+      <nav class="sidebar-nav" aria-label="روابط لوحة التحكم">
+        <p class="sidebar-section-label">الرئيسية</p>
+        <ul class="list-none p-0 m-0">
+          <li class="sidebar-nav-item">
+            <a href="index.html" class="sidebar-nav-link"
+              ><svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" /></svg
+              ><span>الرئيسية</span></a
+            >
+          </li>
+        </ul>
+        <p class="sidebar-section-label">إدارة العروض</p>
+        <ul class="list-none p-0 m-0">
+          <li class="sidebar-nav-item">
+            <a href="deals.html" class="sidebar-nav-link"
+              ><svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"
+                />
+                <line x1="7" y1="7" x2="7.01" y2="7" /></svg
+              ><span>العروض</span></a
+            >
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="create-deal.html" class="sidebar-nav-link"
+              ><svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" /></svg
+              ><span>إضافة عرض</span></a
+            >
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="coupons.html" class="sidebar-nav-link"
+              ><svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z" />
+                <line x1="9" y1="3" x2="9" y2="21" /></svg
+              ><span>الكوبونات</span></a
+            >
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="create-coupon.html" class="sidebar-nav-link" aria-current="page"
+              ><svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" /></svg
+              ><span>إنشاء كوبون</span></a
+            >
+          </li>
+        </ul>
+        <p class="sidebar-section-label">العمليات</p>
+        <ul class="list-none p-0 m-0">
+          <li class="sidebar-nav-item">
+            <a href="#" class="sidebar-nav-link" data-coming-soon
+              ><svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" /></svg
+              ><span>طلبات الحجز</span></a
+            >
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="#" class="sidebar-nav-link" data-coming-soon
+              ><svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                <circle cx="9" cy="7" r="4" /></svg
+              ><span>العملاء</span></a
+            >
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="analytics.html" class="sidebar-nav-link"
+              ><svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+                <line x1="2" y1="20" x2="22" y2="20" /></svg
+              ><span>التحليلات</span></a
+            >
+          </li>
+        </ul>
+        <p class="sidebar-section-label">الإعدادات</p>
+        <ul class="list-none p-0 m-0">
+          <li class="sidebar-nav-item">
+            <a href="integrations.html" class="sidebar-nav-link"
+              ><svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M18 6L6 18" />
+                <path d="M7 17l-5 5" />
+                <path d="M17 7l5-5" />
+                <path d="M11 3l3 3-7 7-3-3z" />
+                <path d="M13 21l-3-3 7-7 3 3z" /></svg
+              ><span>التكاملات</span></a
+            >
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="settings.html" class="sidebar-nav-link"
+              ><svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="3" />
+                <path
+                  d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"
+                /></svg
+              ><span>الإعدادات</span></a
+            >
+          </li>
+        </ul>
+      </nav>
+      <div class="sidebar-bottom">
+        <ul class="list-none p-0 m-0">
+          <li class="sidebar-nav-item">
+            <a href="../pages/index.html" class="sidebar-nav-link text-lagoon-300 hover:text-white"
+              ><svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" /></svg
+              ><span>العودة للموقع</span></a
+            >
+          </li>
+          <li class="sidebar-nav-item">
+            <button type="button" class="sidebar-nav-link w-full text-start" data-action="logout">
+              <svg
+                width="18"
+                height="18"
+                aria-hidden="true"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" /></svg
+              ><span>تسجيل الخروج</span>
+            </button>
+          </li>
+        </ul>
       </div>
-      <div class="relative flex-shrink-0">
-        <button id="btn-user-menu" type="button" class="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-ink-50 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors" aria-haspopup="menu" aria-controls="dropdown-user-menu" aria-expanded="false" aria-label="قائمة المستخدم">
-          <span class="w-8 h-8 bg-gradient-to-br from-lagoon-400 to-lagoon-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">أ</span>
-          <span class="hidden lg:block text-sm font-semibold text-ink-800">أحمد العمري</span>
+    </aside>
+    <div id="sidebar-scrim" class="dash-scrim" hidden aria-hidden="true"></div>
+
+    <!-- ── Main ── -->
+    <div class="dash-main">
+      <!-- Topbar -->
+      <header class="dash-topbar" role="banner" aria-label="شريط التحكم العلوي">
+        <button
+          id="btn-mobile-menu"
+          type="button"
+          class="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors flex-shrink-0"
+          aria-label="فتح القائمة الجانبية"
+          aria-controls="sidebar-drawer"
+          aria-expanded="false"
+        >
+          <svg
+            width="22"
+            height="22"
+            aria-hidden="true"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
         </button>
-        <div id="dropdown-user-menu" class="dash-dropdown" role="menu" hidden>
-          <div class="px-4 py-3 border-b border-ink-100"><div class="font-bold text-sm text-ink-800">أحمد العمري</div><div class="text-xs text-ink-500">مدير الوكالة — شركة رحلات الشرق</div></div>
-          <div class="p-2"><button type="button" role="menuitem" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-danger hover:bg-danger/5 transition-colors" data-action="logout"><svg width="16" height="16" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>تسجيل الخروج</button></div>
+        <div class="hidden sm:flex items-center gap-1.5 text-sm text-ink-500 flex-shrink-0">
+          <a href="index.html" class="text-ink-700 font-semibold hover:text-lagoon-600"
+            >لوحة التحكم</a
+          >
+          <svg
+            width="14"
+            height="14"
+            aria-hidden="true"
+            class="text-ink-300 rotate-90"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+          <a href="coupons.html" class="text-ink-600 hover:text-lagoon-600">الكوبونات</a>
+          <svg
+            width="14"
+            height="14"
+            aria-hidden="true"
+            class="text-ink-300 rotate-90"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+          <span class="text-ink-400">إنشاء كوبون</span>
         </div>
-      </div>
-    </header>
-
-    <!-- ── Main content ── -->
-    <main id="main" tabindex="-1">
-      <div class="dash-content">
-
-        <!-- Breadcrumb -->
-        <nav class="dash-breadcrumb" aria-label="مسار التنقل">
-          <a href="../pages/index.html">الموقع الرئيسي</a>
-          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
-          <a href="index.html">لوحة التحكم</a>
-          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
-          <a href="coupons.html">الكوبونات</a>
-          <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
-          <span aria-current="page">إنشاء كوبون جديد</span>
-        </nav>
-
-        <!-- Page header -->
-        <div class="page-header-band">
-          <div style="position:relative;z-index:1">
-            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-2.5 mb-1">
-                  <div class="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0" aria-hidden="true">
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
-                  </div>
-                  <span class="text-xs font-semibold text-lagoon-200 uppercase tracking-widest">إنشاء كوبون</span>
-                </div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-white leading-tight m-0">إنشاء كوبون جديد</h1>
-                <p class="text-lagoon-200 text-sm mt-1 m-0 font-medium">أنشئ كوبون خصم جديد للوكالة — واجهة أمامية تجريبية</p>
-                <div class="safe-note" role="note">
-                  <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                  <span>لا يتم حفظ الكوبون على خادم في هذه النسخة — إجراءات تجريبية / قابل للربط لاحقاً</span>
-                </div>
-              </div>
-              <div class="flex flex-wrap items-center gap-2 mt-1 sm:mt-0 flex-shrink-0">
-                <a href="coupons.html" class="btn btn-sm" style="background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);color:white">
-                  <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-                  رجوع للكوبونات
-                </a>
-                <button type="button" id="btn-save-draft-top" class="btn btn-sm" style="background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);color:white">
-                  <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                  حفظ كمسودة
-                </button>
-                <button type="button" id="btn-publish-top" class="btn btn-sm" style="background:#fff;color:#0E8186;font-weight:700">
-                  <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                  نشر تجريبي
-                </button>
-              </div>
+        <div class="flex-1 min-w-2"></div>
+        <form
+          id="topbar-search-form"
+          role="search"
+          class="topbar-search hidden md:flex"
+          aria-label="البحث"
+        >
+          <svg
+            width="16"
+            height="16"
+            aria-hidden="true"
+            class="text-ink-400 flex-shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            type="search"
+            name="q"
+            placeholder="بحث تجريبي…"
+            autocomplete="off"
+            dir="auto"
+            aria-label="حقل البحث"
+          />
+        </form>
+        <div class="relative flex-shrink-0">
+          <button
+            id="btn-notifications"
+            type="button"
+            class="relative flex items-center justify-center w-10 h-10 rounded-xl text-ink-600 hover:bg-ink-100 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors"
+            aria-label="الإشعارات"
+            aria-haspopup="menu"
+            aria-controls="dropdown-notifications"
+            aria-expanded="false"
+          >
+            <svg
+              width="20"
+              height="20"
+              aria-hidden="true"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 01-3.46 0" />
+            </svg>
+          </button>
+          <div
+            id="dropdown-notifications"
+            class="dash-dropdown"
+            role="menu"
+            hidden
+            style="min-width: 280px"
+          >
+            <div class="p-3 text-center text-sm text-ink-400">لا إشعارات — واجهة تجريبية</div>
+          </div>
+        </div>
+        <div class="relative flex-shrink-0">
+          <button
+            id="btn-user-menu"
+            type="button"
+            class="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-ink-50 focus-visible:ring-2 focus-visible:ring-lagoon-500 transition-colors"
+            aria-haspopup="menu"
+            aria-controls="dropdown-user-menu"
+            aria-expanded="false"
+            aria-label="قائمة المستخدم"
+          >
+            <span
+              class="w-8 h-8 bg-gradient-to-br from-lagoon-400 to-lagoon-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+              aria-hidden="true"
+              >أ</span
+            >
+            <span class="hidden lg:block text-sm font-semibold text-ink-800">أحمد العمري</span>
+          </button>
+          <div id="dropdown-user-menu" class="dash-dropdown" role="menu" hidden>
+            <div class="px-4 py-3 border-b border-ink-100">
+              <div class="font-bold text-sm text-ink-800">أحمد العمري</div>
+              <div class="text-xs text-ink-500">مدير الوكالة — شركة رحلات الشرق</div>
+            </div>
+            <div class="p-2">
+              <button
+                type="button"
+                role="menuitem"
+                class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-danger hover:bg-danger/5 transition-colors"
+                data-action="logout"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" /></svg
+                >تسجيل الخروج
+              </button>
             </div>
           </div>
         </div>
+      </header>
 
-        <!-- ════ Two-column layout ════ -->
-        <div class="create-form-layout">
+      <!-- ── Main content ── -->
+      <main id="main" tabindex="-1">
+        <div class="dash-content">
+          <!-- Breadcrumb -->
+          <nav class="dash-breadcrumb" aria-label="مسار التنقل">
+            <a href="../pages/index.html">الموقع الرئيسي</a>
+            <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+            <a href="index.html">لوحة التحكم</a>
+            <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+            <a href="coupons.html">الكوبونات</a>
+            <span class="dash-breadcrumb-sep" aria-hidden="true">/</span>
+            <span aria-current="page">إنشاء كوبون جديد</span>
+          </nav>
 
-          <!-- ── Main form column ── -->
-          <div>
-            <form id="form-create-coupon" novalidate aria-label="نموذج إنشاء كوبون جديد">
-
-              <!-- §1 Basic Information -->
-              <div class="form-section">
-                <div class="form-section-header">
-                  <span class="form-section-num" aria-hidden="true">1</span>
-                  <h2 class="form-section-title">المعلومات الأساسية</h2>
+          <!-- Page header -->
+          <div class="page-header-band">
+            <div style="position: relative; z-index: 1">
+              <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2.5 mb-1">
+                    <div
+                      class="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        width="18"
+                        height="18"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="white"
+                        stroke-width="2"
+                      >
+                        <path d="M2 9a3 3 0 010-6h20a3 3 0 010 6v2a3 3 0 010 6H2a3 3 0 010-6V9z" />
+                        <line x1="9" y1="3" x2="9" y2="21" />
+                      </svg>
+                    </div>
+                    <span class="text-xs font-semibold text-lagoon-200 uppercase tracking-widest"
+                      >إنشاء كوبون</span
+                    >
+                  </div>
+                  <h1 class="text-2xl sm:text-3xl font-extrabold text-white leading-tight m-0">
+                    إنشاء كوبون جديد
+                  </h1>
+                  <p class="text-lagoon-200 text-sm mt-1 m-0 font-medium">
+                    أنشئ كوبون خصم جديد للوكالة — واجهة أمامية تجريبية
+                  </p>
+                  <div class="safe-note" role="note">
+                    <svg
+                      width="13"
+                      height="13"
+                      aria-hidden="true"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      style="flex-shrink: 0; margin-top: 1px"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="16" x2="12" y2="12" />
+                      <line x1="12" y1="8" x2="12.01" y2="8" />
+                    </svg>
+                    <span
+                      >لا يتم حفظ الكوبون على خادم في هذه النسخة — إجراءات تجريبية / قابل للربط
+                      لاحقاً</span
+                    >
+                  </div>
                 </div>
-                <div class="form-section-body">
-                  <div class="form-grid">
+                <div class="flex flex-wrap items-center gap-2 mt-1 sm:mt-0 flex-shrink-0">
+                  <a
+                    href="coupons.html"
+                    class="btn btn-sm"
+                    style="
+                      background: rgba(255, 255, 255, 0.08);
+                      border: 1.5px solid rgba(255, 255, 255, 0.2);
+                      color: white;
+                    "
+                  >
+                    <svg
+                      width="13"
+                      height="13"
+                      aria-hidden="true"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                    رجوع للكوبونات
+                  </a>
+                  <button
+                    type="button"
+                    id="btn-save-draft-top"
+                    class="btn btn-sm"
+                    style="
+                      background: rgba(255, 255, 255, 0.12);
+                      border: 1.5px solid rgba(255, 255, 255, 0.2);
+                      color: white;
+                    "
+                  >
+                    <svg
+                      width="13"
+                      height="13"
+                      aria-hidden="true"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
+                      <polyline points="17 21 17 13 7 13 7 21" />
+                      <polyline points="7 3 7 8 15 8" />
+                    </svg>
+                    حفظ كمسودة
+                  </button>
+                  <button
+                    type="button"
+                    id="btn-publish-top"
+                    class="btn btn-sm"
+                    style="background: #fff; color: #0e8186; font-weight: 700"
+                  >
+                    <svg
+                      width="13"
+                      height="13"
+                      aria-hidden="true"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <line x1="22" y1="2" x2="11" y2="13" />
+                      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    </svg>
+                    نشر تجريبي
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                    <!-- Coupon code -->
-                    <div class="field-group span-full">
-                      <label for="coupon-code" class="field-label">كود الكوبون <span class="req" aria-hidden="true">*</span></label>
-                      <div class="code-input-wrap">
+          <!-- ════ Two-column layout ════ -->
+          <div class="create-form-layout">
+            <!-- ── Main form column ── -->
+            <div>
+              <form id="form-create-coupon" novalidate aria-label="نموذج إنشاء كوبون جديد">
+                <!-- §1 Basic Information -->
+                <div class="form-section">
+                  <div class="form-section-header">
+                    <span class="form-section-num" aria-hidden="true">1</span>
+                    <h2 class="form-section-title">المعلومات الأساسية</h2>
+                  </div>
+                  <div class="form-section-body">
+                    <div class="form-grid">
+                      <!-- Coupon code -->
+                      <div class="field-group span-full">
+                        <label for="coupon-code" class="field-label"
+                          >كود الكوبون <span class="req" aria-hidden="true">*</span></label
+                        >
+                        <div class="code-input-wrap">
+                          <input
+                            id="coupon-code"
+                            name="code"
+                            type="text"
+                            class="field-input"
+                            placeholder="مثال: SUMMER25"
+                            dir="ltr"
+                            autocomplete="off"
+                            aria-required="true"
+                            aria-describedby="code-error code-helper"
+                            maxlength="32"
+                            style="text-transform: uppercase"
+                          />
+                          <button
+                            type="button"
+                            id="btn-generate-code"
+                            class="code-btn code-btn-gen"
+                            aria-label="توليد كود عشوائي"
+                          >
+                            <svg
+                              width="13"
+                              height="13"
+                              aria-hidden="true"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                            >
+                              <path
+                                d="M9.5 14.5L3 21m0 0h6m-6 0v-6m16-12l-6.5 6.5M21 3l-3 3-3-3m3 3V3"
+                              />
+                            </svg>
+                            توليد تلقائي
+                          </button>
+                          <button
+                            type="button"
+                            id="btn-copy-code"
+                            class="code-btn code-btn-copy"
+                            aria-label="نسخ الكود"
+                          >
+                            <svg
+                              width="13"
+                              height="13"
+                              aria-hidden="true"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                            >
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                            </svg>
+                            نسخ
+                          </button>
+                        </div>
+                        <p class="field-helper" id="code-helper">
+                          أحرف كبيرة وأرقام فقط — يُعرض للمستخدم بهذا الشكل (اتجاه LTR)
+                        </p>
+                        <p class="field-error" id="code-error" hidden role="alert">
+                          <svg
+                            width="12"
+                            height="12"
+                            aria-hidden="true"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                          </svg>
+                          كود الكوبون مطلوب
+                        </p>
+                      </div>
+
+                      <!-- Provider -->
+                      <div class="field-group">
+                        <label for="coupon-provider" class="field-label"
+                          >المزود / الجهة المانحة</label
+                        >
                         <input
-                          id="coupon-code"
-                          name="code"
+                          id="coupon-provider"
+                          name="provider"
                           type="text"
                           class="field-input"
-                          placeholder="مثال: SUMMER25"
-                          dir="ltr"
-                          autocomplete="off"
-                          aria-required="true"
-                          aria-describedby="code-error code-helper"
-                          maxlength="32"
-                          style="text-transform:uppercase"
+                          placeholder="مثال: دار الإيمان للعمرة"
+                          dir="auto"
+                        />
+                        <p class="field-helper">اسم الشركة أو الجهة التي أصدرت الكوبون</p>
+                      </div>
+
+                      <!-- Category -->
+                      <div class="field-group">
+                        <label for="coupon-category" class="field-label"
+                          >الفئة <span class="req" aria-hidden="true">*</span></label
                         >
-                        <button type="button" id="btn-generate-code" class="code-btn code-btn-gen" aria-label="توليد كود عشوائي">
-                          <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9.5 14.5L3 21m0 0h6m-6 0v-6m16-12l-6.5 6.5M21 3l-3 3-3-3m3 3V3"/></svg>
-                          توليد تلقائي
-                        </button>
-                        <button type="button" id="btn-copy-code" class="code-btn code-btn-copy" aria-label="نسخ الكود">
-                          <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                          نسخ
-                        </button>
+                        <select
+                          id="coupon-category"
+                          name="category"
+                          class="field-select"
+                          aria-required="true"
+                          aria-describedby="category-error"
+                        >
+                          <option value="">اختر الفئة…</option>
+                          <option value="Flights">رحلات طيران</option>
+                          <option value="Hotels">فنادق</option>
+                          <option value="Packages">باقات سياحية</option>
+                          <option value="Activities">أنشطة وجولات</option>
+                          <option value="Car Rental">تأجير سيارات</option>
+                          <option value="Travel Insurance">تأمين سفر</option>
+                          <option value="Umrah">عمرة</option>
+                          <option value="Honeymoon">شهر عسل</option>
+                        </select>
+                        <p class="field-error" id="category-error" hidden role="alert">
+                          <svg
+                            width="12"
+                            height="12"
+                            aria-hidden="true"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                          </svg>
+                          الفئة مطلوبة
+                        </p>
                       </div>
-                      <p class="field-helper" id="code-helper">أحرف كبيرة وأرقام فقط — يُعرض للمستخدم بهذا الشكل (اتجاه LTR)</p>
-                      <p class="field-error" id="code-error" hidden role="alert">
-                        <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        كود الكوبون مطلوب
-                      </p>
-                    </div>
 
-                    <!-- Provider -->
-                    <div class="field-group">
-                      <label for="coupon-provider" class="field-label">المزود / الجهة المانحة</label>
-                      <input id="coupon-provider" name="provider" type="text" class="field-input" placeholder="مثال: دار الإيمان للعمرة" dir="auto">
-                      <p class="field-helper">اسم الشركة أو الجهة التي أصدرت الكوبون</p>
-                    </div>
+                      <!-- Related deal -->
+                      <div class="field-group">
+                        <label for="coupon-related-deal" class="field-label"
+                          >العرض المرتبط (اختياري)</label
+                        >
+                        <select id="coupon-related-deal" name="relatedDeal" class="field-select">
+                          <option value="">بدون عرض مرتبط</option>
+                          <option value="deal-001">عطلة في شرم الشيخ (deal-001)</option>
+                          <option value="deal-002">رحلة إسطنبول (deal-002)</option>
+                          <option value="deal-003">دبي الفاخرة (deal-003)</option>
+                          <option value="deal-004">جولة المغرب (deal-004)</option>
+                          <option value="deal-005">رحلة باريس (deal-005)</option>
+                          <option value="deal-006">تزلج إنترلاكن (deal-006)</option>
+                          <option value="deal-007">شريف جزر المالديف (deal-007)</option>
+                          <option value="deal-008">رحلة بانكوك (deal-008)</option>
+                          <option value="deal-009">رحلة نيويورك (deal-009)</option>
+                          <option value="deal-010">باقة آسيا العائلية (deal-010)</option>
+                          <option value="deal-011">باقة عمرة رمضان (deal-011)</option>
+                          <option value="deal-012">شهر عسل جزر المالديف (deal-012)</option>
+                        </select>
+                        <p class="field-helper">
+                          ربط الكوبون بعرض معين يُتيح عرضه على صفحته — قابل للربط لاحقاً
+                        </p>
+                      </div>
 
-                    <!-- Category -->
-                    <div class="field-group">
-                      <label for="coupon-category" class="field-label">الفئة <span class="req" aria-hidden="true">*</span></label>
-                      <select id="coupon-category" name="category" class="field-select" aria-required="true" aria-describedby="category-error">
-                        <option value="">اختر الفئة…</option>
-                        <option value="Flights">رحلات طيران</option>
-                        <option value="Hotels">فنادق</option>
-                        <option value="Packages">باقات سياحية</option>
-                        <option value="Activities">أنشطة وجولات</option>
-                        <option value="Car Rental">تأجير سيارات</option>
-                        <option value="Travel Insurance">تأمين سفر</option>
-                        <option value="Umrah">عمرة</option>
-                        <option value="Honeymoon">شهر عسل</option>
-                      </select>
-                      <p class="field-error" id="category-error" hidden role="alert">
-                        <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        الفئة مطلوبة
-                      </p>
-                    </div>
-
-                    <!-- Related deal -->
-                    <div class="field-group">
-                      <label for="coupon-related-deal" class="field-label">العرض المرتبط (اختياري)</label>
-                      <select id="coupon-related-deal" name="relatedDeal" class="field-select">
-                        <option value="">بدون عرض مرتبط</option>
-                        <option value="deal-001">عطلة في شرم الشيخ (deal-001)</option>
-                        <option value="deal-002">رحلة إسطنبول (deal-002)</option>
-                        <option value="deal-003">دبي الفاخرة (deal-003)</option>
-                        <option value="deal-004">جولة المغرب (deal-004)</option>
-                        <option value="deal-005">رحلة باريس (deal-005)</option>
-                        <option value="deal-006">تزلج إنترلاكن (deal-006)</option>
-                        <option value="deal-007">شريف جزر المالديف (deal-007)</option>
-                        <option value="deal-008">رحلة بانكوك (deal-008)</option>
-                        <option value="deal-009">رحلة نيويورك (deal-009)</option>
-                        <option value="deal-010">باقة آسيا العائلية (deal-010)</option>
-                        <option value="deal-011">باقة عمرة رمضان (deal-011)</option>
-                        <option value="deal-012">شهر عسل جزر المالديف (deal-012)</option>
-                      </select>
-                      <p class="field-helper">ربط الكوبون بعرض معين يُتيح عرضه على صفحته — قابل للربط لاحقاً</p>
-                    </div>
-
-                    <!-- Short description -->
-                    <div class="field-group span-full">
-                      <label for="coupon-description" class="field-label">وصف مختصر</label>
-                      <textarea id="coupon-description" name="shortDescription" class="field-textarea" placeholder="صف الكوبون باختصار للمستخدمين…" rows="2" dir="auto"></textarea>
-                      <p class="field-helper">يظهر أسفل الكود في صفحة الكوبون — اختياري</p>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-              <!-- §2 Discount Details -->
-              <div class="form-section">
-                <div class="form-section-header">
-                  <span class="form-section-num" aria-hidden="true">2</span>
-                  <h2 class="form-section-title">تفاصيل الخصم</h2>
-                </div>
-                <div class="form-section-body">
-                  <div class="form-grid">
-
-                    <!-- Discount type -->
-                    <div class="field-group">
-                      <label for="discount-type" class="field-label">نوع الخصم <span class="req" aria-hidden="true">*</span></label>
-                      <select id="discount-type" name="discountType" class="field-select" aria-required="true" aria-describedby="discount-type-error">
-                        <option value="">اختر نوع الخصم…</option>
-                        <option value="Percentage">نسبة مئوية (%)</option>
-                        <option value="Fixed amount">مبلغ ثابت</option>
-                        <option value="Free service">خدمة مجانية</option>
-                        <option value="Custom offer">عرض مخصص</option>
-                      </select>
-                      <p class="field-error" id="discount-type-error" hidden role="alert">
-                        <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
-                        نوع الخصم مطلوب
-                      </p>
-                    </div>
-
-                    <!-- Discount value -->
-                    <div class="field-group">
-                      <label for="discount-value" class="field-label">قيمة الخصم <span class="req" aria-hidden="true">*</span></label>
-                      <input id="discount-value" name="discountValue" type="number" class="field-input" placeholder="مثال: 25" min="0" dir="ltr" aria-required="true" aria-describedby="discount-value-error discount-value-helper">
-                      <p class="field-helper" id="discount-value-helper">للنسبة: أدخل 25 للتعبير عن 25% — للمبلغ: أدخل القيمة بالعملة المختارة</p>
-                      <p class="field-error" id="discount-value-error" hidden role="alert">
-                        <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
-                        قيمة الخصم مطلوبة
-                      </p>
-                    </div>
-
-                    <!-- Currency (conditional: shown when Fixed amount) -->
-                    <div class="field-group" id="currency-wrap" hidden>
-                      <label for="discount-currency" class="field-label">العملة <span class="req" aria-hidden="true">*</span></label>
-                      <select id="discount-currency" name="currency" class="field-select" aria-describedby="currency-error">
-                        <option value="ر.س">ريال سعودي (ر.س)</option>
-                        <option value="USD">دولار أمريكي (USD)</option>
-                        <option value="EUR">يورو (EUR)</option>
-                        <option value="AED">درهم إماراتي (AED)</option>
-                        <option value="EGP">جنيه مصري (EGP)</option>
-                      </select>
-                      <p class="field-error" id="currency-error" hidden role="alert">
-                        <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
-                        العملة مطلوبة للمبلغ الثابت
-                      </p>
-                    </div>
-
-                    <!-- Minimum booking -->
-                    <div class="field-group">
-                      <label for="min-booking" class="field-label">الحد الأدنى للحجز (ر.س)</label>
-                      <input id="min-booking" name="minimumBooking" type="number" class="field-input" placeholder="مثال: 500" min="0" dir="ltr">
-                      <p class="field-helper">الحد الأدنى لقيمة الحجز لتطبيق الكوبون</p>
-                    </div>
-
-                    <!-- Max discount -->
-                    <div class="field-group">
-                      <label for="max-discount" class="field-label">أقصى خصم (ر.س)</label>
-                      <input id="max-discount" name="maxDiscount" type="number" class="field-input" placeholder="اتركه فارغاً لبلا حد" min="0" dir="ltr">
-                      <p class="field-helper">للنسبة المئوية: أقصى مبلغ يُطبَّق كخصم — اختياري</p>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-              <!-- §3 Usage Rules -->
-              <div class="form-section">
-                <div class="form-section-header">
-                  <span class="form-section-num" aria-hidden="true">3</span>
-                  <h2 class="form-section-title">شروط الاستخدام والصلاحية</h2>
-                </div>
-                <div class="form-section-body">
-                  <div class="form-grid">
-
-                    <div class="field-group">
-                      <label for="start-date" class="field-label">تاريخ البدء</label>
-                      <input id="start-date" name="startDate" type="date" class="field-input" dir="ltr">
-                    </div>
-
-                    <div class="field-group">
-                      <label for="expiry-date" class="field-label">تاريخ الانتهاء <span class="req" aria-hidden="true">*</span></label>
-                      <input id="expiry-date" name="expiryDate" type="date" class="field-input" dir="ltr" aria-required="true" aria-describedby="expiry-error">
-                      <p class="field-error" id="expiry-error" hidden role="alert">
-                        <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
-                        تاريخ الانتهاء مطلوب
-                      </p>
-                    </div>
-
-                    <div class="field-group">
-                      <label for="usage-limit" class="field-label">حد الاستخدام الإجمالي</label>
-                      <input id="usage-limit" name="usageLimit" type="number" class="field-input" placeholder="مثال: 200 — فارغ = بلا حد" min="1" dir="ltr">
-                    </div>
-
-                    <div class="field-group">
-                      <label for="per-user-limit" class="field-label">حد الاستخدام لكل مستخدم</label>
-                      <input id="per-user-limit" name="perUserLimit" type="number" class="field-input" placeholder="مثال: 1" min="1" dir="ltr">
-                    </div>
-
-                    <div class="field-group span-full">
-                      <label class="field-label">قيود إضافية</label>
-                      <div class="flex flex-wrap gap-3 mt-1">
-                        <label class="toggle-row">
-                          <input type="checkbox" id="first-booking-only" name="firstBookingOnly">
-                          <span class="toggle-lbl">الحجز الأول فقط</span>
-                        </label>
-                        <label class="toggle-row">
-                          <input type="checkbox" id="new-customers-only" name="newCustomersOnly">
-                          <span class="toggle-lbl">للعملاء الجدد فقط</span>
-                        </label>
+                      <!-- Short description -->
+                      <div class="field-group span-full">
+                        <label for="coupon-description" class="field-label">وصف مختصر</label>
+                        <textarea
+                          id="coupon-description"
+                          name="shortDescription"
+                          class="field-textarea"
+                          placeholder="صف الكوبون باختصار للمستخدمين…"
+                          rows="2"
+                          dir="auto"
+                        ></textarea>
+                        <p class="field-helper">يظهر أسفل الكود في صفحة الكوبون — اختياري</p>
                       </div>
                     </div>
-
-                    <div class="field-group span-full">
-                      <label for="selected-destinations" class="field-label">الوجهات المشمولة (اختياري)</label>
-                      <input id="selected-destinations" name="destinations" type="text" class="field-input" placeholder="مثال: دبي، إسطنبول، شرم الشيخ…" dir="auto">
-                      <p class="field-helper">اتركه فارغاً لتطبيق الكوبون على جميع الوجهات</p>
-                    </div>
-
                   </div>
                 </div>
-              </div>
 
-              <!-- §4 Source & Review -->
-              <div class="form-section">
-                <div class="form-section-header">
-                  <span class="form-section-num" aria-hidden="true">4</span>
-                  <h2 class="form-section-title">المصدر والمراجعة</h2>
+                <!-- §2 Discount Details -->
+                <div class="form-section">
+                  <div class="form-section-header">
+                    <span class="form-section-num" aria-hidden="true">2</span>
+                    <h2 class="form-section-title">تفاصيل الخصم</h2>
+                  </div>
+                  <div class="form-section-body">
+                    <div class="form-grid">
+                      <!-- Discount type -->
+                      <div class="field-group">
+                        <label for="discount-type" class="field-label"
+                          >نوع الخصم <span class="req" aria-hidden="true">*</span></label
+                        >
+                        <select
+                          id="discount-type"
+                          name="discountType"
+                          class="field-select"
+                          aria-required="true"
+                          aria-describedby="discount-type-error"
+                        >
+                          <option value="">اختر نوع الخصم…</option>
+                          <option value="Percentage">نسبة مئوية (%)</option>
+                          <option value="Fixed amount">مبلغ ثابت</option>
+                          <option value="Free service">خدمة مجانية</option>
+                          <option value="Custom offer">عرض مخصص</option>
+                        </select>
+                        <p class="field-error" id="discount-type-error" hidden role="alert">
+                          <svg
+                            width="12"
+                            height="12"
+                            aria-hidden="true"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                          </svg>
+                          نوع الخصم مطلوب
+                        </p>
+                      </div>
+
+                      <!-- Discount value -->
+                      <div class="field-group">
+                        <label for="discount-value" class="field-label"
+                          >قيمة الخصم <span class="req" aria-hidden="true">*</span></label
+                        >
+                        <input
+                          id="discount-value"
+                          name="discountValue"
+                          type="number"
+                          class="field-input"
+                          placeholder="مثال: 25"
+                          min="0"
+                          dir="ltr"
+                          aria-required="true"
+                          aria-describedby="discount-value-error discount-value-helper"
+                        />
+                        <p class="field-helper" id="discount-value-helper">
+                          للنسبة: أدخل 25 للتعبير عن 25% — للمبلغ: أدخل القيمة بالعملة المختارة
+                        </p>
+                        <p class="field-error" id="discount-value-error" hidden role="alert">
+                          <svg
+                            width="12"
+                            height="12"
+                            aria-hidden="true"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                          </svg>
+                          قيمة الخصم مطلوبة
+                        </p>
+                      </div>
+
+                      <!-- Currency (conditional: shown when Fixed amount) -->
+                      <div class="field-group" id="currency-wrap" hidden>
+                        <label for="discount-currency" class="field-label"
+                          >العملة <span class="req" aria-hidden="true">*</span></label
+                        >
+                        <select
+                          id="discount-currency"
+                          name="currency"
+                          class="field-select"
+                          aria-describedby="currency-error"
+                        >
+                          <option value="ر.س">ريال سعودي (ر.س)</option>
+                          <option value="USD">دولار أمريكي (USD)</option>
+                          <option value="EUR">يورو (EUR)</option>
+                          <option value="AED">درهم إماراتي (AED)</option>
+                          <option value="EGP">جنيه مصري (EGP)</option>
+                        </select>
+                        <p class="field-error" id="currency-error" hidden role="alert">
+                          <svg
+                            width="12"
+                            height="12"
+                            aria-hidden="true"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                          </svg>
+                          العملة مطلوبة للمبلغ الثابت
+                        </p>
+                      </div>
+
+                      <!-- Minimum booking -->
+                      <div class="field-group">
+                        <label for="min-booking" class="field-label">الحد الأدنى للحجز (ر.س)</label>
+                        <input
+                          id="min-booking"
+                          name="minimumBooking"
+                          type="number"
+                          class="field-input"
+                          placeholder="مثال: 500"
+                          min="0"
+                          dir="ltr"
+                        />
+                        <p class="field-helper">الحد الأدنى لقيمة الحجز لتطبيق الكوبون</p>
+                      </div>
+
+                      <!-- Max discount -->
+                      <div class="field-group">
+                        <label for="max-discount" class="field-label">أقصى خصم (ر.س)</label>
+                        <input
+                          id="max-discount"
+                          name="maxDiscount"
+                          type="number"
+                          class="field-input"
+                          placeholder="اتركه فارغاً لبلا حد"
+                          min="0"
+                          dir="ltr"
+                        />
+                        <p class="field-helper">للنسبة المئوية: أقصى مبلغ يُطبَّق كخصم — اختياري</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="form-section-body">
-                  <div class="form-grid">
 
-                    <!-- Source type -->
-                    <div class="field-group">
-                      <label for="source-type" class="field-label">مصدر الكوبون <span class="req" aria-hidden="true">*</span></label>
-                      <select id="source-type" name="sourceType" class="field-select" aria-required="true" aria-describedby="source-type-error">
-                        <option value="">اختر المصدر…</option>
-                        <option value="Manual">Manual — يدوي مباشر</option>
-                        <option value="Affiliate">Affiliate — شبكة أفيلييت</option>
-                        <option value="Coupon API">Coupon API — عبر API</option>
-                        <option value="Scraped Pending Review">Scraped Pending Review — مجمّع (يستلزم مراجعة)</option>
-                      </select>
-                      <p class="field-error" id="source-type-error" hidden role="alert">
-                        <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
-                        مصدر الكوبون مطلوب
-                      </p>
+                <!-- §3 Usage Rules -->
+                <div class="form-section">
+                  <div class="form-section-header">
+                    <span class="form-section-num" aria-hidden="true">3</span>
+                    <h2 class="form-section-title">شروط الاستخدام والصلاحية</h2>
+                  </div>
+                  <div class="form-section-body">
+                    <div class="form-grid">
+                      <div class="field-group">
+                        <label for="start-date" class="field-label">تاريخ البدء</label>
+                        <input
+                          id="start-date"
+                          name="startDate"
+                          type="date"
+                          class="field-input"
+                          dir="ltr"
+                        />
+                      </div>
+
+                      <div class="field-group">
+                        <label for="expiry-date" class="field-label"
+                          >تاريخ الانتهاء <span class="req" aria-hidden="true">*</span></label
+                        >
+                        <input
+                          id="expiry-date"
+                          name="expiryDate"
+                          type="date"
+                          class="field-input"
+                          dir="ltr"
+                          aria-required="true"
+                          aria-describedby="expiry-error"
+                        />
+                        <p class="field-error" id="expiry-error" hidden role="alert">
+                          <svg
+                            width="12"
+                            height="12"
+                            aria-hidden="true"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                          </svg>
+                          تاريخ الانتهاء مطلوب
+                        </p>
+                      </div>
+
+                      <div class="field-group">
+                        <label for="usage-limit" class="field-label">حد الاستخدام الإجمالي</label>
+                        <input
+                          id="usage-limit"
+                          name="usageLimit"
+                          type="number"
+                          class="field-input"
+                          placeholder="مثال: 200 — فارغ = بلا حد"
+                          min="1"
+                          dir="ltr"
+                        />
+                      </div>
+
+                      <div class="field-group">
+                        <label for="per-user-limit" class="field-label"
+                          >حد الاستخدام لكل مستخدم</label
+                        >
+                        <input
+                          id="per-user-limit"
+                          name="perUserLimit"
+                          type="number"
+                          class="field-input"
+                          placeholder="مثال: 1"
+                          min="1"
+                          dir="ltr"
+                        />
+                      </div>
+
+                      <div class="field-group span-full">
+                        <label class="field-label">قيود إضافية</label>
+                        <div class="flex flex-wrap gap-3 mt-1">
+                          <label class="toggle-row">
+                            <input
+                              type="checkbox"
+                              id="first-booking-only"
+                              name="firstBookingOnly"
+                            />
+                            <span class="toggle-lbl">الحجز الأول فقط</span>
+                          </label>
+                          <label class="toggle-row">
+                            <input
+                              type="checkbox"
+                              id="new-customers-only"
+                              name="newCustomersOnly"
+                            />
+                            <span class="toggle-lbl">للعملاء الجدد فقط</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="field-group span-full">
+                        <label for="selected-destinations" class="field-label"
+                          >الوجهات المشمولة (اختياري)</label
+                        >
+                        <input
+                          id="selected-destinations"
+                          name="destinations"
+                          type="text"
+                          class="field-input"
+                          placeholder="مثال: دبي، إسطنبول، شرم الشيخ…"
+                          dir="auto"
+                        />
+                        <p class="field-helper">اتركه فارغاً لتطبيق الكوبون على جميع الوجهات</p>
+                      </div>
                     </div>
+                  </div>
+                </div>
 
-                    <!-- Source URL -->
-                    <div class="field-group">
-                      <label for="source-url" class="field-label">رابط المصدر</label>
-                      <input id="source-url" name="sourceUrl" type="url" class="field-input" placeholder="https://partner.example.com/coupons" dir="ltr">
-                      <p class="field-helper">رابط صفحة الكوبون الأصلي — للأرشفة</p>
-                    </div>
+                <!-- §4 Source & Review -->
+                <div class="form-section">
+                  <div class="form-section-header">
+                    <span class="form-section-num" aria-hidden="true">4</span>
+                    <h2 class="form-section-title">المصدر والمراجعة</h2>
+                  </div>
+                  <div class="form-section-body">
+                    <div class="form-grid">
+                      <!-- Source type -->
+                      <div class="field-group">
+                        <label for="source-type" class="field-label"
+                          >مصدر الكوبون <span class="req" aria-hidden="true">*</span></label
+                        >
+                        <select
+                          id="source-type"
+                          name="sourceType"
+                          class="field-select"
+                          aria-required="true"
+                          aria-describedby="source-type-error"
+                        >
+                          <option value="">اختر المصدر…</option>
+                          <option value="Manual">Manual — يدوي مباشر</option>
+                          <option value="Affiliate">Affiliate — شبكة أفيلييت</option>
+                          <option value="Coupon API">Coupon API — عبر API</option>
+                          <option value="Scraped Pending Review">
+                            Scraped Pending Review — مجمّع (يستلزم مراجعة)
+                          </option>
+                        </select>
+                        <p class="field-error" id="source-type-error" hidden role="alert">
+                          <svg
+                            width="12"
+                            height="12"
+                            aria-hidden="true"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                          </svg>
+                          مصدر الكوبون مطلوب
+                        </p>
+                      </div>
 
-                    <!-- Affiliate URL -->
-                    <div class="field-group">
-                      <label for="affiliate-url" class="field-label">رابط الأفيلييت</label>
-                      <input id="affiliate-url" name="affiliateUrl" type="url" class="field-input" placeholder="https://partner.example.com/aff/CODE" dir="ltr">
-                      <p class="field-helper">للـ Affiliate فقط — الرابط الذي يحمل كود التتبع الخاص بك</p>
-                    </div>
+                      <!-- Source URL -->
+                      <div class="field-group">
+                        <label for="source-url" class="field-label">رابط المصدر</label>
+                        <input
+                          id="source-url"
+                          name="sourceUrl"
+                          type="url"
+                          class="field-input"
+                          placeholder="https://partner.example.com/coupons"
+                          dir="ltr"
+                        />
+                        <p class="field-helper">رابط صفحة الكوبون الأصلي — للأرشفة</p>
+                      </div>
 
-                    <!-- Review status -->
-                    <div class="field-group">
-                      <label for="review-status" class="field-label">حالة المراجعة</label>
-                      <select id="review-status" name="reviewStatus" class="field-select">
-                        <option value="بانتظار المراجعة">بانتظار المراجعة</option>
-                        <option value="تمت المراجعة">تمت المراجعة</option>
-                        <option value="مرفوض">مرفوض</option>
-                      </select>
-                    </div>
+                      <!-- Affiliate URL -->
+                      <div class="field-group">
+                        <label for="affiliate-url" class="field-label">رابط الأفيلييت</label>
+                        <input
+                          id="affiliate-url"
+                          name="affiliateUrl"
+                          type="url"
+                          class="field-input"
+                          placeholder="https://partner.example.com/aff/CODE"
+                          dir="ltr"
+                        />
+                        <p class="field-helper">
+                          للـ Affiliate فقط — الرابط الذي يحمل كود التتبع الخاص بك
+                        </p>
+                      </div>
 
-                    <!-- Manual review toggle -->
-                    <div class="field-group span-full">
-                      <label class="toggle-row">
-                        <input type="checkbox" id="manual-review-required" name="manualReviewRequired">
-                        <span class="toggle-lbl">يستلزم مراجعة يدوية قبل النشر</span>
-                      </label>
-                    </div>
+                      <!-- Review status -->
+                      <div class="field-group">
+                        <label for="review-status" class="field-label">حالة المراجعة</label>
+                        <select id="review-status" name="reviewStatus" class="field-select">
+                          <option value="بانتظار المراجعة">بانتظار المراجعة</option>
+                          <option value="تمت المراجعة">تمت المراجعة</option>
+                          <option value="مرفوض">مرفوض</option>
+                        </select>
+                      </div>
 
-                    <!-- Notes -->
-                    <div class="field-group span-full">
-                      <label for="source-notes" class="field-label">ملاحظات داخلية</label>
-                      <textarea id="source-notes" name="sourceNotes" class="field-textarea" placeholder="ملاحظات للفريق الداخلي فقط…" rows="2" dir="auto"></textarea>
-                    </div>
+                      <!-- Manual review toggle -->
+                      <div class="field-group span-full">
+                        <label class="toggle-row">
+                          <input
+                            type="checkbox"
+                            id="manual-review-required"
+                            name="manualReviewRequired"
+                          />
+                          <span class="toggle-lbl">يستلزم مراجعة يدوية قبل النشر</span>
+                        </label>
+                      </div>
 
-                    <!-- Scraped warning (conditional) -->
-                    <div class="field-group span-full" id="scraped-warning-wrap" hidden>
-                      <div class="inline-msg inline-msg-warning" role="alert">
-                        <svg width="15" height="15" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                        <div>
-                          <strong>تنبيه: كوبون مجمّع — يستلزم مراجعة يدوية.</strong><br>
-                          لا يتم نشر أي كوبون مجمّع (Scraped) تلقائياً قبل مراجعة المصدر والتحقق من صحته يدوياً. تأكد من ضبط "حالة المراجعة" وتفعيل خيار "يستلزم مراجعة يدوية". — إجراء تجريبي في هذه النسخة.
+                      <!-- Notes -->
+                      <div class="field-group span-full">
+                        <label for="source-notes" class="field-label">ملاحظات داخلية</label>
+                        <textarea
+                          id="source-notes"
+                          name="sourceNotes"
+                          class="field-textarea"
+                          placeholder="ملاحظات للفريق الداخلي فقط…"
+                          rows="2"
+                          dir="auto"
+                        ></textarea>
+                      </div>
+
+                      <!-- Scraped warning (conditional) -->
+                      <div class="field-group span-full" id="scraped-warning-wrap" hidden>
+                        <div class="inline-msg inline-msg-warning" role="alert">
+                          <svg
+                            width="15"
+                            height="15"
+                            aria-hidden="true"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            style="flex-shrink: 0; margin-top: 2px"
+                          >
+                            <path
+                              d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                            />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                          </svg>
+                          <div>
+                            <strong>تنبيه: كوبون مجمّع — يستلزم مراجعة يدوية.</strong><br />
+                            لا يتم نشر أي كوبون مجمّع (Scraped) تلقائياً قبل مراجعة المصدر والتحقق
+                            من صحته يدوياً. تأكد من ضبط "حالة المراجعة" وتفعيل خيار "يستلزم مراجعة
+                            يدوية". — إجراء تجريبي في هذه النسخة.
+                          </div>
                         </div>
                       </div>
                     </div>
-
                   </div>
                 </div>
-              </div>
 
-              <!-- §5 Terms & Conditions -->
-              <div class="form-section">
-                <div class="form-section-header">
-                  <span class="form-section-num" aria-hidden="true">5</span>
-                  <h2 class="form-section-title">الشروط والأحكام</h2>
-                </div>
-                <div class="form-section-body">
-                  <div class="form-grid">
-
-                    <div class="field-group span-full">
-                      <label for="terms" class="field-label">شروط استخدام الكوبون</label>
-                      <textarea id="terms" name="terms" class="field-textarea" placeholder="مثال: يُطبَّق على رحلات الطيران الدولية فقط. لا يُجمع مع عروض أخرى." rows="3" dir="auto"></textarea>
-                    </div>
-
-                    <div class="field-group span-full">
-                      <label for="exclusions" class="field-label">الاستثناءات</label>
-                      <textarea id="exclusions" name="exclusions" class="field-textarea" placeholder="مثال: لا يسري على الحجوزات المسبقة أو العروض الموسمية…" rows="2" dir="auto"></textarea>
-                    </div>
-
-                    <div class="field-group span-full">
-                      <label for="terms-notes" class="field-label">ملاحظات إضافية</label>
-                      <textarea id="terms-notes" name="termsNotes" class="field-textarea" placeholder="أي معلومات إضافية للمستخدم…" rows="2" dir="auto"></textarea>
-                    </div>
-
+                <!-- §5 Terms & Conditions -->
+                <div class="form-section">
+                  <div class="form-section-header">
+                    <span class="form-section-num" aria-hidden="true">5</span>
+                    <h2 class="form-section-title">الشروط والأحكام</h2>
                   </div>
-                </div>
-              </div>
+                  <div class="form-section-body">
+                    <div class="form-grid">
+                      <div class="field-group span-full">
+                        <label for="terms" class="field-label">شروط استخدام الكوبون</label>
+                        <textarea
+                          id="terms"
+                          name="terms"
+                          class="field-textarea"
+                          placeholder="مثال: يُطبَّق على رحلات الطيران الدولية فقط. لا يُجمع مع عروض أخرى."
+                          rows="3"
+                          dir="auto"
+                        ></textarea>
+                      </div>
 
-              <!-- §6 Status & Visibility -->
-              <div class="form-section">
-                <div class="form-section-header">
-                  <span class="form-section-num" aria-hidden="true">6</span>
-                  <h2 class="form-section-title">الحالة والظهور</h2>
-                </div>
-                <div class="form-section-body">
-                  <div class="form-grid">
+                      <div class="field-group span-full">
+                        <label for="exclusions" class="field-label">الاستثناءات</label>
+                        <textarea
+                          id="exclusions"
+                          name="exclusions"
+                          class="field-textarea"
+                          placeholder="مثال: لا يسري على الحجوزات المسبقة أو العروض الموسمية…"
+                          rows="2"
+                          dir="auto"
+                        ></textarea>
+                      </div>
 
-                    <div class="field-group">
-                      <label for="coupon-status" class="field-label">حالة الكوبون</label>
-                      <select id="coupon-status" name="status" class="field-select">
-                        <option value="Draft">مسودة (Draft)</option>
-                        <option value="Active">نشط (Active)</option>
-                        <option value="Scheduled">مجدول (Scheduled)</option>
-                        <option value="Paused">موقوف (Paused)</option>
-                      </select>
-                    </div>
-
-                    <!-- Scheduled date (conditional) -->
-                    <div class="field-group" id="schedule-date-wrap" hidden>
-                      <label for="schedule-publish-date" class="field-label">تاريخ النشر المجدول</label>
-                      <input id="schedule-publish-date" name="scheduledPublishDate" type="datetime-local" class="field-input" dir="ltr">
-                      <p class="field-helper">الكوبون سيُفعَّل تلقائياً في هذا التاريخ — قابل للربط لاحقاً</p>
-                    </div>
-
-                    <div class="field-group span-full">
-                      <label class="field-label">خيارات الظهور</label>
-                      <div class="flex flex-wrap gap-3 mt-1">
-                        <label class="toggle-row">
-                          <input type="checkbox" id="visible-on-public" name="visibleOnPublic" checked>
-                          <span class="toggle-lbl">مرئي على الموقع العام</span>
-                        </label>
-                        <label class="toggle-row">
-                          <input type="checkbox" id="coupon-featured" name="featured">
-                          <span class="toggle-lbl">مميز / مرئي في الواجهة الرئيسية ★</span>
-                        </label>
+                      <div class="field-group span-full">
+                        <label for="terms-notes" class="field-label">ملاحظات إضافية</label>
+                        <textarea
+                          id="terms-notes"
+                          name="termsNotes"
+                          class="field-textarea"
+                          placeholder="أي معلومات إضافية للمستخدم…"
+                          rows="2"
+                          dir="auto"
+                        ></textarea>
                       </div>
                     </div>
-
                   </div>
                 </div>
-              </div>
 
-              <!-- §7 SEO & Public Display -->
-              <div class="form-section">
-                <div class="form-section-header">
-                  <span class="form-section-num" aria-hidden="true">7</span>
-                  <h2 class="form-section-title">العنوان العام وبيانات SEO</h2>
-                </div>
-                <div class="form-section-body">
-                  <div class="form-grid">
-
-                    <div class="field-group span-full">
-                      <label for="seo-title" class="field-label">العنوان العام للكوبون</label>
-                      <input id="seo-title" name="seoTitle" type="text" class="field-input" placeholder="مثال: كوبون خصم 25% على رحلات الصيف 2026" dir="auto">
-                    </div>
-
-                    <div class="field-group span-full">
-                      <label for="meta-description" class="field-label">وصف الميتا (SEO)</label>
-                      <textarea id="meta-description" name="metaDescription" class="field-textarea" placeholder="وصف مختصر يظهر في نتائج البحث…" rows="2" dir="auto" maxlength="160"></textarea>
-                      <p class="field-helper">الحد الأقصى 160 حرف — يظهر في نتائج Google</p>
-                    </div>
-
-                    <div class="field-group span-full">
-                      <label for="coupon-slug" class="field-label">الرابط المختصر (Slug)</label>
-                      <input id="coupon-slug" name="slug" type="text" class="field-input" placeholder="summer-25-package" dir="ltr">
-                      <div class="slug-preview-block" aria-live="polite" aria-label="معاينة رابط الكوبون">
-                        <svg width="12" height="12" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-                        <span>rihlaty.example.com/coupons/</span>
-                        <span id="slug-preview-val" class="slug-val">…</span>
+                <!-- §6 Status & Visibility -->
+                <div class="form-section">
+                  <div class="form-section-header">
+                    <span class="form-section-num" aria-hidden="true">6</span>
+                    <h2 class="form-section-title">الحالة والظهور</h2>
+                  </div>
+                  <div class="form-section-body">
+                    <div class="form-grid">
+                      <div class="field-group">
+                        <label for="coupon-status" class="field-label">حالة الكوبون</label>
+                        <select id="coupon-status" name="status" class="field-select">
+                          <option value="Draft">مسودة (Draft)</option>
+                          <option value="Active">نشط (Active)</option>
+                          <option value="Scheduled">مجدول (Scheduled)</option>
+                          <option value="Paused">موقوف (Paused)</option>
+                        </select>
                       </div>
-                      <p class="field-helper">يُولَّد تلقائياً من الكود — يمكن تعديله يدوياً</p>
-                    </div>
 
+                      <!-- Scheduled date (conditional) -->
+                      <div class="field-group" id="schedule-date-wrap" hidden>
+                        <label for="schedule-publish-date" class="field-label"
+                          >تاريخ النشر المجدول</label
+                        >
+                        <input
+                          id="schedule-publish-date"
+                          name="scheduledPublishDate"
+                          type="datetime-local"
+                          class="field-input"
+                          dir="ltr"
+                        />
+                        <p class="field-helper">
+                          الكوبون سيُفعَّل تلقائياً في هذا التاريخ — قابل للربط لاحقاً
+                        </p>
+                      </div>
+
+                      <div class="field-group span-full">
+                        <label class="field-label">خيارات الظهور</label>
+                        <div class="flex flex-wrap gap-3 mt-1">
+                          <label class="toggle-row">
+                            <input
+                              type="checkbox"
+                              id="visible-on-public"
+                              name="visibleOnPublic"
+                              checked
+                            />
+                            <span class="toggle-lbl">مرئي على الموقع العام</span>
+                          </label>
+                          <label class="toggle-row">
+                            <input type="checkbox" id="coupon-featured" name="featured" />
+                            <span class="toggle-lbl">مميز / مرئي في الواجهة الرئيسية ★</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- §7 SEO & Public Display -->
+                <div class="form-section">
+                  <div class="form-section-header">
+                    <span class="form-section-num" aria-hidden="true">7</span>
+                    <h2 class="form-section-title">العنوان العام وبيانات SEO</h2>
+                  </div>
+                  <div class="form-section-body">
+                    <div class="form-grid">
+                      <div class="field-group span-full">
+                        <label for="seo-title" class="field-label">العنوان العام للكوبون</label>
+                        <input
+                          id="seo-title"
+                          name="seoTitle"
+                          type="text"
+                          class="field-input"
+                          placeholder="مثال: كوبون خصم 25% على رحلات الصيف 2026"
+                          dir="auto"
+                        />
+                      </div>
+
+                      <div class="field-group span-full">
+                        <label for="meta-description" class="field-label">وصف الميتا (SEO)</label>
+                        <textarea
+                          id="meta-description"
+                          name="metaDescription"
+                          class="field-textarea"
+                          placeholder="وصف مختصر يظهر في نتائج البحث…"
+                          rows="2"
+                          dir="auto"
+                          maxlength="160"
+                        ></textarea>
+                        <p class="field-helper">الحد الأقصى 160 حرف — يظهر في نتائج Google</p>
+                      </div>
+
+                      <div class="field-group span-full">
+                        <label for="coupon-slug" class="field-label">الرابط المختصر (Slug)</label>
+                        <input
+                          id="coupon-slug"
+                          name="slug"
+                          type="text"
+                          class="field-input"
+                          placeholder="summer-25-package"
+                          dir="ltr"
+                        />
+                        <div
+                          class="slug-preview-block"
+                          aria-live="polite"
+                          aria-label="معاينة رابط الكوبون"
+                        >
+                          <svg
+                            width="12"
+                            height="12"
+                            aria-hidden="true"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+                            <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+                          </svg>
+                          <span>rihlaty.example.com/coupons/</span>
+                          <span id="slug-preview-val" class="slug-val">…</span>
+                        </div>
+                        <p class="field-helper">يُولَّد تلقائياً من الكود — يمكن تعديله يدوياً</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Form submit row -->
+                <div class="flex flex-wrap gap-3 pt-2 pb-6">
+                  <button type="submit" id="btn-publish-form" class="btn btn-primary">
+                    <svg
+                      width="14"
+                      height="14"
+                      aria-hidden="true"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <line x1="22" y1="2" x2="11" y2="13" />
+                      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    </svg>
+                    نشر تجريبي
+                  </button>
+                  <button type="button" id="btn-save-draft-form" class="btn btn-outline">
+                    <svg
+                      width="14"
+                      height="14"
+                      aria-hidden="true"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
+                      <polyline points="17 21 17 13 7 13 7 21" />
+                    </svg>
+                    حفظ كمسودة
+                  </button>
+                  <a href="coupons.html" class="btn btn-ghost">
+                    <svg
+                      width="14"
+                      height="14"
+                      aria-hidden="true"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                    رجوع
+                  </a>
+                </div>
+              </form>
+            </div>
+            <!-- /main form column -->
+
+            <!-- ── Sticky sidebar column ── -->
+            <div class="form-sticky-col">
+              <!-- Live coupon preview -->
+              <div class="sticky-card mb-3">
+                <h3 class="text-sm font-bold text-ink-700 mb-1 flex items-center gap-1.5">
+                  <svg
+                    width="14"
+                    height="14"
+                    aria-hidden="true"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  معاينة مباشرة
+                </h3>
+                <div class="coupon-preview-card" aria-live="polite" aria-label="معاينة الكوبون">
+                  <div class="coupon-preview-notch">
+                    <span class="coupon-preview-code" id="preview-code" dir="ltr">CODE</span>
+                  </div>
+                  <div class="coupon-preview-discount" id="preview-discount">—</div>
+                  <div class="coupon-preview-meta">
+                    <span id="preview-provider">—</span>
+                    <span class="mx-1">·</span>
+                    <span id="preview-category">—</span>
+                  </div>
+                  <div class="mt-2 flex items-center justify-between gap-2 flex-wrap">
+                    <span id="preview-source-badge" class="badge badge-source-manual">Manual</span>
+                    <span id="preview-expiry" class="text-xs text-ink-400" dir="ltr"></span>
+                  </div>
+                  <div class="mt-3 text-xs text-ink-400 italic">
+                    بيانات تجريبية — لا يتم تفعيل الكوبون الآن
                   </div>
                 </div>
               </div>
 
-              <!-- Form submit row -->
-              <div class="flex flex-wrap gap-3 pt-2 pb-6">
-                <button type="submit" id="btn-publish-form" class="btn btn-primary">
-                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                  نشر تجريبي
-                </button>
-                <button type="button" id="btn-save-draft-form" class="btn btn-outline">
-                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-                  حفظ كمسودة
-                </button>
-                <a href="coupons.html" class="btn btn-ghost">
-                  <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-                  رجوع
-                </a>
-              </div>
-
-            </form>
-          </div>
-          <!-- /main form column -->
-
-          <!-- ── Sticky sidebar column ── -->
-          <div class="form-sticky-col">
-
-            <!-- Live coupon preview -->
-            <div class="sticky-card mb-3">
-              <h3 class="text-sm font-bold text-ink-700 mb-1 flex items-center gap-1.5">
-                <svg width="14" height="14" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                معاينة مباشرة
-              </h3>
-              <div class="coupon-preview-card" aria-live="polite" aria-label="معاينة الكوبون">
-                <div class="coupon-preview-notch">
-                  <span class="coupon-preview-code" id="preview-code" dir="ltr">CODE</span>
+              <!-- Completion summary -->
+              <div class="sticky-card">
+                <h3 class="text-sm font-bold text-ink-700 mb-2">اكتمال النموذج</h3>
+                <div class="summary-completion-bar" aria-hidden="true">
+                  <div class="summary-completion-fill" id="summary-fill"></div>
                 </div>
-                <div class="coupon-preview-discount" id="preview-discount">—</div>
-                <div class="coupon-preview-meta">
-                  <span id="preview-provider">—</span>
-                  <span class="mx-1">·</span>
-                  <span id="preview-category">—</span>
+                <p class="text-xs text-ink-500 mt-1" id="summary-missing">
+                  الحقول المطلوبة لم تُكتمل بعد
+                </p>
+
+                <div class="mt-4 flex flex-col gap-2">
+                  <button
+                    type="button"
+                    id="btn-publish-sidebar"
+                    class="btn btn-primary btn-sm w-full justify-center"
+                  >
+                    <svg
+                      width="13"
+                      height="13"
+                      aria-hidden="true"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <line x1="22" y1="2" x2="11" y2="13" />
+                      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    </svg>
+                    نشر تجريبي
+                  </button>
+                  <button
+                    type="button"
+                    id="btn-save-draft-sidebar"
+                    class="btn btn-outline btn-sm w-full justify-center"
+                  >
+                    <svg
+                      width="13"
+                      height="13"
+                      aria-hidden="true"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
+                    </svg>
+                    حفظ كمسودة
+                  </button>
                 </div>
-                <div class="mt-2 flex items-center justify-between gap-2 flex-wrap">
-                  <span id="preview-source-badge" class="badge badge-source-manual">Manual</span>
-                  <span id="preview-expiry" class="text-xs text-ink-400" dir="ltr"></span>
+
+                <!-- Quick tips -->
+                <div class="mt-4 pt-4 border-t border-ink-100">
+                  <p class="text-xs font-bold text-ink-600 mb-2">نصائح سريعة</p>
+                  <ul class="text-xs text-ink-500 space-y-1.5 list-none p-0 m-0">
+                    <li class="flex items-start gap-1.5">
+                      <svg
+                        width="11"
+                        height="11"
+                        aria-hidden="true"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        class="mt-0.5 flex-shrink-0 text-lagoon-500"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      استخدم "توليد تلقائي" للحصول على كود فريد
+                    </li>
+                    <li class="flex items-start gap-1.5">
+                      <svg
+                        width="11"
+                        height="11"
+                        aria-hidden="true"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        class="mt-0.5 flex-shrink-0 text-lagoon-500"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      الكوبونات Scraped تستلزم مراجعة يدوية إلزامية
+                    </li>
+                    <li class="flex items-start gap-1.5">
+                      <svg
+                        width="11"
+                        height="11"
+                        aria-hidden="true"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        class="mt-0.5 flex-shrink-0 text-warning"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      المعاينة تتحدث فورياً مع كل تغيير — بيانات تجريبية
+                    </li>
+                  </ul>
                 </div>
-                <div class="mt-3 text-xs text-ink-400 italic">بيانات تجريبية — لا يتم تفعيل الكوبون الآن</div>
               </div>
             </div>
-
-            <!-- Completion summary -->
-            <div class="sticky-card">
-              <h3 class="text-sm font-bold text-ink-700 mb-2">اكتمال النموذج</h3>
-              <div class="summary-completion-bar" aria-hidden="true">
-                <div class="summary-completion-fill" id="summary-fill"></div>
-              </div>
-              <p class="text-xs text-ink-500 mt-1" id="summary-missing">الحقول المطلوبة لم تُكتمل بعد</p>
-
-              <div class="mt-4 flex flex-col gap-2">
-                <button type="button" id="btn-publish-sidebar" class="btn btn-primary btn-sm w-full justify-center">
-                  <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                  نشر تجريبي
-                </button>
-                <button type="button" id="btn-save-draft-sidebar" class="btn btn-outline btn-sm w-full justify-center">
-                  <svg width="13" height="13" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/></svg>
-                  حفظ كمسودة
-                </button>
-              </div>
-
-              <!-- Quick tips -->
-              <div class="mt-4 pt-4 border-t border-ink-100">
-                <p class="text-xs font-bold text-ink-600 mb-2">نصائح سريعة</p>
-                <ul class="text-xs text-ink-500 space-y-1.5 list-none p-0 m-0">
-                  <li class="flex items-start gap-1.5">
-                    <svg width="11" height="11" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="mt-0.5 flex-shrink-0 text-lagoon-500"><polyline points="20 6 9 17 4 12"/></svg>
-                    استخدم "توليد تلقائي" للحصول على كود فريد
-                  </li>
-                  <li class="flex items-start gap-1.5">
-                    <svg width="11" height="11" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="mt-0.5 flex-shrink-0 text-lagoon-500"><polyline points="20 6 9 17 4 12"/></svg>
-                    الكوبونات Scraped تستلزم مراجعة يدوية إلزامية
-                  </li>
-                  <li class="flex items-start gap-1.5">
-                    <svg width="11" height="11" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="mt-0.5 flex-shrink-0 text-warning"><polyline points="20 6 9 17 4 12"/></svg>
-                    المعاينة تتحدث فورياً مع كل تغيير — بيانات تجريبية
-                  </li>
-                </ul>
-              </div>
-
-            </div>
-
+            <!-- /sticky sidebar -->
           </div>
-          <!-- /sticky sidebar -->
-
+          <!-- /two-column layout -->
         </div>
-        <!-- /two-column layout -->
+      </main>
 
-      </div>
-    </main>
+      <!-- Footer -->
+      <footer class="dash-footer" role="contentinfo">
+        <div>
+          <span class="font-semibold text-ink-600">رحلاتي</span><span> — نظام إدارة الوكالات</span>
+        </div>
+        <div class="flex items-center gap-3 flex-wrap">
+          <span
+            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold"
+            style="background: #fef9c3; color: #a16207"
+          >
+            <svg
+              width="10"
+              height="10"
+              aria-hidden="true"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+              <line x1="12" y1="12" x2="12" y2="16" />
+            </svg>
+            بيانات تجريبية — واجهة أمامية فقط
+          </span>
+          <a href="../pages/index.html" class="hover:text-lagoon-600 transition-colors"
+            >تصفح الموقع العام</a
+          >
+        </div>
+      </footer>
+    </div>
+    <!-- /dash-main -->
 
-    <!-- Footer -->
-    <footer class="dash-footer" role="contentinfo">
-      <div><span class="font-semibold text-ink-600">رحلاتي</span><span> — نظام إدارة الوكالات</span></div>
-      <div class="flex items-center gap-3 flex-wrap">
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold" style="background:#FEF9C3;color:#A16207">
-          <svg width="10" height="10" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12.01" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
-          بيانات تجريبية — واجهة أمامية فقط
-        </span>
-        <a href="../pages/index.html" class="hover:text-lagoon-600 transition-colors">تصفح الموقع العام</a>
-      </div>
-    </footer>
-
-  </div><!-- /dash-main -->
-
-  <!-- Scripts -->
-  <script src="../src/js/ui.js" defer></script>
-  <script src="../src/js/main.js" defer></script>
-  <script src="../src/js/dashboard.js" defer></script>
-</body>
+    <!-- Scripts -->
+    <script src="../src/js/ui.js" defer></script>
+    <script src="../src/js/main.js" defer></script>
+    <script src="../src/js/dashboard.js" defer></script>
+  </body>
 </html>

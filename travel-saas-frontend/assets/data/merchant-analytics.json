@@ -126,14 +126,44 @@
     ]
   },
   "trafficSources": [
-    { "name": "Organic Search", "nameAr": "البحث الطبيعي", "visits": 7090, "pct": 38.5, "trend": "up" },
+    {
+      "name": "Organic Search",
+      "nameAr": "البحث الطبيعي",
+      "visits": 7090,
+      "pct": 38.5,
+      "trend": "up"
+    },
     { "name": "Direct", "nameAr": "مباشر", "visits": 3680, "pct": 20.0, "trend": "stable" },
-    { "name": "Social Media", "nameAr": "وسائل التواصل", "visits": 2760, "pct": 15.0, "trend": "up" },
+    {
+      "name": "Social Media",
+      "nameAr": "وسائل التواصل",
+      "visits": 2760,
+      "pct": 15.0,
+      "trend": "up"
+    },
     { "name": "Referral", "nameAr": "إحالة", "visits": 1840, "pct": 10.0, "trend": "down" },
-    { "name": "Coupon Pages", "nameAr": "صفحات الكوبونات", "visits": 1290, "pct": 7.0, "trend": "up" },
+    {
+      "name": "Coupon Pages",
+      "nameAr": "صفحات الكوبونات",
+      "visits": 1290,
+      "pct": 7.0,
+      "trend": "up"
+    },
     { "name": "Deal Pages", "nameAr": "صفحات العروض", "visits": 920, "pct": 5.0, "trend": "up" },
-    { "name": "Email Mock", "nameAr": "البريد الإلكتروني (تجريبي)", "visits": 460, "pct": 2.5, "trend": "stable" },
-    { "name": "WhatsApp Mock", "nameAr": "واتساب (تجريبي)", "visits": 380, "pct": 2.0, "trend": "up" }
+    {
+      "name": "Email Mock",
+      "nameAr": "البريد الإلكتروني (تجريبي)",
+      "visits": 460,
+      "pct": 2.5,
+      "trend": "stable"
+    },
+    {
+      "name": "WhatsApp Mock",
+      "nameAr": "واتساب (تجريبي)",
+      "visits": 380,
+      "pct": 2.0,
+      "trend": "up"
+    }
   ],
   "devices": [
     { "name": "mobile", "nameAr": "الجوال", "pct": 63 },
@@ -241,7 +271,13 @@
   "topDestinations": [
     { "name": "دبي", "visits": 4200, "dealClicks": 2100, "inquiries": 185, "trend": "up" },
     { "name": "إسطنبول", "visits": 3850, "dealClicks": 1920, "inquiries": 142, "trend": "up" },
-    { "name": "شرم الشيخ", "visits": 3620, "dealClicks": 1810, "inquiries": 128, "trend": "stable" },
+    {
+      "name": "شرم الشيخ",
+      "visits": 3620,
+      "dealClicks": 1810,
+      "inquiries": 128,
+      "trend": "stable"
+    },
     { "name": "الرياض", "visits": 2450, "dealClicks": 1225, "inquiries": 74, "trend": "up" },
     { "name": "باريس", "visits": 3100, "dealClicks": 1550, "inquiries": 98, "trend": "stable" },
     { "name": "بانكوك", "visits": 2800, "dealClicks": 1400, "inquiries": 87, "trend": "up" },
